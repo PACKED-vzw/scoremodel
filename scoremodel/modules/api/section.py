@@ -2,7 +2,8 @@ from scoremodel.models.general import Question, Report, Section
 from sqlalchemy import and_, or_
 from scoremodel.modules.error import RequiredAttributeMissing, DatabaseItemAlreadyExists, DatabaseItemDoesNotExist
 from scoremodel.modules.api.generic import GenericApi
-from scoremodel.modules.api import QuestionApi, ReportApi
+import scoremodel.modules.api.report
+import scoremodel.modules.api.question
 from scoremodel import db
 
 
@@ -12,7 +13,7 @@ class SectionApi(GenericApi):
 
     def __init__(self, section_id=None):
         self.section_id = section_id
-        self.a_report = ReportApi()
+        self.a_report = scoremodel.modules.api.report.ReportApi()
 
     def create(self, input_data, report_id):
         """
@@ -22,7 +23,7 @@ class SectionApi(GenericApi):
         :return:
         """
         cleaned_data = self.parse_input_data(input_data)
-        existing_section = Section.query().filter(and_(Section.title == cleaned_data['title'],
+        existing_section = Section.query.filter(and_(Section.title == cleaned_data['title'],
                                                        Section.report_id == report_id)).first()
         if existing_section is not None:
             raise DatabaseItemAlreadyExists('A section called "{0}" already exists in the report {1}'
@@ -30,6 +31,7 @@ class SectionApi(GenericApi):
         new_section = Section(title=cleaned_data['title'], context=cleaned_data['context'],
                               total_score=cleaned_data['total_score'], order=cleaned_data['order_in_report'])
         db.session.add(new_section)
+        db.session.commit()
         # Add to the report
         report = self.a_report.read(report_id)
         new_section.report = report
@@ -45,7 +47,7 @@ class SectionApi(GenericApi):
         :param section_id:
         :return:
         """
-        existing_section = Section.query().filter(Section.id == section_id).first()
+        existing_section = Section.query.filter(Section.id == section_id).first()
         if existing_section is None:
             raise DatabaseItemDoesNotExist('No section with id {0}'.format(section_id))
         return existing_section
@@ -84,7 +86,7 @@ class SectionApi(GenericApi):
         return True
 
     def new_question(self, question_data, section_id):
-        a_question = QuestionApi()
+        a_question = scoremodel.modules.api.question.QuestionApi()
         cleaned_data = a_question.parse_input_data(question_data)
         # Try to create, if that fails, try querying for it
         try:

@@ -27,6 +27,36 @@ Risicofactor
 """
 
 
+class Answer(db.Model):
+    __tablename__ = 'Answer'
+    id = db.Column(db.Integer, primary_key=True)
+    answer = db.Column(db.Text, nullable=False, index=True)
+    value = db.Column(db.Integer, nullable=True, default=1)
+    order_in_question = db.Column(db.Integer, nullable=False, default=0)
+
+    def __repr__(self):
+        return u'<Answer {0}: {1}>'.format(self.id, self.answer)
+
+    def __init__(self, answer, value=1, order=0):
+        self.answer = answer
+        self.value = value
+        self.order_in_question = order
+
+    def output_obj(self):
+        return {
+            'id': self.id,
+            'answer': self.answer,
+            'value': self.value,
+            'order_in_question': self.order_in_question
+        }
+
+
+answers = db.Table('answer_question',
+                   db.Column('answer_id', db.Integer, db.ForeignKey('Answer.id')),
+                   db.Column('question_id', db.Integer, db.ForeignKey('Question.id'))
+                   )
+
+
 class Action(db.Model):
     __tablename__ = 'Action'
     id = db.Column(db.Integer, primary_key=True)
@@ -37,6 +67,12 @@ class Action(db.Model):
 
     def __init__(self, action):
         self.action = action
+
+    def output_obj(self):
+        return {
+            'id': self.id,
+            'action': self.action
+        }
 
 
 actions = db.Table('action_question',
@@ -56,11 +92,68 @@ class RiskFactor(db.Model):
     def __init__(self, risk_factor):
         self.risk_factor = risk_factor
 
+    def output_obj(self):
+        return {
+            'id': self.id,
+            'risk_factor': self.risk_factor
+        }
+
 
 risk_factors = db.Table('riskfactor_question',
                         db.Column('risk_factor_id', db.Integer, db.ForeignKey('RiskFactor.id')),
                         db.Column('question_id', db.Integer, db.ForeignKey('Question.id'))
                         )
+
+
+class Report(db.Model):
+    __tablename__ = 'Report'
+    id = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.Text, index=True, nullable=False)
+    sections = db.relationship('Section', backref='report', lazy='dynamic')
+
+    def __repr__(self):
+        return '<Report {0}>'.format(self.id)
+
+    def __init__(self, title):
+        self.title = title
+
+    def output_obj(self):
+        return {
+            'id': self.id,
+            'title': self.title,
+            'sections': [s.output_obj() for s in self.sections]
+        }
+
+
+class Section(db.Model):
+    __tablename__ = 'Section'
+    id = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.Text, index=True, nullable=False)
+    context = db.Column(db.Text)
+    total_score = db.Column(db.Integer, default=0, nullable=False)
+    order_in_report = db.Column(db.Integer, nullable=False, default=0)
+    questions = db.relationship('Question', backref='section', lazy='dynamic')
+    report_id = db.Column(db.Integer, db.ForeignKey(Report.id))
+
+    def __repr__(self):
+        return u'<Section {0}: {1}>'.format(self.id, self.title)
+
+    def __init__(self, title, context=None, total_score=0, order=0):
+        self.title = title
+        self.context = context
+        self.total_score = total_score
+        self.order_in_report = 0
+
+    def output_obj(self):
+        return {
+            'id': self.id,
+            'title': self.title,
+            'context': self.context,
+            'total_score': self.total_score,
+            'order_in_report': self.order_in_report,
+            'questions': [q.output_obj() for q in self.questions],
+            'report_id': self.report_id
+        }
 
 
 class Question(db.Model):
@@ -110,57 +203,17 @@ class Question(db.Model):
         highest = self.answers.order_by('value desc').all()
         return highest[0].value
 
-
-class Section(db.Model):
-    __tablename__ = 'Section'
-    id = db.Column(db.Integer, primary_key=True)
-    title = db.Column(db.Text, index=True, nullable=False)
-    context = db.Column(db.Text)
-    total_score = db.Column(db.Integer, default=0, nullable=False)
-    order_in_report = db.Column(db.Integer, nullable=False, default=0)
-    questions = db.relationship('Question', backref='section', lazy='dynamic')
-    report_id = db.Column(db.Integer, db.ForeignKey(Report.id))
-
-    def __repr__(self):
-        return u'<Section {0}: {1}>'.format(self.id, self.title)
-
-    def __init__(self, title, context=None, total_score=0, order=0):
-        self.title = title
-        self.context = context
-        self.total_score = total_score
-        self.order_in_report = 0
-
-
-class Report(db.Model):
-    __tablename__ = 'Report'
-    id = db.Column(db.Integer, primary_key=True)
-    title = db.Column(db.Text, index=True, nullable=False)
-    sections = db.relationship('Section', backref='report', lazy='dynamic')
-
-    def __repr__(self):
-        return '<Report {0}>'.format(self.id)
-
-    def __init__(self, title):
-        self.title = title
-
-
-class Answer(db.Model):
-    __tablename__ = 'Answer'
-    id = db.Column(db.Integer, primary_key=True)
-    answer = db.Column(db.Text, nullable=False, index=True)
-    value = db.Column(db.Integer, nullable=True, default=1)
-    order_in_question = db.Column(db.Integer, nullable=False, default=0)
-
-    def __repr__(self):
-        return u'<Answer {0}: {1}>'.format(self.id, self.answer)
-
-    def __init__(self, answer, value=1, order=0):
-        self.answer = answer
-        self.value = value
-        self.order_in_question = order
-
-
-answers = db.Table('answer_question',
-                   db.Column('answer_id', db.Integer, db.ForeignKey('Answer.id')),
-                   db.Column('question_id', db.Integer, db.ForeignKey('Question.id'))
-                   )
+    def output_obj(self):
+        return {
+            'id': self.id,
+            'question': self.question,
+            'context': self.context,
+            'risk': self.risk,
+            'example': self.example,
+            'weight': self.weight,
+            'order_in_section': self.order_in_section,
+            'section_id': self.section_id,
+            'actions': [a.output_obj() for a in self.actions],
+            'risk_factors': [r.output_obj() for r in self.risk_factors],
+            'answers': [a.output_obj() for a in self.answers]
+        }

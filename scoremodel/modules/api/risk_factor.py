@@ -36,7 +36,7 @@ class RiskFactorApi(GenericApi):
         :param risk_factor_id:
         :return:
         """
-        existing_risk_factor = RiskFactor.query().filter(RiskFactor.id == risk_factor_id).first()
+        existing_risk_factor = RiskFactor.query.filter(RiskFactor.id == risk_factor_id).first()
         if existing_risk_factor is None:
             raise DatabaseItemDoesNotExist('No risk factor with id {0}'.format(risk_factor_id))
         return existing_risk_factor

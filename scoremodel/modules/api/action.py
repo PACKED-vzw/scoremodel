@@ -37,7 +37,7 @@ class ActionApi(GenericApi):
         :param action_id:
         :return:
         """
-        existing_action = Action.query().filter(Action.id == action_id).first()
+        existing_action = Action.query.filter(Action.id == action_id).first()
         if existing_action is None:
             raise DatabaseItemDoesNotExist('No action with id {0)'.format(action_id))
         return existing_action

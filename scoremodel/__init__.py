@@ -6,6 +6,8 @@ app.config.from_object('config')
 db = SQLAlchemy(app)
 # Models must be imported after db has been declared
 from scoremodel.views.user import *
+from scoremodel.views.api import *
+from scoremodel.models import *
 
 
 @app.route('/')

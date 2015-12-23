@@ -18,7 +18,7 @@ class GenericApi:
         """
         cleaned = {}
         # All non-supported parameters are filtered
-        for input_data_key, input_data_value in input_data:
+        for input_data_key, input_data_value in input_data.items():
             if input_data_key in possible_params:
                 cleaned[input_data_key] = input_data_value
         # Check whether the required parameters are used
@@ -36,32 +36,32 @@ class GenericApi:
         return cleaned
 
     def get_answer(self, answer_name):
-        answer = Answer.query().filter(Answer.answer == answer_name).first()
+        answer = Answer.query.filter(Answer.answer == answer_name).first()
         if answer is None:
             raise DatabaseItemDoesNotExist('No answer called {0}'.format(answer_name))
         return answer
 
     def get_action(self, action_name):
-        action = Action.query().filter(Action.action == action_name).first()
+        action = Action.query.filter(Action.action == action_name).first()
         if action is None:
             raise DatabaseItemDoesNotExist('No action called {0}'.format(action_name))
         return action
 
     def get_risk_factor(self, risk_factor_name):
-        risk_factor = RiskFactor.query().filter(RiskFactor.risk_factor == risk_factor_name).first()
+        risk_factor = RiskFactor.query.filter(RiskFactor.risk_factor == risk_factor_name).first()
         if risk_factor is None:
             raise DatabaseItemDoesNotExist('No risk factor called {0}'.format(risk_factor_name))
         return risk_factor
 
     def get_question(self, question_name, section_id):
-        existing_question = Question.query().filter(and_(Question.question == question_name,
+        existing_question = Question.query.filter(and_(Question.question == question_name,
                                                          Question.section_id == section_id)).first()
         if existing_question is None:
             raise DatabaseItemDoesNotExist('No question called {0} in section {1}'.format(question_name, section_id))
         return existing_question
 
     def get_section(self, section_title, report_id):
-        existing_section = Section.query().filter(and_(Section.title == section_title,
+        existing_section = Section.query.filter(and_(Section.title == section_title,
                                                        Section.report_id == report_id)).first()
         if existing_section is None:
             raise DatabaseItemDoesNotExist('No section called {0} in report {1}'.format(section_title, report_id))

@@ -36,7 +36,7 @@ class AnswerApi(GenericApi):
         :param answer_id:
         :return:
         """
-        existing_answer = Answer.query().filter(Answer.id == answer_id).first()
+        existing_answer = Answer.query.filter(Answer.id == answer_id).first()
         if existing_answer is None:
             raise DatabaseItemDoesNotExist('No answer with id {0}'.format(answer_id))
         return existing_answer

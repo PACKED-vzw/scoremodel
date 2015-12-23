@@ -1,3 +1,4 @@
+import json
 
 
 class ItemNotFound(Exception):
@@ -17,4 +18,13 @@ class DatabaseItemDoesNotExist(Exception):
 
 
 class IllegalEntityType(Exception):
+    pass
+
+
+class ApiException(Exception):
+    def to_json(self):
+        return json.dumps(self.__str__())
+
+
+class IDMissingForCUD(ApiException):
     pass

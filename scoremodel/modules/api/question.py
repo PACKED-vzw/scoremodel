@@ -2,7 +2,10 @@ from scoremodel.models.general import Question, Answer, RiskFactor, Action, Repo
 from sqlalchemy import and_, or_
 from scoremodel.modules.error import RequiredAttributeMissing, DatabaseItemAlreadyExists, DatabaseItemDoesNotExist
 from scoremodel.modules.api.generic import GenericApi
-from scoremodel.modules.api import AnswerApi, ActionApi, SectionApi, RiskFactorApi
+from scoremodel.modules.api.answer import AnswerApi
+from scoremodel.modules.api.action import ActionApi
+import scoremodel.modules.api.section
+from scoremodel.modules.api.risk_factor import RiskFactorApi
 from scoremodel import db
 
 
@@ -12,7 +15,7 @@ class QuestionApi(GenericApi):
 
     def __init__(self, question_id=None):
         self.question_id = question_id
-        self.a_section = SectionApi()
+        self.a_section = scoremodel.modules.api.section.SectionApi()
 
     def create(self, data, section_id):
         """
@@ -29,7 +32,7 @@ class QuestionApi(GenericApi):
         """
         cleaned_data = self.parse_input_data(data)
         # Check whether this question already exists
-        existing_question = Question.query(Question.id).filter(and_(Question.question == cleaned_data['question'],
+        existing_question = Question.query.filter(and_(Question.question == cleaned_data['question'],
                                                                     Question.section_id == section_id)).first()
         if existing_question:
             # Already exists
@@ -39,6 +42,7 @@ class QuestionApi(GenericApi):
                                 risk=cleaned_data['risk'], example=cleaned_data['example'],
                                 weight=cleaned_data['weight'], order=cleaned_data['order_in_section'])
         db.session.add(new_question)
+        db.session.commit()
         # Add to the section
         section = self.a_section.read(section_id)
         new_question.section = section
@@ -62,7 +66,7 @@ class QuestionApi(GenericApi):
         :param question_id:
         :return:
         """
-        existing_question = Question.query().filter(Question.id == question_id).first()
+        existing_question = Question.query.filter(Question.id == question_id).first()
         if existing_question is None:
             raise DatabaseItemDoesNotExist('No question with id {0}'.format(question_id))
         return existing_question

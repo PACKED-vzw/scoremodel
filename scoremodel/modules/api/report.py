@@ -2,7 +2,7 @@ from scoremodel.models.general import Report, Section
 from sqlalchemy import and_, or_
 from scoremodel.modules.error import RequiredAttributeMissing, DatabaseItemAlreadyExists, DatabaseItemDoesNotExist
 from scoremodel.modules.api.generic import GenericApi
-from scoremodel.modules.api import SectionApi
+from scoremodel.modules.api.section import SectionApi
 from scoremodel import db
 
 
@@ -10,8 +10,8 @@ class ReportApi(GenericApi):
     simple_params = ['title']
     complex_params = ['sections']
 
-    def __init__(self, section_id=None):
-        self.section_id = section_id
+    def __init__(self, report_id=None):
+        self.report_id = report_id
 
     def create(self, input_data):
         """
@@ -20,11 +20,12 @@ class ReportApi(GenericApi):
         :return: 
         """
         cleaned_data = self.parse_input_data(input_data)
-        existing_report = Report.query().filter(Report.title == cleaned_data['title']).first()
+        existing_report = Report.query.filter(Report.title == cleaned_data['title']).first()
         if existing_report is not None:
             raise DatabaseItemAlreadyExists('A report called {0} already exists'.format(cleaned_data['title']))
         new_report = Report(title=cleaned_data['title'])
         db.session.add(new_report)
+        db.session.commit()
         # Add sections
         for section in cleaned_data['sections']:
             new_report.sections.append(self.new_section(section, new_report.id))
@@ -37,7 +38,7 @@ class ReportApi(GenericApi):
         :param report_id: 
         :return: 
         """
-        existing_report = Report.query().filter(Report.id == report_id).first()
+        existing_report = Report.query.filter(Report.id == report_id).first()
         if existing_report is None:
             raise DatabaseItemDoesNotExist('No report with id {0}'.format(report_id))
         return existing_report
