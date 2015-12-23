@@ -1,0 +1,17 @@
+{% block footer %}
+    <div class="footer logo">
+    <a href="http://www.den.nl"><img src="{{ url_for('static', filename='img/logo_den.png') }}" alt="Logo DEN" class="footer" /></a>
+    </div>
+    <div class="footer logo">
+    <a href="http://www.packed.be"><img src="{{ url_for('static', filename='img/logo_packed.jpg') }}" alt="Logo PACKED vzw" class="footer" /></a>
+    </div>
+    <div class="footer logo">
+    <a href="http://creativecommons.org/licenses/by-sa/3.0"><img src="{{ url_for('static', filename='img/cc-by-sa.png') }}" alt="CC-BY-SA" class="footer" /></a>
+    </div>
+    <div class="footer" id="contact">
+    <ul class="contact">
+        <li>it@packed.be</li>
+        <li>robert.gillesse@den.nl</li>
+    </ul>
+    </div>
+{% endblock %}

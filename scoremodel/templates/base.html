@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    {% if title %}
+        <title>{{ title }}</title>
+    {% else %}
+        <title>Scoremodel</title>
+    {% endif %}
+<link rel="stylesheet" href="{{ url_for('static', filename='screen.css') }}" media="screen" />
+<link rel="stylesheet" href="{{ url_for('static', filename='print.css') }}" media="print" />
+</head>
+<body>
+    <header>
+        {% include 'header.html' %}
+    </header>
+    <nav>
+        {% include 'navigation.html' %}
+    </nav>
+    <div class="content">
+        {% block content %}{% endblock %}
+    </div>
+    <footer>
+        {% include 'footer.html' %}
+    </footer>
+</body>
+</html>
