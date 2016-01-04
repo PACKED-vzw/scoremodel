@@ -8,14 +8,14 @@ from scoremodel import db
 
 
 class SectionApi(GenericApi):
-    simple_params = ['title', 'context', 'total_score', 'order_in_report']
+    simple_params = ['title', 'context', 'total_score', 'order_in_report', 'report_id']
     complex_params = ['questions']
 
     def __init__(self, section_id=None):
         self.section_id = section_id
         self.a_report = scoremodel.modules.api.report.ReportApi()
 
-    def create(self, input_data, report_id):
+    def create(self, input_data):
         """
         Create a new section. See QuestionApi.create(). Sections are in a report and have questions.
         :param input_data:
@@ -24,16 +24,16 @@ class SectionApi(GenericApi):
         """
         cleaned_data = self.parse_input_data(input_data)
         existing_section = Section.query.filter(and_(Section.title == cleaned_data['title'],
-                                                       Section.report_id == report_id)).first()
+                                                     Section.report_id == cleaned_data['report_id'])).first()
         if existing_section is not None:
             raise DatabaseItemAlreadyExists('A section called "{0}" already exists in the report {1}'
-                                            .format(cleaned_data['title'], report_id))
+                                            .format(cleaned_data['title'], cleaned_data['report_id']))
         new_section = Section(title=cleaned_data['title'], context=cleaned_data['context'],
                               total_score=cleaned_data['total_score'], order=cleaned_data['order_in_report'])
         db.session.add(new_section)
         db.session.commit()
         # Add to the report
-        report = self.a_report.read(report_id)
+        report = self.a_report.read(cleaned_data['report_id'])
         new_section.report = report
         # Add the questions
         for question in cleaned_data['questions']:
@@ -52,7 +52,7 @@ class SectionApi(GenericApi):
             raise DatabaseItemDoesNotExist('No section with id {0}'.format(section_id))
         return existing_section
 
-    def update(self, section_id, input_data, report_id):
+    def update(self, section_id, input_data):
         """
         Update an existing section. See QuestionApi.update()
         :param section_id:
@@ -64,7 +64,7 @@ class SectionApi(GenericApi):
         existing_section = self.read(section_id)
         existing_section = self.update_simple_attributes(existing_section, self.simple_params, cleaned_data)
         # Update the report
-        report = self.a_report.read(report_id)
+        report = self.a_report.read(cleaned_data['report_id'])
         existing_section.report = report
         # Update the questions
         existing_section = self.remove_questions(existing_section)
@@ -107,6 +107,6 @@ class SectionApi(GenericApi):
         :param input_data:
         :return:
         """
-        possible_params = ['title', 'context', 'total_score', 'order_in_report', 'questions']
-        required_params = ['title', 'total_score']
+        possible_params = ['title', 'context', 'total_score', 'order_in_report', 'questions', 'report_id']
+        required_params = ['title', 'total_score', 'report_id']
         return self.clean_input_data(input_data, possible_params, required_params, self.complex_params)

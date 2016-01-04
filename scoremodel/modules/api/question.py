@@ -10,14 +10,14 @@ from scoremodel import db
 
 
 class QuestionApi(GenericApi):
-    simple_attributes = ['question', 'context', 'risk', 'example', 'weight', 'order_in_section']
+    simple_attributes = ['question', 'context', 'risk', 'example', 'weight', 'order_in_section', 'section_id']
     complex_params = ['actions', 'risk_factors', 'answers']  # These should be a list in input_data
 
     def __init__(self, question_id=None):
         self.question_id = question_id
         self.a_section = scoremodel.modules.api.section.SectionApi()
 
-    def create(self, data, section_id):
+    def create(self, data):
         """
         Create a new question. The data input variable contains all the attributes for the "question" entity
         in the database as a dict. For simple attributes, this is a string or integer value, but for actions,
@@ -33,7 +33,7 @@ class QuestionApi(GenericApi):
         cleaned_data = self.parse_input_data(data)
         # Check whether this question already exists
         existing_question = Question.query.filter(and_(Question.question == cleaned_data['question'],
-                                                                    Question.section_id == section_id)).first()
+                                                       Question.section_id == cleaned_data['section_id'])).first()
         if existing_question:
             # Already exists
             raise DatabaseItemAlreadyExists('A question called "{0}" already exists in this section.'
@@ -44,7 +44,7 @@ class QuestionApi(GenericApi):
         db.session.add(new_question)
         db.session.commit()
         # Add to the section
-        section = self.a_section.read(section_id)
+        section = self.a_section.read(cleaned_data['section_id'])
         new_question.section = section
         # Add the answers
         for answer in cleaned_data['answers']:
@@ -71,7 +71,7 @@ class QuestionApi(GenericApi):
             raise DatabaseItemDoesNotExist('No question with id {0}'.format(question_id))
         return existing_question
 
-    def update(self, question_id, input_data, section_id):
+    def update(self, question_id, input_data):
         """
         Update a question identified by question_id. The variable input_data must contain all variables, both
         those that are to be changed and those that remain the same. If you only send the changed ones, the others
@@ -86,7 +86,7 @@ class QuestionApi(GenericApi):
         cleaned_data = self.parse_input_data(input_data)
         existing_question = self.update_simple_attributes(existing_question, self.simple_attributes, cleaned_data)
         # Update the section
-        section = self.a_section.read(section_id)
+        section = self.a_section.read(cleaned_data['section_id'])
         existing_question.section = section
         # Update answers
         existing_question = self.remove_answers(existing_question)
@@ -122,8 +122,8 @@ class QuestionApi(GenericApi):
         :return:
         """
         possible_params = ['question', 'context', 'risk', 'example', 'weight', 'order_in_section', 'actions',
-                           'risk_factors', 'answers']
-        required_params = ['question', 'weight']
+                           'risk_factors', 'answers', 'section_id']
+        required_params = ['question', 'weight', 'section_id']
         return self.clean_input_data(input_data, possible_params, required_params, self.complex_params)
 
     def new_answer(self, answer_data):
@@ -158,14 +158,17 @@ class QuestionApi(GenericApi):
     def remove_answers(self, question_entity):
         for answer in question_entity.answers:
             question_entity.answers.remove(answer)
+        db.session.commit()
         return question_entity
 
     def remove_actions(self, question_entity):
         for action in question_entity.actions:
             question_entity.actions.remove(action)
+        db.session.commit()
         return question_entity
 
     def remove_risk_factors(self, question_entity):
         for risk_factor in question_entity.risk_factors:
             question_entity.risk_factors.remove(risk_factor)
+        db.session.commit()
         return question_entity

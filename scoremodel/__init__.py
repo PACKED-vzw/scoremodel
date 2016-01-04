@@ -1,9 +1,11 @@
 from flask import Flask
 from flask.ext.sqlalchemy import SQLAlchemy
+from flask.ext.babel import Babel
 
 app = Flask(__name__)
 app.config.from_object('config')
 db = SQLAlchemy(app)
+babel = Babel(app)
 # Models must be imported after db has been declared
 from scoremodel.views.user import *
 from scoremodel.views.api import *
