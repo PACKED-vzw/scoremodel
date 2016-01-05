@@ -65,6 +65,14 @@ class RiskFactorApi(GenericApi):
         db.session.commit()
         return True
 
+    def list(self):
+        """
+        List all risk_factors
+        :return:
+        """
+        risk_factors = RiskFactor.query.all()
+        return risk_factors
+
     def parse_input_data(self, input_data):
         possible_params = ['risk_factor']
         required_params = ['risk_factor']

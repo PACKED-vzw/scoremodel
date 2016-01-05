@@ -1,5 +1,5 @@
 from scoremodel.modules.error import RequiredAttributeMissing, DatabaseItemDoesNotExist
-from scoremodel.models.general import Section, Answer, Action, Report, RiskFactor, Question
+from scoremodel.models.general import Section, Answer, Report, RiskFactor, Question
 from sqlalchemy import and_, or_
 
 
@@ -40,12 +40,6 @@ class GenericApi:
         if answer is None:
             raise DatabaseItemDoesNotExist('No answer called {0}'.format(answer_name))
         return answer
-
-    def get_action(self, action_name):
-        action = Action.query.filter(Action.action == action_name).first()
-        if action is None:
-            raise DatabaseItemDoesNotExist('No action called {0}'.format(action_name))
-        return action
 
     def get_risk_factor(self, risk_factor_name):
         risk_factor = RiskFactor.query.filter(RiskFactor.risk_factor == risk_factor_name).first()

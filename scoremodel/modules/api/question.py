@@ -1,17 +1,16 @@
-from scoremodel.models.general import Question, Answer, RiskFactor, Action, Report, Section
+from scoremodel.models.general import Question, Answer, RiskFactor, Report, Section
 from sqlalchemy import and_, or_
 from scoremodel.modules.error import RequiredAttributeMissing, DatabaseItemAlreadyExists, DatabaseItemDoesNotExist
 from scoremodel.modules.api.generic import GenericApi
 from scoremodel.modules.api.answer import AnswerApi
-from scoremodel.modules.api.action import ActionApi
 import scoremodel.modules.api.section
 from scoremodel.modules.api.risk_factor import RiskFactorApi
 from scoremodel import db
 
 
 class QuestionApi(GenericApi):
-    simple_attributes = ['question', 'context', 'risk', 'example', 'weight', 'order_in_section', 'section_id']
-    complex_params = ['actions', 'risk_factors', 'answers']  # These should be a list in input_data
+    simple_attributes = ['question', 'context', 'risk', 'example', 'weight', 'order_in_section', 'section_id', 'action']
+    complex_params = ['risk_factors', 'answers']  # These should be a list in input_data
 
     def __init__(self, question_id=None):
         self.question_id = question_id
@@ -40,7 +39,8 @@ class QuestionApi(GenericApi):
                                             .format(cleaned_data['question']))
         new_question = Question(question=cleaned_data['question'], context=cleaned_data['context'],
                                 risk=cleaned_data['risk'], example=cleaned_data['example'],
-                                weight=cleaned_data['weight'], order=cleaned_data['order_in_section'])
+                                weight=cleaned_data['weight'], order=cleaned_data['order_in_section'],
+                                action=cleaned_data['action'])
         db.session.add(new_question)
         db.session.commit()
         # Add to the section
@@ -49,9 +49,6 @@ class QuestionApi(GenericApi):
         # Add the answers
         for answer in cleaned_data['answers']:
             new_question.answers.append(self.new_answer(answer))
-        # Add the actions
-        for action in cleaned_data['actions']:
-            new_question.actions.append(self.new_action(action))
         # Add the risk factors
         for risk_factor in cleaned_data['risk_factors']:
             new_question.risk_factors.append(self.new_risk_factor(risk_factor))
@@ -92,10 +89,6 @@ class QuestionApi(GenericApi):
         existing_question = self.remove_answers(existing_question)
         for answer in cleaned_data['answers']:
             existing_question.answers.append(self.new_answer(answer))
-        # Update actions
-        existing_question = self.remove_actions(existing_question)
-        for action in cleaned_data['actions']:
-            existing_question.actions.append(self.new_action(action))
         # Update risk factors
         existing_question = self.remove_risk_factors(existing_question)
         for risk_factor in cleaned_data['risk_factors']:
@@ -121,7 +114,7 @@ class QuestionApi(GenericApi):
         :param input_data:
         :return:
         """
-        possible_params = ['question', 'context', 'risk', 'example', 'weight', 'order_in_section', 'actions',
+        possible_params = ['question', 'context', 'risk', 'example', 'weight', 'order_in_section', 'action',
                            'risk_factors', 'answers', 'section_id']
         required_params = ['question', 'weight', 'section_id']
         return self.clean_input_data(input_data, possible_params, required_params, self.complex_params)
@@ -137,15 +130,6 @@ class QuestionApi(GenericApi):
             o_answer = a_answer.create(cleaned_data)
         return o_answer
 
-    def new_action(self, action_data):
-        a_action = ActionApi()
-        cleaned_data = a_action.parse_input_data(action_data)
-        try:
-            o_action = self.get_action(cleaned_data['action'])
-        except DatabaseItemDoesNotExist:
-            o_action = a_action.create(cleaned_data)
-        return o_action
-
     def new_risk_factor(self, risk_factor_data):
         a_risk_factor = RiskFactorApi()
         cleaned_data = a_risk_factor.parse_input_data(risk_factor_data)
@@ -158,12 +142,6 @@ class QuestionApi(GenericApi):
     def remove_answers(self, question_entity):
         for answer in question_entity.answers:
             question_entity.answers.remove(answer)
-        db.session.commit()
-        return question_entity
-
-    def remove_actions(self, question_entity):
-        for action in question_entity.actions:
-            question_entity.actions.remove(action)
         db.session.commit()
         return question_entity
 

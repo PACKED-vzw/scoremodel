@@ -65,6 +65,14 @@ class AnswerApi(GenericApi):
         db.session.commit()
         return True
 
+    def list(self):
+        """
+        List all answers
+        :return:
+        """
+        answers = Answer.query.all()
+        return answers
+
     def parse_input_data(self, input_data):
         possible_params = ['answer', 'value', 'order_in_question']
         required_params = ['answer']

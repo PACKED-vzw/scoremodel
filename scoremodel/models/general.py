@@ -57,30 +57,6 @@ answers = db.Table('answer_question',
                    )
 
 
-class Action(db.Model):
-    __tablename__ = 'Action'
-    id = db.Column(db.Integer, primary_key=True)
-    action = db.Column(db.Text, index=True)
-
-    def __repr__(self):
-        return '<Action {0}>'.format(self.id)
-
-    def __init__(self, action):
-        self.action = action
-
-    def output_obj(self):
-        return {
-            'id': self.id,
-            'action': self.action
-        }
-
-
-actions = db.Table('action_question',
-                   db.Column('action_id', db.Integer, db.ForeignKey('Action.id')),
-                   db.Column('question_id', db.Integer, db.ForeignKey('Question.id'))
-                   )
-
-
 class RiskFactor(db.Model):
     __tablename__ = 'RiskFactor'
     id = db.Column(db.Integer, primary_key=True)
@@ -166,13 +142,7 @@ class Question(db.Model):
     weight = db.Column(db.Integer, nullable=False, default=1)
     order_in_section = db.Column(db.Integer, nullable=False, default=0)
     section_id = db.Column(db.Integer, db.ForeignKey(Section.id))
-    actions = db.relationship('Action',
-                              secondary=actions,
-                              primaryjoin=(actions.c.question_id == id),
-                              secondaryjoin=(actions.c.action_id == Action.id),
-                              backref=db.backref('questions', lazy='dynamic'),
-                              lazy='dynamic'
-                              )
+    action = db.Column(db.Text)
     risk_factors = db.relationship('RiskFactor',
                                    secondary=risk_factors,
                                    primaryjoin=(risk_factors.c.question_id == id),
@@ -191,13 +161,14 @@ class Question(db.Model):
     def __repr__(self):
         return u'<Question {0}: {1}>'.format(self.id, self.question)
 
-    def __init__(self, question, context=None, risk=None, example=None, weight=1, order=0):
+    def __init__(self, question, context=None, risk=None, example=None, weight=1, order=0, action=None):
         self.question = question
         self.context = context
         self.risk = risk
         self.example = example
         self.weight = weight
         self.order_in_section = order
+        self.action = action
 
     def highest_answer(self):
         highest = self.answers.order_by('value desc').all()
@@ -213,7 +184,7 @@ class Question(db.Model):
             'weight': self.weight,
             'order_in_section': self.order_in_section,
             'section_id': self.section_id,
-            'actions': [a.output_obj() for a in self.actions],
+            'action': self.action,
             'risk_factors': [r.output_obj() for r in self.risk_factors],
             'answers': [a.output_obj() for a in self.answers]
         }
