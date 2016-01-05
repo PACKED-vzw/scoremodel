@@ -41,7 +41,7 @@ class ScoremodelApi:
                     self.output_data = self.update(api_obj_id, self.parse_json(input_data_string))
         elif self.request.method == 'POST':
             if self.parse_json(input_data_string) is not None:
-                self.output_data = self.parse_json(input_data_string)
+                self.output_data = self.create(self.parse_json(input_data_string))
         else:
             self.msg = error_msg['illegal_action'].format(self.request.method)
         ##
