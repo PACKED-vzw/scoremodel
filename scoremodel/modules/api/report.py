@@ -73,4 +73,4 @@ class ReportApi(GenericApi):
         """
         possible_params = ['title']
         required_params = ['title']
-        return self.clean_input_data(input_data, possible_params, required_params, self.complex_params)
+        return self.clean_input_data(Report, input_data, possible_params, required_params, self.complex_params)

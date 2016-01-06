@@ -76,4 +76,4 @@ class RiskFactorApi(GenericApi):
     def parse_input_data(self, input_data):
         possible_params = ['risk_factor']
         required_params = ['risk_factor']
-        return self.clean_input_data(input_data, possible_params, required_params, self.complex_params)
+        return self.clean_input_data(RiskFactor, input_data, possible_params, required_params, self.complex_params)

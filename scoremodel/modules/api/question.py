@@ -117,7 +117,7 @@ class QuestionApi(GenericApi):
         possible_params = ['question', 'context', 'risk', 'example', 'weight', 'order_in_section', 'action',
                            'risk_factors', 'answers', 'section_id']
         required_params = ['question', 'weight', 'section_id']
-        return self.clean_input_data(input_data, possible_params, required_params, self.complex_params)
+        return self.clean_input_data(Question, input_data, possible_params, required_params, self.complex_params)
 
     def new_answer(self, answer_data):
         # Check whether this answer exists

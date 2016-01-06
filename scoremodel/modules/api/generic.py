@@ -1,11 +1,12 @@
 from scoremodel.modules.error import RequiredAttributeMissing, DatabaseItemDoesNotExist
 from scoremodel.models.general import Section, Answer, Report, RiskFactor, Question
 from sqlalchemy import and_, or_
-
+from datetime import datetime
+from pytz import timezone
 
 class GenericApi:
 
-    def clean_input_data(self, input_data, possible_params, required_params, complex_params):
+    def clean_input_data(self, db_class, input_data, possible_params, required_params, complex_params):
         """
         Clean the input data dict: remove all non-supported attributes and check whether all the required
         parametes have been filled. All missing parameters are set to None. All attributes in complex_params
@@ -33,6 +34,23 @@ class GenericApi:
         for complex_param in complex_params:
             if type(cleaned[complex_param]) is not list:
                 cleaned[complex_param] = [cleaned[complex_param]]
+        # Check for nullability
+        for possible_param in possible_params:
+            if db_class.__table__.columns[possible_param].nullable is not True:
+                # Can't be null, so set it to 0 or empty string or empty date, depending on what the type is
+                if cleaned[possible_param] is None:
+                    c_type = str(Section.__table__.columns[possible_param].type)
+                    ##
+                    # TODO make this cleaner
+                    ##
+                    if c_type == 'INTEGER':
+                        cleaned[possible_param] = 0
+                    elif c_type == 'TEXT':
+                        cleaned[possible_param] = u''
+                    elif c_type == 'DATETIME':
+                        cleaned[possible_param] = datetime.now(tz=timezone('UTC'))
+                    elif c_type == 'STRING':
+                        cleaned[possible_param] = u''
         return cleaned
 
     def get_answer(self, answer_name):

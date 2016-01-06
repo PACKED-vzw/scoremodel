@@ -11,6 +11,10 @@ class SectionApi(GenericApi):
     simple_params = ['title', 'context', 'total_score', 'order_in_report', 'report_id']
     complex_params = []
 
+    ##
+    # TODO auto-generate total_score from attached questions?
+    ##
+
     def __init__(self, section_id=None):
         self.section_id = section_id
         self.a_report = scoremodel.modules.api.report.ReportApi()
@@ -84,4 +88,5 @@ class SectionApi(GenericApi):
         """
         possible_params = ['title', 'context', 'total_score', 'order_in_report', 'report_id']
         required_params = ['title', 'total_score', 'report_id']
-        return self.clean_input_data(input_data, possible_params, required_params, self.complex_params)
+        cleaned_data = self.clean_input_data(Section, input_data, possible_params, required_params, self.complex_params)
+        return cleaned_data
