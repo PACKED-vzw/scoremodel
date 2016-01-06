@@ -16,7 +16,7 @@ class QuestionApi(GenericApi):
         self.question_id = question_id
         self.a_section = scoremodel.modules.api.section.SectionApi()
 
-    def create(self, data):
+    def create(self, input_data):
         """
         Create a new question. The data input variable contains all the attributes for the "question" entity
         in the database as a dict. For simple attributes, this is a string or integer value, but for actions,
@@ -29,7 +29,7 @@ class QuestionApi(GenericApi):
         :param section_id:
         :return:
         """
-        cleaned_data = self.parse_input_data(data)
+        cleaned_data = self.parse_input_data(input_data)
         # Check whether this question already exists
         existing_question = Question.query.filter(and_(Question.question == cleaned_data['question'],
                                                        Question.section_id == cleaned_data['section_id'])).first()

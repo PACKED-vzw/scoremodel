@@ -4,6 +4,7 @@ from sqlalchemy import and_, or_
 from datetime import datetime
 from pytz import timezone
 
+
 class GenericApi:
 
     def clean_input_data(self, db_class, input_data, possible_params, required_params, complex_params):
@@ -36,21 +37,22 @@ class GenericApi:
                 cleaned[complex_param] = [cleaned[complex_param]]
         # Check for nullability
         for possible_param in possible_params:
-            if db_class.__table__.columns[possible_param].nullable is not True:
-                # Can't be null, so set it to 0 or empty string or empty date, depending on what the type is
-                if cleaned[possible_param] is None:
-                    c_type = str(Section.__table__.columns[possible_param].type)
-                    ##
-                    # TODO make this cleaner
-                    ##
-                    if c_type == 'INTEGER':
-                        cleaned[possible_param] = 0
-                    elif c_type == 'TEXT':
-                        cleaned[possible_param] = u''
-                    elif c_type == 'DATETIME':
-                        cleaned[possible_param] = datetime.now(tz=timezone('UTC'))
-                    elif c_type == 'STRING':
-                        cleaned[possible_param] = u''
+            if possible_param in db_class.__table__.columns:
+                if db_class.__table__.columns[possible_param].nullable is not True:
+                    # Can't be null, so set it to 0 or empty string or empty date, depending on what the type is
+                    if cleaned[possible_param] is None:
+                        c_type = str(Section.__table__.columns[possible_param].type)
+                        ##
+                        # TODO make this cleaner
+                        ##
+                        if c_type == 'INTEGER':
+                            cleaned[possible_param] = 0
+                        elif c_type == 'TEXT':
+                            cleaned[possible_param] = u''
+                        elif c_type == 'DATETIME':
+                            cleaned[possible_param] = datetime.now(tz=timezone('UTC'))
+                        elif c_type == 'STRING':
+                            cleaned[possible_param] = u''
         return cleaned
 
     def get_answer(self, answer_name):
