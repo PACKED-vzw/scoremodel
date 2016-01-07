@@ -1,0 +1,39 @@
+{% extends 'admin/base.html' %}
+{% block content %}
+{% raw %}
+<div class="container" ng-app="scoremodel">
+    <div class="starter-template" style="padding-top: 100px" ng-controller="AdminCtrl">
+        <div class="report panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">Rapport</h3>
+            </div>
+            <div class="panel-body">
+                <form novalidate class="form-inline">
+                    <div class="form-group">
+                        <label for="report.title">Titel</label>
+                        <input id="report.title" type="text" class="form-control" ng-model="report.title"
+                               ng-change="reset_submit_button('report_submit', report.id)" required="required"/>
+                        <button type="submit" class="btn btn-default" ng-click="submit_form('report')"
+                                ng-show="!success.report_submit[report.id] && !errors.report_submit[report.id]">Opslaan
+                        </button>
+                        <button type="button" class="btn btn-success" ng-show="success.report_submit[report.id]">
+                            Opgeslagen
+                        </button>
+                        <button type="button" class="btn btn-danger" ng-show="errors.report_submit[report.id]">
+                            {{errors.report_submit[report.id]}}
+                        </button>
+                    </div>
+                </form>
+                <!-- Sections -->
+                {% endraw %}
+                <div ng-include="'{{ url_for('static', filename='lib/templates/section.html') }}'" ng-repeat="section in report.sections track by section.id">
+                </div>
+                {% raw %}
+                <!-- Add new section -->
+                <button type="button" class="btn btn-info" ng-click="new_element_in_form('section')">Sectie toevoegen</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endraw %}
+{% endblock %}

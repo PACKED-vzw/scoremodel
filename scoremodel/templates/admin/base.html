@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    {% if title %}
+        <title>{{ title }}</title>
+    {% else %}
+        <title>Scoremodel Admin</title>
+    {% endif %}
+    <!-- Bootstrap -->
+    <link href="{{ url_for('static', filename='lib/bower_components/bootstrap/dist/css/bootstrap.css') }}" rel="stylesheet"/>
+    <link href="{{ url_for('static', filename='lib/bower_components/bootstrap/dist/css/bootstrap-theme.css') }}" rel="stylesheet"/>
+    <!-- Scripts -->
+    <!-- Bootstrap -->
+    <script src="{{ url_for('static', filename='lib/bower_components/jquery/dist/jquery.js') }}"></script>
+    <script>window.jQuery || document.write('<script src="{{ url_for('static', filename='lib/bower_components/jquery/dist/jquery.js') }}"><\/script>')</script>
+    <script src="{{ url_for('static', filename='lib/bower_components/bootstrap/dist/js/bootstrap.js') }}"></script>
+    <!-- Angular -->
+    <script src="{{ url_for('static', filename='lib/bower_components/angular/angular.js') }}"></script>
+    <script src="{{ url_for('static', filename='lib/bower_components/angular-resource/angular-resource.js') }}"></script>
+    <!-- Local scripts -->
+    <!-- API -->
+    <script src="{{ url_for('static', filename='lib/scoremodel/api/api.core.js') }}"></script>
+    <!-- Convert -->
+    <script src="{{ url_for('static', filename='lib/scoremodel/convert/convert.core.js') }}"></script>
+    <script src="{{ url_for('static', filename='lib/scoremodel/convert/convert.answer.js') }}"></script>
+    <script src="{{ url_for('static', filename='lib/scoremodel/convert/convert.risk_factor.js') }}"></script>
+    <script src="{{ url_for('static', filename='lib/scoremodel/convert/convert.question.js') }}"></script>
+    <script src="{{ url_for('static', filename='lib/scoremodel/convert/convert.section.js') }}"></script>
+    <script src="{{ url_for('static', filename='lib/scoremodel/convert/convert.report.js') }}"></script>
+    <!-- Submit -->
+    <script src="{{ url_for('static', filename='lib/scoremodel/api/api.submit.js') }}"></script>
+    <!-- View -->
+    <script src="{{ url_for('static', filename='lib/scoremodel/view/view.id.js') }}"></script>
+    <!-- App -->
+    <script src="{{ url_for('static', filename='lib/admin.js') }}"></script>
+</head>
+<body>
+    <header>
+        {% include 'header.html' %}
+    </header>
+    <nav>
+        {% include 'navigation.html' %}
+    </nav>
+    <div class="content">
+        {% block content %}{% endblock %}
+    </div>
+    <footer>
+        {% include 'footer.html' %}
+    </footer>
+</body>
+</html>

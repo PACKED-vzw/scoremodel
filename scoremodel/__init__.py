@@ -9,6 +9,7 @@ babel = Babel(app)
 # Models must be imported after db has been declared
 from scoremodel.views.user import *
 from scoremodel.views.api import *
+import scoremodel.views.admin
 from scoremodel.models import *
 
 

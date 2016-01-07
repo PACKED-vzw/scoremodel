@@ -1,0 +1,15 @@
+{
+  "name": "admin-interface",
+  "version": "0.0.0",
+  "authors": [
+    "Pieter De Praetere <pieter@packed.be>"
+  ],
+  "license": "GPLv2",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}
