@@ -1,8 +1,8 @@
 {% extends 'admin/base.html' %}
 {% block admin_content %}
 {% raw %}
-<div class="container" ng-app="scoremodel">
-    <div class="starter-template" style="padding-top: 100px" ng-controller="AdminCtrl">
+<div class="a_container" ng-app="scoremodel">
+    <div class="starter-template" ng-controller="AdminCtrl">
         <div class="report panel panel-default">
             <div class="panel-heading">
                 <h3 class="panel-title">Rapport</h3>
@@ -10,6 +10,9 @@
             <div class="panel-body">
                 <form novalidate class="form-inline">
                     <div class="form-group">
+                        {% endraw %}
+                        <input id="report_id" type="hidden" value="{{ report_id }}" />
+                        {% raw %}
                         <label for="report.title">Titel</label>
                         <input id="report.title" type="text" class="form-control" ng-model="report.title"
                                ng-change="reset_submit_button('report_submit', report.id)" required="required"/>

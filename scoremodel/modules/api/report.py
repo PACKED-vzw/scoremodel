@@ -64,6 +64,14 @@ class ReportApi(GenericApi):
         db.session.commit()
         return True
 
+    def list(self):
+        """
+        List all reports
+        :return:
+        """
+        existing_reports = Report.query.all()
+        return existing_reports
+
     def parse_input_data(self, input_data):
         """
         Clean the input data dict: remove all non-supported attributes and check whether all the required

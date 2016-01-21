@@ -383,6 +383,7 @@ app.controller('AdminCtrl', ['$scope', '$location', '$q', 'ApiCore', 'ApiSubmit'
             return false;
         };
 
+
         /*
         Get all possible answers and risk factors
          */
