@@ -1,16 +1,23 @@
 from flask import Flask
 from flask.ext.sqlalchemy import SQLAlchemy
 from flask.ext.babel import Babel
+from flask.ext.login import LoginManager
 
 app = Flask(__name__)
 app.config.from_object('config')
 db = SQLAlchemy(app)
 babel = Babel(app)
+login_manager = LoginManager()
+login_manager.session_protection = 'strong'
+login_manager.init_app(app)
+login_manager.login_view = '.v_login'
+
+
 # Models must be imported after db has been declared
-from scoremodel.views.user import *
 from scoremodel.views.api import *
-import scoremodel.views.admin
-from scoremodel.models import *
+from scoremodel.views.admin import *
+from scoremodel.views.admin.auth import *
+from scoremodel.views.admin.user import *
 
 
 @app.route('/')

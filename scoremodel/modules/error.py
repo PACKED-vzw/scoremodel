@@ -21,6 +21,10 @@ class IllegalEntityType(Exception):
     pass
 
 
+class InvalidPassword(Exception):
+    pass
+
+
 class ApiException(Exception):
     def to_json(self):
         return json.dumps(self.__str__())

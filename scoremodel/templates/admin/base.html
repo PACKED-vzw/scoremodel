@@ -11,6 +11,7 @@
     <!-- Bootstrap -->
     <link href="{{ url_for('static', filename='lib/bower_components/bootstrap/dist/css/bootstrap.css') }}" rel="stylesheet"/>
     <link href="{{ url_for('static', filename='lib/bower_components/bootstrap/dist/css/bootstrap-theme.css') }}" rel="stylesheet"/>
+    <link href="{{ url_for('static', filename='lib/style/bootstrap-dashboard.css') }}" rel="stylesheet" />
     <!-- Scripts -->
     <!-- Bootstrap -->
     <script src="{{ url_for('static', filename='lib/bower_components/jquery/dist/jquery.js') }}"></script>
@@ -37,17 +38,35 @@
     <script src="{{ url_for('static', filename='lib/admin.js') }}"></script>
 </head>
 <body>
-    <header>
-        {% include 'header.html' %}
-    </header>
-    <nav>
-        {% include 'navigation.html' %}
-    </nav>
-    <div class="content">
-        {% block content %}{% endblock %}
+{% include 'admin/admin_navigation.html' %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-sm-3 col-md-2 sidebar">
+            <ul class="nav nav-sidebar">
+                <li class="dropdown-header">Scoremodel administration</li>
+                <li class=""><a href="#">Reports</a></li>
+                <li class=""><a href="#">Analytics</a></li>
+                <li class=""><a href="#">Export</a></li>
+            </ul>
+            <ul class="nav nav-sidebar">
+                <li class="dropdown-header">User administration</li>
+                <li><a href="{{ url_for('.v_user_list') }}">User list</a></li>
+                <li><a href="{{ url_for('.v_user_create') }}">Add user</a></li>
+            </ul>
+        </div>
+        <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+            {% if get_flashed_messages() %}
+            <!-- Messages -->
+            {% for message in get_flashed_messages() %}
+            <div class="alert alert-info" role="alert">
+                {{ message }}
+            </div>
+            {% endfor %}
+            {% endif %}
+            {% block admin_content %}
+            {% endblock %}
+        </div>
     </div>
-    <footer>
-        {% include 'footer.html' %}
-    </footer>
+</div>
 </body>
 </html>
