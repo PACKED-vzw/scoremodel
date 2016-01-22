@@ -1,72 +1,107 @@
 <div class="question panel panel-default">
-    <div class="panel-heading" data-toggle="collapse" data-target="#question-body-{{question.id}}" aria-expanded="false"
-         aria-controls="question-body-{{question.id}}">
-        <h3 class="panel-title">{{question.question}}</h3>
+    <div class="panel-heading" data-toggle="collapse" data-target="#question-body-{{ question.id }}"
+         aria-expanded="false"
+         aria-controls="question-body-{{ question.id }}">
+        <h3 class="panel-title">{{ question.question }}</h3>
     </div>
-    <div class="panel-body collapse" id="question-body-{{question.id}}">
-        <form novalidate>
+    <div class="panel-body collapse" id="question-body-{{ question.id }}">
+        <form novalidate class="form-horizontal">
             <div class="form-group">
-                <label for="question.weight_{{question.id}}" class="control-label">Gewicht</label>
-                <input id="question.weight_{{question.id}}" type="number" ng-model="question.weight" min="0" max="10"
-                       integer class="form-control" ng-change="reset_submit_button('question_submit', question.id)"
-                       required="required"/>
-                <label for="question.question_{{question.id}}" class="control-label">Vraag</label>
-                                    <textarea id="question.question_{{question.id}}"
-                                              ng-model="question.question"
-                                              class="form-control"
-                                              ng-change="reset_submit_button('question_submit', question.id)"
-                                              required="required"></textarea>
-                <label for="question.example_{{question.id}}" class="control-label">Voorbeeld</label>
-                                    <textarea id="question.example_{{question.id}}" ng-model="question.example"
-                                              class="form-control"
-                                              ng-change="reset_submit_button('question_submit', question.id)"></textarea>
-                <label for="question.context_{{question.id}}" class="control-label">Context</label>
-                                    <textarea id="question.context_{{question.id}}" ng-model="question.context"
-                                              class="form-control"
-                                              ng-change="reset_submit_button('question_submit', question.id)"></textarea>
-                <label for="question.risk_{{question.id}}" class="control-label">Risico</label>
-                                    <textarea id="question.risk_{{question.id}}" ng-model="question.risk"
-                                              class="form-control"
-                                              ng-change="reset_submit_button('question_submit', question.id)"></textarea>
-                <label for="question.action_{{question.id}}" class="control-label">Actie</label>
-                <textarea id="question.action_{{question.id}}" class="form-control"
-                          ng-model="question.action"
-                          ng-change="reset_submit_button('question_submit', question.id)"></textarea>
-                <div><h4><label for="question.risk_factor_{{question.id}}">Risicofactor</label></h4>
-                    <select id="question.risk_factor_{{question.id}}"
+                <label for="question.weight_{{ question.id }}" class="control-label col-sm-1">Gewicht</label>
+                <div class="col-sm-11">
+                    <input id="question.weight_{{ question.id }}" type="number" ng-model="question.weight" min="0"
+                           max="10"
+                           integer class="form-control" ng-change="reset_submit_button('question_submit', question.id)"
+                           required="required"/>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="question.question_{{ question.id }}" class="control-label col-sm-1">Vraag</label>
+                <div class="col-sm-11">
+                     <textarea id="question.question_{{ question.id }}"
+                               ng-model="question.question"
+                               class="form-control"
+                               ng-change="reset_submit_button('question_submit', question.id)"
+                               required="required"></textarea>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="question.example_{{ question.id }}" class="control-label col-sm-1">Voorbeeld</label>
+                <div class="col-sm-11">
+                     <textarea id="question.example_{{ question.id }}" ng-model="question.example"
+                               class="form-control"
+                               ng-change="reset_submit_button('question_submit', question.id)"></textarea>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="question.context_{{ question.id }}" class="control-label col-sm-1">Context</label>
+                <div class="col-sm-11">
+                     <textarea id="question.context_{{ question.id }}" ng-model="question.context"
+                               class="form-control"
+                               ng-change="reset_submit_button('question_submit', question.id)"></textarea>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="question.risk_{{ question.id }}" class="control-label col-sm-1">Risico</label>
+                <div class="col-sm-11">
+                     <textarea id="question.risk_{{ question.id }}" ng-model="question.risk"
+                               class="form-control"
+                               ng-change="reset_submit_button('question_submit', question.id)"></textarea>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="question.action_{{ question.id }}" class="control-label col-sm-1">Actie</label>
+                <div class="col-sm-11">
+                    <textarea id="question.action_{{ question.id }}" class="form-control"
+                              ng-model="question.action"
+                              ng-change="reset_submit_button('question_submit', question.id)"></textarea>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="question.risk_factor_{{ question.id }}" class="control-label col-sm-1">Risicofactor</label>
+                <div class="col-sm-11">
+                    <select id="question.risk_factor_{{ question.id }}"
                             ng-options="risk_factor as risk_factor.risk_factor for risk_factor in available_risk_factors track by risk_factor.id"
                             ng-model="question.risk_factors" class="form-control"
                             ng-change="reset_submit_button('question_submit', question.id)"
                             required="required"></select>
                 </div>
-                <div><h4><label for="question.answer_{{question.id}}">Antwoorden</label></h4>
-                    <select id="question.answer_{{question.id}}"
+            </div>
+            <div class="form-group">
+                <label for="question.answer_{{ question.id }}" class="control-label col-sm-1">Antwoorden</label>
+                <div class="col-sm-11">
+                    <select id="question.answer_{{ question.id }}"
                             ng-options="answer as answer.answer for answer in available_answers track by answer.id"
                             ng-model="question.answers" class="form-control" multiple="multiple"
                             ng-change="reset_submit_button('question_submit', question.id)"
                             required="required"></select>
                 </div>
-
             </div>
-            <div>
-                <button type="submit" class="btn btn-default"
-                        ng-click="submit_form('question', section.id, question.id)"
-                        ng-show="!success.question_submit[question.id] && !errors.question_submit[question.id]">Opslaan
-                </button>
-                <button type="button" class="btn btn-success" ng-show="success.question_submit[question.id]">
-                    Opgeslagen
-                </button>
-                <button type="button" class="btn btn-danger" ng-show="errors.question_submit[question.id]">
-                    {{errors.question_submit[question.id]}}
-                </button>
-                <button type="submit" class="btn btn-default" ng-click="remove_element('question', section.id, question.id)"
-                        ng-show="!errors.question_remove[question.id] && !success.question_remove[question.id]">Verwijderen
-                </button>
-                <button type="button" class="btn btn-success" ng-show="success.question_remove[question.id]">Verwijderd
-                </button>
-                <button type="button" class="btn btn-danger" ng-show="errors.question_remove[question.id]">
-                    {{errors.question_remove[question.id]}}
-                </button>
+            <div class="form-group">
+                <div class="col-sm-3 col-sm-offset-1">
+                    <button type="submit" class="btn btn-default"
+                            ng-click="submit_form('question', section.id, question.id)"
+                            ng-show="!success.question_submit[question.id] && !errors.question_submit[question.id]">
+                        Opslaan
+                    </button>
+                    <button type="button" class="btn btn-success" ng-show="success.question_submit[question.id]">
+                        Opgeslagen
+                    </button>
+                    <button type="button" class="btn btn-danger" ng-show="errors.question_submit[question.id]">
+                        {{ errors.question_submit[question.id] }}
+                    </button>
+                    <button type="submit" class="btn btn-default"
+                            ng-click="remove_element('question', section.id, question.id)"
+                            ng-show="!errors.question_remove[question.id] && !success.question_remove[question.id]">
+                        Verwijderen
+                    </button>
+                    <button type="button" class="btn btn-success" ng-show="success.question_remove[question.id]">
+                        Verwijderd
+                    </button>
+                    <button type="button" class="btn btn-danger" ng-show="errors.question_remove[question.id]">
+                        {{ errors.question_remove[question.id] }}
+                    </button>
+                </div>
             </div>
         </form>
     </div>

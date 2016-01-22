@@ -41,19 +41,26 @@
 {% include 'admin/admin_navigation.html' %}
 <div class="container-fluid">
     <div class="row">
-        <div class="col-sm-3 col-md-2 sidebar">
+        <nav class="col-sm-3 col-md-2 sidebar">
             <ul class="nav nav-sidebar">
-                <li class="dropdown-header">Scoremodel administration</li>
-                <li class=""><a href="{{ url_for('.v_report_list') }}">Reports</a></li>
-                <li class=""><a href="#">Analytics</a></li>
-                <li class=""><a href="#">Export</a></li>
+                <li class="dropdown-header">Reports</li>
+                <li class=""><a href="{{ url_for('.v_report_list') }}">Report list</a></li>
+                <li class=""><a href="{{ url_for('.v_report_create') }}">New report</a></li>
             </ul>
             <ul class="nav nav-sidebar">
-                <li class="dropdown-header">User administration</li>
+                <li class="dropdown-header">Generic answers</li>
+                <li class=""><a href="{{ url_for('.v_answer_list') }}">Answer list</a></li>
+            </ul>
+            <ul class="nav nav-sidebar">
+                <li class="dropdown-header">Generic risk factors</li>
+                <li class=""><a href="{{ url_for('.v_risk_factor_list') }}">Risk factor list</a></li>
+            </ul>
+            <ul class="nav nav-sidebar">
+                <li class="dropdown-header">Users</li>
                 <li><a href="{{ url_for('.v_user_list') }}">User list</a></li>
                 <li><a href="{{ url_for('.v_user_create') }}">Add user</a></li>
             </ul>
-        </div>
+        </nav>
         <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
             {% if get_flashed_messages() %}
             <!-- Messages -->

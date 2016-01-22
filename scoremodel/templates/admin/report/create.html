@@ -1,0 +1,40 @@
+{% extends 'admin/base.html' %}
+{% block admin_content %}
+    <form method="post" action="{{ url_for('.v_report_create') }}">
+        <div class="col-xs-9">
+            <div class="report panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Rapport</h3>
+                </div>
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <div class="form-group">
+                                <label for="report.title" class="col-sm-1 control-label">Titel</label>
+                                <div class="col-sm-11">
+                                    {{ form.title(class_='form-control', id='report.title') }}
+                                    {% if form.title.errors %}
+                                        <div class="alert alert-danger">
+                                            <ul>
+                                                {% for error in form.title.errors %}
+                                                    <li>{{ error }}</li>
+                                                {% endfor %}
+                                            </ul>
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            {{ form.csrf_token }}
+                            <div class="form-group">
+                                <div class="col-sm-3 col-sm-offset-1">
+                                    {{ form.submit(class_='btn btn-default') }}
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+{% endblock %}

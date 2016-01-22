@@ -1,0 +1,17 @@
+{% extends 'admin/base.html' %}
+{% block admin_content %}
+<form method="post" action="{{ action_url }}">
+    <div class="panel panel-warning">
+        <div class="panel-heading">
+            <h1 class="panel-title">Confirm deletion</h1>
+        </div>
+        <div class="panel-body">
+            <p>Please press &lt;Confirm delete&gt; to confirm the deletion of the {{ item_type }} called &ldquo;{{ item_identifier }}&rdquo;.</p>
+        </div>
+    </div>
+    {{ form.csrf_token }}
+    <div class="form-group">
+        {{ form.submit(class_='btn btn-danger') }}
+    </div>
+</form>
+{% endblock %}

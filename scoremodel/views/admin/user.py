@@ -54,7 +54,7 @@ def v_user_create():
             flash('A required form element was not submitted: {0}'.format(e))
             return render_template('admin/user/create.html', form=form)
         except Exception as e:  # Remove this after debugging
-        #    flash('An unexpected error occurred: {0}'.format(e))
+            #    flash('An unexpected error occurred: {0}'.format(e))
             flash('An unexpected error occurred.')
             return render_template('admin/user/create.html', form=form)
         else:
@@ -100,7 +100,7 @@ def v_user_edit(user_id):
             return render_template('admin/user/edit.html', form=form, user_id=user_id)
         except Exception as e:
             flash('An unexpected error occurred: {0}'.format(e))
-            #flash('An unexpected error occurred.')
+            # flash('An unexpected error occurred.')
             return render_template('admin/user/edit.html', form=form, user_id=user_id)
         else:
             return redirect(url_for('.v_user_list'))
@@ -141,6 +141,9 @@ def v_user_delete(user_id):
             return redirect(url_for('.v_user_list'))
         else:
             flash('Unable to delete user {0}'.format(existing_user.email))
-            return render_template('admin/user/delete.html', form=form, user_id=user_id, user_name=existing_user.email)
+            return render_template('admin/generic/delete.html', action_url=url_for('.v_user_delete',
+                                                                                   user_id=user_id),
+                                   item_type='Report', item_identifier=existing_user.email, form=form)
 
-    return render_template('admin/user/delete.html', form=form, user_id=user_id, user_name=existing_user.email)
+    return render_template('admin/generic/delete.html', action_url=url_for('.v_user_delete', user_id=user_id),
+                           item_type='Report', item_identifier=existing_user.email, form=form)
