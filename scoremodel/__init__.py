@@ -15,6 +15,7 @@ login_manager.login_view = '.v_login'
 
 # Models must be imported after db has been declared
 from scoremodel.views.api import *
+from scoremodel.views.admin import *
 from scoremodel.views.admin.report import *
 from scoremodel.views.admin.auth import *
 from scoremodel.views.admin.user import *
@@ -46,11 +47,6 @@ def v_documenten():
 
 @app.route('/disclaimer')
 def v_disclaimer():
-    pass
-
-
-@app.route('/admin')
-def v_admin():
     pass
 
 

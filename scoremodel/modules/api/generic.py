@@ -12,6 +12,7 @@ class GenericApi:
         Clean the input data dict: remove all non-supported attributes and check whether all the required
         parametes have been filled. All missing parameters are set to None. All attributes in complex_params
         must be a list.
+        :param db_class
         :param input_data:
         :param required_params
         :param possible_params

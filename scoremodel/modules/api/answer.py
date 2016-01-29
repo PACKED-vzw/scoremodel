@@ -6,7 +6,7 @@ from scoremodel import db
 
 class AnswerApi(GenericApi):
     complex_params = []  # These should be a list in input_data
-    simple_params = ['answer', 'value', 'order_in_question']
+    simple_params = ['answer', 'value']
 
     def __init__(self, answer_id=None):
         self.answer_id = answer_id
@@ -24,8 +24,7 @@ class AnswerApi(GenericApi):
             existing_answer = None
         if existing_answer:
             raise DatabaseItemAlreadyExists('An answer called "{0}" already exists'.format(cleaned_data['answer']))
-        new_answer = Answer(answer=cleaned_data['answer'], value=cleaned_data['value'],
-                            order=cleaned_data['order_in_question'])
+        new_answer = Answer(answer=cleaned_data['answer'], value=cleaned_data['value'])
         db.session.add(new_answer)
         db.session.commit()
         return new_answer
@@ -74,6 +73,6 @@ class AnswerApi(GenericApi):
         return answers
 
     def parse_input_data(self, input_data):
-        possible_params = ['answer', 'value', 'order_in_question']
+        possible_params = ['answer', 'value']
         required_params = ['answer']
         return self.clean_input_data(Answer, input_data, possible_params, required_params, self.complex_params)
