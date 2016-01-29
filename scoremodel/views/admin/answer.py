@@ -6,6 +6,7 @@ from scoremodel.modules.api.answer import AnswerApi
 from scoremodel.modules.forms.generic import GenericDeleteForm
 from scoremodel.modules.forms.answers import AnswerCreateForm
 from scoremodel.modules.error import DatabaseItemAlreadyExists, RequiredAttributeMissing, DatabaseItemDoesNotExist
+from scoremodel.modules.gui.admin import ScoremodelAdminGui
 
 
 @app.route('/admin/answer/list')
@@ -22,29 +23,10 @@ def v_answer_list():
 @login_required
 @must_be_admin
 def v_answer_create():
-    form = AnswerCreateForm()
-    if request.method == 'POST' and form.validate_on_submit():
-        a_api = AnswerApi()
-        input_data = {
-            'answer': form.answer.data,
-            'value': form.value.data
-        }
-        try:
-            a_api.create(input_data)
-        except RequiredAttributeMissing:
-            flash('Missing required form input.')
-            return redirect(url_for('.v_answer_create'))
-        except DatabaseItemAlreadyExists:
-            flash('An answer called {0} already exists.'.format(input_data['answer']))
-            return redirect(url_for('.v_answer_create'))
-        except Exception as e:
-            flash('An unexpected error occurred.')
-            print(e)
-            return redirect(url_for('.v_answer_create'))
-        else:
-            flash('Answer created successfully.')
-            return redirect(url_for('.v_answer_list'))
-    return render_template('admin/answer/create.html', action_url=url_for('.v_answer_create'), form=form)
+    g_answer = ScoremodelAdminGui(c_form=AnswerCreateForm, o_request=request, c_api=AnswerApi,
+                                  error_view='.v_answer_create', success_view='.v_answer_list')
+    return g_answer.create('admin/answer/create.html', ('answer', 'value'),
+                           {'action_url': url_for('.v_answer_create')})
 
 
 @app.route('/admin/answer/edit/<int:id>', methods=['GET', 'POST'])
