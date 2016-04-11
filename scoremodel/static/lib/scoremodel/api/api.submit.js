@@ -101,6 +101,26 @@ api_submit.factory('ApiSubmit', ['ApiCore',
             return api_promise;
         };
 
+        /**
+         * 
+         */
+        ApiSubmit.prototype.question_answer = function(report_id, question_id, answer_id, question_answer_id) {
+            var input_data = {
+                user_report_id: report_id,
+                question_id: question_id,
+                answer_id: answer_id
+            };
+            var api_promise;
+            if (question_answer_id < 0) {
+                /* Create */
+                api_promise = this.a_api.create(input_data, 'user_report/question_answer');
+            } else {
+                /* Update */
+                api_promise = this.a_api.update(question_answer_id, input_data, 'user_report/question_answer');
+            }
+            return api_promise;
+        };
+
         return ApiSubmit;
     }
 ]);

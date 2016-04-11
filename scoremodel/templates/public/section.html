@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+{% block content %}
+    <div class="container">
+        <div class="page-header">
+            <h1>{{ section.title }}</h1>
+        </div>
+        <div class="well">
+            <p>{{ section.context }}</p>
+        </div>
+        <div class="row">
+            {% for question in section.ordered_questions %}
+                <div class="col-md-offset-1 col-md-9">
+                    <div class="row">
+                        <div class="col-sm-5">
+                            <h2>{{ question.question }}</h2>
+                            <form novalidate>
+                                <div>
+                                    {% for answer in question.answers %}
+                                        <div class="radio">
+                                            <label>
+                                                <input type="radio" ng-model="questions[{{ question.id }}].answer"
+                                                       ng-change="submit_answer({{ report_id }},{{ question.id }},{{ answer.id }})"
+                                                       value="{{ answer.id }}"/>
+                                                {{ answer.answer }}
+                                            </label>
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                            </form>
+                        </div>
+                        <div class="col-sm-6 col-md-offset-1">
+                            <ul class="nav nav-pills" role="tablist">
+                                <li role="presentation">Context</li>
+                                <li role="presentation">Risico</li>
+                                <li role="presentation">Voorbeeld</li>
+                            </ul>
+                            <p></p>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}

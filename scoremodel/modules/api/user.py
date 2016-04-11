@@ -3,6 +3,7 @@ from copy import copy, deepcopy
 from scoremodel.modules.api.generic import GenericApi
 from scoremodel.modules.api.role import RoleApi
 from scoremodel.models.user import User
+from scoremodel.models.public import UserReport
 from scoremodel import db, login_manager
 from scoremodel.modules.error import RequiredAttributeMissing, DatabaseItemAlreadyExists, DatabaseItemDoesNotExist,\
     InvalidPassword
@@ -147,6 +148,16 @@ class UserApi(GenericApi):
         if update_password is True:
             existing_user.set_password(unhashed_password)
         return existing_user
+
+    def get_user_reports(self, user_id):
+        user = self.read(user_id)
+        return user.reports
+
+    def add_user_report(self, user_id, report):
+        user = self.read(user_id)
+        user.reports.append(report)
+        db.commit()
+        return user
 
 
 @login_manager.user_loader

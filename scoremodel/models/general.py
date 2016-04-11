@@ -86,6 +86,7 @@ class Report(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.Text, index=True, nullable=False)
     sections = db.relationship('Section', backref='report', lazy='dynamic')
+    user_reports = db.relationship('UserReport', backref='template', lazy='dynamic')
 
     def __repr__(self):
         return '<Report {0}>'.format(self.id)
@@ -97,8 +98,12 @@ class Report(db.Model):
         return {
             'id': self.id,
             'title': self.title,
-            'sections': [s.output_obj() for s in self.sections]
+            'sections': [s.output_obj() for s in self.ordered_sections]
         }
+
+    @property
+    def ordered_sections(self):
+        return sorted(self.sections, key=lambda section: section.order_in_report)
 
 
 class Section(db.Model):
@@ -118,7 +123,7 @@ class Section(db.Model):
         self.title = title
         self.context = context
         self.total_score = total_score
-        self.order_in_report = 0
+        self.order_in_report = order
 
     def output_obj(self):
         return {
@@ -127,9 +132,13 @@ class Section(db.Model):
             'context': self.context,
             'total_score': self.total_score,
             'order_in_report': self.order_in_report,
-            'questions': [q.output_obj() for q in self.questions],
+            'questions': [q.output_obj() for q in self.ordered_questions],
             'report_id': self.report_id
         }
+
+    @property
+    def ordered_questions(self):
+        return sorted(self.questions, key=lambda question: question.order_in_section)
 
 
 class Question(db.Model):

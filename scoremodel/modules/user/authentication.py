@@ -1,5 +1,5 @@
 from functools import wraps
-from flask import abort
+from flask import abort, flash, url_for, redirect
 from flask.ext.login import current_user
 from flask.ext.wtf import Form
 from wtforms import StringField, PasswordField, BooleanField, SubmitField

@@ -21,6 +21,8 @@ from scoremodel.views.admin.auth import *
 from scoremodel.views.admin.user import *
 from scoremodel.views.admin.answer import *
 from scoremodel.views.admin.risk_factor import *
+# Public views
+from scoremodel.views.public.report import *
 
 
 @app.route('/')
@@ -49,6 +51,10 @@ def v_documenten():
 def v_disclaimer():
     pass
 
+
+@app.route('/contact')
+def v_contact():
+    pass
 
 if __name__ == '__main__':
     app.run()

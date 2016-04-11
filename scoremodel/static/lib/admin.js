@@ -251,6 +251,11 @@ app.controller('AdminCtrl', ['$scope', '$location', '$q', 'ApiCore', 'ApiSubmit'
                     $scope.new_section_id = $scope.new_section_id - 1;
                     var template_section = angular.copy($scope.report_template.sections[0]);
                     template_section.id = angular.copy($scope.new_section_id);
+                    /* By default (until we create a function that allows moving sections to change the order in the
+                     * question, the order_in_report is position_of_last_item_in_sections + 1, which is conveniently
+                     * equal to sections.length
+                     */
+                    template_section.order_in_report = $scope.report.sections.length;
                     $scope.report.sections.push(template_section);
                     $scope.success.section_new[template_section.id] = true;
                     break;
@@ -262,6 +267,7 @@ app.controller('AdminCtrl', ['$scope', '$location', '$q', 'ApiCore', 'ApiSubmit'
                         for (var i = 0; i < $scope.report.sections.length; i++) {
                             var section = $scope.report.sections[i];
                             if (section.id == section_id) {
+                                template_question.order_in_section = $scope.report.sections[i].questions.length;
                                 $scope.report.sections[i].questions.push(template_question);
                                 $scope.success.question_new[template_question.id] = true;
                                 break;

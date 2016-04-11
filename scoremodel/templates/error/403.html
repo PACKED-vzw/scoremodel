@@ -1,0 +1,7 @@
+{% extends 'base.html' %}
+{% block content %}
+    <div class="jumbotron">
+    <h1>Access forbidden</h1>
+    <p>You do not have the rights to view this page. If you believe this is an error, please <a href="{{ url_for('.v_contact') }}">contact the administrator</a>. Please return to the <a href="{{ url_for('.v_index') }}">main page</a>.</p>
+    </div>
+{% endblock %}

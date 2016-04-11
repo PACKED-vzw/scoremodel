@@ -3,25 +3,60 @@
 <head>
     <meta charset="UTF-8">
     {% if title %}
-        <title>{{ title }}</title>
+        <title>Scoremodel: {{ title }}</title>
     {% else %}
         <title>Scoremodel</title>
     {% endif %}
-<link rel="stylesheet" href="{{ url_for('static', filename='screen.css') }}" media="screen" />
-<link rel="stylesheet" href="{{ url_for('static', filename='print.css') }}" media="print" />
+    <!-- Bootstrap -->
+    <link href="{{ url_for('static', filename='lib/bower_components/bootstrap/dist/css/bootstrap.css') }}" rel="stylesheet"/>
+    <link href="{{ url_for('static', filename='lib/bower_components/bootstrap/dist/css/bootstrap-theme.css') }}" rel="stylesheet"/>
+    <link href="{{ url_for('static', filename='lib/style/bootstrap-dashboard.css') }}" rel="stylesheet" />
+    <!-- Scripts -->
+    <!-- Bootstrap -->
+    <script src="{{ url_for('static', filename='lib/bower_components/jquery/dist/jquery.js') }}"></script>
+    <script>window.jQuery || document.write('<script src="{{ url_for('static', filename='lib/bower_components/jquery/dist/jquery.js') }}"><\/script>')</script>
+    <script src="{{ url_for('static', filename='lib/bower_components/bootstrap/dist/js/bootstrap.js') }}"></script>
+    <!-- Angular -->
+    <script src="{{ url_for('static', filename='lib/bower_components/angular/angular.js') }}"></script>
+    <script src="{{ url_for('static', filename='lib/bower_components/angular-resource/angular-resource.js') }}"></script>
+    <!-- Local scripts -->
+    <!-- API -->
+    <script src="{{ url_for('static', filename='lib/scoremodel/api/api.core.js') }}"></script>
+    <script src="{{ url_for('static', filename='lib/scoremodel/api/api.submit.js') }}"></script>
+    <!-- Local -->
+    <script src="{{ url_for('static', filename='lib/scoremodel/public/section.js') }}"></script>
+    <!-- Local CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='screen.css') }}" media="screen" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='print.css') }}" media="print" />
 </head>
 <body>
+<div class="container-fluid">
+<div class="row">
     <header>
         {% include 'header.html' %}
     </header>
     <nav>
         {% include 'navigation.html' %}
     </nav>
-    <div class="content">
+</div>
+<div class="row">
+    <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+            {% if get_flashed_messages() %}
+            <!-- Messages -->
+            {% for message in get_flashed_messages() %}
+            <div class="alert alert-info" role="alert">
+                {{ message }}
+            </div>
+            {% endfor %}
+            {% endif %}
         {% block content %}{% endblock %}
     </div>
+</div>
+<div class="row">
     <footer>
         {% include 'footer.html' %}
     </footer>
+</div>
+</div>
 </body>
 </html>

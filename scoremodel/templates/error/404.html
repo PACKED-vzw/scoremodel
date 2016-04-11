@@ -1,0 +1,7 @@
+{% extends 'base.html' %}
+{% block content %}
+    <div class="jumbotron">
+    <h1>Page not found</h1>
+    <p>We could not find the page you requested. You could try <a href="https://www.google.com/search?q={{ page_name }}&as_sitesearch=scoremodel.org">searching for it</a> or return to the <a href="{{ url_for('.v_index') }}">main page</a>.</p>
+    </div>
+{% endblock %}
