@@ -1,4 +1,6 @@
+from sqlalchemy import and_
 from scoremodel import db
+from scoremodel.models.public import QuestionAnswer
 
 ##
 # Contains general database models:
@@ -182,6 +184,15 @@ class Question(db.Model):
     def highest_answer(self):
         highest = self.answers.order_by('value desc').all()
         return highest[0].value
+
+    def selected_answer(self, user_report_id):
+        """
+        Returns the selected answer for a specific question in a specific user report
+        :param user_report_id:
+        :return:
+        """
+        return QuestionAnswer.query.filter(and_(QuestionAnswer.question_id == self.id,
+                                                QuestionAnswer.user_report_id == user_report_id)).first()
 
     def output_obj(self):
         return {

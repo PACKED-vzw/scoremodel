@@ -13,6 +13,28 @@ app.controller('SectionCtrl', ['$scope', 'ApiCore', 'ApiSubmit',
          * @param answer_id
          */
         $scope.questions = {};
+        $scope.answers = {};
+
+
+
+        $scope.fill_model = function() {
+            var parse_url = new UrlParse('');
+            var section_id = parse_url.get_str_id('section_id');
+            var user_report_id = parse_url.get_str_id('report_id');
+            var api_core = new ApiCore();
+            var promise = api_core.read(section_id, 'section');
+            promise.then(function success(response){
+                for(var i = 0; i < response.data.data.questions.length; i++) {
+                    var question = response.data.data.questions[i];
+                    $scope.answers[question.id] = {answer: null};
+                    var question_answer_promise = api_core.read(user_report_id + '/question/' + question.id, 'user_report');
+                    question_answer_promise.then(function success(response) {
+                        var question_answer = response.data.data;
+                        $scope.answers[question_answer.question_id].answer = question_answer.answer_id;
+                    }, function error(response){});
+                }
+            }, function error(response){});
+        };
         
         $scope.submit_answer = function(report_id, question_id, answer_id) {
             /*
@@ -20,7 +42,7 @@ app.controller('SectionCtrl', ['$scope', 'ApiCore', 'ApiSubmit',
              */
             var api_submit = new ApiSubmit(null);
             var submit_promise;
-            if () {
+            if (!$scope.questions.hasOwnProperty(question_id)) {
                 $scope.questions[question_id] = {
                     question_answer_id: -1,
                     error: {}
@@ -35,5 +57,8 @@ app.controller('SectionCtrl', ['$scope', 'ApiCore', 'ApiSubmit',
                 $scope.questions[question_id].error.msg = response;
             });
         };
+
+        $scope.fill_model();
+        console.log($scope.answers);
     }
 ]);

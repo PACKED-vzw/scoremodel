@@ -1,10 +1,11 @@
-from scoremodel.models.public import UserReport, QuestionAnswer
-from scoremodel.models.general import Report, Section
-from sqlalchemy import and_, or_
-from scoremodel.modules.error import RequiredAttributeMissing, DatabaseItemAlreadyExists, DatabaseItemDoesNotExist
-from scoremodel.modules.api.generic import GenericApi
-from scoremodel.modules.api.question import QuestionApi
+from sqlalchemy import and_
+
 from scoremodel import db
+from scoremodel.models.general import Section
+from scoremodel.models.public import QuestionAnswer
+from scoremodel.modules.api.generic import GenericApi
+from scoremodel.modules.api.section import SectionApi
+from scoremodel.modules.error import DatabaseItemAlreadyExists, DatabaseItemDoesNotExist
 
 
 class QuestionAnswerApi(GenericApi):
@@ -45,6 +46,45 @@ class QuestionAnswerApi(GenericApi):
     def list(self):
         existing_question_answers = QuestionAnswer.query.all()
         return existing_question_answers
+
+    def get_for_section_by_question_id(self, section_id, user_id, user_report_id):
+        """
+        Get all questionAnswers for a specific section (section_id) in a dict
+        where the key is the question_id for a specific user in a specific UserReport
+        :param section_id:
+        :param user_id:
+        :param user_report_id:
+        :return:
+        """
+        section_api = SectionApi()
+        current_section = section_api.read(section_id)
+        ordered_questions = {}
+        for question in current_section.questions:
+            if question.id in ordered_questions:
+                raise DatabaseItemAlreadyExists('Error: two questions with the same id in one section!')
+            # Get the QuestionAnswers object
+            try:
+                question_answer = self.get_answer_by_question_id(question.id, user_id, user_report_id)
+            except DatabaseItemDoesNotExist:
+                continue
+            ordered_questions[question.id] = question_answer
+        return ordered_questions
+
+    def get_answer_by_question_id(self, question_id, user_id, user_report_id):
+        """
+        Get the answer to a question by its question_id in a specific report.
+        :param question_id:
+        :param user_id:
+        :param user_report_id:
+        :return:
+        """
+        question_answer = QuestionAnswer.query.filter(and_(QuestionAnswer.question_id == question_id,
+                                                           QuestionAnswer.user_id == user_id,
+                                                           QuestionAnswer.user_report_id == user_report_id)).first()
+        if question_answer is None:
+            raise DatabaseItemDoesNotExist('No answer found for question {0} in report {1}'.format(question_id,
+                                                                                                   user_report_id))
+        return question_answer
 
     def parse_input_data(self, input_data):
         """

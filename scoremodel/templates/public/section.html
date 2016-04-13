@@ -1,32 +1,40 @@
 {% extends 'base.html' %}
 {% block content %}
-    <div class="container">
+    <div class="container" ng-app="scoremodel.public">
         <div class="page-header">
             <h1>{{ section.title }}</h1>
         </div>
         <div class="well">
             <p>{{ section.context }}</p>
         </div>
-        <div class="row">
+        <div class="row" ng-controller="SectionCtrl">
+        <form novalidate>
+        <input id="report_id" type="hidden" value="{{ report_id }}" />
+        <input id="section_id" type="hidden" value="{{ section.id }}" />
             {% for question in section.ordered_questions %}
                 <div class="col-md-offset-1 col-md-9">
                     <div class="row">
                         <div class="col-sm-5">
                             <h2>{{ question.question }}</h2>
-                            <form novalidate>
                                 <div>
                                     {% for answer in question.answers %}
                                         <div class="radio">
                                             <label>
-                                                <input type="radio" ng-model="questions[{{ question.id }}].answer"
+                                                {% if question.selected_answer(report_id) and question.selected_answer(report_id).answer_id == answer.id %}
+                                                    <input type="radio" ng-model="answers[{{ question.id }}].answer"
                                                        ng-change="submit_answer({{ report_id }},{{ question.id }},{{ answer.id }})"
-                                                       value="{{ answer.id }}"/>
+                                                       value="{{ answer.id }}" id="questions_{{ question.id }}_{{ answer.id }}" name="questions_{{ question.id }}" checked autocomplete="off"/>
                                                 {{ answer.answer }}
+                                                {% else %}
+                                                <input type="radio" ng-model="answers[{{ question.id }}].answer"
+                                                       ng-change="submit_answer({{ report_id }},{{ question.id }},{{ answer.id }})"
+                                                       value="{{ answer.id }}" id="questions_{{ question.id }}_{{ answer.id }}" name="questions_{{ question.id }}" autocomplete="off"/>
+                                                {{ answer.answer }}
+                                                {% endif %}
                                             </label>
                                         </div>
                                     {% endfor %}
                                 </div>
-                            </form>
                         </div>
                         <div class="col-sm-6 col-md-offset-1">
                             <ul class="nav nav-pills" role="tablist">
@@ -39,6 +47,7 @@
                     </div>
                 </div>
             {% endfor %}
+        </form>
         </div>
     </div>
 {% endblock %}

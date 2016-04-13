@@ -118,6 +118,7 @@ def v_user_report_edit(user_id, report_id):
 @login_required
 def v_user_report_section(user_id, report_id, section_id):
     section_api = SectionApi()
+    question_answer_api = QuestionAnswerApi()
     if current_user.id != user_id:
         flash('You can only view your own reports.')
         abort(403)
