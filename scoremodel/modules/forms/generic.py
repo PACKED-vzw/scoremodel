@@ -5,7 +5,7 @@ from wtforms.validators import Required
 
 class GenericCreateForm(Form):
     name = StringField('Name', validators=[Required()])
-    submit = SubmitField('Create')
+    submit = SubmitField('Submit')
 
 
 class GenericDeleteForm(Form):

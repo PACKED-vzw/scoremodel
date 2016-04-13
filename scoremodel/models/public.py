@@ -25,15 +25,6 @@ class UserReport(db.Model):
     def creation_date(self):
         return self.creation_time.date()
 
-    def output_obj(self):
-        return {
-            'id': self.id,
-            'name': self.name,
-            'user_id': self.user_id,
-            'report_id': self.report_id,
-            'question_answers': [q.output_obj() for q in self.question_answers]
-        }
-
 
 class QuestionAnswer(db.Model):
     __tablename__ = 'QuestionAnswer'
@@ -48,12 +39,3 @@ class QuestionAnswer(db.Model):
         self.question_id = question_id
         self.answer_id = answer_id
         self.user_report_id = user_report_id
-
-    def output_obj(self):
-        return {
-            'id': self.id,
-            'user_id': self.user_id,
-            'question_id': self.question_id,
-            'answer_id': self.answer_id,
-            'user_report_id': self.user_report_id
-        }

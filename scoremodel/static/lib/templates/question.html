@@ -7,8 +7,8 @@
     <div class="panel-body collapse" id="question-body-{{ question.id }}">
         <form novalidate class="form-horizontal">
             <div class="form-group">
-                <label for="question.weight_{{ question.id }}" class="control-label col-sm-1">Gewicht</label>
-                <div class="col-sm-11">
+                <label for="question.weight_{{ question.id }}" class="control-label col-sm-3">Gewicht</label>
+                <div class="col-sm-9">
                     <input id="question.weight_{{ question.id }}" type="number" ng-model="question.weight" min="0"
                            max="10"
                            integer class="form-control" ng-change="reset_submit_button('question_submit', question.id)"
@@ -16,8 +16,8 @@
                 </div>
             </div>
             <div class="form-group">
-                <label for="question.question_{{ question.id }}" class="control-label col-sm-1">Vraag</label>
-                <div class="col-sm-11">
+                <label for="question.question_{{ question.id }}" class="control-label col-sm-3">Vraag</label>
+                <div class="col-sm-9">
                      <textarea id="question.question_{{ question.id }}"
                                ng-model="question.question"
                                class="form-control"
@@ -26,40 +26,40 @@
                 </div>
             </div>
             <div class="form-group">
-                <label for="question.example_{{ question.id }}" class="control-label col-sm-1">Voorbeeld</label>
-                <div class="col-sm-11">
+                <label for="question.example_{{ question.id }}" class="control-label col-sm-3">Voorbeeld</label>
+                <div class="col-sm-9">
                      <textarea id="question.example_{{ question.id }}" ng-model="question.example"
                                class="form-control"
                                ng-change="reset_submit_button('question_submit', question.id)"></textarea>
                 </div>
             </div>
             <div class="form-group">
-                <label for="question.context_{{ question.id }}" class="control-label col-sm-1">Context</label>
-                <div class="col-sm-11">
+                <label for="question.context_{{ question.id }}" class="control-label col-sm-3">Context</label>
+                <div class="col-sm-9">
                      <textarea id="question.context_{{ question.id }}" ng-model="question.context"
                                class="form-control"
                                ng-change="reset_submit_button('question_submit', question.id)"></textarea>
                 </div>
             </div>
             <div class="form-group">
-                <label for="question.risk_{{ question.id }}" class="control-label col-sm-1">Risico</label>
-                <div class="col-sm-11">
+                <label for="question.risk_{{ question.id }}" class="control-label col-sm-3">Risico</label>
+                <div class="col-sm-9">
                      <textarea id="question.risk_{{ question.id }}" ng-model="question.risk"
                                class="form-control"
                                ng-change="reset_submit_button('question_submit', question.id)"></textarea>
                 </div>
             </div>
             <div class="form-group">
-                <label for="question.action_{{ question.id }}" class="control-label col-sm-1">Actie</label>
-                <div class="col-sm-11">
+                <label for="question.action_{{ question.id }}" class="control-label col-sm-3">Actie</label>
+                <div class="col-sm-9">
                     <textarea id="question.action_{{ question.id }}" class="form-control"
                               ng-model="question.action"
                               ng-change="reset_submit_button('question_submit', question.id)"></textarea>
                 </div>
             </div>
             <div class="form-group">
-                <label for="question.risk_factor_{{ question.id }}" class="control-label col-sm-1">Risicofactor</label>
-                <div class="col-sm-11">
+                <label for="question.risk_factor_{{ question.id }}" class="control-label col-sm-3">Risicofactor</label>
+                <div class="col-sm-9">
                     <select id="question.risk_factor_{{ question.id }}"
                             ng-options="risk_factor as risk_factor.risk_factor for risk_factor in available_risk_factors track by risk_factor.id"
                             ng-model="question.risk_factors" class="form-control"
@@ -68,8 +68,8 @@
                 </div>
             </div>
             <div class="form-group">
-                <label for="question.answer_{{ question.id }}" class="control-label col-sm-1">Antwoorden</label>
-                <div class="col-sm-11">
+                <label for="question.answer_{{ question.id }}" class="control-label col-sm-3">Antwoorden</label>
+                <div class="col-sm-9">
                     <select id="question.answer_{{ question.id }}"
                             ng-options="answer as answer.answer for answer in available_answers track by answer.id"
                             ng-model="question.answers" class="form-control" multiple="multiple"

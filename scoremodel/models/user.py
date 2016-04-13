@@ -1,7 +1,6 @@
 import bcrypt
 from hashlib import sha512
 from scoremodel import db
-import scoremodel.models.public
 
 
 class Role(db.Model):
@@ -28,8 +27,6 @@ class User(db.Model):
     username = db.Column(db.String(255), index=True, unique=True, nullable=False)
     email = db.Column(db.String(255), index=True, unique=True, nullable=False)
     password_hash = db.Column(db.String(), nullable=False)
-    questions = db.relationship('QuestionAnswer', backref='user', lazy='dynamic')
-    reports = db.relationship('UserReport', backref='user', lazy='dynamic')
     authenticated = db.Column(db.Boolean, default=False)
     roles = db.relationship('Role',
                             secondary=users_roles,

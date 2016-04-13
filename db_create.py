@@ -2,6 +2,9 @@ from migrate.versioning import api
 from os.path import exists
 from config import SQLALCHEMY_DATABASE_URI, SQLALCHEMY_MIGRATE_REPO
 from scoremodel import db
+from scoremodel.models.general import *
+from scoremodel.models.public import *
+from scoremodel.models.user import *
 
 ##
 # TODO: Update for MySQL
