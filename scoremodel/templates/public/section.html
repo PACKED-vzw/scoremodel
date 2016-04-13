@@ -8,46 +8,77 @@
             <p>{{ section.context }}</p>
         </div>
         <div class="row" ng-controller="SectionCtrl">
-        <form novalidate>
-        <input id="report_id" type="hidden" value="{{ report_id }}" />
-        <input id="section_id" type="hidden" value="{{ section.id }}" />
-            {% for question in section.ordered_questions %}
-                <div class="col-md-offset-1 col-md-9">
-                    <div class="row">
-                        <div class="col-sm-5">
-                            <h2>{{ question.question }}</h2>
+            <form novalidate>
+                <input id="report_id" type="hidden" value="{{ report_id }}"/>
+                <input id="section_id" type="hidden" value="{{ section.id }}"/>
+                {% for question in section.ordered_questions %}
+                    <div class="col-md-offset-1 col-md-9">
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <h2>{{ question.question }}</h2>
                                 <div>
                                     {% for answer in question.answers %}
                                         <div class="radio">
                                             <label>
                                                 {% if question.selected_answer(report_id) and question.selected_answer(report_id).answer_id == answer.id %}
                                                     <input type="radio" ng-model="answers[{{ question.id }}].answer"
-                                                       ng-change="submit_answer({{ report_id }},{{ question.id }},{{ answer.id }})"
-                                                       value="{{ answer.id }}" id="questions_{{ question.id }}_{{ answer.id }}" name="questions_{{ question.id }}" checked autocomplete="off"/>
-                                                {{ answer.answer }}
+                                                           ng-change="submit_answer({{ report_id }},{{ question.id }},{{ answer.id }})"
+                                                           value="{{ answer.id }}"
+                                                           id="questions_{{ question.id }}_{{ answer.id }}"
+                                                           name="questions_{{ question.id }}" checked
+                                                           autocomplete="off"/>
+                                                    {{ answer.answer }}
                                                 {% else %}
-                                                <input type="radio" ng-model="answers[{{ question.id }}].answer"
-                                                       ng-change="submit_answer({{ report_id }},{{ question.id }},{{ answer.id }})"
-                                                       value="{{ answer.id }}" id="questions_{{ question.id }}_{{ answer.id }}" name="questions_{{ question.id }}" autocomplete="off"/>
-                                                {{ answer.answer }}
+                                                    <input type="radio" ng-model="answers[{{ question.id }}].answer"
+                                                           ng-change="submit_answer({{ report_id }},{{ question.id }},{{ answer.id }})"
+                                                           value="{{ answer.id }}"
+                                                           id="questions_{{ question.id }}_{{ answer.id }}"
+                                                           name="questions_{{ question.id }}" autocomplete="off"/>
+                                                    {{ answer.answer }}
                                                 {% endif %}
                                             </label>
                                         </div>
                                     {% endfor %}
+                                <span>Risicofactor</span>
                                 </div>
-                        </div>
-                        <div class="col-sm-6 col-md-offset-1">
-                            <ul class="nav nav-pills" role="tablist">
-                                <li role="presentation">Context</li>
-                                <li role="presentation">Risico</li>
-                                <li role="presentation">Voorbeeld</li>
-                            </ul>
-                            <p></p>
+                            </div>
+                            <div class="col-sm-offset-1 col-sm-5">
+                                <div class="row">
+                                    <nav>
+                                        <ul class="nav nav-pills" role="tablist">
+                                            <li role="presentation"><a role="tab" href="#context_{{ question.id }}"
+                                                                       data-toggle="pill"
+                                                                       aria-controls="context_{{ question.id }}">Context</a>
+                                            </li>
+                                            <li role="presentation"><a role="tab" href="#risk_{{ question.id }}"
+                                                                       data-toggle="pill"
+                                                                       aria-controls="risk_{{ question.id }}">Risico</a>
+                                            </li>
+                                            <li role="presentation"><a role="tab" href="#example_{{ question.id }}"
+                                                                       data-toggle="pill"
+                                                                       aria-controls="example_{{ question.id }}">Voorbeeld</a>
+                                            </li>
+                                        </ul>
+                                    </nav>
+                                </div>
+                                <div class="row">
+                                    <div class="tab-content">
+                                        <div role="tabpanel" class="tab-pane" id="context_{{ question.id }}">
+                                            <p>{{ question.context }}</p>
+                                        </div>
+                                        <div role="tabpanel" class="tab-pane" id="risk_{{ question.id }}">
+                                            <p>{{ question.risk }}</p>
+                                        </div>
+                                        <div role="tabpanel" class="tab-pane" id="example_{{ question.id }}">
+                                            <p>{{ question.example }}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                </div>
-            {% endfor %}
-        </form>
+                {% endfor %}
+            </form>
         </div>
     </div>
 {% endblock %}

@@ -31,6 +31,7 @@ app.controller('SectionCtrl', ['$scope', 'ApiCore', 'ApiSubmit',
                     question_answer_promise.then(function success(response) {
                         var question_answer = response.data.data;
                         $scope.answers[question_answer.question_id].answer = question_answer.answer_id;
+                        $scope.answers[question_answer.question_id].question_answer_id = question_answer.id;
                     }, function error(response){});
                 }
             }, function error(response){});
@@ -42,23 +43,19 @@ app.controller('SectionCtrl', ['$scope', 'ApiCore', 'ApiSubmit',
              */
             var api_submit = new ApiSubmit(null);
             var submit_promise;
-            if (!$scope.questions.hasOwnProperty(question_id)) {
-                $scope.questions[question_id] = {
-                    question_answer_id: -1,
-                    error: {}
-                };
+            if (!$scope.answers[question_id].hasOwnProperty('question_answer_id')) {
+                $scope.answers[question_id].question_answer_id = -1;
                 submit_promise = api_submit.question_answer(report_id, question_id, answer_id, -1);
             } else {
-                submit_promise = api_submit.question_answer(report_id, question_id, answer_id, $scope.questions[question_id].question_answer_id);
+                submit_promise = api_submit.question_answer(report_id, question_id, answer_id, $scope.answers[question_id].question_answer_id);
             }
             submit_promise.then(function success(response){
-                $scope.questions[question_id].question_answer_id = response.data.data.id;
+                $scope.answers[question_id].question_answer_id = response.data.data.id;
             }, function error(response){
-                $scope.questions[question_id].error.msg = response;
+                $scope.answers[question_id].error = response;
             });
         };
 
         $scope.fill_model();
-        console.log($scope.answers);
     }
 ]);
