@@ -35,6 +35,7 @@ class Answer(db.Model):
     answer = db.Column(db.Text, nullable=False, index=True)
     value = db.Column(db.Integer, nullable=True, default=1)
     order_in_question = db.Column(db.Integer, nullable=False, default=0)
+    question_answers = db.relationship('QuestionAnswer', backref='answer_template', lazy='dynamic')
 
     def __repr__(self):
         return u'<Answer {0}: {1}>'.format(self.id, self.answer)
@@ -113,7 +114,6 @@ class Section(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.Text, index=True, nullable=False)
     context = db.Column(db.Text)
-    total_score = db.Column(db.Integer, default=0, nullable=False)
     order_in_report = db.Column(db.Integer, nullable=False, default=0)
     questions = db.relationship('Question', backref='section', lazy='dynamic')
     report_id = db.Column(db.Integer, db.ForeignKey(Report.id))
@@ -124,23 +124,70 @@ class Section(db.Model):
     def __init__(self, title, context=None, total_score=0, order=0):
         self.title = title
         self.context = context
-        self.total_score = total_score
         self.order_in_report = order
 
     def output_obj(self):
+        if not self.next_in_report:
+            next_section_id = None
+        else:
+            next_section_id = self.next_in_report.id
+
+        if not self.previous_in_report:
+            previous_section_id = None
+        else:
+            previous_section_id = self.previous_in_report.id
         return {
             'id': self.id,
             'title': self.title,
             'context': self.context,
             'total_score': self.total_score,
+            'multiplication_factor': self.multiplication_factor,
             'order_in_report': self.order_in_report,
             'questions': [q.output_obj() for q in self.ordered_questions],
-            'report_id': self.report_id
+            'report_id': self.report_id,
+            'next_section_id': next_section_id,
+            'previous_section_id': previous_section_id
         }
 
     @property
     def ordered_questions(self):
         return sorted(self.questions, key=lambda question: question.order_in_section)
+
+    @property
+    def next_in_report(self):
+        current_pos = self.report.ordered_sections.index(self)
+        next_pos = current_pos + 1
+        if next_pos >= len(self.report.ordered_sections):
+            return None
+        else:
+            return self.report.ordered_sections[next_pos]
+
+    @property
+    def previous_in_report(self):
+        current_pos = self.report.ordered_sections.index(self)
+        previous_pos = current_pos - 1
+        if previous_pos < 0:
+            return None
+        else:
+            return self.report.ordered_sections[previous_pos]
+
+    @property
+    def total_score(self):
+        """
+        Compute the maximum score for all questions. This is defined as
+        score of the answer with the highest score * weight of the question
+        :return:
+        """
+        maximum = 0
+        for question in self.questions:
+            sorted_answers = sorted(question.answers, key=lambda answer: answer.value)
+            sorted_answers.reverse()
+            maximum = maximum + sorted_answers[0].value * question.weight
+        return maximum
+
+    @property
+    def multiplication_factor(self):
+        return 100/self.total_score
 
 
 class Question(db.Model):
@@ -168,6 +215,8 @@ class Question(db.Model):
                               backref=db.backref('questions', lazy='dynamic'),
                               lazy='dynamic'
                               )
+    question_answers = db.relationship('QuestionAnswer', backref='question_template', lazy='dynamic')
+    # TODO: make weight dependent on risk_factors! (risk_factors must have a weight: hoog: 3, midden: 2, laag: 1
 
     def __repr__(self):
         return u'<Question {0}: {1}>'.format(self.id, self.question)

@@ -14,8 +14,19 @@ app.controller('SectionCtrl', ['$scope', 'ApiCore', 'ApiSubmit',
          */
         $scope.questions = {};
         $scope.answers = {};
+        $scope.score = 0;
 
-
+        $scope.update_score = function(){
+            var parse_url = new UrlParse('');
+            var section_id = parse_url.get_str_id('section_id');
+            var user_report_id = parse_url.get_str_id('report_id');
+            var api_core = new ApiCore();
+            var promise = api_core.read(user_report_id + '/section/' + section_id + '/score', 'user_report');
+            promise.then(function success(response){
+                var api_score = response.data.data;
+                $scope.score = Math.round(api_score.score * api_score.multiplication_factor);
+            }, function error(response){});
+        };
 
         $scope.fill_model = function() {
             var parse_url = new UrlParse('');
@@ -35,6 +46,7 @@ app.controller('SectionCtrl', ['$scope', 'ApiCore', 'ApiSubmit',
                     }, function error(response){});
                 }
             }, function error(response){});
+            $scope.update_score();
         };
         
         $scope.submit_answer = function(report_id, question_id, answer_id) {
@@ -51,6 +63,10 @@ app.controller('SectionCtrl', ['$scope', 'ApiCore', 'ApiSubmit',
             }
             submit_promise.then(function success(response){
                 $scope.answers[question_id].question_answer_id = response.data.data.id;
+                /*
+                Update Score
+                 */
+                $scope.update_score();
             }, function error(response){
                 $scope.answers[question_id].error = response;
             });

@@ -1,13 +1,14 @@
 {% extends 'base.html' %}
 {% block content %}
-    <div class="container" ng-app="scoremodel.public">
+    <div class="container" ng-app="scoremodel.public" ng-controller="SectionCtrl">
         <div class="page-header">
             <h1>{{ section.title }}</h1>
         </div>
         <div class="well">
             <p>{{ section.context }}</p>
         </div>
-        <div class="row" ng-controller="SectionCtrl">
+        <div class="row">
+        <div class="row">
             <form novalidate>
                 <input id="report_id" type="hidden" value="{{ report_id }}"/>
                 <input id="section_id" type="hidden" value="{{ section.id }}"/>
@@ -39,16 +40,20 @@
                                             </label>
                                         </div>
                                     {% endfor %}
-                                <span>Risicofactor</span>
+                                    {% for risk_factor in question.risk_factors %}
+                                        <div class="alert alert-warning" role="alert"><p>
+                                            Risicofactor: {{ risk_factor.risk_factor }}</p></div>
+                                    {% endfor %}
                                 </div>
                             </div>
                             <div class="col-sm-offset-1 col-sm-5">
                                 <div class="row">
                                     <nav>
                                         <ul class="nav nav-pills" role="tablist">
-                                            <li role="presentation"><a role="tab" href="#context_{{ question.id }}"
-                                                                       data-toggle="pill"
-                                                                       aria-controls="context_{{ question.id }}">Context</a>
+                                            <li role="presentation" class="active"><a role="tab"
+                                                                                      href="#context_{{ question.id }}"
+                                                                                      data-toggle="pill"
+                                                                                      aria-controls="context_{{ question.id }}">Context</a>
                                             </li>
                                             <li role="presentation"><a role="tab" href="#risk_{{ question.id }}"
                                                                        data-toggle="pill"
@@ -63,7 +68,7 @@
                                 </div>
                                 <div class="row">
                                     <div class="tab-content">
-                                        <div role="tabpanel" class="tab-pane" id="context_{{ question.id }}">
+                                        <div role="tabpanel" class="tab-pane active" id="context_{{ question.id }}">
                                             <p>{{ question.context }}</p>
                                         </div>
                                         <div role="tabpanel" class="tab-pane" id="risk_{{ question.id }}">
@@ -79,6 +84,41 @@
                     </div>
                 {% endfor %}
             </form>
+        </div>
+        <div class="row">
+            <div class="alert alert-info">
+                Totale score voor {{ section.title }}: {% raw %}{{ score }}{% endraw %}/100
+            </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-9 col-md-offset-1">
+                <div class="row">
+                    <div class="col-md-2 col-md-offset-2">
+                        {% if previous_section %}
+                            <a href="{{ url_for('.v_user_report_section', user_id=current_user.id, report_id=report_id, section_id=previous_section.id ) }}"
+                               class="btn btn-default"><span class="glyphicon glyphicon-chevron-left"
+                                                             aria-hidden="true"></span>&nbsp;{{ previous_section.title }}
+                            </a>
+                        {% else %}
+                            <a href="{{ url_for('.v_user_report_edit', user_id=current_user.id, report_id=report_id) }}"
+                               class="btn btn-default"><span class="glyphicon glyphicon-chevron-left"
+                                                             aria-hidden="true"></span>&nbsp;Rapport bewerken</a>
+                        {% endif %}
+                    </div>
+                    <div class="col-md-2 col-md-offset-2">
+                        {% if next_section %}
+                            <a href="{{ url_for('.v_user_report_section', user_id=current_user.id, report_id=report_id, section_id=next_section.id ) }}"
+                               class="btn btn-default">{{ next_section.title }}&nbsp;<span
+                                    class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span></a>
+                        {% else %}
+                            <a href="{{ url_for('.v_user_report_check', user_id=current_user.id, report_id=report_id) }}"
+                               class="btn btn-default">Overzicht&nbsp;<span class="glyphicon glyphicon-chevron-right"
+                                                                            aria-hidden="true"></span></a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 {% endblock %}

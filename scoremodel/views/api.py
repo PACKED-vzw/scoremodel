@@ -11,6 +11,7 @@ from scoremodel.modules.api.question_answer import QuestionAnswerApi
 from scoremodel.modules.api.report import ReportApi
 from scoremodel.modules.api.risk_factor import RiskFactorApi
 from scoremodel.modules.api.section import SectionApi
+from scoremodel.modules.api.score import ScoreApi
 from scoremodel.modules.error import DatabaseItemDoesNotExist
 from scoremodel.modules.msg.messages import api_msg, error_msg
 from scoremodel.modules.user.authentication import must_be_admin
@@ -185,3 +186,17 @@ def a_question_public(user_report_id, question_id):
 @login_required
 def a_user_report(user_report_id):
     pass
+
+
+@app.route('/api/user_report/<int:user_report_id>/section/<int:section_id>/score', methods=['GET'])
+@login_required
+def a_section_score_current(user_report_id, section_id):
+    """
+    Compute the score for the section section_id in user_report user_report_id
+    as it stands now - with the questions that are currently answered.
+    :param user_report_id:
+    :param section_id:
+    :return:
+    """
+    score_api = ScoreApi()
+    return score_api.section(user_report_id, section_id)

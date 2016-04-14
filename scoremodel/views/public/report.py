@@ -106,7 +106,8 @@ def v_user_report_edit(user_id, report_id):
             flash(e)
             return redirect(url_for('.v_user_report_list_by_user', user_id=current_user.id))
         else:
-            return redirect(url_for('.v_user_report_list_by_user', user_id=current_user.id))
+            return redirect(url_for('.v_user_report_section', user_id=current_user.id, report_id=edited_user_report.id,
+                                    section_id=edited_user_report.template.ordered_sections[0].id))
     else:
         form.report.default = str(existing_user_report.report_id)
         form.name.default = existing_user_report.name
@@ -137,7 +138,8 @@ def v_user_report_section(user_id, report_id, section_id):
         abort(404)
     current_section = section_api.read(section_id)
     return render_template('public/section.html', title=current_section.title, section=current_section,
-                           report_id=report_id)
+                           report_id=report_id, next_section=current_section.next_in_report,
+                           previous_section=current_section.previous_in_report)
 
 
 @app.route('/user/<int:user_id>/report/<int:report_id>/check', methods=['GET'])

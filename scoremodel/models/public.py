@@ -49,11 +49,21 @@ class QuestionAnswer(db.Model):
         self.answer_id = answer_id
         self.user_report_id = user_report_id
 
+    @property
+    def score(self):
+        return self.question_template.weight * self.answer_template.value
+
+    @property
+    def multiplication_factor(self):
+        return self.question_template.section.multiplication_factor
+
     def output_obj(self):
         return {
             'id': self.id,
             'user_id': self.user_id,
             'question_id': self.question_id,
             'answer_id': self.answer_id,
+            'score': self.score,
+            'multiplication_factor': self.multiplication_factor,
             'user_report_id': self.user_report_id
         }
