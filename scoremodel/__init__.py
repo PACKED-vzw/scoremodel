@@ -2,9 +2,9 @@ from flask import Flask
 from flask.ext.sqlalchemy import SQLAlchemy
 from flask.ext.babel import Babel
 from flask.ext.login import LoginManager
+from scoremodel.modules.setup import AppSetup
 
-app = Flask(__name__)
-app.config.from_object('config')
+app = AppSetup().app
 db = SQLAlchemy(app)
 babel = Babel(app)
 login_manager = LoginManager()

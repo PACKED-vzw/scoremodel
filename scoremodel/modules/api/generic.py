@@ -42,7 +42,7 @@ class GenericApi:
                 if db_class.__table__.columns[possible_param].nullable is not True:
                     # Can't be null, so set it to 0 or empty string or empty date, depending on what the type is
                     if cleaned[possible_param] is None:
-                        c_type = str(Section.__table__.columns[possible_param].type)
+                        c_type = str(db_class.__table__.columns[possible_param].type)
                         ##
                         # TODO make this cleaner
                         ##

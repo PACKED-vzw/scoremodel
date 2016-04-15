@@ -6,7 +6,7 @@ from scoremodel import db
 
 class RiskFactorApi(GenericApi):
     complex_params = []
-    simple_params = ['risk_factor']
+    simple_params = ['risk_factor', 'value']
 
     def __init__(self, risk_factor_id=None):
         self.risk_factor_id = risk_factor_id
@@ -25,7 +25,7 @@ class RiskFactorApi(GenericApi):
         if existing_risk_factor:
             raise DatabaseItemAlreadyExists('A risk factor called "{0}" already exists.'
                                             .format(cleaned_data['risk_factor']))
-        new_risk_factor = RiskFactor(cleaned_data['risk_factor'])
+        new_risk_factor = RiskFactor(**cleaned_data)
         db.session.add(new_risk_factor)
         db.session.commit()
         return new_risk_factor
@@ -74,6 +74,6 @@ class RiskFactorApi(GenericApi):
         return risk_factors
 
     def parse_input_data(self, input_data):
-        possible_params = ['risk_factor']
+        possible_params = ['risk_factor', 'value']
         required_params = ['risk_factor']
         return self.clean_input_data(RiskFactor, input_data, possible_params, required_params, self.complex_params)

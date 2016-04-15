@@ -64,17 +64,21 @@ class RiskFactor(db.Model):
     __tablename__ = 'RiskFactor'
     id = db.Column(db.Integer, primary_key=True)
     risk_factor = db.Column(db.Text, index=True, unique=True)
+    value = db.Column(db.Integer, nullable=False, default=1)
 
     def __repr__(self):
         return '<RiskFactor {0}>'.format(self.id)
 
-    def __init__(self, risk_factor):
+    def __init__(self, risk_factor, value=None):
         self.risk_factor = risk_factor
+        if value:
+            self.value = value
 
     def output_obj(self):
         return {
             'id': self.id,
-            'risk_factor': self.risk_factor
+            'risk_factor': self.risk_factor,
+            'value': self.value
         }
 
 
