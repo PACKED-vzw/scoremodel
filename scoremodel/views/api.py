@@ -18,8 +18,7 @@ from scoremodel.modules.user.authentication import must_be_admin
 
 
 ##
-# TODO support auth
-# TODO GET risk_factor, GET answer
+# TODO auth so that user_id == user.id for user_report stuff
 ##
 
 
@@ -185,7 +184,15 @@ def a_question_public(user_report_id, question_id):
 @app.route('/api/user_report/<int:user_report_id>', methods=['GET'])
 @login_required
 def a_user_report(user_report_id):
-    pass
+    """
+    For the entire report, get all sections.
+    For every section, get all questions that have been answered.
+    For every question, get the score.
+    For every section, get the score.
+    For the report, get the score.
+    :param user_report_id:
+    :return:
+    """
 
 
 @app.route('/api/user_report/<int:user_report_id>/section/<int:section_id>/score', methods=['GET'])

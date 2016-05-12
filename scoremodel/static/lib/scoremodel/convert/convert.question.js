@@ -7,12 +7,12 @@ var ConvertQuestion = function() {
 
 ConvertQuestion.prototype.from_api = function(data, available_risk_factors) {
     var output_data = angular.copy(data.data.data);
-    if (output_data.risk_factors.length >= 1) {
+    if (output_data.risk_factor_id) {
         /* If it's empty, nothing to set */
         for (var k = 0; k < available_risk_factors.length; k++) {
             var possible_risk_factor = available_risk_factors[k];
-            if (possible_risk_factor.id == output_data.risk_factors[0].id) {
-                output_data.risk_factors = possible_risk_factor;
+            if (possible_risk_factor.id == output_data.risk_factor_id) {
+                output_data.risk_factor = possible_risk_factor;
                 break;
             }
         }
@@ -26,10 +26,11 @@ ConvertQuestion.prototype.to_api = function(data, section_id) {
      * risk_factors: array of risk_factor objects as returned by the API.
      * answers: array of answer objects as retunred by the API.
      */
-    var required_params = ['answers', 'weight', 'order_in_section', 'risk', 'context', 'question', 'example', 'action', 'risk_factors'];
-    var complex_params = ['answers', 'risk_factors'];
+    var required_params = ['answers', 'weight', 'order_in_section', 'risk', 'context', 'question', 'example', 'action', 'risk_factor_id'];
+    var complex_params = ['answers'];
     var cleaned_data = CheckForRequiredParams(data, required_params, complex_params);
     cleaned_data.section_id = section_id;
+    cleaned_data.risk_factor_id = data['risk_factor'].id;
     if (cleaned_data.id < 0) {
         cleaned_data.id = undefined;
     }
@@ -37,7 +38,6 @@ ConvertQuestion.prototype.to_api = function(data, section_id) {
     Do not use json.stringify: this will create a JSON string representation, but that is then json-stringified again
     by $http.post() etc.
      */
-    cleaned_data.risk_factors = this.get_selected_risk_factor(cleaned_data.risk_factors);
     /* Answers are already in an array because we use select multiple */
     console.log('data');
     console.log(cleaned_data);

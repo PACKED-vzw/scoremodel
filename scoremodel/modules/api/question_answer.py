@@ -50,7 +50,7 @@ class QuestionAnswerApi(GenericApi):
     def get_for_section_by_question_id(self, section_id, user_id, user_report_id):
         """
         Get all questionAnswers for a specific section (section_id) in a dict
-        where the key is the question_id for a specific user in a specific UserReport
+        where the key is the question_id, for a specific user in a specific UserReport
         :param section_id:
         :param user_id:
         :param user_report_id:

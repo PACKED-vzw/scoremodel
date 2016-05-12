@@ -51,7 +51,7 @@ class QuestionAnswer(db.Model):
 
     @property
     def score(self):
-        return self.question_template.weight * self.answer_template.value
+        return self.question_template.weight * self.answer_template.value * self.question_template.risk_factor.value
 
     @property
     def multiplication_factor(self):

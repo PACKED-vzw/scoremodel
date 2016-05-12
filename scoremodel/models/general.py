@@ -65,6 +65,7 @@ class RiskFactor(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     risk_factor = db.Column(db.Text, index=True, unique=True)
     value = db.Column(db.Integer, nullable=False, default=1)
+    questions_single = db.relationship('Question', backref='risk_factor', lazy='dynamic')
 
     def __repr__(self):
         return '<RiskFactor {0}>'.format(self.id)
@@ -186,7 +187,8 @@ class Section(db.Model):
         for question in self.questions:
             sorted_answers = sorted(question.answers, key=lambda answer: answer.value)
             sorted_answers.reverse()
-            maximum = maximum + sorted_answers[0].value * question.weight
+            if len(sorted_answers) > 0:
+                maximum = maximum + sorted_answers[0].value * question.weight * question.risk_factor.value
         return maximum
 
     @property
@@ -205,6 +207,7 @@ class Question(db.Model):
     order_in_section = db.Column(db.Integer, nullable=False, default=0)
     section_id = db.Column(db.Integer, db.ForeignKey(Section.id))
     action = db.Column(db.Text)
+    risk_factor_id = db.Column(db.Integer, db.ForeignKey(RiskFactor.id))
     risk_factors = db.relationship('RiskFactor',
                                    secondary=risk_factors,
                                    primaryjoin=(risk_factors.c.question_id == id),
@@ -247,6 +250,10 @@ class Question(db.Model):
         return QuestionAnswer.query.filter(and_(QuestionAnswer.question_id == self.id,
                                                 QuestionAnswer.user_report_id == user_report_id)).first()
 
+    @property
+    def maximum_score(self):
+        pass
+
     def output_obj(self):
         return {
             'id': self.id,
@@ -258,6 +265,6 @@ class Question(db.Model):
             'order_in_section': self.order_in_section,
             'section_id': self.section_id,
             'action': self.action,
-            'risk_factors': [r.output_obj() for r in self.risk_factors],
+            'risk_factor_id': self.risk_factor_id,
             'answers': [a.output_obj() for a in self.answers]
         }

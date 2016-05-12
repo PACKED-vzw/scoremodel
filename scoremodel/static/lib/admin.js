@@ -100,7 +100,7 @@ app.controller('AdminCtrl', ['$scope', '$location', '$q', 'ApiCore', 'ApiSubmit'
                             risk: '',
                             question: 'Nieuwe vraag',
                             action: '',
-                            risk_factors: $scope.available_risk_factors
+                            risk_factor_id: 0
                         }
                     ]
                 }
@@ -125,6 +125,7 @@ app.controller('AdminCtrl', ['$scope', '$location', '$q', 'ApiCore', 'ApiSubmit'
             $scope.report contains all
              */
             var a_submit = new ApiSubmit($scope.report);
+            console.log($scope.report);
             var submit_promise;
             switch(primary) {
                 case 'report':
@@ -383,7 +384,7 @@ app.controller('AdminCtrl', ['$scope', '$location', '$q', 'ApiCore', 'ApiSubmit'
         };
 
         $scope.risk_factor_selected = function(question, risk_factor_id) {
-            if (risk_factor_id == question.risk_factors) {
+            if (risk_factor_id == question.risk_factor_id) {
                 return true;
             }
             return false;
@@ -417,6 +418,8 @@ app.controller('AdminCtrl', ['$scope', '$location', '$q', 'ApiCore', 'ApiSubmit'
                 /* Existing report */
                 var a_convert_report = new ConvertReport();
                 $scope.input_report = a_convert_report.from_api(api_results[2], $scope.available_answers, $scope.available_risk_factors);
+                console.log('remote');
+                console.log($scope.input_report);
                 $scope.report = $scope.input_report;
             } else {
                 /* New report */

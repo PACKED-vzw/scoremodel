@@ -62,7 +62,7 @@
                 <div class="col-sm-9">
                     <select id="question.risk_factor_{{ question.id }}"
                             ng-options="risk_factor as risk_factor.risk_factor for risk_factor in available_risk_factors track by risk_factor.id"
-                            ng-model="question.risk_factors" class="form-control"
+                            ng-model="question.risk_factor" class="form-control"
                             ng-change="reset_submit_button('question_submit', question.id)"
                             required="required"></select>
                 </div>

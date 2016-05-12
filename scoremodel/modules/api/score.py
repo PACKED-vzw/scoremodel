@@ -1,6 +1,8 @@
 from flask import make_response, request
+from flask_login import current_user
 import json
 from scoremodel.modules.api.user_report import UserReportApi
+from scoremodel.modules.api.question_answer import QuestionAnswerApi
 from scoremodel.modules.api.section import SectionApi
 from scoremodel.modules.msg.messages import error_msg
 
@@ -36,6 +38,35 @@ class ScoreApi:
             }
         })
         return self.response
+
+    def report(self, user_report_id):
+        user_report_api = UserReportApi()
+        question_answer_api = QuestionAnswerApi()
+        try:
+            user_report = user_report_api.read(user_report_id)
+        except Exception as e:
+            return self.fail(error_code=400, error_message=e)
+        out_report = {
+            'id': user_report.id,
+            'sections': []
+        }
+        for section in user_report.template.sections:
+            out_section = {
+                'id': section.id,
+                'current_score': 0,
+                'maximum_score': section.total_score,
+                'multiplication_factor': section.multiplication_factor,
+                'questions': []
+            }
+            for question_id, question_answer in question_answer_api.get_for_section_by_question_id(section.id, current_user.id, user_report_id).items():
+                out_section['questions'].append({
+                    'question_id': question_id,
+                    'question_answer_id': question_answer.id,
+                    'current_score': question_answer.score,
+                    'maximum_score': question_answer.question_template.maximum_score,
+                })
+
+            out_report['sections'].append(out_section)
 
     def fail(self, error_code=None, error_message=None):
         if error_code:

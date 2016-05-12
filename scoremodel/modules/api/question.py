@@ -9,12 +9,13 @@ from scoremodel import db
 
 
 class QuestionApi(GenericApi):
-    simple_attributes = ['question', 'context', 'risk', 'example', 'weight', 'order_in_section', 'section_id', 'action']
-    complex_params = ['risk_factors', 'answers']  # These should be a list in input_data
+    simple_attributes = ['question', 'context', 'risk', 'example', 'weight', 'order_in_section', 'section_id', 'action', 'risk_factor_id']
+    complex_params = ['answers']  # These should be a list in input_data
 
     def __init__(self, question_id=None):
         self.question_id = question_id
         self.a_section = scoremodel.modules.api.section.SectionApi()
+        self.a_risk_factor = RiskFactorApi()
 
     def create(self, input_data):
         """
@@ -49,9 +50,9 @@ class QuestionApi(GenericApi):
         # Add the answers
         for answer in cleaned_data['answers']:
             new_question.answers.append(self.new_answer(answer))
-        # Add the risk factors
-        for risk_factor in cleaned_data['risk_factors']:
-            new_question.risk_factors.append(self.new_risk_factor(risk_factor))
+        # Add the risk factor
+        risk_factor = self.a_risk_factor.read(cleaned_data['risk_factor_id'])
+        new_question.risk_factor = risk_factor
         # Store everything in the database
         db.session.commit()
         # Return the question object
@@ -90,9 +91,8 @@ class QuestionApi(GenericApi):
         for answer in cleaned_data['answers']:
             existing_question.answers.append(self.new_answer(answer))
         # Update risk factors
-        existing_question = self.remove_risk_factors(existing_question)
-        for risk_factor in cleaned_data['risk_factors']:
-            existing_question.risk_factors.append(self.new_risk_factor(risk_factor))
+        risk_factor = self.a_risk_factor.read(cleaned_data['risk_factor_id'])
+        existing_question.risk_factor = risk_factor
         db.session.commit()
         return existing_question
 
@@ -114,8 +114,12 @@ class QuestionApi(GenericApi):
         :param input_data:
         :return:
         """
+        # Solve legacy applications that use risk_factors (a list) instead of risk_factor (an object). Multiple
+        # risk factors for one question are no longer supported.
+        if 'risk_factors' in input_data:
+            raise RequiredAttributeMissing('Error: risk_factors was provided!')
         possible_params = ['question', 'context', 'risk', 'example', 'weight', 'order_in_section', 'action',
-                           'risk_factors', 'answers', 'section_id']
+                           'risk_factor_id', 'answers', 'section_id']
         required_params = ['question', 'weight', 'section_id']
         return self.clean_input_data(Question, input_data, possible_params, required_params, self.complex_params)
 
@@ -130,23 +134,9 @@ class QuestionApi(GenericApi):
             o_answer = a_answer.create(cleaned_data)
         return o_answer
 
-    def new_risk_factor(self, risk_factor_data):
-        a_risk_factor = RiskFactorApi()
-        cleaned_data = a_risk_factor.parse_input_data(risk_factor_data)
-        try:
-            o_risk_factor = self.get_risk_factor(cleaned_data['risk_factor'])
-        except DatabaseItemDoesNotExist:
-            o_risk_factor = a_risk_factor.create(cleaned_data)
-        return o_risk_factor
-
     def remove_answers(self, question_entity):
         for answer in question_entity.answers:
             question_entity.answers.remove(answer)
         db.session.commit()
         return question_entity
 
-    def remove_risk_factors(self, question_entity):
-        for risk_factor in question_entity.risk_factors:
-            question_entity.risk_factors.remove(risk_factor)
-        db.session.commit()
-        return question_entity

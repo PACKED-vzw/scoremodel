@@ -30,12 +30,12 @@ ConvertReport.prototype.from_api = function(data, available_answers, available_r
             Set question.risk_factors to risk_factors[x] where risk_factors[x].id == question.risk_factors[0].id
              */
             var question = section.questions[j];
-            if (question.risk_factors.length >= 1) {
+            if (question.risk_factor_id) {
                 /* If it's empty, nothing to set */
                 for (var k = 0; k < available_risk_factors.length; k++) {
                     var possible_risk_factor = available_risk_factors[k];
-                    if (possible_risk_factor.id == question.risk_factors[0].id) {
-                        output_data.sections[i].questions[j].risk_factors = possible_risk_factor;
+                    if (possible_risk_factor.id == question.risk_factor_id) {
+                        output_data.sections[i].questions[j].risk_factor = possible_risk_factor;
                         break;
                     }
                 }

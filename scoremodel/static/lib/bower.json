@@ -23,6 +23,7 @@
     "angular-ui-router": "~0.2.15",
     "angular-ui": "~0.4.0",
     "bootstrap": "~3.3.6",
-    "angular-resource": "~1.4.8"
+    "angular-resource": "~1.4.8",
+    "radar-chart-d3": "git@github.com:alangrafu/radar-chart-d3.git#~1.2.1"
   }
 }
