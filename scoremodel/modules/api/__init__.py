@@ -9,20 +9,37 @@ from scoremodel.modules.msg.messages import api_msg, error_msg
 
 
 class ScoremodelApi:
-    def __init__(self, api_class, o_request, api_obj_id=None):
+    def __init__(self, api_class, o_request, api_obj_id=None, hooks=()):
+        """
+        This class is an REST API class that translates between request methods and
+        methods of the api_class class.
+        It performs the following functions:
+            - Translate between request.method and api_class.action()
+                GET => api_class.read(api_obj_id)
+                DELETE => api_class.delete(api_obj_id)
+                POST => api_class.create(o_request.get_data().decode())
+                PUT => api_class.update(api_obj_id, o_request.get_data().decode())
+            - Performs functions in hooks on the decoded but unparsed data from the original request.
+                All functions take input_data_string as input and must return it (after they applied their actions).
+                The order of the hooks can not be guaranteed.
+            - Converts the request data to JSON.
+            - Takes the reply from api_class (in JSON) and convert it to a response with the correct
+                status code and headers.
+            - On error: generate an error message, error code and error status code.
+        :param api_class:
+        :param o_request:
+        :param api_obj_id:
+        :param hooks:
+        """
         self.api = api_class()
         self.request = o_request
         self.msg = None
         self.output_data = u''
-        ##
-        # Every request method has a self.action() defined:
-        #   GET => self.read(api_obj_id)
-        #   DELETE => self.delete(api_obj_id)
-        #   PUT => self.update(api_obj_id)
-        #   POST => self.create()
-        ##
         input_data_raw = self.request.get_data()
         input_data_string = input_data_raw.decode('utf-8')
+        # Perform the hooks
+        for hook in hooks:
+            input_data_string = hook(input_data_string)
         self.response = make_response()
         if self.request.method == 'GET':
             if api_obj_id is None:
@@ -121,10 +138,10 @@ class ScoremodelApi:
             self.msg = error_msg['item_not_exists'].format(self.api, item_id)
             self.response.status_code = 404
             updated_object = None
-        #except Exception as e:
-        #    self.msg = error_msg['error_occurred'].format(e)
-        #    self.response.status_code = 400
-        #    updated_object = None
+        except Exception as e:
+            self.msg = error_msg['error_occurred'].format(e)
+            self.response.status_code = 400
+            updated_object = None
         else:
             self.msg = api_msg['item_updated'].format(self.api, updated_object.id)
         if updated_object is not None:
