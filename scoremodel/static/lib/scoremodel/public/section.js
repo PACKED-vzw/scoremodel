@@ -45,8 +45,8 @@ app.controller('SectionCtrl', ['$scope', 'ApiCore', 'ApiSubmit',
                         $scope.answers[question_answer.question_id].question_answer_id = question_answer.id;
                     }, function error(response){});
                 }
+                $scope.update_score();
             }, function error(response){});
-            $scope.update_score();
         };
         
         $scope.submit_answer = function(report_id, question_id, answer_id) {

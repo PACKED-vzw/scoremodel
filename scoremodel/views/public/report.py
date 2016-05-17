@@ -62,9 +62,9 @@ def v_user_report_new(user_id):
         return render_template('public/create.html', form=form, title='Nieuw rapport')
 
 
-@app.route('/user/<int:user_id>/report/<int:report_id>', methods=['GET', 'POST'])
+@app.route('/user/<int:user_id>/report/<int:user_report_id>', methods=['GET', 'POST'])
 @login_required
-def v_user_report_edit(user_id, report_id):
+def v_user_report_edit(user_id, user_report_id):
     if current_user.id != user_id:
         flash('You can only view your own reports.')
         abort(403)
@@ -72,7 +72,7 @@ def v_user_report_edit(user_id, report_id):
     report_api = ReportApi()
     form.report.choices = [(r.id, r.title) for r in report_api.list()]
     try:
-        existing_user_report = user_report_api.read(report_id)
+        existing_user_report = user_report_api.read(user_report_id)
     except DatabaseItemDoesNotExist as e:
         flash('This report does not exist.')
         return redirect(url_for('.v_user_report_list_by_user', user_id=current_user.id))
@@ -106,7 +106,7 @@ def v_user_report_edit(user_id, report_id):
             flash(e)
             return redirect(url_for('.v_user_report_list_by_user', user_id=current_user.id))
         else:
-            return redirect(url_for('.v_user_report_section', user_id=current_user.id, report_id=edited_user_report.id,
+            return redirect(url_for('.v_user_report_section', user_id=current_user.id, user_report_id=edited_user_report.id,
                                     section_id=edited_user_report.template.ordered_sections[0].id))
     else:
         form.report.default = str(existing_user_report.report_id)
@@ -115,16 +115,16 @@ def v_user_report_edit(user_id, report_id):
         return render_template('public/edit.html', form=form, title='Rapport bewerken', report_id=report_id)
 
 
-@app.route('/user/<int:user_id>/report/<int:report_id>/section/<int:section_id>', methods=['GET'])
+@app.route('/user/<int:user_id>/report/<int:user_report_id>/section/<int:section_id>', methods=['GET'])
 @login_required
-def v_user_report_section(user_id, report_id, section_id):
+def v_user_report_section(user_id, user_report_id, section_id):
     section_api = SectionApi()
     question_answer_api = QuestionAnswerApi()
     if current_user.id != user_id:
         flash('You can only view your own reports.')
         abort(403)
     try:
-        user_report = user_report_api.read(report_id)
+        user_report = user_report_api.read(user_report_id)
     except DatabaseItemDoesNotExist as e:
         flash('This page does not exist.')
         abort(404)
@@ -137,22 +137,26 @@ def v_user_report_section(user_id, report_id, section_id):
     if section_id not in [section.id for section in sections]:
         abort(404)
     current_section = section_api.read(section_id)
+    # Controle waar report_id != user_report_id
     return render_template('public/section.html', title=current_section.title, section=current_section,
-                           report_id=report_id, next_section=current_section.next_in_report,
-                           previous_section=current_section.previous_in_report)
+                           user_report_id=user_report_id, next_section=current_section.next_in_report,
+                           previous_section=current_section.previous_in_report, report_id=user_report.template.id)
 
 
-@app.route('/user/<int:user_id>/report/<int:report_id>/check', methods=['GET'])
+@app.route('/user/<int:user_id>/report/<int:user_report_id>/check', methods=['GET'])
 @login_required
-def v_user_report_check(user_id, report_id):
+def v_user_report_check(user_id, user_report_id):
     if current_user.id != user_id:
         flash('You can only view your own reports.')
         abort(403)
+    user_report = user_report_api.read(user_report_id)
+    sections = user_report.template.sections
+    return render_template('public/report.html', sections=sections)
 
 
-@app.route('/user/<int:user_id>/report/<int:report_id>/print', methods=['GET'])
+@app.route('/user/<int:user_id>/report/<int:user_report_id>/print', methods=['GET'])
 @login_required
-def v_user_report_print(user_id, report_id):
+def v_user_report_print(user_id, user_report_id):
     if current_user.id != user_id:
         flash('You can only view your own reports.')
         abort(403)

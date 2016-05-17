@@ -96,23 +96,23 @@
                 <div class="row">
                     <div class="col-md-2 col-md-offset-2">
                         {% if previous_section %}
-                            <a href="{{ url_for('.v_user_report_section', user_id=current_user.id, report_id=report_id, section_id=previous_section.id ) }}"
+                            <a href="{{ url_for('.v_user_report_section', user_id=current_user.id, user_report_id=user_report_id, section_id=previous_section.id ) }}"
                                class="btn btn-default"><span class="glyphicon glyphicon-chevron-left"
                                                              aria-hidden="true"></span>&nbsp;{{ previous_section.title }}
                             </a>
                         {% else %}
-                            <a href="{{ url_for('.v_user_report_edit', user_id=current_user.id, report_id=report_id) }}"
+                            <a href="{{ url_for('.v_user_report_edit', user_id=current_user.id, user_report_id=user_report_id) }}"
                                class="btn btn-default"><span class="glyphicon glyphicon-chevron-left"
                                                              aria-hidden="true"></span>&nbsp;Rapport bewerken</a>
                         {% endif %}
                     </div>
                     <div class="col-md-2 col-md-offset-2">
                         {% if next_section %}
-                            <a href="{{ url_for('.v_user_report_section', user_id=current_user.id, report_id=report_id, section_id=next_section.id ) }}"
+                            <a href="{{ url_for('.v_user_report_section', user_id=current_user.id, user_report_id=user_report_id, section_id=next_section.id ) }}"
                                class="btn btn-default">{{ next_section.title }}&nbsp;<span
                                     class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span></a>
                         {% else %}
-                            <a href="{{ url_for('.v_user_report_check', user_id=current_user.id, report_id=report_id) }}"
+                            <a href="{{ url_for('.v_user_report_check', user_id=current_user.id, user_report_id=user_report_id) }}"
                                class="btn btn-default">Overzicht&nbsp;<span class="glyphicon glyphicon-chevron-right"
                                                                             aria-hidden="true"></span></a>
                         {% endif %}

@@ -6,6 +6,11 @@ app.controller('SectionCtrl', ['$scope', 'ApiCore', 'ApiSubmit',
         /*
         Get data
          */
+        var data = [];
+        
+        /*
+        Groen veld = certificatie DSA minimum
+         */
 
         $scope.draw = function(){
             /* https://github.com/alangrafu/radar-chart-d3 */

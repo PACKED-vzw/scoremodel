@@ -252,7 +252,8 @@ class Question(db.Model):
 
     @property
     def maximum_score(self):
-        pass
+        sorted_answers = sorted(self.answers, key=lambda answer: answer.value)
+        return sorted_answers[0].value * self.weight * self.risk_factor.value
 
     def output_obj(self):
         return {
@@ -266,5 +267,6 @@ class Question(db.Model):
             'section_id': self.section_id,
             'action': self.action,
             'risk_factor_id': self.risk_factor_id,
-            'answers': [a.output_obj() for a in self.answers]
+            'answers': [a.output_obj() for a in self.answers],
+            'maximum_score': self.maximum_score
         }

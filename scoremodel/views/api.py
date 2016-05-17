@@ -8,6 +8,7 @@ from scoremodel.modules.api import ScoremodelApi
 from scoremodel.modules.api.answer import AnswerApi
 from scoremodel.modules.api.question import QuestionApi
 from scoremodel.modules.api.question_answer import QuestionAnswerApi
+from scoremodel.modules.api.user_report import UserReportApi
 from scoremodel.modules.api.report import ReportApi
 from scoremodel.modules.api.risk_factor import RiskFactorApi
 from scoremodel.modules.api.section import SectionApi
@@ -193,6 +194,18 @@ def a_user_report(user_report_id):
     :param user_report_id:
     :return:
     """
+    user_report_api = UserReportApi()
+    user_report = user_report_api.read(user_report_id)
+    answered_questions = {}
+    for section in user_report.template.sections:
+        answered_questions[section.id] = {
+            'answered_questions': {}
+        }
+            #get_answer_by_question_id(self, question_id, user_id, user_report_id)
+            #get_for_section_by_question_id(self, section_id, user_id, user_report_id)
+        question_answer_api = QuestionAnswerApi()
+        answered_questions[section.id]['answered_questions'] = question_answer_api.get_for_section_by_question_id\
+            (section.id, current_user.id, user_report_id)
 
 
 @app.route('/api/user_report/<int:user_report_id>/section/<int:section_id>/score', methods=['GET'])

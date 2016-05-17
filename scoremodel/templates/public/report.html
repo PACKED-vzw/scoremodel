@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+{% block content %}
+    <div class="container" ng-app="scoremodel.public" ng-controller="ReportCtrl">
+    <div class="row">
+        <div class="col-sm-6">
+        <h1><a name="inhoudstafel">Inhoudstafel</a></h1>
+            <nav>
+                <ul role="menu">
+                    <li><a href="#rapportgegevens">Rapportgegevens</a></li>
+                    <li><a href="#grafiek">Grafiek</a></li>
+                    <li><a href="#actieplan">Actieplan</a></li>
+                    <ul>
+                    {% for section in sections %}
+                        <li><a href="#actieplan_{{ section.title }}">{{ section.title }}</a></li>
+                    {% endfor %}
+                    </ul>
+                    <li><a href="#resultaten">Resultaten</a></li>
+                    <ul>
+                    {% for section in sections %}
+                        <li><a href="#resultaten_{{ section.title }}">{{ section.title }}</a></li>
+                    {% endfor %}
+                    </ul>
+                </ul>
+            </nav>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-6">
+            <h1><a name="rapportgegevens">Rapportgegevens</a></h1>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-6">
+            <h1><a name="grafiek">Grafiek</a></h1>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-6">
+            <h1><a name="actieplan">Actieplan</a></h1>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-6">
+            <h1><a name="resultaten">Resultaten</a></h1>
+        </div>
+    </div>
+    </div>
+{% endblock %}
