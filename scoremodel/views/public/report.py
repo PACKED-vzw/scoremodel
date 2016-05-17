@@ -100,7 +100,7 @@ def v_user_report_edit(user_id, user_report_id):
             edited_user_report = user_report_api.update(existing_user_report.id, input_data)
         except RequiredAttributeMissing as e:
             flash('A required form element was not submitted: {0}'.format(e))
-            return redirect(url_for('.v_user_report_edit', user_id=current_user.id, report_id=report_id))
+            return redirect(url_for('.v_user_report_edit', user_id=current_user.id, report_id=user_report_id))
         except Exception as e:
             flash('An unexpected error occurred.')
             flash(e)
@@ -112,7 +112,7 @@ def v_user_report_edit(user_id, user_report_id):
         form.report.default = str(existing_user_report.report_id)
         form.name.default = existing_user_report.name
         form.process()
-        return render_template('public/edit.html', form=form, title='Rapport bewerken', report_id=report_id)
+        return render_template('public/edit.html', form=form, title='Rapport bewerken', report_id=user_report_id)
 
 
 @app.route('/user/<int:user_id>/report/<int:user_report_id>/section/<int:section_id>', methods=['GET'])

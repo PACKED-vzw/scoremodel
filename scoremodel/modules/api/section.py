@@ -46,6 +46,7 @@ class SectionApi(GenericApi):
         """
         Return a section based on its id. See QuestionApi.read()
         :param section_id:
+        :param section_data:
         :return:
         """
         existing_section = Section.query.filter(Section.id == section_id).first()
@@ -90,3 +91,6 @@ class SectionApi(GenericApi):
         required_params = ['title', 'total_score', 'report_id']
         cleaned_data = self.clean_input_data(Section, input_data, possible_params, required_params, self.complex_params)
         return cleaned_data
+
+    def list(self):
+        return []

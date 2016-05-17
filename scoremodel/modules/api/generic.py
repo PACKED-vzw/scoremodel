@@ -3,9 +3,36 @@ from scoremodel.models.general import Section, Answer, Report, RiskFactor, Quest
 from sqlalchemy import and_, or_
 from datetime import datetime
 from pytz import timezone
+import abc
 
 
 class GenericApi:
+
+    __metaclass__ = abc.ABCMeta
+
+    # Abstract methods
+
+    @abc.abstractmethod
+    def create(self, object_data):
+        return
+
+    @abc.abstractmethod
+    def read(self, object_id):
+        return
+
+    @abc.abstractmethod
+    def update(self, object_id, object_data):
+        return
+
+    @abc.abstractmethod
+    def delete(self, object_id):
+        return
+
+    @abc.abstractmethod
+    def list(self):
+        return
+
+    # Helper methods
 
     def clean_input_data(self, db_class, input_data, possible_params, required_params, complex_params):
         """

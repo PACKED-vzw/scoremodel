@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% block content %}
     <div class="row">
-        <form method="post" action="{{ url_for('.v_user_report_edit', user_id=current_user.id, report_id=report_id) }}">
+        <form method="post" action="{{ url_for('.v_user_report_edit', user_id=current_user.id, user_report_id=report_id) }}">
             <div class="form-group">
                 <label for="user_report.name">Rapportnaam</label>
                 {{ form.name(class_='form-control', id='user_report.name') }}

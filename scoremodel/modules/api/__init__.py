@@ -1,4 +1,5 @@
 import json
+import inspect
 from flask import make_response
 from scoremodel.modules.api.report import ReportApi
 from scoremodel.modules.api.section import SectionApi
@@ -9,16 +10,31 @@ from scoremodel.modules.msg.messages import api_msg, error_msg
 
 
 class ScoremodelApi:
-    def __init__(self, api_class, o_request, api_obj_id=None, hooks=()):
+
+    ##
+    # This table translates between API methods
+    # and api_class methods. Useful when you want
+    # to use another function to perform a .read().
+    translation_table = {
+        'post': 'create',
+        'get': 'read',
+        'put': 'update',
+        'delete': 'delete',
+        'list': 'list'
+    }
+
+    def __init__(self, api_class, o_request, api_obj_id=None, hooks=(), translate=None):
         """
         This class is an REST API class that translates between request methods and
         methods of the api_class class.
         It performs the following functions:
-            - Translate between request.method and api_class.action()
-                GET => api_class.read(api_obj_id)
-                DELETE => api_class.delete(api_obj_id)
-                POST => api_class.create(o_request.get_data().decode())
-                PUT => api_class.update(api_obj_id, o_request.get_data().decode())
+            - Translate between request.method and self.action()
+                GET => self.get(api_obj_id) | self.list() if api_obj_id is None
+                DELETE => self.delete(api_obj_id)
+                POST => self.post(o_request.get_data().decode())
+                PUT => self.put(api_obj_id, o_request.get_data().decode())
+            - Translate between self.action() and api_class.action() using translate or self.translation_table
+                if translate is None.
             - Performs functions in hooks on the decoded but unparsed data from the original request.
                 All functions take input_data_string as input and must return it (after they applied their actions).
                 The order of the hooks can not be guaranteed.
@@ -30,11 +46,17 @@ class ScoremodelApi:
         :param o_request:
         :param api_obj_id:
         :param hooks:
+        :param translate:
         """
         self.api = api_class()
         self.request = o_request
         self.msg = None
         self.output_data = u''
+        # TODO: check for completeness
+        if translate is None:
+            self.translate = self.translated_functions(self.translation_table)
+        else:
+            self.translate = self.translated_functions(translate)
         input_data_raw = self.request.get_data()
         input_data_string = input_data_raw.decode('utf-8')
         # Perform the hooks
@@ -49,7 +71,7 @@ class ScoremodelApi:
                     self.msg = error_msg['missing_argument'].format('api_obj_id')
                     self.response.status_code = 400
             else:
-                self.output_data = self.read(api_obj_id)
+                self.output_data = self.get(api_obj_id, self.parse_json(input_data_string))
         elif self.request.method == 'DELETE':
             if api_obj_id is None:
                 self.msg = error_msg['missing_argument'].format('api_obj_id')
@@ -62,10 +84,10 @@ class ScoremodelApi:
                 self.response.status_code = 400
             else:
                 if self.parse_json(input_data_string) is not None:
-                    self.output_data = self.update(api_obj_id, self.parse_json(input_data_string))
+                    self.output_data = self.put(api_obj_id, self.parse_json(input_data_string))
         elif self.request.method == 'POST':
             if self.parse_json(input_data_string) is not None:
-                self.output_data = self.create(self.parse_json(input_data_string))
+                self.output_data = self.post(self.parse_json(input_data_string))
         else:
             self.msg = error_msg['illegal_action'].format(self.request.method)
             self.response.status_code = 405
@@ -75,11 +97,11 @@ class ScoremodelApi:
         self.headers()
         self.create_response(self.output_data)
 
-    def create(self, input_data, additional_opts=None):
+    def post(self, input_data, additional_opts=None):
         if not additional_opts:
             additional_opts = {}
         try:
-            created_object = self.api.create(input_data=input_data, **additional_opts)
+            created_object = self.translate['post'](input_data=input_data, **additional_opts)
         except DatabaseItemAlreadyExists:
             self.msg = error_msg['item_exists'].format(self.api)
             self.response.status_code = 400
@@ -95,9 +117,9 @@ class ScoremodelApi:
         else:
             return u''
 
-    def read(self, item_id):
+    def get(self, item_id, input_data):
         try:
-            found_object = self.api.read(item_id)
+            found_object = self.translate['get'](item_id, input_data)
         except DatabaseItemDoesNotExist:
             self.msg = error_msg['item_not_exists'].format(self.api, item_id)
             self.response.status_code = 404
@@ -129,7 +151,7 @@ class ScoremodelApi:
         else:
             return u''
 
-    def update(self, item_id, input_data, additional_opts=None):
+    def put(self, item_id, input_data, additional_opts=None):
         if not additional_opts:
             additional_opts = {}
         try:
@@ -189,3 +211,18 @@ class ScoremodelApi:
             self.msg = u'A JSON error occurred: {0}'.format(e)
             return None
         return parsed_string
+
+    def translated_functions(self, translation_table):
+        """
+        Take translation_table and self.api: return the function with that name in such a way
+        that it can be called (https://stackoverflow.com/questions/3061/calling-a-function-of-a-module-from-a-string-with-the-functions-name-in-python)
+        :return:
+        """
+        translation = {}
+        for our_function, api_function in translation_table.items():
+            call_function = getattr(self.api, api_function)
+            translation[our_function] = call_function
+        return translation
+
+    def call_translated_function(self, function, item_id=None, input_data=None):
+        args = inspect.getargspec(function)

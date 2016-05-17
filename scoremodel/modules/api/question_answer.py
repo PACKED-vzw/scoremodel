@@ -7,6 +7,7 @@ from scoremodel.modules.api.generic import GenericApi
 from scoremodel.modules.api.section import SectionApi
 from scoremodel.modules.error import DatabaseItemAlreadyExists, DatabaseItemDoesNotExist
 
+#TODO: for get, check current_user!
 
 class QuestionAnswerApi(GenericApi):
     simple_params = ['user_id', 'question_id', 'answer_id', 'user_report_id']
@@ -27,6 +28,27 @@ class QuestionAnswerApi(GenericApi):
         existing_question_answer = QuestionAnswer.query.filter(QuestionAnswer.id == question_answer_id).first()
         if existing_question_answer is None:
             raise DatabaseItemDoesNotExist('No QuestionAnswer with id {0}'.format(question_answer_id))
+        return existing_question_answer
+
+    def query(self, input_data):
+        """
+        Query for a QuestionAnswer where question_id, answer_id, user_id and user_report_id equal the input.
+        Return QuestionAnswer or throw DatabaseItemDoesNotExist
+        :param input_data:
+        :return:
+        """
+        cleaned_data = self.parse_input_data(input_data)
+        existing_question_answer = QuestionAnswer.query.filter(
+            and_(QuestionAnswer.user_report_id == cleaned_data['user_report_id'],
+                 QuestionAnswer.user_id == cleaned_data['user_id'],
+                 QuestionAnswer.question_id == cleaned_data['question_id'],
+                 QuestionAnswer.answer_id == cleaned_data['answer_id'])).first()
+        if existing_question_answer is None:
+            raise DatabaseItemDoesNotExist(
+                'No QuestionAnswer with user_report_id {0}, user_id {1}, question_id {2} and answer_id {3}'.format(
+                    cleaned_data['user_report_id'], cleaned_data['user_id'], cleaned_data['question_id'],
+                    cleaned_data['answer_id']
+                ))
         return existing_question_answer
 
     def update(self, question_answer_id, input_data):

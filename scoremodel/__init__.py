@@ -14,7 +14,7 @@ login_manager.login_view = '.v_login'
 
 
 # Models must be imported after db has been declared
-from scoremodel.views.api import *
+from scoremodel.views.api_old import *
 from scoremodel.views.admin import *
 from scoremodel.views.admin.report import *
 from scoremodel.views.admin.auth import *
@@ -24,6 +24,9 @@ from scoremodel.views.admin.risk_factor import *
 # Public views
 from scoremodel.views.public.report import *
 
+# Blueprints
+from scoremodel.views.api import api
+app.register_blueprint(api)
 
 @app.route('/')
 @app.route('/index')
