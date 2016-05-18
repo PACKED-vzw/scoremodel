@@ -5,7 +5,7 @@ from scoremodel.models.general import Section
 from scoremodel.models.public import QuestionAnswer
 from scoremodel.modules.api.generic import GenericApi
 from scoremodel.modules.api.section import SectionApi
-from scoremodel.modules.error import DatabaseItemAlreadyExists, DatabaseItemDoesNotExist
+from scoremodel.modules.error import DatabaseItemAlreadyExists, DatabaseItemDoesNotExist, RequiredAttributeMissing
 
 
 class QuestionAnswerApi(GenericApi):
@@ -47,6 +47,36 @@ class QuestionAnswerApi(GenericApi):
                 'No QuestionAnswer with user_report_id {0}, user_id {1}, question_id {2} and answer_id {3}'.format(
                     cleaned_data['user_report_id'], cleaned_data['user_id'], cleaned_data['question_id'],
                     cleaned_data['answer_id']
+                ))
+        return existing_question_answer
+
+    def query_user_report_question(self, input_data):
+        """
+        Return a question answer (which should be unique for this combination) for a specific question in
+        a specific user_report.
+        :param input_data:
+        :return:
+        """
+        cleaned_data = {}
+        for key in self.possible_params:
+            if key in self.required_params and key != 'answer_id':
+                if key not in input_data:
+                    raise RequiredAttributeMissing('Missing attribute {0}'.format(key))
+                cleaned_data[key] = input_data[key]
+            else:
+                if key not in input_data:
+                    cleaned_data[key] = None
+                else:
+                    cleaned_data[key] = input_data[key]
+
+        existing_question_answer = QuestionAnswer.query.filter(
+            and_(QuestionAnswer.user_report_id == cleaned_data['user_report_id'],
+                 QuestionAnswer.user_id == cleaned_data['user_id'],
+                 QuestionAnswer.question_id == cleaned_data['question_id'])).first()
+        if existing_question_answer is None:
+            raise DatabaseItemDoesNotExist(
+                'No QuestionAnswer with user_report_id {0}, user_id {1} and question_id {2}'.format(
+                    cleaned_data['user_report_id'], cleaned_data['user_id'], cleaned_data['question_id']
                 ))
         return existing_question_answer
 

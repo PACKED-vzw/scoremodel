@@ -21,7 +21,7 @@
                                     {% for answer in question.answers %}
                                         <div class="radio">
                                             <label>
-                                                {% if question.selected_answer(user_report_id) and question.selected_answer(user_report_id).answer_id == answer.id %}
+                                                {% if question_answers[question.id] is defined and answer.id == question_answers[question.id].answer_id %}
                                                     <input type="radio"
                                                            value="{{ answer.id }}"
                                                            id="questions_{{ question.id }}_{{ answer.id }}"
@@ -29,7 +29,7 @@
                                                            autocomplete="off"/>
                                                     {{ answer.answer }}
                                                 {% else %}
-                                                    <input type="radio" ng-model="answers[{{ question.id }}].answer"
+                                                    <input type="radio"
                                                            value="{{ answer.id }}"
                                                            id="questions_{{ question.id }}_{{ answer.id }}"
                                                            name="questions_{{ question.id }}" autocomplete="off"/>
@@ -38,10 +38,9 @@
                                             </label>
                                         </div>
                                     {% endfor %}
-                                    {% for risk_factor in question.risk_factors %}
                                         <div class="alert alert-warning" role="alert"><p>
-                                            Risicofactor: {{ risk_factor.risk_factor }}</p></div>
-                                    {% endfor %}
+                                            Risicofactor: {{ question.risk_factor.risk_factor }}</p>
+                                        </div>
                                 </div>
                             </div>
                             <div class="col-sm-offset-1 col-sm-5">

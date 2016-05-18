@@ -119,28 +119,45 @@ def v_user_report_edit(user_id, user_report_id):
 @login_required
 def v_user_report_section(user_id, user_report_id, section_id):
     section_api = SectionApi()
-    question_answer_api = QuestionAnswerApi()
     if current_user.id != user_id:
         flash('You can only view your own reports.')
         abort(403)
+        return
     try:
         user_report = user_report_api.read(user_report_id)
     except DatabaseItemDoesNotExist as e:
         flash('This page does not exist.')
         abort(404)
+        return
     except Exception as e:
         flash('An unexpected error occurred.')
         return redirect(url_for('.v_index'))
-    # Get the sections that should be part of the report template. Check whether
-    # section_id is part of them. If not, bail out.
-    sections = user_report.template.sections
-    if section_id not in [section.id for section in sections]:
+
+    # Check whether current section is in this user_report
+    if section_id not in [section.id for section in user_report.template.sections]:
+        flash('This section does not exist.')
         abort(404)
+        return
+
     current_section = section_api.read(section_id)
-    # Controle waar report_id != user_report_id
-    return render_template('public/section.html', title=current_section.title, section=current_section,
-                           user_report_id=user_report_id, next_section=current_section.next_in_report,
-                           previous_section=current_section.previous_in_report, report_id=user_report.template.id)
+
+    # Get all question_answers for this report and order them by question_id, so we can compare
+    # question.answer.answer_id to question_answers['question_id'].answer_id
+    question_answers = {}
+    for question_answer in user_report.question_answers:
+        question_answers[question_answer.question_id] = question_answer
+
+    print(question_answers)
+    print(current_section.output_obj())
+
+    return render_template('public/section_v2.html',
+                           title=current_section.title,
+                           section=current_section,
+                           user_report_id=user_report_id,
+                           question_answers=question_answers,
+                           next_section=current_section.next_in_report,
+                           previous_section=current_section.previous_in_report
+                           )
 
 
 @app.route('/user/<int:user_id>/report/<int:user_report_id>/check', methods=['GET'])

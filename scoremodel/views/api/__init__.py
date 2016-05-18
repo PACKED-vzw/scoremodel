@@ -5,7 +5,7 @@ from flask.ext.login import login_required, current_user
 from flask import Blueprint, render_template
 
 from scoremodel.modules.api.rest.scoremodel import ScoremodelRestApi
-from scoremodel.modules.api.question_answer.rest_api import QuestionAnswerRestApi
+from scoremodel.modules.api.question_answer.rest_api import QuestionAnswerQueryRestApi, QuestionAnswerQuestionQueryRestApi
 from scoremodel.modules.api.answer import AnswerApi
 from scoremodel.modules.api.question import QuestionApi
 from scoremodel.modules.api.question_answer import QuestionAnswerApi
@@ -161,13 +161,51 @@ def v_api_create_question_answer(user_report_id, question_id, answer_id):
         return json.dumps(parsed_data)
 
     # api_obj_id can not be None, but it is ignored in this case
-    a_api = QuestionAnswerRestApi(api_class=QuestionAnswerApi, o_request=request, api_obj_id='',
-                                  hooks=[hook_insert_current_user, hook_insert_ids])
+    a_api = QuestionAnswerQueryRestApi(api_class=QuestionAnswerApi, o_request=request, api_obj_id='',
+                                       hooks=[hook_insert_current_user, hook_insert_ids])
+    return a_api.response
+
+
+@api.route('/user_report/<int:user_report_id>/question/<int:question_id>', methods=['GET'])
+@login_required
+def v_api_get_question_answer(user_report_id, question_id):
+    # Create a hook to insert current_user.id in the original data.
+    def hook_insert_current_user(input_data):
+        if input_data:
+            try:
+                parsed_data = json.loads(input_data)
+            except ValueError as e:
+                # If parsing the data as JSON fails, return to ScoremodelApi so
+                # it can handle the failure gracefully.
+                return input_data
+        else:
+            parsed_data = {}
+        parsed_data['user_id'] = current_user.id
+        return json.dumps(parsed_data)
+
+    # Create a hook to insert user_report_id, question_id and answer_id into input_data
+    def hook_insert_ids(input_data):
+        if input_data:
+            try:
+                parsed_data = json.loads(input_data)
+            except ValueError as e:
+                # If parsing the data as JSON fails, return to ScoremodelApi so
+                # it can handle the failure gracefully.
+                return input_data
+        else:
+            parsed_data = {}
+        parsed_data['user_report_id'] = user_report_id
+        parsed_data['question_id'] = question_id
+        return json.dumps(parsed_data)
+
+    # api_obj_id can not be None, but it is ignored in this case
+    a_api = QuestionAnswerQuestionQueryRestApi(api_class=QuestionAnswerApi, o_request=request, api_obj_id='',
+                                               hooks=[hook_insert_current_user, hook_insert_ids])
     return a_api.response
 
 
 @api.route('/user_report', methods=['GET', 'POST'])
-@api.route('/user_report/<int:user_report_id>', methods=['PUT', 'DELETE'])
+@api.route('/user_report/<int:user_report_id>', methods=['PUT', 'DELETE', 'GET'])
 @login_required
 def v_api_user_report(user_report_id=None):
     # Create a hook to insert current_user.id in the original data.
