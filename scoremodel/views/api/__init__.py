@@ -102,7 +102,7 @@ def v_api_public_risk_factor(risk_factor_id=None):
 
 
 @api.route('/question_answer', methods=['GET', 'POST'])
-@api.route('/question_answer/<int:question_answer_id>', methods=['PUT', 'DELETE'])
+@api.route('/question_answer/<int:question_answer_id>', methods=['PUT', 'DELETE', 'GET'])
 @login_required
 def v_api_question_answer(question_answer_id=None):
     # Create a hook to insert current_user.id in the original data.
