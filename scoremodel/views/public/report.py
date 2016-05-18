@@ -150,7 +150,7 @@ def v_user_report_section(user_id, user_report_id, section_id):
     print(question_answers)
     print(current_section.output_obj())
 
-    return render_template('public/section_v2.html',
+    return render_template('public/section.html',
                            title=current_section.title,
                            section=current_section,
                            user_report_id=user_report_id,
