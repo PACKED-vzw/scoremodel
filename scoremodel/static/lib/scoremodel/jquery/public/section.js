@@ -6,7 +6,7 @@
 
 $(document).ready(function(){
     /*
-    Update the score to its inital value
+    Update the score to its initial value
      */
     update_score();
     /*
@@ -33,7 +33,14 @@ function get_question_id(name_attr){
     return name_attr_split[1];
 }
 
-
+/**
+ * Update the score using API calls:
+ *  - Get all questions for this section.
+ *  - For all questions, get the QuestionAnswer
+ *      - If one exists: score = score + question_score * question_multiply
+ *      - If one doesn't: score = score + 0
+ *      - Set the score
+ */
 function update_score() {
     /*
     First, get all questions for the current section (input section_id)
