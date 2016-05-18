@@ -10,7 +10,7 @@ babel = Babel(app)
 login_manager = LoginManager()
 login_manager.session_protection = 'strong'
 login_manager.init_app(app)
-login_manager.login_view = '.v_login'
+login_manager.login_view = 'v_login'
 
 
 # Models must be imported after db has been declared
@@ -27,6 +27,7 @@ from scoremodel.views.public.report import *
 # Blueprints
 from scoremodel.views.api import api
 app.register_blueprint(api)
+
 
 @app.route('/')
 @app.route('/index')

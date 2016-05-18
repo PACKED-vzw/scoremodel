@@ -1,8 +1,6 @@
-from scoremodel.models.general import Report, Section
-from sqlalchemy import and_, or_
+from scoremodel.models.general import Report
 from scoremodel.modules.error import RequiredAttributeMissing, DatabaseItemAlreadyExists, DatabaseItemDoesNotExist
 from scoremodel.modules.api.generic import GenericApi
-from scoremodel.modules.api.section import SectionApi
 from scoremodel import db
 
 

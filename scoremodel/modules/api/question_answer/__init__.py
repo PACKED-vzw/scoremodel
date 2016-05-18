@@ -6,8 +6,8 @@ from scoremodel.models.public import QuestionAnswer
 from scoremodel.modules.api.generic import GenericApi
 from scoremodel.modules.api.section import SectionApi
 from scoremodel.modules.error import DatabaseItemAlreadyExists, DatabaseItemDoesNotExist
+# TODO: for get, check current_user!
 
-#TODO: for get, check current_user!
 
 class QuestionAnswerApi(GenericApi):
     simple_params = ['user_id', 'question_id', 'answer_id', 'user_report_id']

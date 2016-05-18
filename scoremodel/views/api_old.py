@@ -4,7 +4,7 @@ from flask import request, make_response
 from flask.ext.login import login_required, current_user
 
 from scoremodel import app
-from scoremodel.modules.api import ScoremodelApi
+from scoremodel.modules.api.rest.scoremodel import ScoremodelRestApi
 from scoremodel.modules.api.answer import AnswerApi
 from scoremodel.modules.api.question import QuestionApi
 from scoremodel.modules.api.question_answer import QuestionAnswerApi
@@ -28,14 +28,14 @@ from scoremodel.modules.user.authentication import must_be_admin
 @login_required
 @must_be_admin
 def a_report(report_id=None):
-    a_api = ScoremodelApi(api_class=ReportApi, o_request=request, api_obj_id=report_id)
+    a_api = ScoremodelRestApi(api_class=ReportApi, o_request=request, api_obj_id=report_id)
     return a_api.response
 
 
 @app.route('/api/report', methods=['GET'])
 @app.route('/api/report/<int:report_id>', methods=['GET'])
 def a_report_list(report_id=None):
-    a_api = ScoremodelApi(api_class=ReportApi, o_request=request, api_obj_id=report_id)
+    a_api = ScoremodelRestApi(api_class=ReportApi, o_request=request, api_obj_id=report_id)
     return a_api.response
 
 
@@ -46,7 +46,7 @@ def a_report_list(report_id=None):
 @login_required
 @must_be_admin
 def a_section(report_id=None, section_id=None):
-    a_api = ScoremodelApi(api_class=SectionApi, o_request=request, api_obj_id=section_id)
+    a_api = ScoremodelRestApi(api_class=SectionApi, o_request=request, api_obj_id=section_id)
     return a_api.response
 
 
@@ -58,7 +58,7 @@ def a_section(report_id=None, section_id=None):
 @login_required
 @must_be_admin
 def a_question(report_id=None, section_id=None, question_id=None):
-    a_api = ScoremodelApi(api_class=QuestionApi, o_request=request, api_obj_id=question_id)
+    a_api = ScoremodelRestApi(api_class=QuestionApi, o_request=request, api_obj_id=question_id)
     return a_api.response
 
 
@@ -66,7 +66,7 @@ def a_question(report_id=None, section_id=None, question_id=None):
 @login_required
 @must_be_admin
 def a_answer_list():
-    a_api = ScoremodelApi(api_class=AnswerApi, o_request=request)
+    a_api = ScoremodelRestApi(api_class=AnswerApi, o_request=request)
     return a_api.response
 
 
@@ -74,7 +74,7 @@ def a_answer_list():
 @login_required
 @must_be_admin
 def a_answer(answer_id):
-    a_api = ScoremodelApi(api_class=AnswerApi, o_request=request, api_obj_id=answer_id)
+    a_api = ScoremodelRestApi(api_class=AnswerApi, o_request=request, api_obj_id=answer_id)
     return a_api.response
 
 
@@ -82,7 +82,7 @@ def a_answer(answer_id):
 @login_required
 @must_be_admin
 def a_risk_factor_list():
-    a_api = ScoremodelApi(api_class=RiskFactorApi, o_request=request)
+    a_api = ScoremodelRestApi(api_class=RiskFactorApi, o_request=request)
     return a_api.response
 
 
@@ -90,7 +90,7 @@ def a_risk_factor_list():
 @login_required
 @must_be_admin
 def a_risk_factor(risk_factor_id):
-    a_api = ScoremodelApi(api_class=RiskFactorApi, o_request=request, api_obj_id=risk_factor_id)
+    a_api = ScoremodelRestApi(api_class=RiskFactorApi, o_request=request, api_obj_id=risk_factor_id)
     return a_api.response
 
 
@@ -149,7 +149,7 @@ def a_question_answer(question_answer_id=None):
         response.status_code = 200
         return response
     else:
-        a_api = ScoremodelApi(api_class=QuestionAnswerApi, o_request=request, api_obj_id=question_answer_id)
+        a_api = ScoremodelRestApi(api_class=QuestionAnswerApi, o_request=request, api_obj_id=question_answer_id)
         return a_api.response
 
 
