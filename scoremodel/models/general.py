@@ -237,6 +237,7 @@ class Question(db.Model):
         self.order_in_section = order
         self.action = action
 
+    @property
     def highest_answer(self):
         highest = self.answers.order_by('value desc').all()
         return highest[0].value

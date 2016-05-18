@@ -147,9 +147,6 @@ def v_user_report_section(user_id, user_report_id, section_id):
     for question_answer in user_report.question_answers:
         question_answers[question_answer.question_id] = question_answer
 
-    print(question_answers)
-    print(current_section.output_obj())
-
     return render_template('public/section.html',
                            title=current_section.title,
                            section=current_section,
@@ -167,8 +164,25 @@ def v_user_report_check(user_id, user_report_id):
         flash('You can only view your own reports.')
         abort(403)
     user_report = user_report_api.read(user_report_id)
-    sections = user_report.template.sections
-    return render_template('public/report.html', sections=sections)
+
+    # Get all question_answers for this report and order them by question_id, so we can compare
+    # question.answer.answer_id to question_answers['question_id'].answer_id
+    question_answers = {}
+    all_scores = {}
+    for question_answer in user_report.question_answers:
+        question_answers[question_answer.question_id] = question_answer
+        if question_answer.question_template.section.id in all_scores:
+            all_scores[question_answer.question_template.section.id] += question_answer.score * \
+                                                                        question_answer.multiplication_factor
+        else:
+            all_scores[question_answer.question_template.section.id] = question_answer.score * \
+                                                                       question_answer.multiplication_factor
+
+    return render_template('public/report.html',
+                           report_template=user_report.template,
+                           question_answers=question_answers,
+                           all_scores=all_scores
+                           )
 
 
 @app.route('/user/<int:user_id>/report/<int:user_report_id>/print', methods=['GET'])

@@ -2,48 +2,103 @@
 {% block content %}
     <script src="{{ url_for('static', filename='lib/scoremodel/jquery/public/report.js') }}"></script>
     <div class="container">
-    <div class="row">
-        <div class="col-sm-6">
-        <h1><a name="inhoudstafel">Inhoudstafel</a></h1>
-            <nav>
-                <ul role="menu">
-                    <li><a href="#rapportgegevens">Rapportgegevens</a></li>
-                    <li><a href="#grafiek">Grafiek</a></li>
-                    <li><a href="#actieplan">Actieplan</a></li>
-                    <ul>
-                    {% for section in sections %}
-                        <li><a href="#actieplan_{{ section.title }}">{{ section.title }}</a></li>
-                    {% endfor %}
+        <div class="row">
+            <div class="col-md-9">
+                <h1><a name="inhoudstafel">Inhoudstafel</a></h1>
+                <nav>
+                    <ul role="menu">
+                        <li><a href="#rapportgegevens">Rapportgegevens</a></li>
+                        <li><a href="#grafiek">Grafiek</a></li>
+                        <li><a href="#actieplan">Actieplan</a></li>
+                        <ul>
+                            {% for section in report_template.sections %}
+                                <li><a href="#actieplan_{{ section.title }}">{{ section.title }}</a></li>
+                            {% endfor %}
+                        </ul>
+                        <li><a href="#resultaten">Resultaten</a></li>
+                        <ul>
+                            {% for section in report_template.sections %}
+                                <li><a href="#resultaten_{{ section.title }}">{{ section.title }}</a></li>
+                            {% endfor %}
+                        </ul>
                     </ul>
-                    <li><a href="#resultaten">Resultaten</a></li>
-                    <ul>
-                    {% for section in sections %}
-                        <li><a href="#resultaten_{{ section.title }}">{{ section.title }}</a></li>
-                    {% endfor %}
-                    </ul>
-                </ul>
-            </nav>
+                </nav>
+            </div>
         </div>
-    </div>
-    <div class="row">
-        <div class="col-sm-6">
-            <h1><a name="rapportgegevens">Rapportgegevens</a></h1>
+        <div class="row">
+            <div class="col-md-9">
+                <h1><a name="rapportgegevens">Rapportgegevens</a></h1>
+            </div>
         </div>
-    </div>
-    <div class="row">
-        <div class="col-sm-6">
-            <h1><a name="grafiek">Grafiek</a></h1>
+        <div class="row">
+            <div class="col-md-9">
+                <h1><a name="grafiek">Grafiek</a></h1>
+            </div>
         </div>
-    </div>
-    <div class="row">
-        <div class="col-sm-6">
-            <h1><a name="actieplan">Actieplan</a></h1>
+        <div class="row">
+            <div class="col-md-9">
+                <h1><a name="actieplan">Actieplan</a></h1>
+                {% for section in report_template.sections %}
+                    <div class="row">
+                        <div class="col-md-12">
+                            <h2><a name="section_{{ section.id }}">{{ section.title }}</a></h2>
+                            <span class="label label-default">Score: {{ all_scores[section.id] | round | int }}%</span>
+                            {% for question in section.questions %}
+                                {% if question_answers[question.id] is not defined or question_answers[question.id].answer_template.value != question.highest_answer %}
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <h3>{{ question.question }}</h3>
+                                            <span class="label label-info">{{ question.risk_factor.risk_factor }}</span>
+                                            {% if question_answers[question.id] is defined %}
+                                                <span class="label label-danger">{{ question_answers[question.id].answer_template.answer }}</span>
+                                            {% else %}
+                                                <span class="label label-warning">Niet ingevuld</span>
+                                            {% endif %}
+                                            <h4>Context</h4>
+                                            <p>{{ question.context }}</p>
+                                            <h4>Risico</h4>
+                                            <p>{{ question.risk }}</p>
+                                            <h4>Acties</h4>
+                                            <p>{{ question.action }}</p>
+                                            <h4>Voorbeeld</h4>
+                                            <p>{{ question.example }}</p>
+                                        </div>
+                                    </div>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
         </div>
-    </div>
-    <div class="row">
-        <div class="col-sm-6">
-            <h1><a name="resultaten">Resultaten</a></h1>
+        <div class="row">
+            <div class="col-md-9">
+                <h1><a name="resultaten">Resultaten</a></h1>
+                {% for section in report_template.sections %}
+                    <div class="row">
+                        <div class="col-md-12">
+                            <h2><a name="section_{{ section.id }}">{{ section.title }}</a></h2>
+                            {% for question in section.questions %}
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <h3>{{ question.question }}</h3>
+                                        <span class="label label-info">{{ question.risk_factor.risk_factor }}</span>
+                                        {% if question_answers[question.id] is not defined %}
+                                            <span class="label label-warning">Niet ingevuld</span>
+                                        {% else %}
+                                            {% if question_answers[question.id].answer_template.value == question.highest_answer %}
+                                                <span class="label label-success">{{ question_answers[question.id].answer_template.answer }}</span>
+                                            {% else %}
+                                                <span class="label label-danger">{{ question_answers[question.id].answer_template.answer }}</span>
+                                            {% endif %}
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
         </div>
-    </div>
     </div>
 {% endblock %}
