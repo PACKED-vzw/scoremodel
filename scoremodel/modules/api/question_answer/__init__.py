@@ -45,8 +45,7 @@ class QuestionAnswerApi(GenericApi):
                  QuestionAnswer.question_id == cleaned_data['question_id'],
                  QuestionAnswer.answer_id == cleaned_data['answer_id'])).first()
         if existing_question_answer is None:
-            raise DatabaseItemDoesNotExist(_('No QuestionAnswer with user_report_id %(user_report_id),'
-                                             'user_id %(user_id), question_id %(question_id) and answer_id %(answer_id)',
+            raise DatabaseItemDoesNotExist(_('No QuestionAnswer with user_report_id %(user_report_id)s user_id %(user_id)s question_id %(question_id)s and answer_id %(answer_id)s',
                                              user_report_id=cleaned_data['user_report_id'],
                                              user_id=cleaned_data['user_id'],
                                              question_id=cleaned_data['question_id'],
@@ -78,8 +77,7 @@ class QuestionAnswerApi(GenericApi):
                  QuestionAnswer.user_id == cleaned_data['user_id'],
                  QuestionAnswer.question_id == cleaned_data['question_id'])).first()
         if existing_question_answer is None:
-            raise DatabaseItemDoesNotExist(_('No QuestionAnswer with user_report_id %(user_report_id),'
-                                             'user_id %(user_id) and question_id %(question_id)',
+            raise DatabaseItemDoesNotExist(_('No QuestionAnswer with user_report_id %(user_report_id)s user_id %(user_id)s and question_id %(question_id)s',
                                              user_report_id=cleaned_data['user_report_id'],
                                              user_id=cleaned_data['user_id'],
                                              question_id=cleaned_data['question_id']))
@@ -138,7 +136,7 @@ class QuestionAnswerApi(GenericApi):
                                                            QuestionAnswer.user_id == user_id,
                                                            QuestionAnswer.user_report_id == user_report_id)).first()
         if question_answer is None:
-            raise DatabaseItemDoesNotExist(_('No answer found for question %(question_id) in report %(report_id)',
+            raise DatabaseItemDoesNotExist(_('No answer found for question %(question_id)s in report %(report_id)s',
                                              question_id=question_id,
                                              report_id=user_report_id))
         return question_answer

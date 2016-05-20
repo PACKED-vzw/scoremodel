@@ -13,14 +13,6 @@ login_manager.init_app(app)
 login_manager.login_view = 'v_login'
 
 
-@babel.localeselector
-def get_locale():
-    if current_user.is_anonymous or not current_user.locale:
-        return request.accept_languages.best_match(app.config['LANGUAGES'].keys())
-    else:
-        return current_user.locale
-
-
 # Models must be imported after db has been declared
 from scoremodel.views.api_old import *
 from scoremodel.views.admin import *
@@ -37,6 +29,13 @@ from scoremodel.views.public import public
 app.register_blueprint(public)
 
 # TODO: probleem met vragen van rapporten
+
+@babel.localeselector
+def get_locale():
+    if current_user.is_anonymous or not current_user.locale:
+        return request.accept_languages.best_match(app.config['LANGUAGES'].keys())
+    else:
+        return current_user.locale
 
 @app.route('/')
 @app.route('/index')
