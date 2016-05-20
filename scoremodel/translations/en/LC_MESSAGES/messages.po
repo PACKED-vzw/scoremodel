@@ -1,0 +1,626 @@
+# English translations for PROJECT.
+# Copyright (C) 2016 ORGANIZATION
+# This file is distributed under the same license as the PROJECT project.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2016.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PROJECT VERSION\n"
+"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
+"POT-Creation-Date: 2016-05-20 17:00+0200\n"
+"PO-Revision-Date: 2016-05-20 17:00+0200\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language: en\n"
+"Language-Team: en <LL@li.org>\n"
+"Plural-Forms: nplurals=2; plural=(n != 1)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.3.4\n"
+
+#: scoremodel/forms/login.py:8
+msgid "Username"
+msgstr ""
+
+#: scoremodel/forms/login.py:9 scoremodel/modules/user/admin.py:9
+#: scoremodel/modules/user/admin.py:18
+#: scoremodel/modules/user/authentication.py:12
+#: scoremodel/templates/admin/login.html:9
+#: scoremodel/templates/admin/user/create.html:18
+#: scoremodel/templates/admin/user/edit.html:18
+msgid "Password"
+msgstr ""
+
+#: scoremodel/forms/login.py:10 scoremodel/modules/user/authentication.py:13
+#: scoremodel/templates/admin/login.html:14
+msgid "Remember me"
+msgstr ""
+
+#: scoremodel/modules/api/question.py:122
+msgid "Error: risk_factors was provided!"
+msgstr ""
+
+#: scoremodel/modules/api/question_answer/__init__.py:48
+#, python-format
+msgid ""
+"No QuestionAnswer with user_report_id %(user_report_id)s user_id "
+"%(user_id)s question_id %(question_id)s and answer_id %(answer_id)s"
+msgstr ""
+
+#: scoremodel/modules/api/question_answer/__init__.py:80
+#, python-format
+msgid ""
+"No QuestionAnswer with user_report_id %(user_report_id)s user_id "
+"%(user_id)s and question_id %(question_id)s"
+msgstr ""
+
+#: scoremodel/modules/api/question_answer/__init__.py:118
+msgid "Error: two questions with the same id in one section!"
+msgstr ""
+
+#: scoremodel/modules/api/question_answer/__init__.py:139
+#, python-format
+msgid "No answer found for question %(question_id)s in report %(report_id)s"
+msgstr ""
+
+#: scoremodel/modules/forms/answers.py:8
+#: scoremodel/templates/admin/answer/create.html:5
+#: scoremodel/views/admin/answer.py:20
+msgid "Answer"
+msgstr ""
+
+#: scoremodel/modules/forms/answers.py:9
+#: scoremodel/templates/admin/answer/create.html:18
+msgid "Value"
+msgstr ""
+
+#: scoremodel/modules/forms/answers.py:10 scoremodel/modules/forms/generic.py:9
+msgid "Submit"
+msgstr ""
+
+#: scoremodel/modules/forms/generic.py:8
+msgid "Name"
+msgstr ""
+
+#: scoremodel/modules/forms/generic.py:13 scoremodel/modules/report/admin.py:13
+#: scoremodel/modules/user/admin.py:26
+msgid "Confirm delete"
+msgstr ""
+
+#: scoremodel/modules/forms/public/report.py:8
+#: scoremodel/templates/public/create.html:6
+#: scoremodel/templates/public/edit.html:6
+#: scoremodel/templates/public/list.html:7
+#: scoremodel/templates/public/report.html:33
+msgid "Report name"
+msgstr ""
+
+#: scoremodel/modules/forms/public/report.py:9
+#: scoremodel/templates/public/create.html:19
+#: scoremodel/templates/public/edit.html:19
+#: scoremodel/templates/public/report.html:37
+msgid "Report template"
+msgstr ""
+
+#: scoremodel/modules/forms/public/report.py:10
+#: scoremodel/templates/admin/report/edit.html:32
+msgid "Save"
+msgstr ""
+
+#: scoremodel/modules/msg/messages.py:4
+#, python-format
+msgid "%(what)s <%(identifier)s> created."
+msgstr ""
+
+#: scoremodel/modules/msg/messages.py:5
+#, python-format
+msgid "%(what)s <%(identifier)s> found."
+msgstr ""
+
+#: scoremodel/modules/msg/messages.py:6
+#, python-format
+msgid "%(what)s <%(identifier)s> updated."
+msgstr ""
+
+#: scoremodel/modules/msg/messages.py:7
+#, python-format
+msgid "%(what)s <%(identifier)s> deleted."
+msgstr ""
+
+#: scoremodel/modules/msg/messages.py:8
+#, python-format
+msgid "%(what)s found."
+msgstr ""
+
+#: scoremodel/modules/msg/messages.py:12
+#, python-format
+msgid "%(what)s already exists."
+msgstr ""
+
+#: scoremodel/modules/msg/messages.py:13
+#, python-format
+msgid "%(what)s <%(identifier)s> does not exist."
+msgstr ""
+
+#: scoremodel/modules/msg/messages.py:14
+#, python-format
+msgid "An error occurred: %(error)s."
+msgstr ""
+
+#: scoremodel/modules/msg/messages.py:15
+#, python-format
+msgid "Illegal action %(action)s."
+msgstr ""
+
+#: scoremodel/modules/msg/messages.py:16
+#, python-format
+msgid "Missing argument %(argument)s"
+msgstr ""
+
+#: scoremodel/modules/msg/messages.py:20
+#, python-format
+msgid "A %(what)s with identifier %(identifier)s already exists."
+msgstr ""
+
+#: scoremodel/modules/msg/messages.py:21
+#, python-format
+msgid "No %(what)s with identifier %(identifier)s."
+msgstr ""
+
+#: scoremodel/modules/msg/messages.py:22
+#, python-format
+msgid ""
+"No %(what)s with identifier %(identifier)s does not exist in %(in_what)s "
+"with identifier %(in_identifier)s"
+msgstr ""
+
+#: scoremodel/modules/msg/messages.py:25
+#, python-format
+msgid ""
+"Item %(what)s with identifier %(identifier)s already exists in "
+"%(in_what)s with identifier %(in_identifier)s"
+msgstr ""
+
+#: scoremodel/modules/msg/messages.py:28
+#, python-format
+msgid "Attribute %(what)s missing."
+msgstr ""
+
+#: scoremodel/modules/report/admin.py:8
+#: scoremodel/templates/admin/report/create.html:13
+#: scoremodel/templates/admin/report/edit.html:19
+#: scoremodel/templates/admin/report/list.html:7
+msgid "Title"
+msgstr ""
+
+#: scoremodel/modules/report/admin.py:9 scoremodel/modules/user/admin.py:13
+msgid "Create"
+msgstr ""
+
+#: scoremodel/modules/user/admin.py:8 scoremodel/modules/user/admin.py:17
+#: scoremodel/modules/user/authentication.py:11
+msgid "E-mail"
+msgstr ""
+
+#: scoremodel/modules/user/admin.py:10 scoremodel/modules/user/admin.py:19
+msgid "Passwords must match"
+msgstr ""
+
+#: scoremodel/modules/user/admin.py:11 scoremodel/modules/user/admin.py:20
+#: scoremodel/templates/admin/user/create.html:31
+#: scoremodel/templates/admin/user/edit.html:31
+msgid "Confirm password"
+msgstr ""
+
+#: scoremodel/modules/user/admin.py:12 scoremodel/modules/user/admin.py:21
+msgid "Role"
+msgstr ""
+
+#: scoremodel/modules/user/admin.py:22
+msgid "Edit"
+msgstr ""
+
+#: scoremodel/modules/user/authentication.py:14
+#: scoremodel/templates/login.html:3 scoremodel/templates/login.html:9
+msgid "Log on"
+msgstr ""
+
+#: scoremodel/templates/admin/admin_navigation.html:6
+#: scoremodel/templates/navigation.html:3
+msgid "Home"
+msgstr ""
+
+#: scoremodel/templates/navigation.html:5
+msgid "FAQ"
+msgstr ""
+
+#: scoremodel/templates/navigation.html:6
+msgid "Documents"
+msgstr ""
+
+#: scoremodel/templates/navigation.html:7
+msgid "Disclaimer"
+msgstr ""
+
+#: scoremodel/templates/admin/admin_navigation.html:7
+#: scoremodel/templates/admin/base.html:9
+msgid "Scoremodel administration"
+msgstr ""
+
+#: scoremodel/templates/admin/admin_navigation.html:8
+msgid "User administration"
+msgstr ""
+
+#: scoremodel/templates/admin/admin_navigation.html:9
+msgid "Log out"
+msgstr ""
+
+#: scoremodel/templates/admin/base.html:46
+#: scoremodel/views/public/__init__.py:32
+msgid "Reports"
+msgstr ""
+
+#: scoremodel/templates/admin/base.html:47
+#: scoremodel/templates/admin/base.html:52
+#: scoremodel/templates/admin/base.html:57
+#: scoremodel/templates/admin/base.html:62
+msgid "List"
+msgstr ""
+
+#: scoremodel/templates/admin/base.html:48
+#: scoremodel/templates/admin/base.html:53
+#: scoremodel/templates/admin/base.html:58
+#: scoremodel/templates/admin/base.html:63
+msgid "New"
+msgstr ""
+
+#: scoremodel/templates/admin/base.html:51
+msgid "Generic answers"
+msgstr ""
+
+#: scoremodel/templates/admin/base.html:56
+msgid "Generic risk factors"
+msgstr ""
+
+#: scoremodel/templates/admin/base.html:61
+msgid "Users"
+msgstr ""
+
+#: scoremodel/templates/admin/login.html:5
+msgid "Email address"
+msgstr ""
+
+#: scoremodel/templates/admin/generic/delete.html:6
+#: scoremodel/templates/admin/report/delete.html:6
+#: scoremodel/templates/admin/user/delete.html:6
+msgid "Confirm deletion"
+msgstr ""
+
+#: scoremodel/templates/admin/generic/delete.html:9
+#: scoremodel/templates/admin/report/delete.html:9
+#: scoremodel/templates/admin/user/delete.html:9
+#, python-format
+msgid ""
+"Please press &lt;Confirm delete&gt; to confirm the deletion of the "
+"%(item_type)s called &ldquo;%(item_identifier)s&rdquo;."
+msgstr ""
+
+#: scoremodel/templates/admin/generic/list.html:6
+#: scoremodel/templates/admin/report/list.html:6
+#: scoremodel/templates/admin/user/list.html:6
+msgid "ID"
+msgstr ""
+
+#: scoremodel/templates/admin/report/create.html:7
+#: scoremodel/templates/admin/report/delete.html:9
+#: scoremodel/templates/admin/report/edit.html:9
+#: scoremodel/views/admin/report.py:48 scoremodel/views/admin/report.py:53
+msgid "Report"
+msgstr ""
+
+#: scoremodel/templates/admin/report/edit.html:36
+msgid "Saved"
+msgstr ""
+
+#: scoremodel/templates/admin/report/edit.html:61
+msgid "Add section"
+msgstr ""
+
+#: scoremodel/templates/admin/report/list.html:8
+msgid "Sections"
+msgstr ""
+
+#: scoremodel/templates/admin/user/create.html:5
+#: scoremodel/templates/admin/user/edit.html:5
+msgid "E-mail address"
+msgstr ""
+
+#: scoremodel/templates/admin/user/create.html:44
+#: scoremodel/templates/admin/user/edit.html:44
+msgid "Roles"
+msgstr ""
+
+#: scoremodel/templates/admin/user/delete.html:9
+#: scoremodel/templates/public/report.html:41
+#: scoremodel/views/admin/user.py:147 scoremodel/views/admin/user.py:150
+msgid "User"
+msgstr ""
+
+#: scoremodel/templates/admin/user/list.html:7
+msgid "User name"
+msgstr ""
+
+#: scoremodel/templates/admin/user/list.html:8
+msgid "User role"
+msgstr ""
+
+#: scoremodel/templates/error/403.html:4
+msgid "Access forbidden"
+msgstr ""
+
+#: scoremodel/templates/error/403.html:5
+#, python-format
+msgid ""
+"You do not have the rights to view this page. If you believe this is an "
+"error, please <a href=\"%(contact)s\">contact the administrator</a>. "
+"Please return to the <a href=\"%(index)s\">main page</a>."
+msgstr ""
+
+#: scoremodel/templates/error/404.html:4
+msgid "Page not found"
+msgstr ""
+
+#: scoremodel/templates/error/404.html:5
+#, python-format
+msgid ""
+"We could not find the page you requested. You could try <a "
+"href=\"https://www.google.com/search?q=%(page_name)s&as_sitesearch=scoremodel.org\">searching"
+" for it</a> or return to the <a href=\"%(index)s\">main page</a>."
+msgstr ""
+
+#: scoremodel/templates/public/list.html:8
+msgid "Creation date"
+msgstr ""
+
+#: scoremodel/templates/public/list.html:22
+#: scoremodel/views/public/__init__.py:69
+msgid "New report"
+msgstr ""
+
+#: scoremodel/templates/public/report.html:7
+msgid "Table of contents"
+msgstr ""
+
+#: scoremodel/templates/public/report.html:10
+#: scoremodel/templates/public/report.html:30
+msgid "Report data"
+msgstr ""
+
+#: scoremodel/templates/public/report.html:11
+#: scoremodel/templates/public/report.html:53
+msgid "Graph"
+msgstr ""
+
+#: scoremodel/templates/public/report.html:12
+#: scoremodel/templates/public/report.html:61
+msgid "Actions"
+msgstr ""
+
+#: scoremodel/templates/public/report.html:18
+#: scoremodel/templates/public/report.html:97
+msgid "Results"
+msgstr ""
+
+#: scoremodel/templates/public/report.html:45
+msgid "Creation time"
+msgstr ""
+
+#: scoremodel/templates/public/report.html:66
+msgid "Score"
+msgstr ""
+
+#: scoremodel/templates/public/report.html:76
+#: scoremodel/templates/public/report.html:108
+msgid "Not completed"
+msgstr ""
+
+#: scoremodel/templates/public/report.html:78
+#: scoremodel/templates/public/section.html:54
+msgid "Context"
+msgstr ""
+
+#: scoremodel/templates/public/report.html:80
+#: scoremodel/templates/public/section.html:58
+msgid "Risks"
+msgstr ""
+
+#: scoremodel/templates/public/report.html:82
+msgid "Action"
+msgstr ""
+
+#: scoremodel/templates/public/report.html:84
+#: scoremodel/templates/public/section.html:62
+msgid "Example"
+msgstr ""
+
+#: scoremodel/templates/public/section.html:43
+msgid "Risk factor"
+msgstr ""
+
+#: scoremodel/templates/public/section.html:88
+#, python-format
+msgid "Total score for section \"%(section_title)s\":"
+msgstr ""
+
+#: scoremodel/templates/public/section.html:104
+#: scoremodel/views/public/__init__.py:119
+msgid "Edit report"
+msgstr ""
+
+#: scoremodel/templates/public/section.html:114
+msgid "Overview"
+msgstr ""
+
+#: scoremodel/views/admin/answer.py:37 scoremodel/views/admin/risk_factor.py:34
+msgid "Missing required form input."
+msgstr ""
+
+#: scoremodel/views/admin/answer.py:40
+msgid "An answer called {0} already exists."
+msgstr ""
+
+#: scoremodel/views/admin/answer.py:43 scoremodel/views/admin/answer.py:64
+#: scoremodel/views/admin/answer.py:78 scoremodel/views/admin/answer.py:101
+#: scoremodel/views/admin/answer.py:112 scoremodel/views/admin/report.py:45
+#: scoremodel/views/admin/report.py:76 scoremodel/views/admin/risk_factor.py:40
+#: scoremodel/views/admin/risk_factor.py:62
+#: scoremodel/views/admin/risk_factor.py:74
+#: scoremodel/views/admin/risk_factor.py:98
+#: scoremodel/views/admin/risk_factor.py:110 scoremodel/views/admin/user.py:59
+#: scoremodel/views/public/__init__.py:59
+#: scoremodel/views/public/__init__.py:87
+#: scoremodel/views/public/__init__.py:102
+#: scoremodel/views/public/__init__.py:110
+#: scoremodel/views/public/__init__.py:136
+msgid "An unexpected error occurred."
+msgstr ""
+
+#: scoremodel/views/admin/answer.py:47
+msgid "Answer created successfully."
+msgstr ""
+
+#: scoremodel/views/admin/answer.py:61
+msgid "No answer with id {0} exists."
+msgstr ""
+
+#: scoremodel/views/admin/answer.py:81 scoremodel/views/admin/risk_factor.py:77
+msgid "Update successful."
+msgstr ""
+
+#: scoremodel/views/admin/answer.py:98
+msgid "This answer does not exist."
+msgstr ""
+
+#: scoremodel/views/admin/answer.py:106
+msgid "Answer removed."
+msgstr ""
+
+#: scoremodel/views/admin/answer.py:109
+msgid "Answer could not be removed."
+msgstr ""
+
+#: scoremodel/views/admin/auth.py:19 scoremodel/views/admin/auth.py:25
+msgid "Invalid username or password."
+msgstr ""
+
+#: scoremodel/views/admin/auth.py:36
+msgid "You have been logged out."
+msgstr ""
+
+#: scoremodel/views/admin/report.py:36
+msgid "No report with id {0} exists."
+msgstr ""
+
+#: scoremodel/views/admin/report.py:41
+msgid "Report {0} removed."
+msgstr ""
+
+#: scoremodel/views/admin/report.py:43
+msgid "Failed to remove report {0}."
+msgstr ""
+
+#: scoremodel/views/admin/report.py:69
+msgid "A report called {0} already exists."
+msgstr ""
+
+#: scoremodel/views/admin/report.py:72 scoremodel/views/admin/user.py:55
+#: scoremodel/views/admin/user.py:100 scoremodel/views/public/__init__.py:56
+#: scoremodel/views/public/__init__.py:107
+msgid "A required form element was not submitted: {0}"
+msgstr ""
+
+#: scoremodel/views/admin/report.py:79
+msgid "Report created."
+msgstr ""
+
+#: scoremodel/views/admin/risk_factor.py:18
+msgid "Risk Factor"
+msgstr ""
+
+#: scoremodel/views/admin/risk_factor.py:37
+msgid "An risk_factor called {0} already exists."
+msgstr ""
+
+#: scoremodel/views/admin/risk_factor.py:44
+msgid "risk_factor created successfully."
+msgstr ""
+
+#: scoremodel/views/admin/risk_factor.py:59
+msgid "No risk_factor with id {0} exists."
+msgstr ""
+
+#: scoremodel/views/admin/risk_factor.py:71
+msgid "No risk_factor with id {0}."
+msgstr ""
+
+#: scoremodel/views/admin/risk_factor.py:95
+msgid "This risk factor does not exist."
+msgstr ""
+
+#: scoremodel/views/admin/risk_factor.py:104
+msgid "Risk factor removed."
+msgstr ""
+
+#: scoremodel/views/admin/risk_factor.py:107
+msgid "Risk factor could not be removed."
+msgstr ""
+
+#: scoremodel/views/admin/user.py:52
+msgid "A user called {0} already exists."
+msgstr ""
+
+#: scoremodel/views/admin/user.py:77
+msgid "A user with id {0} does not exist."
+msgstr ""
+
+#: scoremodel/views/admin/user.py:97 scoremodel/views/admin/user.py:132
+msgid "No user with id {0}"
+msgstr ""
+
+#: scoremodel/views/admin/user.py:103
+msgid "An unexpected error occurred: {0}"
+msgstr ""
+
+#: scoremodel/views/admin/user.py:135
+msgid "An unexpected error occured: {0}"
+msgstr ""
+
+#: scoremodel/views/admin/user.py:141
+msgid "User {0} deleted"
+msgstr ""
+
+#: scoremodel/views/admin/user.py:144
+msgid "Unable to delete user {0}"
+msgstr ""
+
+#: scoremodel/views/public/__init__.py:28
+#: scoremodel/views/public/__init__.py:39
+#: scoremodel/views/public/__init__.py:76
+#: scoremodel/views/public/__init__.py:127
+#: scoremodel/views/public/__init__.py:166
+#: scoremodel/views/public/__init__.py:196
+msgid "You can only view your own reports."
+msgstr ""
+
+#: scoremodel/views/public/__init__.py:53
+msgid "This report already exists."
+msgstr ""
+
+#: scoremodel/views/public/__init__.py:65
+msgid "Report created"
+msgstr ""
+
+#: scoremodel/views/public/__init__.py:84
+msgid "This report does not exist."
+msgstr ""
+
