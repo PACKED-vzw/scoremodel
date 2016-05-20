@@ -180,6 +180,8 @@ def v_user_report_check(user_id, user_report_id):
 
     return render_template('public/report.html',
                            report_template=user_report.template,
+                           user_report=user_report,
+                           user_report_creation_time='{:%Y-%m-%d %H:%M:%S}'.format(user_report.creation_time),
                            question_answers=question_answers,
                            all_scores=all_scores
                            )
