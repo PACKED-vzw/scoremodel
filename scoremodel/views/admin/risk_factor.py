@@ -1,6 +1,6 @@
 from flask import request, render_template, url_for, redirect, flash
 from flask.ext.login import login_required
-
+from flask.ext.babel import gettext as _
 from scoremodel import app
 from scoremodel.modules.api.risk_factor import RiskFactorApi
 from scoremodel.modules.error import RequiredAttributeMissing, DatabaseItemDoesNotExist, DatabaseItemAlreadyExists
@@ -15,7 +15,7 @@ def v_risk_factor_list():
     a_api = RiskFactorApi()
     l_risk_factors = a_api.list()
     return render_template('admin/generic/list.html', items=l_risk_factors, item_type='risk_factor',
-                           name='risk_factor', canonical_name='Risk Factor')
+                           name='risk_factor', canonical_name=_('Risk Factor'))
 
 
 @app.route('/admin/risk_factor/create', methods=['GET', 'POST'])
@@ -31,17 +31,17 @@ def v_risk_factor_create():
         try:
             a_api.create(input_data)
         except RequiredAttributeMissing:
-            flash('Missing required form input.')
+            flash(_('Missing required form input.'))
             return redirect(url_for('.v_risk_factor_create'))
         except DatabaseItemAlreadyExists:
-            flash('An risk_factor called {0} already exists.'.format(input_data['risk_factor']))
+            flash(_('An risk_factor called {0} already exists.').format(input_data['risk_factor']))
             return redirect(url_for('.v_risk_factor_create'))
         except Exception as e:
-            flash('An unexpected error occurred.')
+            flash(_('An unexpected error occurred.'))
             print(e)
             return redirect(url_for('.v_risk_factor_create'))
         else:
-            flash('risk_factor created successfully.')
+            flash(_('risk_factor created successfully.'))
             return redirect(url_for('.v_risk_factor_list'))
     else:
         return render_template('admin/generic/create.html', action_url=url_for('.v_risk_factor_create'), form=form)
@@ -56,11 +56,10 @@ def v_risk_factor_edit(id):
     try:
         existing_risk_factor = a_api.read(risk_factor_id=id)
     except DatabaseItemDoesNotExist:
-        flash('No risk_factor with id {0} exists.'.format(id))
+        flash(_('No risk_factor with id {0} exists.').format(id))
         return redirect(url_for('.v_risk_factor_list'))
     except Exception as e:
-        flash('An unexpected error occurred.')
-        print(e)
+        flash(_('An unexpected error occurred.'))
         return redirect(url_for('.v_risk_factor_list'))
     if request.method == 'POST' and form.validate_on_submit():
         input_data = {
@@ -69,14 +68,13 @@ def v_risk_factor_edit(id):
         try:
             a_api.update(risk_factor_id=id, input_data=input_data)
         except DatabaseItemDoesNotExist:
-            flash('No risk_factor with id {0}.'.format(id))
+            flash(_('No risk_factor with id {0}.').format(id))
             return redirect(url_for('.v_risk_factor_list'))
         except Exception as e:
-            flash('An unexpected error occurred.')
-            print(e)
+            flash(_('An unexpected error occurred.'))
             return redirect(url_for('.v_risk_factor_list'))
         else:
-            flash('Update successful.')
+            flash(_('Update successful.'))
             return redirect(url_for('.v_risk_factor_list'))
     else:
         # Fill in the values
@@ -94,22 +92,22 @@ def v_risk_factor_delete(id):
     try:
         existing_risk_factor = a_api.read(id)
     except DatabaseItemDoesNotExist:
-        flash('This risk factor does not exist.')
+        flash(_('This risk factor does not exist.'))
         return redirect(url_for('.v_risk_factor_list'))
     except Exception as e:
-        flash('An unexpected error occurred.')
+        flash(_('An unexpected error occurred.'))
         print(e)  # TODO: logging
         return redirect(url_for('.v_risk_factor_list'))
     if request.method == 'POST' and form.validate_on_submit():
         try:
             if a_api.delete(id) is True:
-                flash('Risk factor removed.')
+                flash(_('Risk factor removed.'))
                 return redirect(url_for('.v_risk_factor_list'))
             else:
-                flash('Risk factor could not be removed.')
+                flash(_('Risk factor could not be removed.'))
                 return redirect(url_for('.v_risk_factor_list'))
         except Exception as e:
-            flash('An unexpected error occurred.')
+            flash(_('An unexpected error occurred.'))
             print(e)
             return redirect(url_for('.v_risk_factor_list'))
     else:

@@ -1,5 +1,6 @@
 from flask import request, render_template, redirect, url_for, flash, abort, Blueprint
 from flask.ext.login import login_required, current_user
+from flask.ext.babel import gettext as _
 
 from scoremodel.modules.api.question_answer import QuestionAnswerApi
 from scoremodel.modules.api.report import ReportApi
@@ -24,18 +25,18 @@ def v_index():
 @login_required
 def v_user_report_list_by_user(user_id):
     if current_user.id != user_id:
-        flash('You can only view your own reports.')
+        flash(_('You can only view your own reports.'))
         abort(403)
     user_api = UserApi()
     reports_user = user_api.get_user_reports(user_id)
-    return render_template('public/list.html', reports=reports_user, title='Rapporten')
+    return render_template('public/list.html', reports=reports_user, title=_('Reports'))
 
 
 @public.route('/user/<int:user_id>/report/new', methods=['GET', 'POST'])
 @login_required
 def v_user_report_new(user_id):
     if current_user.id != user_id:
-        flash('You can only view your own reports.')
+        flash(_('You can only view your own reports.'))
         abort(403)
     form = UserReportCreateForm()
     report_api = ReportApi()
@@ -49,31 +50,30 @@ def v_user_report_new(user_id):
         try:
             new_user_report = user_report_api.create(user_report_data)
         except DatabaseItemAlreadyExists as e:
-            flash('This report already exists.')
+            flash(_('This report already exists.'))
             return redirect(url_for('public.v_user_report_new', user_id=user_id))
         except RequiredAttributeMissing as e:
-            flash('A required form element was not submitted: {0}'.format(e))
+            flash(_('A required form element was not submitted: {0}').format(e))
             return redirect(url_for('public.v_user_report_new', user_id=current_user.id))
         except Exception as e:
-            flash('An unexpected error occurred.')
-            flash('The error is {0}'.format(e))
+            flash(_('An unexpected error occurred.'))
             return redirect(url_for('public.v_user_report_new', user_id=current_user.id))
         else:
             report_api = ReportApi()
             report_template = report_api.read(new_user_report.report_id)
             first_section = report_template.ordered_sections[0]
-            flash('Rapport aangemaakt.')
+            flash(_('Report created'))
             return redirect(url_for('public.v_user_report_section', report_id=new_user_report.id, user_id=current_user.id,
                                     section_id=first_section.id))
     else:
-        return render_template('public/create.html', form=form, title='Nieuw rapport')
+        return render_template('public/create.html', form=form, title=_('New report'))
 
 
 @public.route('/user/<int:user_id>/report/<int:user_report_id>', methods=['GET', 'POST'])
 @login_required
 def v_user_report_edit(user_id, user_report_id):
     if current_user.id != user_id:
-        flash('You can only view your own reports.')
+        flash(_('You can only view your own reports.'))
         abort(403)
     form = UserReportCreateForm()
     report_api = ReportApi()
@@ -81,11 +81,10 @@ def v_user_report_edit(user_id, user_report_id):
     try:
         existing_user_report = user_report_api.read(user_report_id)
     except DatabaseItemDoesNotExist as e:
-        flash('This report does not exist.')
+        flash(_('This report does not exist.'))
         return redirect(url_for('public.v_user_report_list_by_user', user_id=current_user.id))
     except Exception as e:
-        flash('An unexpected error occurred.')
-        flash('{0}'.format(e))
+        flash(_('An unexpected error occurred.'))
         return redirect(url_for('public.v_user_report_list_by_user', user_id=current_user.id))
     if request.method == 'POST' and form.validate_on_submit():
         input_data = {
@@ -100,17 +99,15 @@ def v_user_report_edit(user_id, user_report_id):
                 try:
                     qa_api.delete(question_answer.id)
                 except Exception as e:
-                    flash('An unexpected error occurred.')
-                    flash('{0}'.format(e))
+                    flash(_('An unexpected error occurred.'))
                     return redirect(url_for('public.v_user_report_list_by_user', user_id=current_user.id))
         try:
             edited_user_report = user_report_api.update(existing_user_report.id, input_data)
         except RequiredAttributeMissing as e:
-            flash('A required form element was not submitted: {0}'.format(e))
+            flash(_('A required form element was not submitted: {0}').format(e))
             return redirect(url_for('public.v_user_report_edit', user_id=current_user.id, report_id=user_report_id))
         except Exception as e:
-            flash('An unexpected error occurred.')
-            flash(e)
+            flash(_('An unexpected error occurred.'))
             return redirect(url_for('public.v_user_report_list_by_user', user_id=current_user.id))
         else:
             return redirect(url_for('public.v_user_report_section', user_id=current_user.id, user_report_id=edited_user_report.id,
@@ -119,7 +116,7 @@ def v_user_report_edit(user_id, user_report_id):
         form.report.default = str(existing_user_report.report_id)
         form.name.default = existing_user_report.name
         form.process()
-        return render_template('public/edit.html', form=form, title='Rapport bewerken', report_id=user_report_id)
+        return render_template('public/edit.html', form=form, title=_('Edit report'), report_id=user_report_id)
 
 
 @public.route('/user/<int:user_id>/report/<int:user_report_id>/section/<int:section_id>', methods=['GET'])
@@ -127,22 +124,20 @@ def v_user_report_edit(user_id, user_report_id):
 def v_user_report_section(user_id, user_report_id, section_id):
     section_api = SectionApi()
     if current_user.id != user_id:
-        flash('You can only view your own reports.')
+        flash(_('You can only view your own reports.'))
         abort(403)
         return
     try:
         user_report = user_report_api.read(user_report_id)
     except DatabaseItemDoesNotExist as e:
-        flash('This page does not exist.')
         abort(404)
         return
     except Exception as e:
-        flash('An unexpected error occurred.')
+        flash(_('An unexpected error occurred.'))
         return redirect(url_for('v_index'))
 
     # Check whether current section is in this user_report
     if section_id not in [section.id for section in user_report.template.sections]:
-        flash('This section does not exist.')
         abort(404)
         return
 
@@ -168,7 +163,7 @@ def v_user_report_section(user_id, user_report_id, section_id):
 @login_required
 def v_user_report_check(user_id, user_report_id):
     if current_user.id != user_id:
-        flash('You can only view your own reports.')
+        flash(_('You can only view your own reports.'))
         abort(403)
     user_report = user_report_api.read(user_report_id)
 
@@ -198,5 +193,5 @@ def v_user_report_check(user_id, user_report_id):
 @login_required
 def v_user_report_print(user_id, user_report_id):
     if current_user.id != user_id:
-        flash('You can only view your own reports.')
+        flash(_('You can only view your own reports.'))
         abort(403)

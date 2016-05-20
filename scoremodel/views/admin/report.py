@@ -5,6 +5,7 @@ from scoremodel.modules.user.authentication import must_be_admin
 from scoremodel.modules.api.report import ReportApi
 from scoremodel.modules.report.admin import ReportCreateForm, ReportDeleteForm
 from scoremodel.modules.error import DatabaseItemAlreadyExists, RequiredAttributeMissing, DatabaseItemDoesNotExist
+from flask.ext.babel import gettext as _
 
 
 @app.route('/admin/reports', methods=['GET'])
@@ -32,24 +33,24 @@ def v_report_delete(report_id):
     try:
         existing_report = a_report.read(report_id)
     except DatabaseItemDoesNotExist:
-        flash('No report with id {0} exists.'.format(report_id))
+        flash(_('No report with id {0} exists.').format(report_id))
         return url_for('.v_report_list')
     if request.method == 'POST' and form.validate_on_submit():
         try:
             if a_report.delete(report_id) is True:
-                flash('Report {0} removed.'.format(report_id))
+                flash(_('Report {0} removed.').format(report_id))
             else:
-                flash('Failed to remove report {0}.'.format(report_id))
+                flash(_('Failed to remove report {0}.').format(report_id))
         except Exception as e:
-            flash('An unexpected error occurred.')
+            flash(_('An unexpected error occurred.'))
             return render_template('admin/generic/delete.html', action_url=url_for('.v_report_delete',
                                                                                    report_id=report_id),
-                                   item_type='Report', item_identifier=existing_report.title, form=form)
+                                   item_type=_('Report'), item_identifier=existing_report.title, form=form)
         else:
             return redirect(url_for('.v_report_list'))
     return render_template('admin/generic/delete.html', action_url=url_for('.v_report_delete',
                                                                            report_id=report_id),
-                           item_type='Report', item_identifier=existing_report.title, form=form)
+                           item_type=_('Report'), item_identifier=existing_report.title, form=form)
 
 
 @app.route('/admin/reports/create', methods=['GET', 'POST'])
@@ -65,17 +66,17 @@ def v_report_create():
         try:
             new_report = a_report.create(input_data)
         except DatabaseItemAlreadyExists as e:
-            flash('A report called {0} already exists.'.format(input_data['title']))
+            flash(_('A report called {0} already exists.').format(input_data['title']))
             return render_template('admin/report/create.html', form=form)
         except RequiredAttributeMissing as e:
-            flash('A required form element was not submitted: {0}'.format(e))
+            flash(_('A required form element was not submitted: {0}').format(e))
             return render_template('admin/report/create.html', form=form)
         except Exception as e:  # Remove this after debugging
         #    flash('An unexpected error occurred: {0}'.format(e))
-            flash('An unexpected error occurred.')
+            flash(_('An unexpected error occurred.'))
             return render_template('admin/report/create.html', form=form)
         else:
-            flash('Report created.')
+            flash(_('Report created.'))
             return redirect(url_for('.v_report_edit', report_id=new_report.id))
     return render_template('admin/report/create.html', form=form)
 

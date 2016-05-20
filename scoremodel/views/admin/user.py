@@ -1,5 +1,6 @@
 from flask import render_template, url_for, flash, request, redirect
 from flask.ext.login import login_required
+from flask.ext.babel import gettext as _
 from scoremodel.modules.api.user import UserApi
 from scoremodel.modules.api.role import RoleApi
 from scoremodel.modules.user.admin import UserCreateForm, UserDeleteForm, UserModifyForm
@@ -48,14 +49,14 @@ def v_user_create():
         try:
             new_user = a_user.create(input_data)
         except DatabaseItemAlreadyExists as e:
-            flash('A user called {0} already exists.'.format(input_data['email']))
+            flash(_('A user called {0} already exists.').format(input_data['email']))
             return render_template('admin/user/create.html', form=form)
         except RequiredAttributeMissing as e:
-            flash('A required form element was not submitted: {0}'.format(e))
+            flash(_('A required form element was not submitted: {0}').format(e))
             return render_template('admin/user/create.html', form=form)
         except Exception as e:  # Remove this after debugging
             #    flash('An unexpected error occurred: {0}'.format(e))
-            flash('An unexpected error occurred.')
+            flash(_('An unexpected error occurred.'))
             return render_template('admin/user/create.html', form=form)
         else:
             return redirect(url_for('.v_user_list'))
@@ -73,7 +74,7 @@ def v_user_edit(user_id):
     try:
         existing_user = a_user.read(user_id)
     except DatabaseItemDoesNotExist:
-        flash('A user with id {0} does not exist.'.format(user_id))
+        flash(_('A user with id {0} does not exist.').format(user_id))
         return redirect(url_for('.v_user_list'))
 
     if request.method == 'POST' and form.validate_on_submit():
@@ -93,13 +94,13 @@ def v_user_edit(user_id):
         try:
             edited_user = a_user.update(user_id, input_data, update_password)
         except DatabaseItemDoesNotExist as e:
-            flash('No user with id {0}'.format(user_id))
+            flash(_('No user with id {0}').format(user_id))
             return redirect(url_for('.v_user_list'))
         except RequiredAttributeMissing as e:
-            flash('A required form element was not submitted: {0}'.format(e))
+            flash(_('A required form element was not submitted: {0}').format(e))
             return render_template('admin/user/edit.html', form=form, user_id=user_id)
         except Exception as e:
-            flash('An unexpected error occurred: {0}'.format(e))
+            flash(_('An unexpected error occurred: {0}').format(e))
             # flash('An unexpected error occurred.')
             return render_template('admin/user/edit.html', form=form, user_id=user_id)
         else:
@@ -128,22 +129,22 @@ def v_user_delete(user_id):
     try:
         existing_user = a_user.read(user_id)
     except DatabaseItemDoesNotExist as e:
-        flash('No user with id {0}'.format(user_id))
+        flash(_('No user with id {0}').format(user_id))
         return redirect(url_for('.v_user_list'))
     except Exception as e:
-        flash('An unexpected error occured: {0}'.format(e))
+        flash(_('An unexpected error occured: {0}').format(e))
         # flash('An unexpected erro occured.')
         return redirect(url_for('.v_user_list'))
 
     if request.method == 'POST' and form.validate_on_submit():
         if a_user.delete(user_id) is True:
-            flash('User {0} deleted'.format(existing_user.email))
+            flash(_('User {0} deleted').format(existing_user.email))
             return redirect(url_for('.v_user_list'))
         else:
-            flash('Unable to delete user {0}'.format(existing_user.email))
+            flash(_('Unable to delete user {0}').format(existing_user.email))
             return render_template('admin/generic/delete.html', action_url=url_for('.v_user_delete',
                                                                                    user_id=user_id),
-                                   item_type='Report', item_identifier=existing_user.email, form=form)
+                                   item_type=_('User'), item_identifier=existing_user.email, form=form)
 
     return render_template('admin/generic/delete.html', action_url=url_for('.v_user_delete', user_id=user_id),
-                           item_type='Report', item_identifier=existing_user.email, form=form)
+                           item_type=_('User'), item_identifier=existing_user.email, form=form)
