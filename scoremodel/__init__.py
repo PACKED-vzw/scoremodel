@@ -30,6 +30,7 @@ app.register_blueprint(public)
 
 # TODO: probleem met vragen van rapporten
 
+
 @babel.localeselector
 def get_locale():
     if current_user.is_anonymous or not current_user.locale:

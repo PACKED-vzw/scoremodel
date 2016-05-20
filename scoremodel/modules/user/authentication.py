@@ -10,8 +10,8 @@ from flask.ext.babel import lazy_gettext as _
 class LoginForm(Form):
     email = StringField(_('E-mail'), validators=[Required(), Email()])
     password = PasswordField(_('Password'), validators=[Required()])
-    remember_me = BooleanField(_('Onthouden'))
-    submit = SubmitField(_('Aanmelden'))
+    remember_me = BooleanField(_('Remember me'))
+    submit = SubmitField(_('Log on'))
 
 
 def role_required(role):

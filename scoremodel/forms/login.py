@@ -5,6 +5,6 @@ from wtforms.validators import DataRequired
 
 
 class LoginForm(Form):
-    username = StringField(_('Gebruikersnaam'), validators=[DataRequired()])
-    password = PasswordField(_('Wachtwoord'), validators=[DataRequired()])
-    remember_me = BooleanField(_('Onthouden'), default=False)
+    username = StringField(_('Username'), validators=[DataRequired()])
+    password = PasswordField(_('Password'), validators=[DataRequired()])
+    remember_me = BooleanField(_('Remember me'), default=False)

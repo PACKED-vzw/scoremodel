@@ -5,6 +5,6 @@ from flask.ext.babel import lazy_gettext as _
 
 
 class UserReportCreateForm(Form):
-    name = StringField(_('Naam'), validators=[InputRequired()])
-    report = SelectField(_('Basisrapport'), validators=[InputRequired()], coerce=int)
-    submit = SubmitField(_('Opslaan'))
+    name = StringField(_('Report name'), validators=[InputRequired()])
+    report = SelectField(_('Report template'), validators=[InputRequired()], coerce=int)
+    submit = SubmitField(_('Save'))
