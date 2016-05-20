@@ -169,14 +169,14 @@ def v_user_report_check(user_id, user_report_id):
     # question.answer.answer_id to question_answers['question_id'].answer_id
     question_answers = {}
     all_scores = {}
+
+    for section in user_report.template.sections:
+        all_scores[section.id] = 0
+
     for question_answer in user_report.question_answers:
         question_answers[question_answer.question_id] = question_answer
-        if question_answer.question_template.section.id in all_scores:
-            all_scores[question_answer.question_template.section.id] += question_answer.score * \
+        all_scores[question_answer.question_template.section.id] += question_answer.score * \
                                                                         question_answer.multiplication_factor
-        else:
-            all_scores[question_answer.question_template.section.id] = question_answer.score * \
-                                                                       question_answer.multiplication_factor
 
     return render_template('public/report.html',
                            report_template=user_report.template,

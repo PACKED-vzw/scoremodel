@@ -193,7 +193,11 @@ class Section(db.Model):
 
     @property
     def multiplication_factor(self):
-        return 100/self.total_score
+        if self.total_score == 0:
+            # Prevent division by zero errors
+            return 100
+        else:
+            return 100/self.total_score
 
 
 class Question(db.Model):

@@ -4,3 +4,11 @@
 
 $(document).ready(function() {
 });
+
+function data_for_table() {
+    var scores = $('span').filter(function(){
+        if ($(this).attr('id')) {
+            return true;
+        }
+    });
+}

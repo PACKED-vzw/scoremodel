@@ -1,5 +1,8 @@
 /**
  * Created by pieter on 4/01/16.
+ *
+ *
+ * TODO: als vraag, dan ook sectie opslaan
  */
 
 var app = angular.module('scoremodel', ['scoremodel.api_core', 'scoremodel.api_submit']);
