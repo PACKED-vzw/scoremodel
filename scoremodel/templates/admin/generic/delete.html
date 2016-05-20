@@ -3,10 +3,10 @@
 <form method="post" action="{{ action_url }}">
     <div class="panel panel-warning">
         <div class="panel-heading">
-            <h1 class="panel-title">Confirm deletion</h1>
+            <h1 class="panel-title">{{ _('Confirm deletion') }}</h1>
         </div>
         <div class="panel-body">
-            <p>Please press &lt;Confirm delete&gt; to confirm the deletion of the {{ item_type }} called &ldquo;{{ item_identifier }}&rdquo;.</p>
+            <p>{{ _('Please press &lt;Confirm delete&gt; to confirm the deletion of the %(item_type)s called &ldquo;%(item_identifier)s&rdquo;.', item_type=item_type, item_identifier=item_identifier) }}</p>
         </div>
     </div>
     {{ form.csrf_token }}

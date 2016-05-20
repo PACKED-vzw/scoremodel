@@ -40,7 +40,7 @@
                                         </div>
                                     {% endfor %}
                                         <div class="alert alert-warning" role="alert"><p>
-                                            Risicofactor: {{ question.risk_factor.risk_factor }}</p>
+                                            {{ _('Risk factor') }}: {{ question.risk_factor.risk_factor }}</p>
                                         </div>
                                 </div>
                             </div>
@@ -51,15 +51,15 @@
                                             <li role="presentation" class="active"><a role="tab"
                                                                                       href="#context_{{ question.id }}"
                                                                                       data-toggle="pill"
-                                                                                      aria-controls="context_{{ question.id }}">Context</a>
+                                                                                      aria-controls="context_{{ question.id }}">{{ _('Context') }}</a>
                                             </li>
                                             <li role="presentation"><a role="tab" href="#risk_{{ question.id }}"
                                                                        data-toggle="pill"
-                                                                       aria-controls="risk_{{ question.id }}">Risico</a>
+                                                                       aria-controls="risk_{{ question.id }}">{{ _('Risks') }}</a>
                                             </li>
                                             <li role="presentation"><a role="tab" href="#example_{{ question.id }}"
                                                                        data-toggle="pill"
-                                                                       aria-controls="example_{{ question.id }}">Voorbeeld</a>
+                                                                       aria-controls="example_{{ question.id }}">{{ _('Example') }}</a>
                                             </li>
                                         </ul>
                                     </nav>
@@ -85,7 +85,7 @@
         </div>
         <div class="row">
             <div class="alert alert-info">
-                Totale score voor {{ section.title }}: <span id="score">0</span> /100
+                {{ _('Total score for section "%(section_title)s":', section_title=section.title) }} <span id="score">0</span> /100
             </div>
             </div>
         </div>
@@ -101,7 +101,7 @@
                         {% else %}
                             <a href="{{ url_for('.v_user_report_edit', user_id=current_user.id, user_report_id=user_report_id) }}"
                                class="btn btn-default"><span class="glyphicon glyphicon-chevron-left"
-                                                             aria-hidden="true"></span>&nbsp;Rapport bewerken</a>
+                                                             aria-hidden="true"></span>&nbsp;{{ _('Edit report') }}</a>
                         {% endif %}
                     </div>
                     <div class="col-md-2 col-md-offset-2">
@@ -111,7 +111,7 @@
                                     class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span></a>
                         {% else %}
                             <a href="{{ url_for('public.v_user_report_check', user_id=current_user.id, user_report_id=user_report_id) }}"
-                               class="btn btn-default">Overzicht&nbsp;<span class="glyphicon glyphicon-chevron-right"
+                               class="btn btn-default">{{ _('Overview') }}&nbsp;<span class="glyphicon glyphicon-chevron-right"
                                                                             aria-hidden="true"></span></a>
                         {% endif %}
                     </div>

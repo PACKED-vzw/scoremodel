@@ -4,18 +4,18 @@
     <div class="container">
         <div class="row">
             <div class="col-md-9">
-                <h1><a name="inhoudstafel">Inhoudstafel</a></h1>
+                <h1><a name="inhoudstafel">{{ _('Table of contents') }}</a></h1>
                 <nav>
                     <ul role="menu">
-                        <li><a href="#rapportgegevens">Rapportgegevens</a></li>
-                        <li><a href="#grafiek">Grafiek</a></li>
-                        <li><a href="#actieplan">Actieplan</a></li>
+                        <li><a href="#rapportgegevens">{{ _('Report data') }}</a></li>
+                        <li><a href="#grafiek">{{ _('Graph') }}</a></li>
+                        <li><a href="#actieplan">{{ _('Actions') }}</a></li>
                         <ul>
                             {% for section in report_template.sections %}
                                 <li><a href="#actieplan_{{ section.id }}">{{ section.title }}</a></li>
                             {% endfor %}
                         </ul>
-                        <li><a href="#resultaten">Resultaten</a></li>
+                        <li><a href="#resultaten">{{ _('Results') }}</a></li>
                         <ul>
                             {% for section in report_template.sections %}
                                 <li><a href="#resultaten_{{ section.id }}">{{ section.title }}</a></li>
@@ -27,22 +27,22 @@
         </div>
         <div class="row">
             <div class="col-md-9">
-                <h1><a name="rapportgegevens">Rapportgegevens</a></h1>
+                <h1><a name="rapportgegevens">{{ _('Report data') }}</a></h1>
                 <table class="table">
                     <tr>
-                        <td>Naam rapport</td>
+                        <td>{{ _('Report name') }}</td>
                         <td>{{ user_report.name }}</td>
                     </tr>
                     <tr>
-                        <td>Type rapport</td>
+                        <td>{{ _('Report template') }}</td>
                         <td>{{ report_template.title }}</td>
                     </tr>
                     <tr>
-                        <td>Gebruiker</td>
+                        <td>{{ _('User') }}</td>
                         <td>{{ user_report.user.username }}</td>
                     </tr>
                     <tr>
-                        <td>Aangemaakt op</td>
+                        <td>{{ _('Creation time') }}</td>
                         <td>{{ user_report_creation_time }}</td>
                     </tr>
                 </table>
@@ -50,7 +50,7 @@
         </div>
         <div class="row">
             <div class="col-md-9">
-                <h1><a name="grafiek">Grafiek</a></h1>
+                <h1><a name="grafiek">{{ _('Graph') }}</a></h1>
                 <div id="graph">
 
                 </div>
@@ -58,12 +58,12 @@
         </div>
         <div class="row">
             <div class="col-md-9">
-                <h1><a name="actieplan">Actieplan</a></h1>
+                <h1><a name="actieplan">{{ _('Actions') }}</a></h1>
                 {% for section in report_template.sections %}
                     <div class="row">
                         <div class="col-md-12">
                             <h2><a name="actieplan_{{ section.id }}"><span class="sectie" id="section_{{ section.id }}">{{ section.title }}</span></a></h2>
-                            <span class="label label-default">Score: <span id="score_{{ section.id }}" class="score">{{ all_scores[section.id] | round | int }}</span>%</span>
+                            <span class="label label-default">{{ _('Score') }}: <span id="score_{{ section.id }}" class="score">{{ all_scores[section.id] | round | int }}</span>%</span>
                             {% for question in section.questions %}
                                 {% if question_answers[question.id] is not defined or question_answers[question.id].answer_template.value != question.highest_answer %}
                                     <div class="row">
@@ -73,15 +73,15 @@
                                             {% if question_answers[question.id] is defined %}
                                                 <span class="label label-danger">{{ question_answers[question.id].answer_template.answer }}</span>
                                             {% else %}
-                                                <span class="label label-warning">Niet ingevuld</span>
+                                                <span class="label label-warning">{{ _('Not completed') }}</span>
                                             {% endif %}
-                                            <h4>Context</h4>
+                                            <h4>{{ _('Context') }}</h4>
                                             <p>{{ question.context }}</p>
-                                            <h4>Risico</h4>
+                                            <h4>{{ _('Risks') }}</h4>
                                             <p>{{ question.risk }}</p>
-                                            <h4>Acties</h4>
+                                            <h4>{{ _('Action') }}</h4>
                                             <p>{{ question.action }}</p>
-                                            <h4>Voorbeeld</h4>
+                                            <h4>{{ _('Example') }}</h4>
                                             <p>{{ question.example }}</p>
                                         </div>
                                     </div>
@@ -94,7 +94,7 @@
         </div>
         <div class="row">
             <div class="col-md-9">
-                <h1><a name="resultaten">Resultaten</a></h1>
+                <h1><a name="resultaten">{{ _('Results') }}</a></h1>
                 {% for section in report_template.sections %}
                     <div class="row">
                         <div class="col-md-12">
@@ -105,7 +105,7 @@
                                         <h3>{{ question.question }}</h3>
                                         <span class="label label-info">{{ question.risk_factor.risk_factor }}</span>
                                         {% if question_answers[question.id] is not defined %}
-                                            <span class="label label-warning">Niet ingevuld</span>
+                                            <span class="label label-warning">{{ _('Not completed') }}</span>
                                         {% else %}
                                             {% if question_answers[question.id].answer_template.value == question.highest_answer %}
                                                 <span class="label label-success">{{ question_answers[question.id].answer_template.answer }}</span>

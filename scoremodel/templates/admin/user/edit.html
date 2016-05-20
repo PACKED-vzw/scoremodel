@@ -2,7 +2,7 @@
 {% block admin_content %}
 <form method="post" action="{{ url_for('.v_user_edit', user_id=user_id) }}">
     <div class="form-group">
-        <label for="user.email">E-mail address</label>
+        <label for="user.email">{{ _('E-mail address') }}</label>
         {{ form.email(class_='form-control', id='user.email') }}
         {% if form.email.errors %}
         <div class="alert alert-danger">
@@ -15,7 +15,7 @@
         {% endif %}
     </div>
     <div class="form-group">
-        <label for="user.password">Password</label>
+        <label for="user.password">{{ _('Password') }}</label>
         {{ form.password(class_='form-control', id='user.password') }}
         {% if form.password.errors %}
         <div class="alert alert-danger">
@@ -28,7 +28,7 @@
         {% endif %}
     </div>
     <div class="form-group">
-        <label for="user.password_check">Confirm password</label>
+        <label for="user.password_check">{{ _('Confirm password') }}</label>
         {{ form.password_match(class_='form-control', id='user.password_check') }}
         {% if form.password_match.errors %}
         <div class="alert alert-danger">
@@ -41,7 +41,7 @@
         {% endif %}
     </div>
     <div class="form-group">
-        <label for="user.roles">Roles</label>
+        <label for="user.roles">{{ _('Roles') }}</label>
         {{ form.roles(class_='form-control', id='user.roles') }}
         {% if form.roles.errors %}
         <div class="alert alert-danger">

@@ -1,9 +1,9 @@
 {% block navigation %}
     <ul class="navigation">
-        <li><a href="{{ url_for('v_index') }}">Home</a></li>
+        <li><a href="{{ url_for('v_index') }}">{{ _('Home') }}Home</a></li>
         <li><a href="{{ url_for('public.v_index') }}">Scoremodel</a></li>
-        <li><a href="{{ url_for('v_faq') }}">FAQ</a></li>
-        <li><a href="{{ url_for('v_doc') }}">Documenten</a></li>
-        <li><a href="{{ url_for('v_disclaimer') }}">Disclaimer</a></li>
+        <li><a href="{{ url_for('v_faq') }}">{{ _('FAQ') }}</a></li>
+        <li><a href="{{ url_for('v_doc') }}">{{ _('Documents') }}</a></li>
+        <li><a href="{{ url_for('v_disclaimer') }}">{{ _('Disclaimer') }}</a></li>
     </ul>
 {% endblock %}

@@ -2,7 +2,7 @@
 {% block admin_content %}
     <form method="post" action="{{ action_url }}">
         <div class="form-group">
-            <label for="answer.name">Answer</label>
+            <label for="answer.name">{{ _('Answer') }}</label>
             {{ form.answer(class_='form-control', id='answer.name') }}
             {% if form.answer.errors %}
                 <div class="alert alert-danger">
@@ -15,7 +15,7 @@
             {% endif %}
         </div>
         <div class="form-group">
-            <label for="answer.value">Value</label>
+            <label for="answer.value">{{ _('Value') }}</label>
             {{ form.value(class_='form-control', id='answer.value') }}
             {% if form.value.errors %}
                 <div class="alert alert-danger">

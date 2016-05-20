@@ -1,24 +1,14 @@
 {% block navigation %}
     <nav class="navbar navbar-inverse navbar-fixed-top">
         <div class="container">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
-                        data-target=".navbar-collapse">
-                    <span class="sr-only">Toggle navigation</span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                <a class="navbar-brand" href="{{ url_for('.v_index') }}">Scoremodel</a>
-            </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    <li class="active"><a href="{{ url_for('.v_index') }}">Home</a></li>
-                    <li class=""><a href="{{ url_for('.v_user_list') }}">Scoremodel administration</a></li>
-                    <li class=""><a href="{{ url_for('.v_user_list') }}">User administration</a></li>
-                    <li class=""><a href="{{ url_for('.v_logout') }}">Logout</a></li>
+                    <li class=""><a href="{{ url_for('.v_index') }}">{{ _('Home') }}</a></li>
+                    <li class=""><a href="{{ url_for('.v_user_list') }}">{{ _('Scoremodel administration') }}</a></li>
+                    <li class=""><a href="{{ url_for('.v_user_list') }}">{{ _('User administration') }}</a></li>
+                    <li class=""><a href="{{ url_for('.v_logout') }}">{{ _('Log out') }}</a></li>
                 </ul>
-            </div><!--/.nav-collapse -->
+            </div>
         </div>
     </nav>
 {% endblock %}

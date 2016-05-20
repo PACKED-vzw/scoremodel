@@ -3,10 +3,10 @@
 <form method="post" action="{{ url_for('.v_user_delete', user_id=user_id) }}">
     <div class="panel panel-warning">
         <div class="panel-heading">
-            <h1 class="panel-title">Confirm deletion</h1>
+            <h1 class="panel-title">{{ _('Confirm deletion') }}</h1>
         </div>
         <div class="panel-body">
-            <p>Please press &lt;Confirm delete&gt; to confirm the deletion of user {{ username }}.</p>
+            <p>{{ _('Please press &lt;Confirm delete&gt; to confirm the deletion of the %(item_type)s called &ldquo;%(item_identifier)s&rdquo;.', item_type=_('User'), item_identifier=username) }}</p>
         </div>
     </div>
     {{ form.csrf_token }}

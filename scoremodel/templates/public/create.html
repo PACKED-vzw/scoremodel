@@ -3,7 +3,7 @@
     <div class="row">
         <form method="post" action="{{ url_for('public.v_user_report_new', user_id=current_user.id) }}">
             <div class="form-group">
-                <label for="user_report.name">Rapportnaam</label>
+                <label for="user_report.name">{{ _('Report name') }}</label>
                 {{ form.name(class_='form-control', id='user_report.name') }}
                 {% if form.name.errors %}
                     <div class="alert alert-danger">
@@ -16,7 +16,7 @@
                 {% endif %}
             </div>
             <div class="form-group">
-                <label for="user_report.report">Basisrapport</label>
+                <label for="user_report.report">{{ _('Report template') }}</label>
                 {{ form.report(class_='form-control', id='user_report.report') }}
                 {% if form.report.errors %}
                     <div class="alert alert-danger">

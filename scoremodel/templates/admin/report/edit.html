@@ -6,7 +6,7 @@
             <div class="col-xs-9">
                 <div class="report panel panel-default">
                     <div class="panel-heading">
-                        <h3 class="panel-title">Rapport</h3>
+                        <h3 class="panel-title">{% endraw %}{{ _('Report') }}{% raw %}</h3>
                     </div>
                     <div class="panel-body">
                         <div class="row">
@@ -16,7 +16,7 @@
                                     <input id="report_id" type="hidden" value="{{ report_id }}"/>
                                     {% raw %}
                                     <div class="form-group">
-                                        <label for="report.title" class="col-sm-1 control-label">Titel</label>
+                                        <label for="report.title" class="col-sm-1 control-label">{% endraw %}{{ _('Title') }}{% raw %}</label>
                                         <div class="col-sm-11">
                                             <input id="report.title" type="text" class="form-control"
                                                    ng-model="report.title"
@@ -29,11 +29,11 @@
                                             <button type="submit" class="btn btn-default"
                                                     ng-click="submit_form('report')"
                                                     ng-show="!success.report_submit[report.id] && !errors.report_submit[report.id]">
-                                                Opslaan
+                                                {% endraw %}{{ _('Save') }}{% raw %}
                                             </button>
                                             <button type="button" class="btn btn-success"
                                                     ng-show="success.report_submit[report.id]">
-                                                Opgeslagen
+                                                {% endraw %}{{ _('Saved') }}{% raw %}
                                             </button>
                                             <button type="button" class="btn btn-danger"
                                                     ng-show="errors.report_submit[report.id]">
@@ -58,7 +58,7 @@
                             <div class="col-xs-12">
                                 <!-- Add new section -->
                                 <button type="button" class="btn btn-info"
-                                        ng-click="new_element_in_form('section')">Sectie toevoegen
+                                        ng-click="new_element_in_form('section')">{% endraw %}{{ _('Add section') }}{% raw %}
                                 </button>
                             </div>
                         </div>
