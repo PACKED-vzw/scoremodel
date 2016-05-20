@@ -1,7 +1,7 @@
 import json
 from scoremodel.modules.error import RequiredAttributeMissing, DatabaseItemAlreadyExists, DatabaseItemDoesNotExist, \
     IllegalEntityType
-from scoremodel.modules.msg.messages import api_msg, error_msg
+from scoremodel.modules.msg.messages import public_api_msg, public_error_msg
 from scoremodel.modules.api.rest import RestApi
 
 
@@ -74,15 +74,15 @@ class ScoremodelRestApi:
         try:
             created_object = self.translate['post'](input_data=input_data, **additional_opts)
         except DatabaseItemAlreadyExists:
-            self.msg = error_msg['item_exists'].format(self.api)
+            self.msg = public_error_msg['item_exists'].format(self.api)
             self.status_code = 400
             created_object = None
         except Exception as e:
-            self.msg = error_msg['error_occurred'].format(e)
+            self.msg = public_error_msg['error_occurred'].format(e)
             self.status_code = 400
             created_object = None
         else:
-            self.msg = api_msg['item_created'].format(self.api, created_object.id)
+            self.msg = public_api_msg['item_created'].format(self.api, created_object.id)
         if created_object is not None:
             return created_object.output_obj()
         else:
@@ -92,15 +92,15 @@ class ScoremodelRestApi:
         try:
             found_object = self.translate['get'](item_id)
         except DatabaseItemDoesNotExist:
-            self.msg = error_msg['item_not_exists'].format(self.api, item_id)
+            self.msg = public_error_msg['item_not_exists'].format(self.api, item_id)
             self.status_code = 404
             found_object = None
         except Exception as e:
-            self.msg = error_msg['error_occurred'].format(e)
+            self.msg = public_error_msg['error_occurred'].format(e)
             self.status_code = 400
             found_object = None
         else:
-            self.msg = api_msg['item_read'].format(self.api, item_id)
+            self.msg = public_api_msg['item_read'].format(self.api, item_id)
         if found_object is not None:
             return found_object.output_obj()
         else:
@@ -110,11 +110,11 @@ class ScoremodelRestApi:
         try:
             found_objects = self.api.list()
         except Exception as e:
-            self.msg = error_msg['error_occurred'].format(e)
+            self.msg = public_error_msg['error_occurred'].format(e)
             self.status_code = 400
             found_objects = None
         if found_objects is not None:
-            self.msg = api_msg['items_found'].format('Report')
+            self.msg = public_api_msg['items_found'].format('Report')
             out_results = []
             for found_object in found_objects:
                 out_results.append(found_object.output_obj())
@@ -128,15 +128,15 @@ class ScoremodelRestApi:
         try:
             updated_object = self.api.update(item_id, input_data=input_data, **additional_opts)
         except DatabaseItemDoesNotExist:
-            self.msg = error_msg['item_not_exists'].format(self.api, item_id)
+            self.msg = public_error_msg['item_not_exists'].format(self.api, item_id)
             self.status_code = 404
             updated_object = None
         except Exception as e:
-            self.msg = error_msg['error_occurred'].format(e)
+            self.msg = public_error_msg['error_occurred'].format(e)
             self.status_code = 400
             updated_object = None
         else:
-            self.msg = api_msg['item_updated'].format(self.api, updated_object.id)
+            self.msg = public_api_msg['item_updated'].format(self.api, updated_object.id)
         if updated_object is not None:
             return updated_object.output_obj()
         else:
@@ -146,15 +146,15 @@ class ScoremodelRestApi:
         try:
             deleted_object = self.api.delete(item_id)
         except DatabaseItemDoesNotExist:
-            self.msg = error_msg['item_not_exists'].format(self.api, item_id)
+            self.msg = public_error_msg['item_not_exists'].format(self.api, item_id)
             self.status_code = 404
             deleted_object = False
         except Exception as e:
-            self.msg = error_msg['error_occurred'].format(e)
+            self.msg = public_error_msg['error_occurred'].format(e)
             self.status_code = 400
             deleted_object = False
         else:
-            self.msg = api_msg['item_deleted'].format(self.api, item_id)
+            self.msg = public_api_msg['item_deleted'].format(self.api, item_id)
         if deleted_object is True:
             return u''
         else:
@@ -174,34 +174,34 @@ class ScoremodelRestApi:
                 if hasattr(self.api, 'list'):
                     self.output_data = self.list()
                 else:
-                    self.msg = error_msg['missing_argument'].format('api_obj_id')
+                    self.msg = public_error_msg['missing_argument'].format('api_obj_id')
                     self.status_code = 400
             else:
                 self.output_data = self.get(api_obj_id, self.parse_json(input_data_string))
         elif self.request.method == 'DELETE':
             if api_obj_id is None:
-                self.msg = error_msg['missing_argument'].format('api_obj_id')
+                self.msg = public_error_msg['missing_argument'].format('api_obj_id')
                 self.status_code = 400
             else:
                 self.output_data = self.delete(api_obj_id)
         elif self.request.method == 'PUT':
             if api_obj_id is None:
-                self.msg = error_msg['missing_argument'].format('api_obj_id')
+                self.msg = public_error_msg['missing_argument'].format('api_obj_id')
                 self.status_code = 400
             else:
                 if self.parse_json(input_data_string) is not None:
                     self.output_data = self.put(api_obj_id, self.parse_json(input_data_string))
                 else:
-                    self.msg = error_msg['missing_argument'].format('body')
+                    self.msg = public_error_msg['missing_argument'].format('body')
                     self.status_code = 400
         elif self.request.method == 'POST':
             if self.parse_json(input_data_string) is not None:
                 self.output_data = self.post(self.parse_json(input_data_string))
             else:
-                self.msg = error_msg['missing_argument'].format('body')
+                self.msg = public_error_msg['missing_argument'].format('body')
                 self.status_code = 400
         else:
-            self.msg = error_msg['illegal_action'].format(self.request.method)
+            self.msg = public_error_msg['illegal_action'].format(self.request.method)
             self.status_code = 405
 
     def create_response(self, data):

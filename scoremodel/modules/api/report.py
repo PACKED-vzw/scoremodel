@@ -1,3 +1,5 @@
+from flask.ext.babel import gettext as _
+from scoremodel.modules.msg.messages import module_error_msg as _e
 from scoremodel.models.general import Report
 from scoremodel.modules.error import RequiredAttributeMissing, DatabaseItemAlreadyExists, DatabaseItemDoesNotExist
 from scoremodel.modules.api.generic import GenericApi
@@ -20,7 +22,7 @@ class ReportApi(GenericApi):
         cleaned_data = self.parse_input_data(input_data)
         existing_report = Report.query.filter(Report.title == cleaned_data['title']).first()
         if existing_report is not None:
-            raise DatabaseItemAlreadyExists('A report called {0} already exists'.format(cleaned_data['title']))
+            raise DatabaseItemAlreadyExists(_e['item_exists'].format(Report, cleaned_data['title']))
         new_report = Report(title=cleaned_data['title'])
         db.session.add(new_report)
         db.session.commit()
@@ -34,7 +36,7 @@ class ReportApi(GenericApi):
         """
         existing_report = Report.query.filter(Report.id == report_id).first()
         if existing_report is None:
-            raise DatabaseItemDoesNotExist('No report with id {0}'.format(report_id))
+            raise DatabaseItemDoesNotExist(_e['item_not_exists'].format(Report, report_id))
         return existing_report
 
     def update(self, report_id, input_data):

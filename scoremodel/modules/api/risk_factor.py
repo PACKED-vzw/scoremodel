@@ -1,3 +1,5 @@
+from flask.ext.babel import gettext as _
+from scoremodel.modules.msg.messages import module_error_msg as _e
 from scoremodel.models.general import RiskFactor
 from scoremodel.modules.error import RequiredAttributeMissing, DatabaseItemAlreadyExists, DatabaseItemDoesNotExist
 from scoremodel.modules.api.generic import GenericApi
@@ -23,8 +25,8 @@ class RiskFactorApi(GenericApi):
         except DatabaseItemDoesNotExist:
             existing_risk_factor = None
         if existing_risk_factor:
-            raise DatabaseItemAlreadyExists('A risk factor called "{0}" already exists.'
-                                            .format(cleaned_data['risk_factor']))
+            raise DatabaseItemAlreadyExists(_e['item_exists']
+                                            .format(RiskFactor, cleaned_data['risk_factor']))
         new_risk_factor = RiskFactor(**cleaned_data)
         db.session.add(new_risk_factor)
         db.session.commit()
@@ -38,7 +40,7 @@ class RiskFactorApi(GenericApi):
         """
         existing_risk_factor = RiskFactor.query.filter(RiskFactor.id == risk_factor_id).first()
         if existing_risk_factor is None:
-            raise DatabaseItemDoesNotExist('No risk factor with id {0}'.format(risk_factor_id))
+            raise DatabaseItemDoesNotExist(_e['item_not_exists'].format(RiskFactor, risk_factor_id))
         return existing_risk_factor
 
     def update(self, risk_factor_id, input_data):

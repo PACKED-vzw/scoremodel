@@ -1,3 +1,5 @@
+from flask.ext.babel import gettext as _
+from scoremodel.modules.msg.messages import module_error_msg as _e
 from scoremodel.models.public import UserReport, QuestionAnswer
 from scoremodel.models.general import Report, Section
 from scoremodel.modules.error import RequiredAttributeMissing, DatabaseItemAlreadyExists, DatabaseItemDoesNotExist
@@ -25,7 +27,7 @@ class UserReportApi(GenericApi):
     def read(self, report_id):
         existing_user_report = UserReport.query.filter(UserReport.id == report_id).first()
         if existing_user_report is None:
-            raise DatabaseItemDoesNotExist('No UserReport with id {0}'.format(report_id))
+            raise DatabaseItemDoesNotExist(_e['item_not_exists'].format(UserReport, report_id))
         return existing_user_report
 
     def update(self, report_id, input_data):

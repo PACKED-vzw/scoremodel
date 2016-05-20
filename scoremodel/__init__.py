@@ -13,6 +13,14 @@ login_manager.init_app(app)
 login_manager.login_view = 'v_login'
 
 
+@babel.localeselector
+def get_locale():
+    if current_user.is_anonymous or not current_user.locale:
+        return request.accept_languages.best_match(app.config['LANGUAGES'].keys())
+    else:
+        return current_user.locale
+
+
 # Models must be imported after db has been declared
 from scoremodel.views.api_old import *
 from scoremodel.views.admin import *
@@ -21,13 +29,14 @@ from scoremodel.views.admin.auth import *
 from scoremodel.views.admin.user import *
 from scoremodel.views.admin.answer import *
 from scoremodel.views.admin.risk_factor import *
-# Public views
-from scoremodel.views.public.report import *
 
 # Blueprints
 from scoremodel.views.api import api
 app.register_blueprint(api)
+from scoremodel.views.public import public
+app.register_blueprint(public)
 
+# TODO: probleem met vragen van rapporten
 
 @app.route('/')
 @app.route('/index')
@@ -35,19 +44,13 @@ app.register_blueprint(api)
 def v_index():
     return 'Hello World!'
 
-
-@app.route('/scoremodel')
-def v_scoremodel():
-    return ''
-
-
 @app.route('/faq')
 def v_faq():
     pass
 
 
 @app.route('/documenten')
-def v_documenten():
+def v_doc():
     pass
 
 

@@ -1,3 +1,5 @@
+from flask.ext.babel import gettext as _
+from scoremodel.modules.msg.messages import module_error_msg as _e
 from scoremodel.modules.api.generic import GenericApi
 from scoremodel.models.user import Role
 from scoremodel import db, login_manager
@@ -23,7 +25,7 @@ class RoleApi(GenericApi):
         except DatabaseItemDoesNotExist:
             existing_role = None
         if existing_role:
-            raise DatabaseItemAlreadyExists('A role called {0} already exists.'.format(input_data['email']))
+            raise DatabaseItemAlreadyExists(_e['item_exists'].format(Role, input_data['role']))
         new_role = Role(role=cleaned_data['role'])
         db.session.add(new_role)
         db.session.commit()
@@ -37,7 +39,7 @@ class RoleApi(GenericApi):
         """
         existing_role = Role.query.filter(Role.id == role_id).first()
         if existing_role is None:
-            raise DatabaseItemDoesNotExist('No role with id {0}'.format(role_id))
+            raise DatabaseItemDoesNotExist(_e['item_not_exists'].format(Role, role_id))
         return existing_role
 
     def update(self, role_id, input_data):
@@ -81,5 +83,5 @@ class RoleApi(GenericApi):
     def get_by_role(self, input_role):
         existing_role = Role.query.filter_by(Role.role == input_role).first()
         if existing_role is None:
-            raise DatabaseItemDoesNotExist('No role called {0}'.format(input_role))
+            raise DatabaseItemDoesNotExist(_e['item_not_exists'].format(Role, input_role))
         return existing_role

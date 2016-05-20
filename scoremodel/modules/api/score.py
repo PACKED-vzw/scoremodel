@@ -1,10 +1,12 @@
+from flask.ext.babel import gettext as _
+from scoremodel.modules.msg.messages import module_error_msg as _e
 from flask import make_response, request
 from flask_login import current_user
 import json
 from scoremodel.modules.api.user_report import UserReportApi
 from scoremodel.modules.api.question_answer import QuestionAnswerApi
 from scoremodel.modules.api.section import SectionApi
-from scoremodel.modules.msg.messages import error_msg
+from scoremodel.modules.msg.messages import public_error_msg
 
 
 class ScoreApi:
@@ -73,8 +75,8 @@ class ScoreApi:
             self.response.status_code = error_code
         else:
             self.response.status_code = 400
-        if error_msg:
-            self.response.data = json.dumps({'msg': error_msg['error_occurred'].format(error_message), 'data': None})
+        if public_error_msg:
+            self.response.data = json.dumps({'msg': public_error_msg['error_occurred'].format(error_message), 'data': None})
         else:
-            self.response.data = json.dumps({'msg': error_msg['error_occurred'].format(''), 'data': None})
+            self.response.data = json.dumps({'msg': public_error_msg['error_occurred'].format(''), 'data': None})
         return self.response

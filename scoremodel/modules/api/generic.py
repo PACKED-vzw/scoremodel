@@ -1,3 +1,5 @@
+from flask.ext.babel import gettext as _
+from scoremodel.modules.msg.messages import module_error_msg as _e
 from scoremodel.modules.error import RequiredAttributeMissing, DatabaseItemDoesNotExist
 from scoremodel.models.general import Section, Answer, Report, RiskFactor, Question
 from sqlalchemy import and_, or_
@@ -54,7 +56,7 @@ class GenericApi:
         # Check whether the required parameters are used
         for required_param in required_params:
             if required_param not in input_data:
-                raise RequiredAttributeMissing('Missing {0} in input_data'.format(required_param))
+                raise RequiredAttributeMissing(_e['attr_missing'].format(required_param))
         # Set the missing attributes from possible_params in input_data to None
         for possible_param in possible_params:
             if possible_param not in cleaned:
@@ -86,27 +88,27 @@ class GenericApi:
     def get_answer(self, answer_name):
         answer = Answer.query.filter(Answer.answer == answer_name).first()
         if answer is None:
-            raise DatabaseItemDoesNotExist('No answer called {0}'.format(answer_name))
+            raise DatabaseItemDoesNotExist(_e['item_not_exists'].format(Answer, answer_name))
         return answer
 
     def get_risk_factor(self, risk_factor_name):
         risk_factor = RiskFactor.query.filter(RiskFactor.risk_factor == risk_factor_name).first()
         if risk_factor is None:
-            raise DatabaseItemDoesNotExist('No risk factor called {0}'.format(risk_factor_name))
+            raise DatabaseItemDoesNotExist(_e['item_not_exists'].format(RiskFactor, risk_factor_name))
         return risk_factor
 
     def get_question(self, question_name, section_id):
         existing_question = Question.query.filter(and_(Question.question == question_name,
                                                          Question.section_id == section_id)).first()
         if existing_question is None:
-            raise DatabaseItemDoesNotExist('No question called {0} in section {1}'.format(question_name, section_id))
+            raise DatabaseItemDoesNotExist(_e['item_not_in'].format(Question, question_name, Section, section_id))
         return existing_question
 
     def get_section(self, section_title, report_id):
         existing_section = Section.query.filter(and_(Section.title == section_title,
-                                                       Section.report_id == report_id)).first()
+                                                     Section.report_id == report_id)).first()
         if existing_section is None:
-            raise DatabaseItemDoesNotExist('No section called {0} in report {1}'.format(section_title, report_id))
+            raise DatabaseItemDoesNotExist(_e['item_not_in'].format(Section, section_title, Report, report_id))
         return existing_section
 
     def update_entity_attribute(self, entity, attribute_name, attribute_new_value):

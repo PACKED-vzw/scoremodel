@@ -1,4 +1,5 @@
 from sqlalchemy import and_
+from flask.ext.babel import gettext as _
 
 from scoremodel import db
 from scoremodel.models.general import Section
@@ -6,6 +7,7 @@ from scoremodel.models.public import QuestionAnswer
 from scoremodel.modules.api.generic import GenericApi
 from scoremodel.modules.api.section import SectionApi
 from scoremodel.modules.error import DatabaseItemAlreadyExists, DatabaseItemDoesNotExist, RequiredAttributeMissing
+from scoremodel.modules.msg.messages import module_error_msg as _e
 
 
 class QuestionAnswerApi(GenericApi):
@@ -26,7 +28,7 @@ class QuestionAnswerApi(GenericApi):
     def read(self, question_answer_id):
         existing_question_answer = QuestionAnswer.query.filter(QuestionAnswer.id == question_answer_id).first()
         if existing_question_answer is None:
-            raise DatabaseItemDoesNotExist('No QuestionAnswer with id {0}'.format(question_answer_id))
+            raise DatabaseItemDoesNotExist(_e['item_not_exists'].format('QuestionAnswer', question_answer_id))
         return existing_question_answer
 
     def query(self, input_data):
@@ -43,11 +45,13 @@ class QuestionAnswerApi(GenericApi):
                  QuestionAnswer.question_id == cleaned_data['question_id'],
                  QuestionAnswer.answer_id == cleaned_data['answer_id'])).first()
         if existing_question_answer is None:
-            raise DatabaseItemDoesNotExist(
-                'No QuestionAnswer with user_report_id {0}, user_id {1}, question_id {2} and answer_id {3}'.format(
-                    cleaned_data['user_report_id'], cleaned_data['user_id'], cleaned_data['question_id'],
-                    cleaned_data['answer_id']
-                ))
+            raise DatabaseItemDoesNotExist(_('No QuestionAnswer with user_report_id %(user_report_id),'
+                                             'user_id %(user_id), question_id %(question_id) and answer_id %(answer_id)',
+                                             user_report_id=cleaned_data['user_report_id'],
+                                             user_id=cleaned_data['user_id'],
+                                             question_id=cleaned_data['question_id'],
+                                             answer_id=cleaned_data['answer_id']
+                                             ))
         return existing_question_answer
 
     def query_user_report_question(self, input_data):
@@ -61,7 +65,7 @@ class QuestionAnswerApi(GenericApi):
         for key in self.possible_params:
             if key in self.required_params and key != 'answer_id':
                 if key not in input_data:
-                    raise RequiredAttributeMissing('Missing attribute {0}'.format(key))
+                    raise RequiredAttributeMissing(_e['attr_missing'].format(key))
                 cleaned_data[key] = input_data[key]
             else:
                 if key not in input_data:
@@ -74,10 +78,11 @@ class QuestionAnswerApi(GenericApi):
                  QuestionAnswer.user_id == cleaned_data['user_id'],
                  QuestionAnswer.question_id == cleaned_data['question_id'])).first()
         if existing_question_answer is None:
-            raise DatabaseItemDoesNotExist(
-                'No QuestionAnswer with user_report_id {0}, user_id {1} and question_id {2}'.format(
-                    cleaned_data['user_report_id'], cleaned_data['user_id'], cleaned_data['question_id']
-                ))
+            raise DatabaseItemDoesNotExist(_('No QuestionAnswer with user_report_id %(user_report_id),'
+                                             'user_id %(user_id) and question_id %(question_id)',
+                                             user_report_id=cleaned_data['user_report_id'],
+                                             user_id=cleaned_data['user_id'],
+                                             question_id=cleaned_data['question_id']))
         return existing_question_answer
 
     def update(self, question_answer_id, input_data):
@@ -112,7 +117,7 @@ class QuestionAnswerApi(GenericApi):
         ordered_questions = {}
         for question in current_section.questions:
             if question.id in ordered_questions:
-                raise DatabaseItemAlreadyExists('Error: two questions with the same id in one section!')
+                raise DatabaseItemAlreadyExists(_('Error: two questions with the same id in one section!'))
             # Get the QuestionAnswers object
             try:
                 question_answer = self.get_answer_by_question_id(question.id, user_id, user_report_id)
@@ -133,8 +138,9 @@ class QuestionAnswerApi(GenericApi):
                                                            QuestionAnswer.user_id == user_id,
                                                            QuestionAnswer.user_report_id == user_report_id)).first()
         if question_answer is None:
-            raise DatabaseItemDoesNotExist('No answer found for question {0} in report {1}'.format(question_id,
-                                                                                                   user_report_id))
+            raise DatabaseItemDoesNotExist(_('No answer found for question %(question_id) in report %(report_id)',
+                                             question_id=question_id,
+                                             report_id=user_report_id))
         return question_answer
 
     def parse_input_data(self, input_data):

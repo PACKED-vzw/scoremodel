@@ -31,6 +31,7 @@ class User(db.Model):
     questions = db.relationship('QuestionAnswer', backref='user', lazy='dynamic')
     reports = db.relationship('UserReport', backref='user', lazy='dynamic')
     authenticated = db.Column(db.Boolean, default=False)
+    locale = db.Column(db.String(8), default='nl')
     roles = db.relationship('Role',
                             secondary=users_roles,
                             primaryjoin=(users_roles.c.user_id == id),

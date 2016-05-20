@@ -1,3 +1,5 @@
+from flask.ext.babel import gettext as _
+from scoremodel.modules.msg.messages import module_error_msg as _e
 from scoremodel.models.general import Question, Report, Section
 from sqlalchemy import and_, or_
 from scoremodel.modules.error import RequiredAttributeMissing, DatabaseItemAlreadyExists, DatabaseItemDoesNotExist
@@ -30,8 +32,8 @@ class SectionApi(GenericApi):
         existing_section = Section.query.filter(and_(Section.title == cleaned_data['title'],
                                                      Section.report_id == cleaned_data['report_id'])).first()
         if existing_section is not None:
-            raise DatabaseItemAlreadyExists('A section called "{0}" already exists in the report {1}'
-                                            .format(cleaned_data['title'], cleaned_data['report_id']))
+            raise DatabaseItemAlreadyExists(_e['item_already_in']
+                                            .format(Section, cleaned_data['title'], Report, cleaned_data['report_id']))
         new_section = Section(title=cleaned_data['title'], context=cleaned_data['context'],
                               total_score=cleaned_data['total_score'], order=cleaned_data['order_in_report'])
         db.session.add(new_section)
@@ -51,7 +53,7 @@ class SectionApi(GenericApi):
         """
         existing_section = Section.query.filter(Section.id == section_id).first()
         if existing_section is None:
-            raise DatabaseItemDoesNotExist('No section with id {0}'.format(section_id))
+            raise DatabaseItemDoesNotExist(_e['item_not_exists'].format(Section, section_id))
         return existing_section
 
     def update(self, section_id, input_data):

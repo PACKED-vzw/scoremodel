@@ -14,7 +14,7 @@ from scoremodel.modules.api.risk_factor import RiskFactorApi
 from scoremodel.modules.api.section import SectionApi
 from scoremodel.modules.api.score import ScoreApi
 from scoremodel.modules.error import DatabaseItemDoesNotExist
-from scoremodel.modules.msg.messages import api_msg, error_msg
+from scoremodel.modules.msg.messages import public_api_msg, public_error_msg
 from scoremodel.modules.user.authentication import must_be_admin
 
 
@@ -121,10 +121,10 @@ def a_question_answer(question_answer_id=None):
             created_object = question_answer_api.create(input_data)
         except Exception as e:
             response.status_code = 400
-            response.data = json.dumps({'msg': error_msg['error_occurred'].format(e)})
+            response.data = json.dumps({'msg': public_error_msg['error_occurred'].format(e)})
             return response
 
-        response.data = json.dumps({'msg': api_msg['item_created'].format(question_answer_api, created_object.id),
+        response.data = json.dumps({'msg': public_api_msg['item_created'].format(question_answer_api, created_object.id),
                                     'data': created_object.output_obj()})
         response.status_code = 200
         return response
@@ -141,10 +141,10 @@ def a_question_answer(question_answer_id=None):
             created_object = question_answer_api.update(question_answer_id, input_data)
         except Exception as e:
             response.status_code = 400
-            response.data = json.dumps({'msg': error_msg['error_occurred'].format(e)})
+            response.data = json.dumps({'msg': public_error_msg['error_occurred'].format(e)})
             return response
 
-        response.data = json.dumps({'msg': api_msg['item_updated'].format(question_answer_api, created_object.id),
+        response.data = json.dumps({'msg': public_api_msg['item_updated'].format(question_answer_api, created_object.id),
                                     'data': created_object.output_obj()})
         response.status_code = 200
         return response
@@ -170,14 +170,14 @@ def a_question_public(user_report_id, question_id):
         question_answer = question_answer_api.get_answer_by_question_id(question_id, current_user.id, user_report_id)
     except DatabaseItemDoesNotExist as e:
         response.status_code = 404
-        response.data = json.dumps({'msg': error_msg['item_not_exists'].format('QuestionAnswer', question_id)})
+        response.data = json.dumps({'msg': public_error_msg['item_not_exists'].format('QuestionAnswer', question_id)})
         return response
     except Exception as e:
         response.status_code = 400
-        response.data = json.dumps({'msg': error_msg['error_occurred'].format(e)})
+        response.data = json.dumps({'msg': public_error_msg['error_occurred'].format(e)})
         return response
     response.status_code = 200
-    response.data = json.dumps({'msg': api_msg['items_found'].format('QuestionAnswer'),
+    response.data = json.dumps({'msg': public_api_msg['items_found'].format('QuestionAnswer'),
                                 'data': question_answer.output_obj()})
     return response
 

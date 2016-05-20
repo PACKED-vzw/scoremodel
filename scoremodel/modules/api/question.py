@@ -1,3 +1,5 @@
+from flask.ext.babel import gettext as _
+from scoremodel.modules.msg.messages import module_error_msg as _e
 from scoremodel.models.general import Question, Answer, RiskFactor, Report, Section
 from sqlalchemy import and_, or_
 from scoremodel.modules.error import RequiredAttributeMissing, DatabaseItemAlreadyExists, DatabaseItemDoesNotExist
@@ -36,8 +38,8 @@ class QuestionApi(GenericApi):
                                                        Question.section_id == cleaned_data['section_id'])).first()
         if existing_question:
             # Already exists
-            raise DatabaseItemAlreadyExists('A question called "{0}" already exists in this section.'
-                                            .format(cleaned_data['question']))
+            raise DatabaseItemAlreadyExists(_e['item_already_in'].format(Question, cleaned_data['question'], Section,
+                                                                         cleaned_data['section_id']))
         new_question = Question(question=cleaned_data['question'], context=cleaned_data['context'],
                                 risk=cleaned_data['risk'], example=cleaned_data['example'],
                                 weight=cleaned_data['weight'], order=cleaned_data['order_in_section'],
@@ -66,7 +68,7 @@ class QuestionApi(GenericApi):
         """
         existing_question = Question.query.filter(Question.id == question_id).first()
         if existing_question is None:
-            raise DatabaseItemDoesNotExist('No question with id {0}'.format(question_id))
+            raise DatabaseItemDoesNotExist(_e['item_not_exists'].format(Question, question_id))
         return existing_question
 
     def update(self, question_id, input_data):
@@ -117,7 +119,7 @@ class QuestionApi(GenericApi):
         # Solve legacy applications that use risk_factors (a list) instead of risk_factor (an object). Multiple
         # risk factors for one question are no longer supported.
         if 'risk_factors' in input_data:
-            raise RequiredAttributeMissing('Error: risk_factors was provided!')
+            raise RequiredAttributeMissing(_('Error: risk_factors was provided!'))
         possible_params = ['question', 'context', 'risk', 'example', 'weight', 'order_in_section', 'action',
                            'risk_factor_id', 'answers', 'section_id']
         required_params = ['question', 'weight', 'section_id']

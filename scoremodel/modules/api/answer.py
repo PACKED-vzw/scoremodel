@@ -1,3 +1,5 @@
+from flask.ext.babel import gettext as _
+from scoremodel.modules.msg.messages import module_error_msg as _e
 from scoremodel.models.general import Question, Answer
 from scoremodel.modules.error import RequiredAttributeMissing, DatabaseItemAlreadyExists, DatabaseItemDoesNotExist
 from scoremodel.modules.api.generic import GenericApi
@@ -23,7 +25,7 @@ class AnswerApi(GenericApi):
         except DatabaseItemDoesNotExist:
             existing_answer = None
         if existing_answer:
-            raise DatabaseItemAlreadyExists('An answer called "{0}" already exists'.format(cleaned_data['answer']))
+            raise DatabaseItemAlreadyExists(_e['item_exists'].format(Answer, cleaned_data['answer']))
         new_answer = Answer(answer=cleaned_data['answer'], value=cleaned_data['value'])
         db.session.add(new_answer)
         db.session.commit()
@@ -37,7 +39,7 @@ class AnswerApi(GenericApi):
         """
         existing_answer = Answer.query.filter(Answer.id == answer_id).first()
         if existing_answer is None:
-            raise DatabaseItemDoesNotExist('No answer with id {0}'.format(answer_id))
+            raise DatabaseItemDoesNotExist(_e['item_not_exists'].format(Answer, answer_id))
         return existing_answer
 
     def update(self, answer_id, input_data):

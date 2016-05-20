@@ -1,3 +1,5 @@
+from flask.ext.babel import gettext as _
+from scoremodel.modules.msg.messages import module_error_msg as _e
 from sqlalchemy.orm import load_only
 from copy import copy, deepcopy
 from scoremodel.modules.api.generic import GenericApi
@@ -30,7 +32,7 @@ class UserApi(GenericApi):
         except DatabaseItemDoesNotExist:
             existing_user = None
         if existing_user:
-            raise DatabaseItemAlreadyExists('A user called {0} already exists.'.format(input_data['email']))
+            raise DatabaseItemAlreadyExists(_e['item_exists'].format(User, input_data['email']))
         new_user = User(email=cleaned_data['email'], password=input_data['password'])
         db.session.add(new_user)
         db.session.commit()
@@ -48,7 +50,7 @@ class UserApi(GenericApi):
         """
         existing_user = User.query.filter(User.id == user_id).first()
         if existing_user is None:
-            raise DatabaseItemDoesNotExist('No user with id {0}'.format(user_id))
+            raise DatabaseItemDoesNotExist(_e['item_not_exists'].format(User, user_id))
         return existing_user
 
     def update(self, user_id, input_data, update_password=True):
@@ -92,7 +94,7 @@ class UserApi(GenericApi):
         """
         existing_user = User.query.filter(User.username == user_name).first()
         if existing_user is None:
-            raise DatabaseItemDoesNotExist('No user called {0}'.format(user_name))
+            raise DatabaseItemDoesNotExist(_e['item_not_exists'].format(User, user_name))
         return existing_user
 
     def check_password(self, user_id, user_password):

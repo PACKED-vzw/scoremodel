@@ -15,7 +15,7 @@ from scoremodel.modules.api.risk_factor import RiskFactorApi
 from scoremodel.modules.api.section import SectionApi
 from scoremodel.modules.api.score import ScoreApi
 from scoremodel.modules.error import DatabaseItemDoesNotExist
-from scoremodel.modules.msg.messages import api_msg, error_msg
+from scoremodel.modules.msg.messages import public_api_msg, public_error_msg
 from scoremodel.modules.user.authentication import must_be_admin
 
 api = Blueprint('api', __name__, url_prefix='/api/v2')
