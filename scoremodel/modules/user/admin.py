@@ -1,25 +1,26 @@
 from flask.ext.wtf import Form
 from wtforms import StringField, PasswordField, BooleanField, SubmitField, SelectMultipleField
 from wtforms.validators import Required, Email, EqualTo
+from flask.ext.babel import lazy_gettext as _
 
 
 class UserCreateForm(Form):
-    email = StringField('E-mail', validators=[Required(), Email()])
-    password = PasswordField('Password', validators=[Required(), EqualTo('password_match',
-                                                                         message='Passwords must match')])
-    password_match = PasswordField('Confirm password', validators=[Required()])
-    roles = SelectMultipleField('Role', validators=[Required()], coerce=int)
-    submit = SubmitField('Create')
+    email = StringField(_('E-mail'), validators=[Required(), Email()])
+    password = PasswordField(_('Password'), validators=[Required(), EqualTo('password_match',
+                                                                            message=_('Passwords must match'))])
+    password_match = PasswordField(_('Confirm password'), validators=[Required()])
+    roles = SelectMultipleField(_('Role'), validators=[Required()], coerce=int)
+    submit = SubmitField(_('Create'))
 
 
 class UserModifyForm(Form):
-    email = StringField('E-mail', validators=[Required(), Email()])
-    password = PasswordField('Password', validators=[EqualTo('password_match',
-                                                             message='Passwords must match')])
-    password_match = PasswordField('Confirm password', validators=[])
-    roles = SelectMultipleField('Role', validators=[Required()], coerce=int)
-    submit = SubmitField('Edit')
+    email = StringField(_('E-mail'), validators=[Required(), Email()])
+    password = PasswordField(_('Password'), validators=[EqualTo('password_match',
+                                                                message=_('Passwords must match'))])
+    password_match = PasswordField(_('Confirm password'), validators=[])
+    roles = SelectMultipleField(_('Role'), validators=[Required()], coerce=int)
+    submit = SubmitField(_('Edit'))
 
 
 class UserDeleteForm(Form):
-    submit = SubmitField('Confirm delete')
+    submit = SubmitField(_('Confirm delete'))

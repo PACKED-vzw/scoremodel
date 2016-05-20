@@ -4,13 +4,14 @@ from flask.ext.login import current_user
 from flask.ext.wtf import Form
 from wtforms import StringField, PasswordField, BooleanField, SubmitField
 from wtforms.validators import Required, Email
+from flask.ext.babel import lazy_gettext as _
 
 
 class LoginForm(Form):
-    email = StringField('E-mail', validators=[Required(), Email()])
-    password = PasswordField('Password', validators=[Required()])
-    remember_me = BooleanField('Onthouden')
-    submit = SubmitField('Aanmelden')
+    email = StringField(_('E-mail'), validators=[Required(), Email()])
+    password = PasswordField(_('Password'), validators=[Required()])
+    remember_me = BooleanField(_('Onthouden'))
+    submit = SubmitField(_('Aanmelden'))
 
 
 def role_required(role):
