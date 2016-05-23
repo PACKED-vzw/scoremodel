@@ -43,6 +43,7 @@ function sections_by_id() {
 }
 
 /**
+ * Draw the chart
  * https://github.com/alangrafu/radar-chart-d3
  * @param scores
  * @param sections

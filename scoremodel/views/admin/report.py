@@ -21,7 +21,13 @@ def v_report_list():
 @login_required
 @must_be_admin
 def v_report_edit(report_id):
-    return render_template('admin/report/edit.html', report_id=report_id)
+    a_report = ReportApi()
+    try:
+        existing_report = a_report.read(report_id)
+    except DatabaseItemDoesNotExist:
+        flash(_('No report with id {0} exists.').format(report_id))
+        return url_for('.v_report_list')
+    return render_template('admin/report/edit_v2.html', report=existing_report)
 
 
 @app.route('/admin/reports/id/<int:report_id>/delete', methods=['GET', 'POST'])

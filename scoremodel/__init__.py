@@ -34,7 +34,7 @@ app.register_blueprint(public)
 @babel.localeselector
 def get_locale():
     if current_user.is_anonymous or not current_user.locale:
-        return request.accept_languages.best_match(app.config['LANGUAGES'].keys())
+        return request.accept_languages.best_match(app.config['LANGUAGES'])
     else:
         return current_user.locale
 

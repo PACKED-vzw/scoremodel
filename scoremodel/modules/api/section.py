@@ -10,7 +10,7 @@ from scoremodel import db
 
 
 class SectionApi(GenericApi):
-    simple_params = ['title', 'context', 'total_score', 'order_in_report', 'report_id']
+    simple_params = ['title', 'context', 'order_in_report', 'report_id']
     complex_params = []
 
     ##
@@ -35,7 +35,7 @@ class SectionApi(GenericApi):
             raise DatabaseItemAlreadyExists(_e['item_already_in']
                                             .format(Section, cleaned_data['title'], Report, cleaned_data['report_id']))
         new_section = Section(title=cleaned_data['title'], context=cleaned_data['context'],
-                              total_score=cleaned_data['total_score'], order=cleaned_data['order_in_report'])
+                              order=cleaned_data['order_in_report'])
         db.session.add(new_section)
         db.session.commit()
         # Add to the report
@@ -89,8 +89,8 @@ class SectionApi(GenericApi):
         :param input_data:
         :return:
         """
-        possible_params = ['title', 'context', 'total_score', 'order_in_report', 'report_id']
-        required_params = ['title', 'total_score', 'report_id']
+        possible_params = ['title', 'context', 'order_in_report', 'report_id']
+        required_params = ['title', 'report_id']
         cleaned_data = self.clean_input_data(Section, input_data, possible_params, required_params, self.complex_params)
         return cleaned_data
 

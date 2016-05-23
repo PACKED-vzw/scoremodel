@@ -126,7 +126,7 @@ class Section(db.Model):
     def __repr__(self):
         return u'<Section {0}: {1}>'.format(self.id, self.title)
 
-    def __init__(self, title, context=None, total_score=0, order=0):
+    def __init__(self, title, context=None, order=0):
         self.title = title
         self.context = context
         self.order_in_report = order
