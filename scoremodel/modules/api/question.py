@@ -90,8 +90,8 @@ class QuestionApi(GenericApi):
         existing_question.section = section
         # Update answers
         existing_question = self.remove_answers(existing_question)
-        for answer in cleaned_data['answers']:
-            existing_question.answers.append(self.new_answer(answer))
+        for answer_id in cleaned_data['answers']:
+            existing_question.answers.append(self.get_answer(answer_id))
         # Update risk factors
         risk_factor = self.a_risk_factor.read(cleaned_data['risk_factor_id'])
         existing_question.risk_factor = risk_factor
@@ -125,15 +125,10 @@ class QuestionApi(GenericApi):
         required_params = ['question', 'weight', 'section_id']
         return self.clean_input_data(Question, input_data, possible_params, required_params, self.complex_params)
 
-    def new_answer(self, answer_data):
+    def get_answer(self, answer_id):
         # Check whether this answer exists
         a_answer = AnswerApi()
-        cleaned_data = a_answer.parse_input_data(answer_data)
-        try:
-            o_answer = self.get_answer(cleaned_data['answer'])
-        except DatabaseItemDoesNotExist:
-            # Create it if it doesn't
-            o_answer = a_answer.create(cleaned_data)
+        o_answer = a_answer.read(answer_id)
         return o_answer
 
     def remove_answers(self, question_entity):
