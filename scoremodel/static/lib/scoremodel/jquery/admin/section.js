@@ -44,6 +44,11 @@ function add_section(section) {
         section_context: section.context
     };
     $('#sections').append(section_template.render(template_vars));
+    /* Add questions */
+    for(var i = 0; i < section.questions.length; i++) {
+        var question = section.questions[i];
+        add_question(question, section.id);
+    }
     /* Add .click-callback to the save button */
     $('#section_' + section.id + '_save_button').find('button')
         .click(function(){

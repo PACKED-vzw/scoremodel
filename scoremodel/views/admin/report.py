@@ -3,6 +3,8 @@ from flask import request, make_response, render_template, redirect, url_for, fl
 from flask.ext.login import login_required
 from scoremodel.modules.user.authentication import must_be_admin
 from scoremodel.modules.api.report import ReportApi
+from scoremodel.modules.api.answer import AnswerApi
+from scoremodel.modules.api.risk_factor import RiskFactorApi
 from scoremodel.modules.report.admin import ReportCreateForm, ReportDeleteForm
 from scoremodel.modules.error import DatabaseItemAlreadyExists, RequiredAttributeMissing, DatabaseItemDoesNotExist
 from flask.ext.babel import gettext as _
@@ -22,12 +24,15 @@ def v_report_list():
 @must_be_admin
 def v_report_edit(report_id):
     a_report = ReportApi()
+    a_answer = AnswerApi()
+    a_risk_factor = RiskFactorApi()
     try:
         existing_report = a_report.read(report_id)
     except DatabaseItemDoesNotExist:
         flash(_('No report with id {0} exists.').format(report_id))
         return url_for('.v_report_list')
-    return render_template('admin/report/edit_v2.html', report=existing_report)
+    return render_template('admin/report/edit_v2.html', report=existing_report, all_risk_factors=a_risk_factor.list(),
+                           all_answers=a_answer.list())
 
 
 @app.route('/admin/reports/id/<int:report_id>/delete', methods=['GET', 'POST'])

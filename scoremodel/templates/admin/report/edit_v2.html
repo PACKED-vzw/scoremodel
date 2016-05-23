@@ -63,7 +63,6 @@
             </div>
             <div class="panel-body collapse" id="section_collapse_{% raw %}{{:section_id}}{% endraw %}">
                 <form novalidate class="form-horizontal">
-                <input type="hidden" id="section_id_{% raw %}{{:section_id}}{% endraw %}" value="{% raw %}{{:section_id}}{% endraw %}" />
                     <div class="form-group">
                         <label for="section_title_{% raw %}{{:section_id}}{% endraw %}" class="control-label col-sm-1">{{ _('Title') }}</label>
                         <div class="col-sm-11">
@@ -96,6 +95,97 @@
                 </button>
             </div>
         </div>
+    </script>
+    <script id="question-template" type="text/x-jsrender">
+        <div class="question panel panel-default">
+    <div class="panel-heading" data-toggle="collapse" data-target="#question_collapse_{% raw %}{{:question_id}}{% endraw %}"
+         aria-expanded="false"
+         aria-controls="question_collapse_{% raw %}{{:question_id}}{% endraw %}">
+        <h3 class="panel-title">{% raw %}{{if question_title}}{{:question_title}}{{else}}{% endraw %}{{ _('New question') }}{% raw %}{{/if}}{% endraw %}</h3>
+    </div>
+    <div class="panel-body collapse" id="question_collapse_{% raw %}{{:question_id}}{% endraw %}">
+        <form novalidate class="form-horizontal">
+            <div class="form-group">
+                <label for="question_weight_{% raw %}{{:question_id}}{% endraw %}" class="control-label col-sm-3">{{ _('Weight') }}</label>
+                <div class="col-sm-9">
+                    <input id="question_weight_{% raw %}{{:question_id}}{% endraw %}" type="number" min="0"
+                           max="10"
+                           integer class="form-control" required="required" value="{% raw %}{{if question_weight}}{{:question_weight}}{{else}}{% endraw %}{{ _('1') }}{% raw %}{{/if}}{% endraw %}"/>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="question_question_{% raw %}{{:question_id}}{% endraw %}" class="control-label col-sm-3">{{ _('Question') }}</label>
+                <div class="col-sm-9">
+                     <textarea id="question_question_{% raw %}{{:question_id}}{% endraw %}"
+                               class="form-control"
+                               required="required">{% raw %}{{if question_title}}{{:question_title}}{{else}}{% endraw %}{{ _('New question') }}{% raw %}{{/if}}{% endraw %}</textarea>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="question_example_{% raw %}{{:question_id}}{% endraw %}" class="control-label col-sm-3">{{ _('Example') }}</label>
+                <div class="col-sm-9">
+                     <textarea id="question_example_{% raw %}{{:question_id}}{% endraw %}"
+                               class="form-control">{% raw %}{{if question_example}}{{:question_example}}{{else}}{% endraw %}{{ _('Question example') }}{% raw %}{{/if}}{% endraw %}</textarea>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="question_context_{% raw %}{{:question_id}}{% endraw %}" class="control-label col-sm-3">{{ _('Context') }}</label>
+                <div class="col-sm-9">
+                     <textarea id="question_context_{% raw %}{{:question_id}}{% endraw %}"
+                               class="form-control">{% raw %}{{if question_context}}{{:question_context}}{{else}}{% endraw %}{{ _('Question context') }}{% raw %}{{/if}}{% endraw %}</textarea>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="question_risk_{% raw %}{{:question_id}}{% endraw %}" class="control-label col-sm-3">{{ _('Risks') }}</label>
+                <div class="col-sm-9">
+                     <textarea id="question_risk_{% raw %}{{:question_id}}{% endraw %}"
+                               class="form-control">{% raw %}{{if question_risk}}{{:question_risk}}{{else}}{% endraw %}{{ _('Question risks') }}{% raw %}{{/if}}{% endraw %}</textarea>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="question_action_{% raw %}{{:question_id}}{% endraw %}" class="control-label col-sm-3">{{ _('Actions') }}</label>
+                <div class="col-sm-9">
+                    <textarea id="question_action_{% raw %}{{:question_id}}{% endraw %}" class="form-control">{% raw %}{{if question_action}}{{:question_action}}{{else}}{% endraw %}{{ _('Actions') }}{% raw %}{{/if}}{% endraw %}</textarea>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="question_risk_factor_{% raw %}{{:question_id}}{% endraw %}" class="control-label col-sm-3">{{ _('Risk factor') }}</label>
+                <div class="col-sm-9" id="question_risk_factor_{% raw %}{{:question_id}}{% endraw %}">
+                    <select
+                            class="form-control"
+                            required="required">
+                            {%  for possible_risk_factor in all_risk_factors %}
+                                <option value="{{ possible_risk_factor.id }}">{{ possible_risk_factor.risk_factor }}</option>
+                            {% endfor %}
+                            </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="question_answer_{% raw %}{{:question_id}}{% endraw %}" class="control-label col-sm-3">{{ _('Answers') }}</label>
+                <div class="col-sm-9" id="question_answer_{% raw %}{{:question_id}}{% endraw %}">
+                    <select
+                            class="form-control" multiple="multiple"
+                            required="required">
+                            {%  for possible_answer in all_answers %}
+                                <option value="{{ possible_answer.id }}">{{ possible_answer.answer }}</option>
+                            {% endfor %}
+                            </select>
+                </div>
+            </div>
+                <div class="form-group">
+                        <div class="col-sm-3 col-sm-offset-1" id="question_{% raw %}{{:question_id}}{% endraw %}_save_button">
+                            <button type="button" class="btn btn-default">{{ _('Save') }}
+                            </button>
+                            </div>
+                        <div  class="col-sm-3 col-sm-offset-1" id="question_{% raw %}{{:question_id}}{% endraw %}_remove_button">
+                            <button type="button" class="btn btn-default">
+                                {{ _('Remove') }}
+                            </button>
+                        </div>
+                    </div>
+        </form>
+    </div>
+</div>
     </script>
     </div>
 {% endblock %}
