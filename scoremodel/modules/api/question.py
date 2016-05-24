@@ -50,8 +50,8 @@ class QuestionApi(GenericApi):
         section = self.a_section.read(cleaned_data['section_id'])
         new_question.section = section
         # Add the answers
-        for answer in cleaned_data['answers']:
-            new_question.answers.append(self.new_answer(answer))
+        for answer_id in cleaned_data['answers']:
+            new_question.answers.append(self.get_answer(answer_id))
         # Add the risk factor
         risk_factor = self.a_risk_factor.read(cleaned_data['risk_factor_id'])
         new_question.risk_factor = risk_factor

@@ -35,7 +35,7 @@ $(document).ready(function(){
      */
     $('#add_section_button').click(function(){
         new_section();
-    })
+    });
     
 });
 

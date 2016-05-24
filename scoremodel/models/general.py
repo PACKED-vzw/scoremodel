@@ -258,7 +258,10 @@ class Question(db.Model):
     @property
     def maximum_score(self):
         sorted_answers = sorted(self.answers, key=lambda answer: answer.value)
-        return sorted_answers[0].value * self.weight * self.risk_factor.value
+        if len(sorted_answers) > 0:
+            return sorted_answers[0].value * self.weight * self.risk_factor.value
+        else:
+            return 0
 
     def output_obj(self):
         return {

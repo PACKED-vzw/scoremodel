@@ -16,17 +16,20 @@
                             <div class="col-xs-12">
                                 <form novalidate class="form-horizontal">
                                     <input id="report_id" type="hidden" value="{{ report.id }}"/>
-                                    <input id="last_section_id" type="hidden" value="0" />
+                                    <input id="last_section_id" type="hidden" value="0"/>
+                                    <input id="last_question_id" type="hidden" value="0"/>
                                     <div class="form-group">
-                                        <label for="report_title" class="col-sm-1 control-label">{{ _('Title') }}</label>
+                                        <label for="report_title"
+                                               class="col-sm-1 control-label">{{ _('Title') }}</label>
                                         <div class="col-sm-11">
-                                            <input id="report_title" type="text" class="form-control" required="required" value="{{ report.title }}"/>
+                                            <input id="report_title" type="text" class="form-control"
+                                                   required="required" value="{{ report.title }}"/>
                                         </div>
                                     </div>
                                     <div class="form-group">
                                         <div class="col-sm-3 col-sm-offset-1" id="report_save_button">
                                             <button type="button" class="btn btn-default">
-                                                    {{ _('Save') }}
+                                                {{ _('Save') }}
                                             </button>
                                         </div>
                                     </div>
@@ -36,16 +39,17 @@
                         <div class="row">
                             <div class="col-xs-12" id="sections">
                                 <!-- Sections -->
-                                
+
                                 <div>
                                 </div>
-                                
+
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-xs-12">
                                 <!-- Add new section -->
-                                <button type="button" class="btn btn-info" id="add_section_button">{{ _('Add section') }}
+                                <button type="button" class="btn btn-info"
+                                        id="add_section_button">{{ _('Add section') }}
                                 </button>
                             </div>
                         </div>
@@ -55,7 +59,7 @@
         </div>
     </div>
     <div style="display:none">
-    <script id="section-template" type="text/x-jsrender">
+        <script id="section-template" type="text/x-jsrender">
         <div class="section panel panel-default" id="section_panel_{% raw %}{{:section_id}}{% endraw %}">
             <div class="panel-heading" data-toggle="collapse" data-target="#section_collapse_{% raw %}{{:section_id}}{% endraw %}" aria-expanded="false"
                  aria-controls="section_{% raw %}{{:section_id}}{% endraw %}">
@@ -91,17 +95,18 @@
                 <div id="questions_section_{% raw %}{{:section_id}}{% endraw %}">
                 </div>
                 <!-- New question -->
-                <button type="button" class="btn btn-info">{{ _('Add question') }}
+                <button type="button" class="btn btn-info" id="add_question_button_section_{% raw %}{{:section_id}}{% endraw %}">{{ _('Add question') }}
                 </button>
             </div>
         </div>
-    </script>
-    <script id="question-template" type="text/x-jsrender">
-        <div class="question panel panel-default">
+
+        </script>
+        <script id="question-template" type="text/x-jsrender">
+        <div class="question panel panel-default" id="question_{% raw %}{{:question_id}}{% endraw %}">
     <div class="panel-heading" data-toggle="collapse" data-target="#question_collapse_{% raw %}{{:question_id}}{% endraw %}"
          aria-expanded="false"
          aria-controls="question_collapse_{% raw %}{{:question_id}}{% endraw %}">
-        <h3 class="panel-title">{% raw %}{{if question_title}}{{:question_title}}{{else}}{% endraw %}{{ _('New question') }}{% raw %}{{/if}}{% endraw %}</h3>
+        <h3 class="panel-title">{% raw %}{{if question_question}}{{:question_question}}{{else}}{% endraw %}{{ _('New question') }}{% raw %}{{/if}}{% endraw %}</h3>
     </div>
     <div class="panel-body collapse" id="question_collapse_{% raw %}{{:question_id}}{% endraw %}">
         <form novalidate class="form-horizontal">
@@ -118,7 +123,7 @@
                 <div class="col-sm-9">
                      <textarea id="question_question_{% raw %}{{:question_id}}{% endraw %}"
                                class="form-control"
-                               required="required">{% raw %}{{if question_title}}{{:question_title}}{{else}}{% endraw %}{{ _('New question') }}{% raw %}{{/if}}{% endraw %}</textarea>
+                               required="required">{% raw %}{{if question_question}}{{:question_question}}{{else}}{% endraw %}{{ _('New question') }}{% raw %}{{/if}}{% endraw %}</textarea>
                 </div>
             </div>
             <div class="form-group">
@@ -154,7 +159,7 @@
                     <select
                             class="form-control"
                             required="required">
-                            {%  for possible_risk_factor in all_risk_factors %}
+                            {% for possible_risk_factor in all_risk_factors %}
                                 <option value="{{ possible_risk_factor.id }}">{{ possible_risk_factor.risk_factor }}</option>
                             {% endfor %}
                             </select>
@@ -166,7 +171,7 @@
                     <select
                             class="form-control" multiple="multiple"
                             required="required">
-                            {%  for possible_answer in all_answers %}
+                            {% for possible_answer in all_answers %}
                                 <option value="{{ possible_answer.id }}">{{ possible_answer.answer }}</option>
                             {% endfor %}
                             </select>
@@ -186,6 +191,7 @@
         </form>
     </div>
 </div>
-    </script>
+
+        </script>
     </div>
 {% endblock %}
