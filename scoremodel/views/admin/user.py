@@ -6,7 +6,7 @@ from scoremodel.modules.api.role import RoleApi
 from scoremodel.modules.user.admin import UserCreateForm, UserDeleteForm, UserModifyForm
 from scoremodel.modules.user.authentication import must_be_admin
 from scoremodel.modules.error import DatabaseItemAlreadyExists, RequiredAttributeMissing, DatabaseItemDoesNotExist
-from scoremodel import app
+from scoremodel.views.admin import admin
 
 a_roles = RoleApi()
 db_roles = a_roles.list()
@@ -15,14 +15,14 @@ for db_role in db_roles:
     possible_roles.append((db_role.id, db_role.role))
 
 
-@app.route('/admin/user/view/<int:user_id>')
+@admin.route('/user/view/<int:user_id>')
 @login_required
 @must_be_admin
 def v_user_view(user_id):
     pass
 
 
-@app.route('/admin/user/list', methods=['GET'])
+@admin.route('/user/list', methods=['GET'])
 @login_required
 @must_be_admin
 def v_user_list():
@@ -31,7 +31,7 @@ def v_user_list():
     return render_template('admin/user/list.html', users=l_users)
 
 
-@app.route('/admin/user/create', methods=['GET', 'POST'])
+@admin.route('/user/create', methods=['GET', 'POST'])
 @login_required
 @must_be_admin
 def v_user_create():
@@ -59,12 +59,12 @@ def v_user_create():
             flash(_('An unexpected error occurred.'))
             return render_template('admin/user/create.html', form=form)
         else:
-            return redirect(url_for('.v_user_list'))
+            return redirect(url_for('admin.v_user_list'))
 
     return render_template('admin/user/create.html', form=form)
 
 
-@app.route('/admin/user/edit/<int:user_id>', methods=['GET', 'POST'])
+@admin.route('/user/edit/<int:user_id>', methods=['GET', 'POST'])
 @login_required
 @must_be_admin
 def v_user_edit(user_id):
@@ -75,7 +75,7 @@ def v_user_edit(user_id):
         existing_user = a_user.read(user_id)
     except DatabaseItemDoesNotExist:
         flash(_('A user with id {0} does not exist.').format(user_id))
-        return redirect(url_for('.v_user_list'))
+        return redirect(url_for('admin.v_user_list'))
 
     if request.method == 'POST' and form.validate_on_submit():
         input_data = {
@@ -95,7 +95,7 @@ def v_user_edit(user_id):
             edited_user = a_user.update(user_id, input_data, update_password)
         except DatabaseItemDoesNotExist as e:
             flash(_('No user with id {0}').format(user_id))
-            return redirect(url_for('.v_user_list'))
+            return redirect(url_for('admin.v_user_list'))
         except RequiredAttributeMissing as e:
             flash(_('A required form element was not submitted: {0}').format(e))
             return render_template('admin/user/edit.html', form=form, user_id=user_id)
@@ -104,7 +104,7 @@ def v_user_edit(user_id):
             # flash('An unexpected error occurred.')
             return render_template('admin/user/edit.html', form=form, user_id=user_id)
         else:
-            return redirect(url_for('.v_user_list'))
+            return redirect(url_for('admin.v_user_list'))
     else:
         ##
         # Add the data from the existing user for the edit form. This must be done after validate_on_submit()
@@ -120,7 +120,7 @@ def v_user_edit(user_id):
         return render_template('admin/user/edit.html', form=form, user_id=user_id)
 
 
-@app.route('/admin/user/delete/<int:user_id>', methods=['GET', 'POST'])
+@admin.route('/user/delete/<int:user_id>', methods=['GET', 'POST'])
 @login_required
 @must_be_admin
 def v_user_delete(user_id):
@@ -130,21 +130,21 @@ def v_user_delete(user_id):
         existing_user = a_user.read(user_id)
     except DatabaseItemDoesNotExist as e:
         flash(_('No user with id {0}').format(user_id))
-        return redirect(url_for('.v_user_list'))
+        return redirect(url_for('admin.v_user_list'))
     except Exception as e:
         flash(_('An unexpected error occured: {0}').format(e))
         # flash('An unexpected erro occured.')
-        return redirect(url_for('.v_user_list'))
+        return redirect(url_for('admin.v_user_list'))
 
     if request.method == 'POST' and form.validate_on_submit():
         if a_user.delete(user_id) is True:
             flash(_('User {0} deleted').format(existing_user.email))
-            return redirect(url_for('.v_user_list'))
+            return redirect(url_for('admin.v_user_list'))
         else:
             flash(_('Unable to delete user {0}').format(existing_user.email))
-            return render_template('admin/generic/delete.html', action_url=url_for('.v_user_delete',
+            return render_template('admin/generic/delete.html', action_url=url_for('admin.v_user_delete',
                                                                                    user_id=user_id),
                                    item_type=_('User'), item_identifier=existing_user.email, form=form)
 
-    return render_template('admin/generic/delete.html', action_url=url_for('.v_user_delete', user_id=user_id),
+    return render_template('admin/generic/delete.html', action_url=url_for('admin.v_user_delete', user_id=user_id),
                            item_type=_('User'), item_identifier=existing_user.email, form=form)

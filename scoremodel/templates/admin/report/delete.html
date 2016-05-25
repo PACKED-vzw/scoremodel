@@ -1,6 +1,6 @@
 {% extends 'admin/base.html' %}
 {% block admin_content %}
-<form method="post" action="{{ url_for('.v_report_delete', report_id=report_id) }}">
+<form method="post" action="{{ url_for('admin.v_report_delete', report_id=report_id) }}">
     <div class="panel panel-warning">
         <div class="panel-heading">
             <h1 class="panel-title">{{ _('Confirm deletion') }}</h1>

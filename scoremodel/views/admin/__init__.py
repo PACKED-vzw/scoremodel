@@ -1,10 +1,17 @@
-from flask import render_template
+from flask import render_template, Blueprint
 from flask.ext.login import login_required
 from scoremodel.modules.user.authentication import role_required
-from scoremodel import app
+
+admin = Blueprint('admin', __name__, url_prefix='/admin')
+
+from scoremodel.views.admin.answer import *
+from scoremodel.views.admin.auth import *
+from scoremodel.views.admin.report import *
+from scoremodel.views.admin.risk_factor import *
+from scoremodel.views.admin.user import *
 
 
-@app.route('/admin')
+@admin.route('/')
 @login_required
 @role_required('administrator')
 def v_admin():

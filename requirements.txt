@@ -4,3 +4,4 @@ flask-babel
 flask-login
 flask-wtf
 bcrypt
+markdown

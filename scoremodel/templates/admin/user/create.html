@@ -1,6 +1,6 @@
 {% extends 'admin/base.html' %}
 {% block admin_content %}
-<form method="post" action="{{ url_for('.v_user_create') }}">
+<form method="post" action="{{ url_for('admin.v_user_create') }}">
     <div class="form-group">
         <label for="user.email">{{ _('E-mail address') }}</label>
         {{ form.email(class_='form-control', id='user.email') }}

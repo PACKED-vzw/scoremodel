@@ -3,11 +3,11 @@ from flask.ext.login import login_user, login_required, logout_user
 from scoremodel.modules.user.authentication import LoginForm
 from scoremodel.modules.api.user import UserApi
 from scoremodel.modules.error import DatabaseItemDoesNotExist
-from scoremodel import app
+from scoremodel.views.admin import admin
 from flask.ext.babel import gettext as _
 
 
-@app.route('/admin/login', methods=['GET', 'POST'])
+@admin.route('/login', methods=['GET', 'POST'])
 def v_login():
     form = LoginForm()
     a_user = UserApi()
@@ -20,7 +20,7 @@ def v_login():
         else:
             if user.verify_password(form.password.data):
                 login_user(user, form.remember_me.data)
-                return redirect(request.args.get('next') or url_for('.v_index'))
+                return redirect(request.args.get('next') or url_for('site.v_index'))
             else:
                 flash(_('Invalid username or password.'))
     ##
@@ -29,9 +29,9 @@ def v_login():
     return render_template('admin/login.html', form=form, next=request.args.get('next'))
 
 
-@app.route('/admin/logout', methods=['GET'])
+@admin.route('/logout', methods=['GET'])
 @login_required
 def v_logout():
     logout_user()
     flash(_('You have been logged out.'))
-    return redirect(url_for('.v_index'))
+    return redirect(url_for('site.v_index'))

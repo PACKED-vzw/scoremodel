@@ -1,4 +1,4 @@
-from scoremodel import app
+from scoremodel.views.admin import admin
 from flask import request, make_response, render_template, redirect, url_for, flash
 from flask.ext.login import login_required
 from scoremodel.modules.user.authentication import must_be_admin
@@ -10,7 +10,7 @@ from scoremodel.modules.error import DatabaseItemAlreadyExists, RequiredAttribut
 from flask.ext.babel import gettext as _
 
 
-@app.route('/admin/reports', methods=['GET'])
+@admin.route('/reports', methods=['GET'])
 @login_required
 @must_be_admin
 def v_report_list():
@@ -19,7 +19,7 @@ def v_report_list():
     return render_template('admin/report/list.html', reports=l_reports)
 
 
-@app.route('/admin/reports/id/<int:report_id>/edit', methods=['GET'])
+@admin.route('/reports/id/<int:report_id>/edit', methods=['GET'])
 @login_required
 @must_be_admin
 def v_report_edit(report_id):
@@ -30,12 +30,12 @@ def v_report_edit(report_id):
         existing_report = a_report.read(report_id)
     except DatabaseItemDoesNotExist:
         flash(_('No report with id {0} exists.').format(report_id))
-        return redirect(url_for('.v_report_list'))
+        return redirect(url_for('admin.v_report_list'))
     return render_template('admin/report/edit_v2.html', report=existing_report, all_risk_factors=a_risk_factor.list(),
                            all_answers=a_answer.list())
 
 
-@app.route('/admin/reports/id/<int:report_id>/delete', methods=['GET', 'POST'])
+@admin.route('/reports/id/<int:report_id>/delete', methods=['GET', 'POST'])
 @login_required
 @must_be_admin
 def v_report_delete(report_id):
@@ -45,7 +45,7 @@ def v_report_delete(report_id):
         existing_report = a_report.read(report_id)
     except DatabaseItemDoesNotExist:
         flash(_('No report with id {0} exists.').format(report_id))
-        return url_for('.v_report_list')
+        return url_for('admin.v_report_list')
     if request.method == 'POST' and form.validate_on_submit():
         try:
             if a_report.delete(report_id) is True:
@@ -54,17 +54,17 @@ def v_report_delete(report_id):
                 flash(_('Failed to remove report {0}.').format(report_id))
         except Exception as e:
             flash(_('An unexpected error occurred.'))
-            return render_template('admin/generic/delete.html', action_url=url_for('.v_report_delete',
+            return render_template('admin/generic/delete.html', action_url=url_for('admin.v_report_delete',
                                                                                    report_id=report_id),
                                    item_type=_('Report'), item_identifier=existing_report.title, form=form)
         else:
-            return redirect(url_for('.v_report_list'))
-    return render_template('admin/generic/delete.html', action_url=url_for('.v_report_delete',
+            return redirect(url_for('admin.v_report_list'))
+    return render_template('admin/generic/delete.html', action_url=url_for('admin.v_report_delete',
                                                                            report_id=report_id),
                            item_type=_('Report'), item_identifier=existing_report.title, form=form)
 
 
-@app.route('/admin/reports/create', methods=['GET', 'POST'])
+@admin.route('/reports/create', methods=['GET', 'POST'])
 @login_required
 @must_be_admin
 def v_report_create():
@@ -88,7 +88,7 @@ def v_report_create():
             return render_template('admin/report/create.html', form=form)
         else:
             flash(_('Report created.'))
-            return redirect(url_for('.v_report_edit', report_id=new_report.id))
+            return redirect(url_for('admin.v_report_edit', report_id=new_report.id))
     return render_template('admin/report/create.html', form=form)
 
 ##
