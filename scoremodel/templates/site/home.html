@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container">
+<div class="row">
+    <div class="col-md-5 col-sm-5">
+        {{ content | safe }}
+    </div>
+    <div class="col-md-7 col-sm-7">
+        {% if current_user.is_authenticated %}
+            <div class="row">
+            <div class="col-md-12 col-sm-12">
+                <h4>{{ _('Report list') }}</h4>
+                <p>{{ _('Here you can find a list of all your reports. You can select a report to continue or <a href="' + url_for('public.v_user_report_new', user_id=current_user.id) + '">create a new report</a>.') }}</p>
+            </div>
+            </div>
+            <div class="row">
+            <div class="col-md-12 col-sm-12">
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th>{{ _('Report name') }}</th>
+                        <th>{{ _('Creation date') }}</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for report in user_reports %}
+                    <tr>
+                        <td><a href="{{ url_for('public.v_user_report_section', user_id=current_user.id, user_report_id=report.id, section_id=report.template.ordered_sections[0].id) }}">{{ report.name }}</a></td>
+                        <td>{{ report.creation_date }}</td>
+                    </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            </div>
+            <div class="row">
+            <div class="col-md-12 col-sm-12">
+                <h4>{{ _('New report') }}</h4>
+                <p class="alert alert-info" role="alert">{{ _('Press "Start" to create a new report.') }}</p>
+                <a role="button" class="btn-default btn" href="{{ url_for('public.v_user_report_new', user_id=current_user.id) }}">{{ _('Start') }}</a>
+            </div>
+            </div>
+        {% else %}
+            <div class="alert alert-info" role="alert">
+<p>{{ _('You are currently not logged in.
+Please provide your username and password or create a new account.') }}</p>
+            </div>
+            {% include 'login/form.html' %}
+        {% endif %}
+    </div>
+</div>
+</div>
+{% endblock %}
