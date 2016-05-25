@@ -13,6 +13,7 @@ from scoremodel.modules.api.user_report import UserReportApi
 from scoremodel.modules.api.report import ReportApi
 from scoremodel.modules.api.risk_factor import RiskFactorApi
 from scoremodel.modules.api.section import SectionApi
+from scoremodel.modules.api.page import PageApi
 from scoremodel.modules.api.score import ScoreApi
 from scoremodel.modules.error import DatabaseItemDoesNotExist
 from scoremodel.modules.msg.messages import public_api_msg, public_error_msg
@@ -223,3 +224,18 @@ def v_api_user_report(user_report_id=None):
                               hooks=[hook_insert_current_user])
     return a_api.response
 
+
+@api.route('/page', methods=['POST'])
+@api.route('/page/<int:page_id>', methods=['PUT', 'DELETE'])
+@login_required
+@must_be_admin
+def v_api_page(page_id=None):
+    a_api = ScoremodelRestApi(api_class=PageApi, o_request=request, api_obj_id=page_id)
+    return a_api.response
+
+
+@api.route('/page', methods=['GET'])
+@api.route('/page/<int:page_id>', methods=['GET'])
+def v_api_public_page(page_id=None):
+    a_api = ScoremodelRestApi(api_class=PageApi, o_request=request, api_obj_id=page_id)
+    return a_api.response
