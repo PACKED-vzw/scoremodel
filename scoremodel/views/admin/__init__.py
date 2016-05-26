@@ -9,6 +9,7 @@ from scoremodel.views.admin.auth import *
 from scoremodel.views.admin.report import *
 from scoremodel.views.admin.risk_factor import *
 from scoremodel.views.admin.user import *
+from scoremodel.views.admin.page import *
 
 
 @admin.route('/')

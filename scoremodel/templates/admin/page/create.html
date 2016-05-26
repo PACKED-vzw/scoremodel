@@ -1,0 +1,53 @@
+{% extends 'admin/base.html' %}
+{% block admin_content %}
+    <div class="col-xs-9">
+        <div class="report panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">{{ _('Page') }}</h3>
+            </div>
+            <div class="panel-body">
+                <form method="post" action="{{ url_for('admin.v_page_create') }}">
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <div class="form-group">
+                                <label for="page.menu_link" class="control-label">{{ _('Menu link') }}</label>
+
+                                {{ form.menu_link(class_='form-control', id='page.menu_link') }}
+                                {% if form.menu_link.errors %}
+                                    <div class="alert alert-danger">
+                                        <ul>
+                                            {% for error in form.menu_link.errors %}
+                                                <li>{{ error }}</li>
+                                            {% endfor %}
+                                        </ul>
+                                    </div>
+                                {% endif %}
+
+                            </div>
+                            <div class="form-group">
+                                <label for="page.lang" class="control-label">{{ _('Language') }}</label>
+                                {{ form.lang(class_='form-control', id='page.lang') }}
+                                {% if form.lang.errors %}
+                                    <div class="alert alert-danger">
+                                        <ul>
+                                            {% for error in form.lang.errors %}
+                                                <li>{{ error }}</li>
+                                            {% endfor %}
+                                        </ul>
+                                    </div>
+                                {% endif %}
+                            </div>
+                            {{ form.csrf_token }}
+                            <div class="form-group">
+                                <div class="col-sm-3 col-sm-offset-1">
+                                    {{ form.submit(class_='btn btn-default') }}
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}

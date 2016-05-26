@@ -1,4 +1,4 @@
-    <form method="post" action="{{ url_for('v_login', next=next) }}" class="form-inline">
+    <form method="post" action="{{ url_for('admin.v_login', next=next) }}" class="form-inline">
         <div class="form-group">
             <label for="login.email">{{ _('Email address') }}</label>
             {{ form.email(class_='form-control', id='login.email') }}

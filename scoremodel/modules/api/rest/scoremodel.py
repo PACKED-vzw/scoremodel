@@ -114,7 +114,7 @@ class ScoremodelRestApi:
             self.status_code = 400
             found_objects = None
         if found_objects is not None:
-            self.msg = public_api_msg['items_found'].format('Report')
+            self.msg = public_api_msg['items_found'].format(self.api)
             out_results = []
             for found_object in found_objects:
                 out_results.append(found_object.output_obj())
