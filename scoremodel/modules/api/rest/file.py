@@ -10,6 +10,13 @@ from scoremodel.modules.api.rest.scoremodel import ScoremodelRestApi
 from werkzeug.utils import secure_filename
 from scoremodel import app
 
+##
+# Subclass this from ScoremodelRestApi
+#   - recreate put & post to support files
+#       -> perform file-related functions and add filename and original_filename to the request.data
+#       -> hand this over to self.api()
+##
+
 
 class FileApi(ScoremodelRestApi):
 
