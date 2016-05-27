@@ -36,9 +36,9 @@ def v_page_create():
         except RequiredAttributeMissing as e:
             flash(_('A required form element was not submitted: {0}').format(e))
             return redirect(url_for('admin.v_page_create'))
-        #except Exception as e:
-        #    flash(_('An unexpected error occurred.'))
-        #    return redirect(url_for('admin.v_page_create'))
+        except Exception as e:
+            flash(_('An unexpected error occurred.'))
+            return redirect(url_for('admin.v_page_create'))
         else:
             flash(_('Page created'))
             return redirect(

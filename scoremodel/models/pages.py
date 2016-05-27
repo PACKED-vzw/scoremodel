@@ -7,6 +7,7 @@ class Lang(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     lang = db.Column(db.String(255), index=True)
     pages = db.relationship('Page', backref='lang', lazy='dynamic')
+    documents = db.relationship('Document', backref='lang', lazy='dynamic')
 
     def __init__(self, lang):
         self.lang = lang
@@ -57,6 +58,32 @@ class Page(db.Model):
             'menu_link_id': self.menu_link_id,
             'menu_link': self.menu_link.menu_link,
             'content': self.content,
+            'lang_id': self.lang_id,
+            'lang': self.lang.lang
+        }
+
+
+class Document(db.Model):
+    __tablename__ = 'Document'
+    id = db.Column(db.Integer, primary_key=True)
+    filename = db.Column(db.String(255), index=True, nullable=False)
+    original_filename = db.Column(db.String(255), nullable=False)
+    description = db.Column(db.Text)
+    lang_id = db.Column(db.Integer, db.ForeignKey(Lang.id))
+
+    def __init__(self, filename, original_filename):
+        self.filename = filename
+        self.original_filename = original_filename
+
+    def __repr__(self):
+        return u'<Document {0}: {1}>'.format(self.id, self.filename)
+
+    def output_obj(self):
+        return {
+            'id': self.id,
+            'filename': self.filename,
+            'original_filename': self.original_filename,
+            'description': self.description,
             'lang_id': self.lang_id,
             'lang': self.lang.lang
         }

@@ -260,3 +260,24 @@ def v_api_page(page_id=None):
 def v_api_public_page(page_id=None):
     a_api = ScoremodelRestApi(api_class=PageApi, o_request=request, api_obj_id=page_id)
     return a_api.response
+
+
+@api.route('/document', methods=['POST'])
+@login_required
+@must_be_admin
+def v_api_document_upload():
+    pass
+
+
+@api.route('/document/<int:document_id>', methods=['PUT', 'DELETE'])
+@login_required
+@must_be_admin
+# Forbid updating the document filename
+def v_api_document_edit(document_id):
+    pass
+
+
+@api.route('/document/<int:document_id>')
+@api.route('/document')
+def v_api_document(document_id=None):
+    pass
