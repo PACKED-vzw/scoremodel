@@ -2,6 +2,7 @@ import json
 
 from flask import request, make_response
 from flask.ext.login import login_required, current_user
+from flask.ext.babel import gettext as _
 from flask import Blueprint, render_template
 
 from scoremodel.modules.api.rest.scoremodel import ScoremodelRestApi
@@ -15,7 +16,7 @@ from scoremodel.modules.api.risk_factor import RiskFactorApi
 from scoremodel.modules.api.section import SectionApi
 from scoremodel.modules.api.page import PageApi
 from scoremodel.modules.api.score import ScoreApi
-from scoremodel.modules.error import DatabaseItemDoesNotExist
+from scoremodel.modules.error import DatabaseItemDoesNotExist, RequiredAttributeMissing
 from scoremodel.modules.msg.messages import public_api_msg, public_error_msg
 from scoremodel.modules.user.authentication import must_be_admin
 
@@ -230,7 +231,27 @@ def v_api_user_report(user_report_id=None):
 @login_required
 @must_be_admin
 def v_api_page(page_id=None):
-    a_api = ScoremodelRestApi(api_class=PageApi, o_request=request, api_obj_id=page_id)
+    def hook_check_lang_id_and_menu_link_id(input_data):
+        if not page_id:
+            # It is a .create()
+            return input_data
+        try:
+            parsed_data = json.loads(input_data)
+        except ValueError as e:
+            return input_data
+        page_api = PageApi()
+        current_page = page_api.read(page_id)
+        if 'lang_id' not in parsed_data or 'menu_link_id' not in parsed_data:
+            # All failures should be handled by ScoremodelRestApi
+            return input_data
+        if current_page.lang_id != parsed_data['lang_id']:
+            raise RequiredAttributeMissing(_('You cannot update lang_id!'))
+        if current_page.menu_link_id != parsed_data['menu_link_id']:
+            raise RequiredAttributeMissing(_('You cannot update menu_link_id!'))
+        return input_data
+
+    a_api = ScoremodelRestApi(api_class=PageApi, o_request=request, api_obj_id=page_id,
+                              hooks=[hook_check_lang_id_and_menu_link_id])
     return a_api.response
 
 

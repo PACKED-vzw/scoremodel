@@ -54,7 +54,9 @@ class Page(db.Model):
     def output_obj(self):
         return {
             'id': self.id,
+            'menu_link_id': self.menu_link_id,
             'menu_link': self.menu_link.menu_link,
             'content': self.content,
+            'lang_id': self.lang_id,
             'lang': self.lang.lang
         }

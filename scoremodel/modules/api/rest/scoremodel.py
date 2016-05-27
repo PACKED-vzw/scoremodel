@@ -56,13 +56,21 @@ class ScoremodelRestApi:
             self.translate = self.translated_functions(translate)
         input_data_raw = self.request.get_data()
         input_data_string = input_data_raw.decode('utf-8')
+        ##
         # Perform the hooks
-        for hook in hooks:
-            input_data_string = hook(input_data_string)
+        # If a hook fails, we error out immediately
         ##
-        # Parse the original request and execute the correct self.action() for the request.method
-        ##
-        self.parse_request(input_data_string=input_data_string, api_obj_id=api_obj_id)
+        try:
+            for hook in hooks:
+                input_data_string = hook(input_data_string)
+        except Exception as e:
+            self.msg = public_error_msg['error_occurred'].format(e)
+            self.status_code = 400
+        else:
+            ##
+            # Parse the original request and execute the correct self.action() for the request.method
+            ##
+            self.parse_request(input_data_string=input_data_string, api_obj_id=api_obj_id)
         ##
         # Set self.response
         ##

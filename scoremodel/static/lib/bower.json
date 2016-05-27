@@ -25,6 +25,7 @@
     "bootstrap": "~3.3.6",
     "angular-resource": "~1.4.8",
     "radar-chart-d3": "git@github.com:alangrafu/radar-chart-d3.git#~1.2.1",
-    "jsrender": "~0.9.75"
+    "jsrender": "~0.9.75",
+    "bootstrap-markdown": "~2.10.0"
   }
 }

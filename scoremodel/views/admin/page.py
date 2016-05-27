@@ -31,7 +31,7 @@ def v_page_create():
         try:
             new_page = page_api.create(page_data)
         except DatabaseItemAlreadyExists as e:
-            flash(_('This report already exists.'))
+            flash(_('This page already exists.'))
             return redirect(url_for('admin.v_page_create'))
         except RequiredAttributeMissing as e:
             flash(_('A required form element was not submitted: {0}').format(e))
@@ -44,14 +44,22 @@ def v_page_create():
             return redirect(
                 url_for('admin.v_page_edit', page_id=new_page.id))
     else:
-        return render_template('admin/page/create.html', title='Page', form=form)
+        return render_template('admin/page/create.html', title=_('Page'), form=form)
 
 
-@admin.route('/page/edit/<int:page_id>')
+@admin.route('/page/edit/<int:page_id>', methods=['GET'])
 @login_required
 @must_be_admin
 def v_page_edit(page_id):
-    pass
+    try:
+        existing_page = page_api.read(page_id)
+    except DatabaseItemDoesNotExist as e:
+        flash(_('No page with id {0}').format(page_id))
+        return redirect(url_for('admin.v_page_list'))
+    except Exception as e:
+        flash(_('An unexpected error occurred: {0}').format(e))
+        return redirect(url_for('admin.v_page_list'))
+    return render_template('admin/page/edit.html', title=_('Page'), page=existing_page)
 
 
 @admin.route('/page/delete/<int:page_id>', methods=['GET', 'POST'])
@@ -89,4 +97,4 @@ def v_page_delete(page_id):
 @must_be_admin
 def v_page_list():
     pages = page_api.list()
-    return render_template('admin/page/list.html', title='Pages', pages=pages)
+    return render_template('admin/page/list.html', title=_('Pages'), pages=pages)
