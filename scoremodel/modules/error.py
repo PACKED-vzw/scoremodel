@@ -27,6 +27,14 @@ class InvalidPassword(Exception):
     pass
 
 
+class FileTypeNotAllowed(Exception):
+    pass
+
+
+class FileDoesNotExist(Exception):
+    pass
+
+
 class ApiException(Exception):
     def to_json(self):
         return json.dumps(self.__str__())

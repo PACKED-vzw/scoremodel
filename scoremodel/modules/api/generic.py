@@ -39,7 +39,7 @@ class GenericApi:
     def clean_input_data(self, db_class, input_data, possible_params, required_params, complex_params):
         """
         Clean the input data dict: remove all non-supported attributes and check whether all the required
-        parametes have been filled. All missing parameters are set to None. All attributes in complex_params
+        parameters have been filled. All missing parameters are set to None. All attributes in complex_params
         must be a list.
         :param db_class
         :param input_data:
@@ -114,7 +114,7 @@ class GenericApi:
     def update_entity_attribute(self, entity, attribute_name, attribute_new_value):
         """
         This function updates the attribute attribute_name of entity only if the original value
-        is different from attribute_new_value
+        is different from attribute_new_value.
         :param entity:
         :param attribute_name:
         :param attribute_value:
@@ -125,15 +125,17 @@ class GenericApi:
             setattr(entity, attribute_name, attribute_new_value)
         return entity
 
-    def update_simple_attributes(self, entity, simple_attributes, cleaned_data):
+    def update_simple_attributes(self, entity, simple_attributes, cleaned_data, to_skip=()):
         """
         Use self.update_entity_attribute() to update the simple (string or numeric) attributes of entity with
-        cleaned_data.
+        cleaned_data. Attributes in to_skip are skipped.
         :param entity:
         :param simple_attributes:
         :param cleaned_data:
+        :param to_skip:
         :return:
         """
         for simple_attribute in simple_attributes:
-            entity = self.update_entity_attribute(entity, simple_attribute, cleaned_data[simple_attribute])
+            if simple_attribute not in to_skip:
+                entity = self.update_entity_attribute(entity, simple_attribute, cleaned_data[simple_attribute])
         return entity

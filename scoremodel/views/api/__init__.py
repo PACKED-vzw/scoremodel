@@ -6,6 +6,8 @@ from flask.ext.babel import gettext as _
 from flask import Blueprint, render_template
 
 from scoremodel.modules.api.rest.scoremodel import ScoremodelRestApi
+from scoremodel.modules.api.rest.file import FileRestApi
+from scoremodel.modules.api.file import FileApi
 from scoremodel.modules.api.question_answer.rest_api import QuestionAnswerQueryRestApi, QuestionAnswerQuestionQueryRestApi
 from scoremodel.modules.api.answer import AnswerApi
 from scoremodel.modules.api.question import QuestionApi
@@ -15,6 +17,7 @@ from scoremodel.modules.api.report import ReportApi
 from scoremodel.modules.api.risk_factor import RiskFactorApi
 from scoremodel.modules.api.section import SectionApi
 from scoremodel.modules.api.page import PageApi
+from scoremodel.modules.api.document import DocumentApi
 from scoremodel.modules.api.score import ScoreApi
 from scoremodel.modules.error import DatabaseItemDoesNotExist, RequiredAttributeMissing
 from scoremodel.modules.msg.messages import public_api_msg, public_error_msg
@@ -265,8 +268,9 @@ def v_api_public_page(page_id=None):
 @api.route('/document', methods=['POST'])
 @login_required
 @must_be_admin
-def v_api_document_upload():
-    pass
+def v_api_document_create():
+    a_api = ScoremodelRestApi(api_class=DocumentApi, o_request=request)
+    return a_api.response
 
 
 @api.route('/document/<int:document_id>', methods=['PUT', 'DELETE'])
@@ -274,7 +278,35 @@ def v_api_document_upload():
 @must_be_admin
 # Forbid updating the document filename
 def v_api_document_edit(document_id):
-    pass
+    def hook_check_filename(input_data):
+        try:
+            parsed_data = json.loads(input_data)
+        except ValueError as e:
+            return input_data
+        document_api = DocumentApi()
+        try:
+            existing_document = document_api.read(document_id)
+        except Exception as e:
+            return input_data
+        if 'original_filename' not in parsed_data:
+            return input_data
+        if parsed_data['original_filename'] != existing_document.original_filename:
+            raise RequiredAttributeMissing(_('You cannot modify original_filename!'))
+        if 'filename' in parsed_data and parsed_data['filename'] != existing_document.filename:
+            raise RequiredAttributeMissing(_('You cannot modify filename!'))
+        return input_data
+
+    a_api = ScoremodelRestApi(api_class=DocumentApi, o_request=request, api_obj_id=document_id,
+                              hooks=[hook_check_filename])
+    return a_api.response
+
+
+@api.route('/document/<int:document_id>/resource', methods=['PUT', 'POST'])
+@login_required
+@must_be_admin
+def v_api_document_resource_upload(document_id):
+    a_api = FileRestApi(api_class=FileApi, o_request=request, api_obj_id=request.files['input_file'].filename,
+                        additional_opts={'input_tag_name': 'input_file'})
 
 
 @api.route('/document/<int:document_id>')

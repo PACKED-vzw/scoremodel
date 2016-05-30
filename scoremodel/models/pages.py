@@ -71,9 +71,10 @@ class Document(db.Model):
     description = db.Column(db.Text)
     lang_id = db.Column(db.Integer, db.ForeignKey(Lang.id))
 
-    def __init__(self, filename, original_filename):
+    def __init__(self, filename, original_filename, description=None):
         self.filename = filename
         self.original_filename = original_filename
+        self.description = description
 
     def __repr__(self):
         return u'<Document {0}: {1}>'.format(self.id, self.filename)

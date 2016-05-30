@@ -19,7 +19,7 @@ class ScoremodelRestApi:
         'list': 'list'
     }
 
-    def __init__(self, api_class, o_request, api_obj_id=None, hooks=(), translate=None):
+    def __init__(self, api_class, o_request, api_obj_id=None, hooks=(), translate=None, additional_opts=None):
         """
         This class is an REST API class that translates between request methods and
         methods of the api_class class.
@@ -43,6 +43,7 @@ class ScoremodelRestApi:
         :param api_obj_id:
         :param hooks:
         :param translate:
+        :param additional_opts:
         """
         self.api = api_class()
         self.request = o_request
@@ -70,7 +71,8 @@ class ScoremodelRestApi:
             ##
             # Parse the original request and execute the correct self.action() for the request.method
             ##
-            self.parse_request(input_data_string=input_data_string, api_obj_id=api_obj_id)
+            self.parse_request(input_data_string=input_data_string, api_obj_id=api_obj_id,
+                               additional_opts=additional_opts)
         ##
         # Set self.response
         ##
@@ -96,7 +98,7 @@ class ScoremodelRestApi:
         else:
             return u''
 
-    def get(self, item_id, input_data):
+    def get(self, item_id, input_data, additional_opts=None):
         try:
             found_object = self.translate['get'](item_id)
         except DatabaseItemDoesNotExist:
@@ -114,7 +116,7 @@ class ScoremodelRestApi:
         else:
             return u''
 
-    def list(self):
+    def list(self, additional_opts=None):
         try:
             found_objects = self.api.list()
         except Exception as e:
@@ -150,7 +152,7 @@ class ScoremodelRestApi:
         else:
             return u''
 
-    def delete(self, item_id):
+    def delete(self, item_id, additional_opts=None):
         try:
             deleted_object = self.api.delete(item_id)
         except DatabaseItemDoesNotExist:
@@ -168,46 +170,88 @@ class ScoremodelRestApi:
         else:
             return u''
 
-    def parse_request(self, input_data_string=None, api_obj_id=None):
+    def parse_get(self, api_obj_id=None, input_data_string=None, additional_opts=None):
+        """
+        Parse a GET request
+        :param api_obj_id:
+        :param input_data_string:
+        :param additional_opts:
+        :return:
+        """
+        if api_obj_id is None:
+            if hasattr(self.api, 'list'):
+                self.output_data = self.list(additional_opts=additional_opts)
+            else:
+                self.msg = public_error_msg['missing_argument'].format('api_obj_id')
+                self.status_code = 400
+        else:
+            self.output_data = self.get(api_obj_id, self.parse_json(input_data_string))
+
+    def parse_delete(self, api_obj_id=None, additional_opts=None):
+        """
+        Parse a DELETE request
+        :param api_obj_id:
+        :param additional_opts:
+        :return:
+        """
+        if api_obj_id is None:
+            self.msg = public_error_msg['missing_argument'].format('api_obj_id')
+            self.status_code = 400
+        else:
+            self.output_data = self.delete(api_obj_id, additional_opts=additional_opts)
+
+    def parse_put(self, api_obj_id=None, input_data_string=None, additional_opts=None):
+        """
+        Parse a PUT request
+        :param api_obj_id:
+        :param input_data_string:
+        :param additional_opts:
+        :return:
+        """
+        if api_obj_id is None:
+            self.msg = public_error_msg['missing_argument'].format('api_obj_id')
+            self.status_code = 400
+        else:
+            if self.parse_json(input_data_string) is not None:
+                self.output_data = self.put(api_obj_id, self.parse_json(input_data_string),
+                                            additional_opts=additional_opts)
+            else:
+                self.msg = public_error_msg['missing_argument'].format('body')
+                self.status_code = 400
+
+    def parse_post(self, input_data_string, additional_opts=None):
+        """
+        Parse a POST request
+        :param input_data_string:
+        :param additional_opts:
+        :return:
+        """
+        if self.parse_json(input_data_string) is not None:
+            self.output_data = self.post(self.parse_json(input_data_string), additional_opts=additional_opts)
+        else:
+            self.msg = public_error_msg['missing_argument'].format('body')
+            self.status_code = 400
+
+    def parse_request(self, input_data_string=None, api_obj_id=None, additional_opts=None):
         """
         Parse the original request:
             - Check for missing arguments and input
             - Execute self.action() for the request.method (self.request)
+        This function has many sub functions (parse_*) to allow for easier
+        subclassing.
         :param input_data_string:
         :param api_obj_id:
+        :param additional_opts:
         :return:
         """
         if self.request.method == 'GET':
-            if api_obj_id is None:
-                if hasattr(self.api, 'list'):
-                    self.output_data = self.list()
-                else:
-                    self.msg = public_error_msg['missing_argument'].format('api_obj_id')
-                    self.status_code = 400
-            else:
-                self.output_data = self.get(api_obj_id, self.parse_json(input_data_string))
+            self.parse_get(api_obj_id, input_data_string, additional_opts=additional_opts)
         elif self.request.method == 'DELETE':
-            if api_obj_id is None:
-                self.msg = public_error_msg['missing_argument'].format('api_obj_id')
-                self.status_code = 400
-            else:
-                self.output_data = self.delete(api_obj_id)
+            self.parse_delete(api_obj_id, additional_opts=additional_opts)
         elif self.request.method == 'PUT':
-            if api_obj_id is None:
-                self.msg = public_error_msg['missing_argument'].format('api_obj_id')
-                self.status_code = 400
-            else:
-                if self.parse_json(input_data_string) is not None:
-                    self.output_data = self.put(api_obj_id, self.parse_json(input_data_string))
-                else:
-                    self.msg = public_error_msg['missing_argument'].format('body')
-                    self.status_code = 400
+            self.parse_put(api_obj_id, input_data_string, additional_opts=additional_opts)
         elif self.request.method == 'POST':
-            if self.parse_json(input_data_string) is not None:
-                self.output_data = self.post(self.parse_json(input_data_string))
-            else:
-                self.msg = public_error_msg['missing_argument'].format('body')
-                self.status_code = 400
+            self.parse_post(input_data_string, additional_opts=additional_opts)
         else:
             self.msg = public_error_msg['illegal_action'].format(self.request.method)
             self.status_code = 405

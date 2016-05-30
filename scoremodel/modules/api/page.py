@@ -21,7 +21,6 @@ class PageApi(GenericApi):
 
     def create(self, input_data):
         cleaned_data = self.parse_input_data(input_data)
-        # There can not be two pages for which menu_link and lang are equal
         if not cleaned_data['lang_id']:
             cleaned_data['lang_id'] = 1
         # Language
@@ -30,6 +29,7 @@ class PageApi(GenericApi):
         existing_menu_link = self.menu_link_api.read(cleaned_data['menu_link_id'])
         existing_page = Page.query.filter(and_(Page.menu_link_id == existing_menu_link.id,
                                                Page.lang_id == existing_lang.id)).first()
+        # There can not be two pages with the same lang_id and menu_link_id
         if existing_page:
             raise DatabaseItemAlreadyExists(_('A page for menu_link {0} in language {1} already exists.')
                                             .format(cleaned_data['menu_link_id'], cleaned_data['lang_id']))
