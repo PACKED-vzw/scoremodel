@@ -12,9 +12,9 @@ from scoremodel import db
 
 
 class DocumentApi(GenericApi):
-    simple_params = ['filename', 'original_filename', 'description', 'lang_id']
+    simple_params = ['filename', 'original_filename', 'description', 'lang_id', 'name']
     complex_params = []
-    required_params = ['lang_id', 'original_filename']
+    required_params = ['lang_id', 'name']
     possible_params = simple_params + complex_params
 
     def __init__(self):
@@ -25,12 +25,12 @@ class DocumentApi(GenericApi):
         if not cleaned_data['lang_id']:
             cleaned_data['lang_id'] = 1
         existing_lang = self.lang_api.read(cleaned_data['lang_id'])
-        # Original filename or new filename?
-        existing_document = Document.query.filter(and_(Document.filename == cleaned_data['filename'],
+        existing_document = Document.query.filter(and_(Document.filename == cleaned_data['name'],
                                                        Document.lang_id == cleaned_data['lang_id'])).first()
         if existing_document:
-            raise DatabaseItemAlreadyExists(_('No two documents can have the same filename and lang_id!'))
-        new_document = Document(filename=cleaned_data['filename'], original_filename=cleaned_data['original_filename'],
+            raise DatabaseItemAlreadyExists(_('No two documents can have the same name and lang_id!'))
+        new_document = Document(name=cleaned_data['name'], filename=cleaned_data['filename'],
+                                original_filename=cleaned_data['original_filename'],
                                 description=cleaned_data['description'])
         new_document.lang = existing_lang
         db.session.add(new_document)

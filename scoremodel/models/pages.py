@@ -66,12 +66,14 @@ class Page(db.Model):
 class Document(db.Model):
     __tablename__ = 'Document'
     id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(255), index=True, nullable=False)
     filename = db.Column(db.String(255), index=True, nullable=False)
     original_filename = db.Column(db.String(255), nullable=False)
     description = db.Column(db.Text)
     lang_id = db.Column(db.Integer, db.ForeignKey(Lang.id))
 
-    def __init__(self, filename, original_filename, description=None):
+    def __init__(self, name, filename=None, original_filename=None, description=None):
+        self.name = name
         self.filename = filename
         self.original_filename = original_filename
         self.description = description

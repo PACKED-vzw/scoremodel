@@ -1,6 +1,6 @@
 import json
 
-from flask import request, make_response
+from flask import request, make_response, send_from_directory
 from flask.ext.login import login_required, current_user
 from flask.ext.babel import gettext as _
 from flask import Blueprint, render_template
@@ -22,6 +22,7 @@ from scoremodel.modules.api.score import ScoreApi
 from scoremodel.modules.error import DatabaseItemDoesNotExist, RequiredAttributeMissing
 from scoremodel.modules.msg.messages import public_api_msg, public_error_msg
 from scoremodel.modules.user.authentication import must_be_admin
+from scoremodel import db, app
 
 api = Blueprint('api', __name__, url_prefix='/api/v2')
 
@@ -305,8 +306,32 @@ def v_api_document_edit(document_id):
 @login_required
 @must_be_admin
 def v_api_document_resource_upload(document_id):
-    a_api = FileRestApi(api_class=FileApi, o_request=request, api_obj_id=request.files['input_file'].filename,
-                        additional_opts={'input_tag_name': 'input_file'})
+    # The code below is for testing, not for production
+    file_api = FileApi()
+    document_api = DocumentApi()
+    existing_document = document_api.read(document_id)
+    input_file = request.files['input_file']
+    created_file = u''
+    if request.method == 'POST':
+        if existing_document.filename or existing_document.original_filename:
+            raise Exception('This item already has an attached file!')
+        created_file = file_api.create(input_file)
+        # Attach to document
+        existing_document.original_filename = created_file['original_filename']
+        existing_document.filename = created_file['filename']
+        db.session.commit()
+    elif request.method == 'PUT':
+        created_file = file_api.update(existing_document.filename, input_file)
+    return json.dumps(created_file)
+
+
+@api.route('/document/<int:document_id>/resource', methods=['GET'])
+def v_api_document_resource(document_id):
+    file_api = FileApi()
+    document_api = DocumentApi()
+    existing_document = document_api.read(document_id)
+    existing_file = file_api.read(existing_document.filename)
+    return send_from_directory(app.config['UPLOAD_FULL_PATH'], existing_file['filename'])
 
 
 @api.route('/document/<int:document_id>')
