@@ -20,7 +20,7 @@ lang = 'nl'
 def v_index():
     form = LoginForm()
     user_api = UserApi()
-    if current_user:
+    if current_user and current_user.is_authenticated:
         user_reports = user_api.get_user_reports(current_user.id)
     else:
         user_reports = []

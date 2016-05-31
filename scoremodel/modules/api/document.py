@@ -20,8 +20,8 @@ class DocumentApi(GenericApi):
     def __init__(self):
         self.lang_api = LangApi()
 
-    def create(self, document_data):
-        cleaned_data = self.parse_input_data(document_data)
+    def create(self, input_data):
+        cleaned_data = self.parse_input_data(input_data)
         if not cleaned_data['lang_id']:
             cleaned_data['lang_id'] = 1
         existing_lang = self.lang_api.read(cleaned_data['lang_id'])
@@ -37,15 +37,15 @@ class DocumentApi(GenericApi):
         db.session.commit()
         return new_document
 
-    def read(self, document_id):
-        existing_document = Document.query.filter(Document.id == document_id).first()
+    def read(self, item_id):
+        existing_document = Document.query.filter(Document.id == item_id).first()
         if not existing_document:
-            raise DatabaseItemDoesNotExist(_e['item_not_exists'].format(Document, document_id))
+            raise DatabaseItemDoesNotExist(_e['item_not_exists'].format(Document, item_id))
         return existing_document
 
-    def update(self, document_id, document_data):
-        existing_document = self.read(document_id)
-        cleaned_data = self.parse_input_data(document_data)
+    def update(self, item_id, input_data):
+        existing_document = self.read(item_id)
+        cleaned_data = self.parse_input_data(input_data)
         existing_lang = self.lang_api.read(cleaned_data['lang_id'])
         existing_document = self.update_simple_attributes(existing_document, self.simple_params, cleaned_data,
                                                           to_skip=['lang_id'])
@@ -53,8 +53,8 @@ class DocumentApi(GenericApi):
         db.session.commit()
         return existing_document
 
-    def delete(self, document_id):
-        existing_document = self.read(document_id)
+    def delete(self, item_id):
+        existing_document = self.read(item_id)
         db.session.delete(existing_document)
         db.session.commit()
         return True

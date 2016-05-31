@@ -21,7 +21,7 @@ from scoremodel.modules.api.document import DocumentApi
 from scoremodel.modules.api.score import ScoreApi
 from scoremodel.modules.error import DatabaseItemDoesNotExist, RequiredAttributeMissing
 from scoremodel.modules.msg.messages import public_api_msg, public_error_msg
-from scoremodel.modules.user.authentication import must_be_admin
+from scoremodel.modules.user.authentication import must_be_admin, requires_auth
 from scoremodel import db, app
 
 api = Blueprint('api', __name__, url_prefix='/api/v2')
@@ -302,26 +302,27 @@ def v_api_document_edit(document_id):
     return a_api.response
 
 
-@api.route('/document/<int:document_id>/resource', methods=['PUT', 'POST'])
+@api.route('/document/<int:document_id>/resource', methods=['POST'])
 @login_required
 @must_be_admin
 def v_api_document_resource_upload(document_id):
+    #POST & PUT probably won't work: only POST
     # The code below is for testing, not for production
     file_api = FileApi()
     document_api = DocumentApi()
     existing_document = document_api.read(document_id)
     input_file = request.files['input_file']
     created_file = u''
-    if request.method == 'POST':
-        if existing_document.filename or existing_document.original_filename:
-            raise Exception('This item already has an attached file!')
+    print(existing_document.output_obj())
+    if existing_document.filename or existing_document.original_filename:
+        # Consider this an update
+        created_file = file_api.update(existing_document.filename, input_file)
+    else:
         created_file = file_api.create(input_file)
         # Attach to document
         existing_document.original_filename = created_file['original_filename']
         existing_document.filename = created_file['filename']
         db.session.commit()
-    elif request.method == 'PUT':
-        created_file = file_api.update(existing_document.filename, input_file)
     return json.dumps(created_file)
 
 
@@ -334,7 +335,15 @@ def v_api_document_resource(document_id):
     return send_from_directory(app.config['UPLOAD_FULL_PATH'], existing_file['filename'])
 
 
-@api.route('/document/<int:document_id>')
+@api.route('/resource/<string:resource_name>', methods=['GET'])
+def v_api_resource(resource_name):
+    file_api = FileApi()
+    existing_file = file_api.by_storage_filename(resource_name)
+    return send_from_directory(app.config['UPLOAD_FULL_PATH'], existing_file['filename'])
+
+
+@api.route('/document/<int:document_id>', methods=['GET'])
 @api.route('/document')
 def v_api_document(document_id=None):
-    pass
+    a_api = ScoremodelRestApi(api_class=DocumentApi, o_request=request, api_obj_id=document_id)
+    return a_api.response

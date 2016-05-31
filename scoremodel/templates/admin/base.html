@@ -38,6 +38,11 @@
                 <li class=""><a href="{{ url_for('admin.v_page_create') }}">{{ _('New') }}</a></li>
             </ul>
             <ul class="nav nav-sidebar">
+                <li class="dropdown-header">{{ _('Documents') }}</li>
+                <li class=""><a href="{{ url_for('admin.v_document_list') }}">{{ _('List') }}</a></li>
+                <li class=""><a href="{{ url_for('admin.v_document_create') }}">{{ _('New') }}</a></li>
+            </ul>
+            <ul class="nav nav-sidebar">
                 <li class="dropdown-header">{{ _('Generic answers') }}</li>
                 <li class=""><a href="{{ url_for('admin.v_answer_list') }}">{{ _('List') }}</a></li>
                 <li class=""><a href="{{ url_for('admin.v_answer_create') }}">{{ _('New') }}</a></li>

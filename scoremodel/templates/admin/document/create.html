@@ -1,0 +1,69 @@
+{% extends 'admin/base.html' %}
+{% block admin_content %}
+    <script src="{{ url_for('static', filename='lib/bower_components/bootstrap-markdown/js/bootstrap-markdown.js') }}"></script>
+    <script src="{{ url_for('static', filename='lib/bower_components/blueimp-file-upload/js/vendor/jquery.ui.widget.js') }}"></script>
+    <script src="{{ url_for('static', filename='lib/bower_components/blueimp-file-upload/js/jquery.iframe-transport.js') }}"></script>
+    <script src="{{ url_for('static', filename='lib/bower_components/blueimp-file-upload/js/jquery.fileupload.js') }}"></script>
+    <script src="{{ url_for('static', filename='lib/scoremodel/jquery/admin/buttons.js') }}"></script>
+    <script src="{{ url_for('static', filename='lib/scoremodel/jquery/admin/document.js') }}"></script>
+    <div class="col-xs-9">
+        <div class="report panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">{{ _('Document') }}</h3>
+            </div>
+            <div class="panel-body">
+                <form novalidate class="form-horizontal">
+                    <input type="hidden" id="document_id" value="{{ document.id }}"/>
+                    <div class="form-group">
+                        <label for="name" class="control-label col-sm-2">{{ _('Document name') }}</label>
+                        <div class="col-sm-10">
+                            <input class="form-control" type="text" id="name" value="" required="required"/>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="description"
+                               class="control-label col-sm-2">{{ _('Document description') }}</label>
+                        <div class="col-sm-10">
+                            <textarea id="description" class="form-control" rows="5"
+                                      data-provide="markdown-editable"></textarea>
+                            <div>
+                                <p class="small">{{ _('You can use <a href="https://daringfireball.net/projects/markdown/">Markdown</a> syntax in this field.') }}</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="lang_id"
+                               class="control-label col-sm-2">{{ _('Document language') }}</label>
+                        <div class="col-sm-10">
+                            <select id="lang_id" class="form-control">
+                                {% for lang in languages %}
+                                    <option value="{{ lang.id }}">{{ lang.lang }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                    {% if document.filename %}
+                        <div class="form-group">
+                            <span class="col-sm-2 control-label">Currently attached document.</span>
+                            <img class="col-sm-6"
+                                 src="{{ url_for('api.v_api_resource', resource_name=document.filename) }}"
+                                 alt="Current document" id="current_document"/>
+                        </div>
+                    {% endif %}
+                    <div class="form-group">
+                        <label for="input_file" class="control-label col-sm-2">{{ _('Document') }}</label>
+                        <div class="col-sm-10">
+                            <input type="file" id="input_file" name="input_file"/>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-3 col-sm-offset-1" id="save_button">
+                            <button type="button" class="btn btn-default">{{ _('Save') }}
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}

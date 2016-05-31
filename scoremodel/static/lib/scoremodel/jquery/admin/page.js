@@ -80,6 +80,8 @@ function get_page(page_id) {
         method: 'GET',
         url: '/api/v2/page/' + page_id,
         success: function(data, status) {},
-        error: function(jqXHR, status, error) {}
+        error: function(jqXHR, status, error) {
+            $('#save_button').html(error_button(error));
+        }
     });
 }

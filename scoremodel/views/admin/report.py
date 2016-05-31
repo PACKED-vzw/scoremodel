@@ -31,7 +31,7 @@ def v_report_edit(report_id):
     except DatabaseItemDoesNotExist:
         flash(_('No report with id {0} exists.').format(report_id))
         return redirect(url_for('admin.v_report_list'))
-    return render_template('admin/report/edit_v2.html', report=existing_report, all_risk_factors=a_risk_factor.list(),
+    return render_template('admin/report/edit.html', report=existing_report, all_risk_factors=a_risk_factor.list(),
                            all_answers=a_answer.list())
 
 

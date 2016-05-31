@@ -84,6 +84,7 @@ class Document(db.Model):
     def output_obj(self):
         return {
             'id': self.id,
+            'name': self.name,
             'filename': self.filename,
             'original_filename': self.original_filename,
             'description': self.description,

@@ -87,10 +87,10 @@ class ScoremodelRestApi:
             self.msg = public_error_msg['item_exists'].format(self.api)
             self.status_code = 400
             created_object = None
-        except Exception as e:
-            self.msg = public_error_msg['error_occurred'].format(e)
-            self.status_code = 400
-            created_object = None
+        #except Exception as e:
+        #    self.msg = public_error_msg['error_occurred'].format(e)
+        #    self.status_code = 400
+        #    created_object = None
         else:
             self.msg = public_api_msg['item_created'].format(self.api, created_object.id)
         if created_object is not None:
