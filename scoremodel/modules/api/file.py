@@ -30,21 +30,21 @@ class FileApi(GenericApi):
     def update(self, input_filename, input_file):
         if not self.allowed(input_file.filename):
             raise FileTypeNotAllowed(_('Illegal file type provided.'))
-        storage_filename = secure_filename(input_filename)
-        input_file.save(join(app.config['UPLOAD_FULL_PATH'], storage_filename))
+        old_storage_filename = secure_filename(input_filename)
+        new_storage_filename = secure_filename(input_file.filename)
+        # Delete the old storage_filename
+        self.delete(old_storage_filename)
+        input_file.save(join(app.config['UPLOAD_FULL_PATH'], new_storage_filename))
         return {
             'original_filename': input_file.filename,
-            'filename': storage_filename
+            'filename': new_storage_filename
         }
 
     def delete(self, input_filename):
         storage_filename = secure_filename(input_filename)
         if not isfile(join(app.config['UPLOAD_FULL_PATH'], storage_filename)):
             raise FileDoesNotExist(_('No file called {0}.').format(storage_filename))
-        try:
-            remove(join(app.config['UPLOAD_FULL_PATH'], storage_filename))
-        except OSError:
-            return False
+        remove(join(app.config['UPLOAD_FULL_PATH'], storage_filename))
         return True
 
     def list(self):

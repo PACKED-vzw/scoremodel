@@ -83,3 +83,12 @@ class DocumentApi(GenericApi):
             existing_document.original_filename = original_filename
         db.session.commit()
         return existing_document
+
+    def by_filename(self, filename):
+        """
+        Return all items that have filename set to @param filename
+        :param filename:
+        :return:
+        """
+        all_documents = Document.query.filter(Document.filename == filename).all()
+        return all_documents

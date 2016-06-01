@@ -107,7 +107,7 @@ function upload_handler() {
             },
             done: function(e, data) {
                 console.log(data.result);
-                $('#current_document').attr('src', '/api/v2/resource/' + data.result.filename);
+                $('#current_document').attr('src', '/api/v2/resource/' + data.result.data.filename);
             }
         });
 }
