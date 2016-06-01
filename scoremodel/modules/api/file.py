@@ -56,13 +56,7 @@ class FileApi(GenericApi):
         return ()
 
     def by_storage_filename(self, input_filename):
-        storage_filename = secure_filename(input_filename)
-        if not isfile(join(app.config['UPLOAD_FULL_PATH'], storage_filename)):
-            raise FileDoesNotExist(_('No file called {0}.').format(storage_filename))
-        return {
-            'filename': storage_filename,
-            'mimetype': mimetypes.guess_type(storage_filename)[0]
-        }
+        return self.read(input_filename)
 
     def allowed(self, filename):
         """

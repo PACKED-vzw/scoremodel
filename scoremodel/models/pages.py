@@ -99,8 +99,11 @@ class Document(db.Model):
 
     @property
     def mimetype(self):
-        guessed = mimetypes.guess_type(self.filename)
-        return guessed[0]
+        if self.filename:
+            guessed = mimetypes.guess_type(self.filename)
+            return guessed[0]
+        else:
+            return u''
 
     @property
     def js_media_type(self):

@@ -48,6 +48,32 @@ class FileRestApi(ScoremodelRestApi):
         """
         self.output_data = self.post(additional_opts=additional_opts)
 
+    def get(self, item_id, input_data=None, additional_opts=None):
+        existing_file = None
+        if not self.api_obj_id:
+            # We do not support .list()
+            self.status_code = 400
+            self.msg = public_error_msg['missing_argument'].format('item_id')
+            return u''
+        try:
+            linked_db_model = self.api.read(self.api_obj_id)
+        except DatabaseItemDoesNotExist as e:
+            self.status_code = 404
+            self.msg = public_error_msg['item_not_exists'].format(self.api, self.api_obj_id)
+        except Exception as e:
+            self.status_code = 400
+            self.msg = public_error_msg['error_occurred'].format(e)
+        else:
+            try:
+                existing_file = self.file_api.read(linked_db_model.filename)
+            except FileDoesNotExist:
+                self.status_code = 404
+                self.msg = public_error_msg['item_not_exists'].format(self.file_api, linked_db_model.filename)
+        if existing_file:
+            return existing_file
+        else:
+            return u''
+
     def put(self, item_id, input_data, additional_opts=None):
         self.status_code = 405
         self.msg = public_error_msg['illegal_action'].format('PUT')
@@ -55,7 +81,6 @@ class FileRestApi(ScoremodelRestApi):
 
     def post(self, input_data=None, additional_opts=None):
         created_file = None
-        print('foo')
         if not self.api_obj_id:
             self.status_code = 400
             self.msg = public_error_msg['missing_argument'].format('item_id')
@@ -72,11 +97,9 @@ class FileRestApi(ScoremodelRestApi):
             input_file = self.request.files[self.form_file_field]  # TODO check
             if self.linked_db_model_has_attachment(linked_db_model):
                 # Consider this an update
-                print('update')
                 created_file = self.file_api.update(linked_db_model.filename, input_file)
             else:
                 # A new creation
-                print('new')
                 created_file = self.file_api.create(self.request.files[self.form_file_field])
 
             try:

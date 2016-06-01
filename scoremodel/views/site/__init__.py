@@ -4,6 +4,7 @@ from flask.ext.babel import gettext as _
 import markdown
 
 from scoremodel.modules.api.page import PageApi
+from scoremodel.modules.api.document import DocumentApi
 from scoremodel.modules.user.authentication import LoginForm
 from scoremodel.modules.error import DatabaseItemDoesNotExist
 from scoremodel.modules.api.user import UserApi
@@ -45,7 +46,9 @@ def v_faq():
 
 @site.route('/documents')
 def v_doc():
-    pass
+    document_api = DocumentApi()
+    documents = document_api.list()
+    return render_template('site/documents.html', documents=documents, title=_('Documents'))
 
 
 @site.route('/disclaimer')

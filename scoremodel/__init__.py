@@ -2,10 +2,12 @@ from flask import Flask, request, redirect, url_for
 from flask.ext.sqlalchemy import SQLAlchemy
 from flask.ext.babel import Babel
 from flask.ext.login import LoginManager, current_user
+from flask.ext.markdown import Markdown
 from scoremodel.modules.setup import AppSetup
 
 app = AppSetup().app
 db = SQLAlchemy(app)
+Markdown(app)
 babel = Babel(app)
 login_manager = LoginManager()
 login_manager.session_protection = 'strong'

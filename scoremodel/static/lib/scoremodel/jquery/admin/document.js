@@ -4,6 +4,15 @@ var data_fields = ['lang_id', 'name', 'description'];
  */
 
 $(document).ready(function () {
+    /* Bootstap Markdown */
+    $('#description').markdown({
+        fullscreen: {
+            enable: false
+        },
+        hiddenButtons: [
+            'Preview'
+        ]
+    });
     var document_id = $('#document_id').val();
     /*$('#save_button').find('button')
         .click(function(){

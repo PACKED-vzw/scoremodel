@@ -1,6 +1,6 @@
 import json
 
-from flask import request, make_response, send_from_directory
+from flask import request, make_response, send_from_directory, abort
 from flask.ext.login import login_required, current_user
 from flask.ext.babel import gettext as _
 from flask import Blueprint, render_template
@@ -19,7 +19,7 @@ from scoremodel.modules.api.section import SectionApi
 from scoremodel.modules.api.page import PageApi
 from scoremodel.modules.api.document import DocumentApi
 from scoremodel.modules.api.score import ScoreApi
-from scoremodel.modules.error import DatabaseItemDoesNotExist, RequiredAttributeMissing
+from scoremodel.modules.error import DatabaseItemDoesNotExist, RequiredAttributeMissing, FileDoesNotExist
 from scoremodel.modules.msg.messages import public_api_msg, public_error_msg
 from scoremodel.modules.user.authentication import must_be_admin, requires_auth
 from scoremodel import db, app
@@ -314,16 +314,34 @@ def v_api_document_resource_upload(document_id):
 def v_api_document_resource(document_id):
     file_api = FileApi()
     document_api = DocumentApi()
-    existing_document = document_api.read(document_id)
-    existing_file = file_api.read(existing_document.filename)
-    # set content-type
+    try:
+        existing_document = document_api.read(document_id)
+    except DatabaseItemDoesNotExist as e:
+        response = make_response()
+        response.status_code = 404
+        return response
+    except Exception as e:
+        response = make_response()
+        response.status_code = 400
+        return response
+    try:
+        existing_file = file_api.read(existing_document.filename)
+    except FileDoesNotExist as e:
+        response = make_response()
+        response.status_code = 404
+        return response
     return send_from_directory(app.config['UPLOAD_FULL_PATH'], existing_file['filename'])
 
 
 @api.route('/resource/<string:resource_name>', methods=['GET'])
 def v_api_resource(resource_name):
     file_api = FileApi()
-    existing_file = file_api.by_storage_filename(resource_name)
+    try:
+        existing_file = file_api.by_storage_filename(resource_name)
+    except FileDoesNotExist as e:
+        response = make_response()
+        response.status_code = 404
+        return response
     return send_from_directory(app.config['UPLOAD_FULL_PATH'], existing_file['filename'])
 
 

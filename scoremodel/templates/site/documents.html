@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% block content %}
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12 col-sm-12">
+                <table class="table table-striped">
+                    <thead>
+                    <th>{{ _('Document') }}</th>
+                    <th>{{ _('Description') }}</th>
+                    </thead>
+                    <tbody>
+                    {% for document in documents %}
+                        <tr>
+                            <td>
+                                <a href="{{ url_for('api.v_api_resource', resource_name=document.filename) }}">{{ document.filename }}</a>
+                            </td>
+                            <td>
+                                {{ document.description | markdown }}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+{% endblock %}
