@@ -316,6 +316,7 @@ def v_api_document_resource(document_id):
     document_api = DocumentApi()
     existing_document = document_api.read(document_id)
     existing_file = file_api.read(existing_document.filename)
+    # set content-type
     return send_from_directory(app.config['UPLOAD_FULL_PATH'], existing_file['filename'])
 
 

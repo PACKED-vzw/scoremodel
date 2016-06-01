@@ -27,6 +27,7 @@
     "radar-chart-d3": "git@github.com:alangrafu/radar-chart-d3.git#~1.2.1",
     "jsrender": "~0.9.75",
     "bootstrap-markdown": "~2.10.0",
-    "blueimp-file-upload": "jquery-file-upload#^9.12.3"
+    "blueimp-file-upload": "jquery-file-upload#^9.12.3",
+    "jquery": "~2.2.4"
   }
 }

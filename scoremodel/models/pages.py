@@ -1,3 +1,4 @@
+import mimetypes
 from scoremodel.models.user import User
 from scoremodel import db
 
@@ -90,7 +91,18 @@ class Document(db.Model):
             'name': self.name,
             'filename': self.filename,
             'original_filename': self.original_filename,
+            'mimetype': self.mimetype,
             'description': self.description,
             'lang_id': self.lang_id,
             'lang': self.lang.lang
         }
+
+    @property
+    def mimetype(self):
+        guessed = mimetypes.guess_type(self.filename)
+        return guessed[0]
+
+    @property
+    def js_media_type(self):
+        media_type = self.mimetype.split('/')
+        return media_type[0]

@@ -89,6 +89,7 @@ function draw(deferred) {
                         $('#save_button').html(default_button('Save'));
                     });
             }
+            draw_preview(document.filename, document.mimetype);
         })
     }
 }
@@ -106,8 +107,22 @@ function upload_handler() {
                 })
             },
             done: function(e, data) {
-                console.log(data.result);
-                $('#current_document').attr('src', '/api/v2/resource/' + data.result.data.filename);
+                draw_preview(data.result.data.filename, data.result.data.mimetype);
             }
         });
+}
+
+function media_type(mimetype) {
+    var split_mimetype = mimetype.split('/');
+    return split_mimetype[0];
+}
+
+function draw_preview(resource_filename, resource_mimetype) {
+    if(media_type(resource_mimetype) != 'image') {
+        /* Use jQuery Media */
+        $('#current_document').replaceWith('<a class="media" href="/api/v2/resource/' + resource_filename + '" id="current_document"><span class="glyphicon glyphicon-file"></span><span class="sr-only">Attached Document</span></a>');
+    } else {
+        /* Use img */
+        $('#current_document').replaceWith('<img src="/api/v2/resource/' + resource_filename + '" alt="Current document" id="current_document"/>');
+    }
 }

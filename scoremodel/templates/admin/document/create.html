@@ -43,11 +43,23 @@
                         </div>
                     </div>
                     {% if document.filename %}
-                        <div class="form-group">
-                            <span class="col-sm-2 control-label">Currently attached document.</span>
-                            <img class="col-sm-6"
-                                 src="{{ url_for('api.v_api_resource', resource_name=document.filename) }}"
-                                 alt="Current document" id="current_document"/>
+                        <div class="row">
+                        <div class="col-sm-2">
+                            <p class="text-right"><strong>Currently attached document</strong></p>
+                        </div>
+                        <div class="col-sm-10">
+                            <div class="thumbnail col-sm-6 col-md-4">
+                                    {% if document.js_media_type == 'image' %}
+                                        <img src="{{ url_for('api.v_api_resource', resource_name=document.filename) }}"
+                                         alt="Current document" id="current_document"/>
+                                    {% else %}
+                                        <a class="media" href="{{ url_for('api.v_api_resource', resource_name=document.filename) }}" id="current_document"><span class="glyphicon glyphicon-file"></span><span class="sr-only">Attached Document</span></a>
+                                    {% endif %}
+                                <div class="caption">
+                                    <p><em>{{ document.filename }}</em></p>
+                                </div>
+                            </div>
+                        </div>
                         </div>
                     {% endif %}
                     <div class="form-group">
