@@ -98,13 +98,15 @@ function upload_handler() {
     $('#input_file').fileupload({
             dataType: 'json',
             add: function (e, data) {
-                $('#save_button').find('button').click(function() {
+                $('#save_button')
+                    .html(default_button('Save'))
+                    .find('button').click(function() {
                     $.when(save_document()).then(function(document_api_response) {
                         var document = document_api_response.data;
                         data.url = '/api/v2/document/' + document.id + '/resource';
                         data.submit();
                     })
-                })
+                });
             },
             done: function(e, data) {
                 draw_preview(data.result.data.filename, data.result.data.mimetype);
@@ -125,4 +127,5 @@ function draw_preview(resource_filename, resource_mimetype) {
         /* Use img */
         $('#current_document').replaceWith('<img src="/api/v2/resource/' + resource_filename + '" alt="Current document" id="current_document"/>');
     }
+    $('#current_document_caption').find('p').html('<em>' + resource_filename + '</em>');
 }
