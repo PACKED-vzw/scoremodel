@@ -306,24 +306,8 @@ def v_api_document_edit(document_id):
 @login_required
 @must_be_admin
 def v_api_document_resource_upload(document_id):
-    #POST & PUT probably won't work: only POST
-    # The code below is for testing, not for production
-    file_api = FileApi()
-    document_api = DocumentApi()
-    existing_document = document_api.read(document_id)
-    input_file = request.files['input_file']
-    created_file = u''
-    print(existing_document.output_obj())
-    if existing_document.filename or existing_document.original_filename:
-        # Consider this an update
-        created_file = file_api.update(existing_document.filename, input_file)
-    else:
-        created_file = file_api.create(input_file)
-        # Attach to document
-        existing_document.original_filename = created_file['original_filename']
-        existing_document.filename = created_file['filename']
-        db.session.commit()
-    return json.dumps(created_file)
+    a_api = FileRestApi(api_class=DocumentApi, o_request=request, form_file_field='input_file', api_obj_id=document_id)
+    return a_api.response
 
 
 @api.route('/document/<int:document_id>/resource', methods=['GET'])

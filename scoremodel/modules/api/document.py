@@ -48,7 +48,7 @@ class DocumentApi(GenericApi):
         cleaned_data = self.parse_input_data(input_data)
         existing_lang = self.lang_api.read(cleaned_data['lang_id'])
         existing_document = self.update_simple_attributes(existing_document, self.simple_params, cleaned_data,
-                                                          to_skip=['lang_id'])
+                                                          to_skip=['lang_id', 'filename', 'original_filename'])
         existing_document.lang = existing_lang
         db.session.commit()
         return existing_document
@@ -67,3 +67,19 @@ class DocumentApi(GenericApi):
         return self.clean_input_data(Document, input_data, possible_params=self.possible_params,
                                      complex_params=self.complex_params,
                                      required_params=self.required_params)
+
+    def set_filenames(self, item_id, filename=None, original_filename=None):
+        """
+        Update the filename and original_filename attributes
+        :param item_id:
+        :param filename:
+        :param original_filename:
+        :return:
+        """
+        existing_document = self.read(item_id)
+        if filename:
+            existing_document.filename = filename
+        if original_filename:
+            existing_document.original_filename = original_filename
+        db.session.commit()
+        return existing_document

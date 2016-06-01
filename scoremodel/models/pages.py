@@ -67,16 +67,19 @@ class Document(db.Model):
     __tablename__ = 'Document'
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(255), index=True, nullable=False)
-    filename = db.Column(db.String(255), index=True, nullable=False)
-    original_filename = db.Column(db.String(255), nullable=False)
+    filename = db.Column(db.String(255), index=True)
+    original_filename = db.Column(db.String(255))
     description = db.Column(db.Text)
     lang_id = db.Column(db.Integer, db.ForeignKey(Lang.id))
 
     def __init__(self, name, filename=None, original_filename=None, description=None):
         self.name = name
-        self.filename = filename
-        self.original_filename = original_filename
-        self.description = description
+        if filename:
+            self.filename = filename
+        if original_filename:
+            self.original_filename = original_filename
+        if description:
+            self.description = description
 
     def __repr__(self):
         return u'<Document {0}: {1}>'.format(self.id, self.filename)

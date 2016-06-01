@@ -11,6 +11,7 @@ from scoremodel.modules.api.rest.scoremodel import ScoremodelRestApi
 from werkzeug.utils import secure_filename
 from scoremodel import app
 
+
 ##
 # Subclass this from ScoremodelRestApi
 #   - recreate put & post to support files
@@ -21,45 +22,79 @@ from scoremodel import app
 
 
 class FileRestApi(ScoremodelRestApi):
+    def __init__(self, api_class, o_request, form_file_field=None, api_obj_id=None, translate=None,
+                 additional_opts=None):
+        self.api = api_class()
+        self.file_api = FileApi()
+        self.form_file_field = form_file_field
+        self.request = o_request
+        self.msg = None
+        self.output_data = u''
+        self.status_code = 200
+        self.api_obj_id = api_obj_id
+        # TODO: check for completeness
+        self.parse_request(api_obj_id=self.api_obj_id, additional_opts=additional_opts)
+        ##
+        # Set self.response
+        ##
+        self.response = self.create_response(self.output_data)
 
-    def post(self, input_data, additional_opts=None):
-        if not additional_opts:
-            raise RequiredAttributeMissing(public_error_msg['missing_argument'].format('input_tag_name'))
-        input_tag_name = additional_opts['input_tag_name']
-        try:
-            created_object = self.api.create(self.request.files[input_tag_name])
-        except FileTypeNotAllowed as e:
-            self.msg = _('Illegal file type.')
-            self.status_code = 400
-            created_object = None
-        except Exception as e:
-            self.msg = public_error_msg['error_occurred'].format(e)
-            self.status_code = 400
-            created_object = None
-        else:
-            self.msg = public_api_msg['item_created'].format(self.api, created_object.filename)
-        if created_object is not None:
-            return created_object
-        else:
-            return u''
+    def parse_post(self, input_data_string, additional_opts=None):
+        """
+        Parse a POST request
+        :param input_data_string:
+        :param additional_opts:
+        :return:
+        """
+        self.output_data = self.post(additional_opts=additional_opts)
 
     def put(self, item_id, input_data, additional_opts=None):
-        if not additional_opts:
-            raise RequiredAttributeMissing(public_error_msg['missing_argument'].format('input_file'))
-        input_tag_name = additional_opts['input_tag_name']
+        self.status_code = 405
+        self.msg = public_error_msg['illegal_action'].format('PUT')
+        return u''
+
+    def post(self, input_data=None, additional_opts=None):
+        created_file = None
+        print('foo')
+        if not self.api_obj_id:
+            self.status_code = 400
+            self.msg = public_error_msg['missing_argument'].format('item_id')
+            return u''
         try:
-            updated_object = self.api.update(item_id, self.request.files[input_tag_name])
-        except FileTypeNotAllowed as e:
-            self.msg = _('Illegal file type.')
-            self.status_code = 400
-            updated_object = None
+            linked_db_model = self.api.read(self.api_obj_id)
+        except DatabaseItemDoesNotExist as e:
+            self.status_code = 404
+            self.msg = public_error_msg['item_not_exists'].format(self.api, self.api_obj_id)
         except Exception as e:
-            self.msg = public_error_msg['error_occurred'].format(e)
             self.status_code = 400
-            updated_object = None
+            self.msg = public_error_msg['error_occurred'].format(e)
         else:
-            self.msg = public_api_msg['item_updated'].format(self.api, updated_object.filename)
-        if updated_object is not None:
-            return updated_object
+            input_file = self.request.files[self.form_file_field]  # TODO check
+            if self.linked_db_model_has_attachment(linked_db_model):
+                # Consider this an update
+                print('update')
+                created_file = self.file_api.update(linked_db_model.filename, input_file)
+            else:
+                # A new creation
+                print('new')
+                created_file = self.file_api.create(self.request.files[self.form_file_field])
+
+            try:
+                print(created_file)
+                self.attach_to_linked_db_model(original_filename=input_file.filename,
+                                               filename=created_file['filename'])
+            except DatabaseItemDoesNotExist as e:
+                self.status_code = 404
+                self.msg = public_error_msg['item_not_exists'].format(self.api, self.api_obj_id)
+        if created_file is not None:
+            return created_file
         else:
             return u''
+
+    def attach_to_linked_db_model(self, original_filename, filename):
+        return self.api.set_filenames(self.api_obj_id, filename=filename, original_filename=original_filename)
+
+    def linked_db_model_has_attachment(self, linked_db_model):
+        if hasattr(linked_db_model, 'filename') and linked_db_model.filename is not None:
+            return True
+        return False
