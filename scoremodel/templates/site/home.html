@@ -1,6 +1,5 @@
 {% extends 'base.html' %}
 {% block content %}
-<div class="container">
 <div class="row">
     <div class="col-md-5 col-sm-5">
         {{ content | safe }}
@@ -48,6 +47,5 @@ Please provide your username and password or create a new account.') }}</p>
             {% include 'login/form.html' %}
         {% endif %}
     </div>
-</div>
 </div>
 {% endblock %}

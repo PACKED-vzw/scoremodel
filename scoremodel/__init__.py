@@ -24,16 +24,16 @@ from scoremodel.views.site import site
 app.register_blueprint(site)
 from scoremodel.views.admin import admin
 app.register_blueprint(admin)
+from scoremodel.modules.locale import Locale
 
 # TODO: probleem met vragen van rapporten
 
 
 @babel.localeselector
 def get_locale():
-    if current_user.is_anonymous or not current_user.locale:
-        return request.accept_languages.best_match(app.config['LANGUAGES'])
-    else:
-        return current_user.locale
+    locale_selector = Locale()
+    locale_selector.set_session_locale(locale_selector.current_locale)
+    return locale_selector.current_locale
 
 
 @app.route('/')

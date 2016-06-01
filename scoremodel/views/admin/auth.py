@@ -35,3 +35,13 @@ def v_logout():
     logout_user()
     flash(_('You have been logged out.'))
     return redirect(url_for('site.v_index'))
+
+
+@admin.route('/register', methods=['GET', 'POST'])
+def v_register():
+    pass
+
+
+@admin.route('/set_locale/<string:locale_name>', methods=['POST'])
+def v_set_locale(locale_name):
+    pass

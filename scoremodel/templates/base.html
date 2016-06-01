@@ -8,51 +8,127 @@
         <title>Scoremodel</title>
     {% endif %}
     <!-- Bootstrap -->
-    <link href="{{ url_for('static', filename='lib/bower_components/bootstrap/dist/css/bootstrap.css') }}" rel="stylesheet"/>
-    <link href="{{ url_for('static', filename='lib/bower_components/bootstrap/dist/css/bootstrap-theme.css') }}" rel="stylesheet"/>
+    <link href="{{ url_for('static', filename='lib/bower_components/bootstrap/dist/css/bootstrap.css') }}"
+          rel="stylesheet"/>
+    <link href="{{ url_for('static', filename='lib/bower_components/bootstrap/dist/css/bootstrap-theme.css') }}"
+          rel="stylesheet"/>
     <!-- Scripts -->
     <!-- Bootstrap -->
     <script src="{{ url_for('static', filename='lib/bower_components/jquery/dist/jquery.js') }}"></script>
     <script>window.jQuery || document.write('<script src="{{ url_for('static', filename='lib/bower_components/jquery/dist/jquery.js') }}"><\/script>')</script>
     <script src="{{ url_for('static', filename='lib/bower_components/bootstrap/dist/js/bootstrap.js') }}"></script>
     <script src="{{ url_for('static', filename='lib/bower_components/bootstrap/js/tab.js') }}"></script>
+    <script src="{{ url_for('static', filename='lib/bower_components/bootstrap/js/collapse.js') }}"></script>
     <!-- D3 -->
     <script src="{{ url_for('static', filename='lib/bower_components/d3/d3.js') }}"></script>
     <script src="{{ url_for('static', filename='lib/bower_components/radar-chart-d3/src/radar-chart.js') }}"></script>
-    <link href="{{ url_for('static', filename='lib/bower_components/radar-chart-d3/src/radar-chart.css') }}" rel="stylesheet" />
+    <link href="{{ url_for('static', filename='lib/bower_components/radar-chart-d3/src/radar-chart.css') }}"
+          rel="stylesheet"/>
     <!-- Local scripts -->
     <!-- Local CSS -->
-    <link rel="stylesheet" href="{{ url_for('static', filename='screen.css') }}" media="screen" />
-    <link rel="stylesheet" href="{{ url_for('static', filename='print.css') }}" media="print" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='screen.css') }}" media="screen"/>
+    <link rel="stylesheet" href="{{ url_for('static', filename='print.css') }}" media="print"/>
 </head>
 <body>
 <div class="container-fluid">
-<div class="row">
-    <header>
-        {% include 'header.html' %}
-    </header>
-    <nav>
-        {% include 'navigation.html' %}
-    </nav>
-</div>
-<div class="row">
-    <div class="col-sm-10 col-sm-offset-2 col-md-10 col-md-offset-2 main">
-            {% if get_flashed_messages() %}
-            <!-- Messages -->
-            {% for message in get_flashed_messages() %}
-            <div class="alert alert-info" role="alert">
-                {{ message }}
-            </div>
-            {% endfor %}
-            {% endif %}
-        {% block content %}{% endblock %}
+    <div class="row">
+        <div class="col-sm-4 col-md-4">
+
+        </div>
     </div>
-</div>
-<div class="row">
-    <footer>
-        {% include 'footer.html' %}
-    </footer>
-</div>
-</div>
+    <div class="row">
+        <div class="col-sm-12 col-md-12" style="min-height: 44px">
+            <nav class="navbar navbar-default">
+                <div class="container-fluid">
+                    <div class="navbar-header">
+                        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
+                                data-target="#navbar" aria-expanded="false">
+                            <span class="sr-only">{{ _('Toggle navigation') }}</span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </button>
+                        <a class="navbar-brand" href="/" >
+                            <img alt="Scoremodel" src="{{ url_for('static', filename='img/logo_scoremodel.png') }}"
+                                 class="img-responsive"/>
+                        </a>
+                    </div>
+                    <div class="collapse navbar-collapse" id="navbar">
+                        <ul class="nav navbar-nav" role="menu">
+                            <li><a href="{{ url_for('site.v_index') }}">{{ _('Home') }}</a></li>
+                            <li><a href="{{ url_for('public.v_index') }}">{{ _('Scoremodel') }}</a></li>
+                            <li><a href="{{ url_for('site.v_faq') }}">{{ _('FAQ') }}</a></li>
+                            <li><a href="{{ url_for('site.v_doc') }}">{{ _('Documents') }}</a></li>
+                            <li><a href="{{ url_for('site.v_disclaimer') }}">{{ _('Disclaimer') }}</a></li>
+                        </ul>
+                        <ul class="nav navbar-nav navbar-right">
+                            {% if current_user.is_authenticated %}
+                                <li><a href="{{ url_for('admin.v_logout', next=request.path) }}">{{ _('Log out') }}</a></li>
+                            {% else %}
+                                <li class="dropdown">
+                                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"
+                                       aria-haspopup="true" aria-expanded="false">{{ _('Register') }}/{{ _('Log in') }}</a>
+                                <ul class="dropdown-menu">
+                                    <li><a href="{{ url_for('admin.v_login', next=request.path) }}">{{ _('Log in') }}</a></li>
+                                    <li><a href="{{ url_for('admin.v_register', next=request.path) }}">{{ _('Register') }}</a></li>
+                                </ul>
+                                </li>
+                            {% endif %}
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"
+                                       aria-haspopup="true" aria-expanded="false">{{ session['locale'] }}</a>
+                            <ul class="dropdown-menu">
+                                    {% for locale in config['LANGUAGES'] %}
+                                        <li><a href="{{ url_for('admin.v_set_locale', locale_name=locale, next=request.path) }}">{{ locale }}</a></li>
+                                    {% endfor %}
+                                </ul>
+                        </li>
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-10 col-sm-offset-1 col-md-10 col-md-offset-1 main">
+            {% if get_flashed_messages() %}
+                <!-- Messages -->
+                {% for message in get_flashed_messages() %}
+                    <div class="alert alert-info" role="alert">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+            {% block content %}{% endblock %}
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-12 col-md-12">&nbsp;</div>
+    </div>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-sm-1 col-md-1">
+                <a href="http://www.den.nl"><img height="40px"
+                                                 src="{{ url_for('static', filename='img/logo_den.png') }}"
+                                                 alt="Logo DEN" class="footer"/></a>
+            </div>
+            <div class="col-sm-1 col-md-1">
+                <a href="http://www.packed.be"><img height="40px"
+                                                    src="{{ url_for('static', filename='img/logo_packed.jpg') }}"
+                                                    alt="Logo PACKED vzw" class="footer"/></a>
+            </div>
+            <div class="col-sm-1 col-md-1">
+                <a href="http://creativecommons.org/licenses/by-sa/3.0"><img height="40px"
+                                                                             src="{{ url_for('static', filename='img/cc-by-sa.png') }}"
+                                                                             alt="CC-BY-SA" class="footer"/></a>
+            </div>
+            <div class="col-sm-2 col-md-1">
+                <ul>
+                    <li>it@packed.be</li>
+                    <li>robert.gillesse@den.nl</li>
+                </ul>
+            </div>
+        </div>
+    </div>
 </body>
 </html>
