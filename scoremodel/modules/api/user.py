@@ -13,7 +13,7 @@ from scoremodel.modules.error import RequiredAttributeMissing, DatabaseItemAlrea
 
 class UserApi(GenericApi):
     complex_params = ['questions', 'reports', 'roles']  # List of role_ids
-    simple_params = ['email', 'password', 'username']
+    simple_params = ['email', 'password', 'username', 'locale']
     required_params = ['email', 'password']
     possible_params = simple_params + complex_params
 
@@ -39,6 +39,8 @@ class UserApi(GenericApi):
         # Add the roles
         for role_id in cleaned_data['roles']:
             new_user.roles.append(self.a_role.read(role_id))
+        if cleaned_data['locale']:
+            new_user.locale = cleaned_data['locale']
         db.session.commit()
         return new_user
 
@@ -158,8 +160,14 @@ class UserApi(GenericApi):
     def add_user_report(self, user_id, report):
         user = self.read(user_id)
         user.reports.append(report)
-        db.commit()
+        db.session.commit()
         return user
+
+    def set_locale(self, user_id, locale):
+        existing_user = self.read(user_id)
+        existing_user.locale = locale
+        db.session.commit()
+        return existing_user
 
 
 @login_manager.user_loader

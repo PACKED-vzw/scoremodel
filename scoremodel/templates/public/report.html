@@ -1,5 +1,11 @@
 {% extends 'base.html' %}
 {% block content %}
+        <!-- D3 -->
+    <script src="{{ url_for('static', filename='lib/bower_components/d3/d3.js') }}"></script>
+    <script src="{{ url_for('static', filename='lib/bower_components/radar-chart-d3/src/radar-chart.js') }}"></script>
+    <link href="{{ url_for('static', filename='lib/bower_components/radar-chart-d3/src/radar-chart.css') }}"
+          rel="stylesheet"/>
+    <!-- Local scripts -->
     <script src="{{ url_for('static', filename='lib/scoremodel/jquery/public/report.js') }}"></script>
     <div class="container">
         <div class="row">

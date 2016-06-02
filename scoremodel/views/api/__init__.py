@@ -7,6 +7,7 @@ from flask import Blueprint, render_template
 
 from scoremodel.modules.api.rest.scoremodel import ScoremodelRestApi
 from scoremodel.modules.api.rest.file import FileRestApi
+from scoremodel.modules.api.rest import RestApi
 from scoremodel.modules.api.file import FileApi
 from scoremodel.modules.api.question_answer.rest_api import QuestionAnswerQueryRestApi, QuestionAnswerQuestionQueryRestApi
 from scoremodel.modules.api.answer import AnswerApi
@@ -18,7 +19,7 @@ from scoremodel.modules.api.risk_factor import RiskFactorApi
 from scoremodel.modules.api.section import SectionApi
 from scoremodel.modules.api.page import PageApi
 from scoremodel.modules.api.document import DocumentApi
-from scoremodel.modules.api.score import ScoreApi
+from scoremodel.modules.locale import Locale
 from scoremodel.modules.error import DatabaseItemDoesNotExist, RequiredAttributeMissing, FileDoesNotExist
 from scoremodel.modules.msg.messages import public_api_msg, public_error_msg
 from scoremodel.modules.user.authentication import must_be_admin, requires_auth
@@ -350,3 +351,20 @@ def v_api_resource(resource_name):
 def v_api_document(document_id=None):
     a_api = ScoremodelRestApi(api_class=DocumentApi, o_request=request, api_obj_id=document_id)
     return a_api.response
+
+
+@api.route('/locale/<string:locale_name>', methods=['POST'])
+@api.route('/locale', methods=['GET'])
+def v_set_locale(locale_name=None):
+    locale_api = Locale()
+    rest_api = RestApi()
+    data = u''
+    if not locale_name:
+        status_code = 200
+        data = json.dumps({'locale': locale_api.current_locale})
+    else:
+        if locale_api.set_locale(locale_name) is True:
+            status_code = 200
+        else:
+            status_code = 400
+    return rest_api.response(status=status_code, data=data)

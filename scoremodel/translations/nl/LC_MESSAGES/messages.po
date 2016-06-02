@@ -1,4 +1,4 @@
-# English translations for PROJECT.
+# Dutch translations for PROJECT.
 # Copyright (C) 2016 ORGANIZATION
 # This file is distributed under the same license as the PROJECT project.
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2016.
@@ -8,21 +8,20 @@ msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
 "POT-Creation-Date: 2016-06-02 08:38+0200\n"
-"PO-Revision-Date: 2016-06-02 08:41+0200\n"
-"Language: en\n"
-"Language-Team: en <it@packed.be>\n"
+"PO-Revision-Date: 2016-06-02 14:49+0200\n"
+"Language: nl\n"
+"Language-Team: nl <LL@li.org>\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.1.1\n"
-"Last-Translator: \n"
+"Last-Translator: Pieter De Praetere <pieter.de.praetere@helptux.be>\n"
 "X-Generator: Poedit 1.8.8\n"
-"X-Poedit-SourceCharset: UTF-8\n"
 
 #: scoremodel/forms/login.py:8
 msgid "Username"
-msgstr "Username"
+msgstr "Gebruikersnaam"
 
 #: scoremodel/forms/login.py:9 scoremodel/modules/user/admin.py:9
 #: scoremodel/modules/user/admin.py:18
@@ -31,36 +30,36 @@ msgstr "Username"
 #: scoremodel/templates/admin/user/edit.html:18
 #: scoremodel/templates/login/form.html:7
 msgid "Password"
-msgstr "Password"
+msgstr "Wachtwoord"
 
 #: scoremodel/forms/login.py:10 scoremodel/modules/user/authentication.py:13
 #: scoremodel/templates/login/form.html:12
 msgid "Remember me"
-msgstr "Remember me"
+msgstr "Onthoud mij"
 
 #: scoremodel/modules/api/document.py:31
 msgid "No two documents can have the same name and lang_id!"
-msgstr "No two documents can have the same name and lang_id!"
+msgstr "Geen twee documenten kunnen dezelfde naam en lang_id hebben!"
 
 #: scoremodel/modules/api/file.py:15 scoremodel/modules/api/file.py:35
 msgid "Illegal file type provided."
-msgstr "Illegal file type provided."
+msgstr "Illegaal bestandstype."
 
 #: scoremodel/modules/api/file.py:27 scoremodel/modules/api/file.py:50
 msgid "No file called {0}."
-msgstr "No file called {0}."
+msgstr "Geen bestand met de naam {0}."
 
 #: scoremodel/modules/api/page.py:34
 msgid "A page for menu_link {0} in language {1} already exists."
-msgstr "A page for menu_link {0} in language {1} already exists."
+msgstr "Er bestaat al een pagina voor menu_link {0} in taal {1}."
 
 #: scoremodel/modules/api/page.py:91
 msgid "A page for menu_link {0} in language {1} does not exist."
-msgstr "A page for menu_link {0} in language {1} does not exist."
+msgstr "Een pagina voor menu_link {0} in taal {1} bestaat niet."
 
 #: scoremodel/modules/api/question.py:122
 msgid "Error: risk_factors was provided!"
-msgstr "Error: risk_factors was provided!"
+msgstr "Fout: risk_factors gekregen!"
 
 #: scoremodel/modules/api/question_answer/__init__.py:48
 #, python-format
@@ -68,8 +67,8 @@ msgid ""
 "No QuestionAnswer with user_report_id %(user_report_id)s user_id %(user_id)s "
 "question_id %(question_id)s and answer_id %(answer_id)s"
 msgstr ""
-"No QuestionAnswer with user_report_id %(user_report_id)s user_id %(user_id)s "
-"question_id %(question_id)s and answer_id %(answer_id)s"
+"Geen QuestionAnswer met user_report_id %(user_report_id)s user_id "
+"%(user_id)s question_id %(question_id)s en answer_id %(answer_id)s"
 
 #: scoremodel/modules/api/question_answer/__init__.py:80
 #, python-format
@@ -77,50 +76,51 @@ msgid ""
 "No QuestionAnswer with user_report_id %(user_report_id)s user_id %(user_id)s "
 "and question_id %(question_id)s"
 msgstr ""
-"No QuestionAnswer with user_report_id %(user_report_id)s user_id %(user_id)s "
-"and question_id %(question_id)s"
+"Geen QuestionAnswer met user_report_id %(user_report_id)s user_id "
+"%(user_id)s en question_id %(question_id)s"
 
 #: scoremodel/modules/api/question_answer/__init__.py:118
 msgid "Error: two questions with the same id in one section!"
-msgstr "Error: two questions with the same id in one section!"
+msgstr "Fout: twee vragen met dezelfde id in één sectie!"
 
 #: scoremodel/modules/api/question_answer/__init__.py:139
 #, python-format
 msgid "No answer found for question %(question_id)s in report %(report_id)s"
-msgstr "No answer found for question %(question_id)s in report %(report_id)s"
+msgstr ""
+"Geen antwoord gevonden voor vraag %(question_id)s in rapport %(report_id)s"
 
 #: scoremodel/modules/forms/answers.py:8
 #: scoremodel/templates/admin/answer/create.html:5
 #: scoremodel/views/admin/answer.py:20
 msgid "Answer"
-msgstr "Answer"
+msgstr "Antwoord"
 
 #: scoremodel/modules/forms/answers.py:9
 #: scoremodel/templates/admin/answer/create.html:18
 msgid "Value"
-msgstr "Value"
+msgstr "Waarde"
 
 #: scoremodel/modules/forms/answers.py:10 scoremodel/modules/forms/generic.py:9
 #: scoremodel/modules/forms/page.py:10
 msgid "Submit"
-msgstr "Submit"
+msgstr "Versturen"
 
 #: scoremodel/modules/forms/generic.py:8
 #: scoremodel/templates/admin/document/list.html:8
 msgid "Name"
-msgstr "Name"
+msgstr "Naam"
 
 #: scoremodel/modules/forms/generic.py:13 scoremodel/modules/report/admin.py:13
 #: scoremodel/modules/user/admin.py:26
 msgid "Confirm delete"
-msgstr "Confirm delete"
+msgstr "Verwijderen bevestigen"
 
 #: scoremodel/modules/forms/page.py:8
 #: scoremodel/templates/admin/page/create.html:13
 #: scoremodel/templates/admin/page/edit.html:21
 #: scoremodel/templates/admin/page/list.html:8
 msgid "Menu link"
-msgstr "Menu link"
+msgstr "Menukoppeling"
 
 #: scoremodel/modules/forms/page.py:9
 #: scoremodel/templates/admin/document/list.html:9
@@ -128,7 +128,7 @@ msgstr "Menu link"
 #: scoremodel/templates/admin/page/edit.html:28
 #: scoremodel/templates/admin/page/list.html:9
 msgid "Language"
-msgstr "Language"
+msgstr "Taal"
 
 #: scoremodel/modules/forms/public/report.py:8
 #: scoremodel/templates/public/create.html:6
@@ -137,14 +137,14 @@ msgstr "Language"
 #: scoremodel/templates/public/report.html:39
 #: scoremodel/templates/site/home.html:20
 msgid "Report name"
-msgstr "Report name"
+msgstr "Rapportnaam"
 
 #: scoremodel/modules/forms/public/report.py:9
 #: scoremodel/templates/public/create.html:19
 #: scoremodel/templates/public/edit.html:19
 #: scoremodel/templates/public/report.html:43
 msgid "Report template"
-msgstr "Report template"
+msgstr "Rapportsjabloon"
 
 #: scoremodel/modules/forms/public/report.py:10
 #: scoremodel/templates/admin/document/create.html:73
@@ -153,67 +153,67 @@ msgstr "Report template"
 #: scoremodel/templates/admin/report/edit.html:84
 #: scoremodel/templates/admin/report/edit.html:182
 msgid "Save"
-msgstr "Save"
+msgstr "Opslaan"
 
 #: scoremodel/modules/msg/messages.py:4
 #, python-format
 msgid "%(what)s <%(identifier)s> created."
-msgstr "%(what)s <%(identifier)s> created."
+msgstr "%(what)s <%(identifier)s> aangemaakt."
 
 #: scoremodel/modules/msg/messages.py:5
 #, python-format
 msgid "%(what)s <%(identifier)s> found."
-msgstr "%(what)s <%(identifier)s> found."
+msgstr "%(what)s <%(identifier)s> gevonden."
 
 #: scoremodel/modules/msg/messages.py:6
 #, python-format
 msgid "%(what)s <%(identifier)s> updated."
-msgstr "%(what)s <%(identifier)s> updated."
+msgstr "%(what)s <%(identifier)s> aangepast."
 
 #: scoremodel/modules/msg/messages.py:7
 #, python-format
 msgid "%(what)s <%(identifier)s> deleted."
-msgstr "%(what)s <%(identifier)s> deleted."
+msgstr "%(what)s <%(identifier)s> verwijderd."
 
 #: scoremodel/modules/msg/messages.py:8
 #, python-format
 msgid "%(what)s found."
-msgstr "%(what)s found."
+msgstr "%(what)s gevonden."
 
 #: scoremodel/modules/msg/messages.py:12
 #, python-format
 msgid "%(what)s already exists."
-msgstr "%(what)s already exists."
+msgstr "%(what)s bestaat al."
 
 #: scoremodel/modules/msg/messages.py:13
 #, python-format
 msgid "%(what)s <%(identifier)s> does not exist."
-msgstr "%(what)s <%(identifier)s> does not exist."
+msgstr "%(what)s <%(identifier)s> bestaat niet."
 
 #: scoremodel/modules/msg/messages.py:14
 #, python-format
 msgid "An error occurred: %(error)s."
-msgstr "An error occurred: %(error)s."
+msgstr "Er is een fout opgetreden: %(error)s."
 
 #: scoremodel/modules/msg/messages.py:15
 #, python-format
 msgid "Illegal action %(action)s."
-msgstr "Illegal action %(action)s."
+msgstr "Illegale actie %(action)s."
 
 #: scoremodel/modules/msg/messages.py:16
 #, python-format
 msgid "Missing argument %(argument)s"
-msgstr "Missing argument %(argument)s"
+msgstr "Argument %(argument)s ontbreekt"
 
 #: scoremodel/modules/msg/messages.py:20
 #, python-format
 msgid "A %(what)s with identifier %(identifier)s already exists."
-msgstr "A %(what)s with identifier %(identifier)s already exists."
+msgstr "Een %(what)s met als identifier %(identifier)s bestaat al."
 
 #: scoremodel/modules/msg/messages.py:21
 #, python-format
 msgid "No %(what)s with identifier %(identifier)s."
-msgstr "No %(what)s with identifier %(identifier)s."
+msgstr "Een %(what)s met als identifier %(identifier)s bestaat niet."
 
 #: scoremodel/modules/msg/messages.py:22
 #, python-format
@@ -221,8 +221,8 @@ msgid ""
 "No %(what)s with identifier %(identifier)s does not exist in %(in_what)s "
 "with identifier %(in_identifier)s"
 msgstr ""
-"No %(what)s with identifier %(identifier)s does not exist in %(in_what)s "
-"with identifier %(in_identifier)s"
+"Geen %(what)s met als identifier %(identifier)s bestaat niet in %(in_what)s "
+"met als identifier %(in_identifier)s."
 
 #: scoremodel/modules/msg/messages.py:25
 #, python-format
@@ -230,13 +230,13 @@ msgid ""
 "Item %(what)s with identifier %(identifier)s already exists in %(in_what)s "
 "with identifier %(in_identifier)s"
 msgstr ""
-"Item %(what)s with identifier %(identifier)s already exists in %(in_what)s "
-"with identifier %(in_identifier)s"
+"Item %(what)s met als identifier %(identifier)s bestaat al in %(in_what)s "
+"met als identifier %(in_identifier)s."
 
 #: scoremodel/modules/msg/messages.py:28
 #, python-format
 msgid "Attribute %(what)s missing."
-msgstr "Attribute %(what)s missing."
+msgstr "Attribute %(what)s ontbreekt."
 
 #: scoremodel/modules/report/admin.py:8
 #: scoremodel/templates/admin/report/create.html:13
@@ -244,11 +244,11 @@ msgstr "Attribute %(what)s missing."
 #: scoremodel/templates/admin/report/edit.html:71
 #: scoremodel/templates/admin/report/list.html:7
 msgid "Title"
-msgstr "Title"
+msgstr "Titel"
 
 #: scoremodel/modules/report/admin.py:9 scoremodel/modules/user/admin.py:13
 msgid "Create"
-msgstr "Create"
+msgstr "Aanmaken"
 
 #: scoremodel/modules/user/admin.py:8 scoremodel/modules/user/admin.py:17
 #: scoremodel/modules/user/authentication.py:11
@@ -257,29 +257,29 @@ msgstr "E-mail"
 
 #: scoremodel/modules/user/admin.py:10 scoremodel/modules/user/admin.py:19
 msgid "Passwords must match"
-msgstr "Passwords must match"
+msgstr "Wachtwoorden moeten overeenkomen."
 
 #: scoremodel/modules/user/admin.py:11 scoremodel/modules/user/admin.py:20
 #: scoremodel/templates/admin/user/create.html:31
 #: scoremodel/templates/admin/user/edit.html:31
 msgid "Confirm password"
-msgstr "Confirm password"
+msgstr "Bevestig wachtwoord"
 
 #: scoremodel/modules/user/admin.py:12 scoremodel/modules/user/admin.py:21
 msgid "Role"
-msgstr "Role"
+msgstr "Rol"
 
 #: scoremodel/modules/user/admin.py:22
 msgid "Edit"
-msgstr "Edit"
+msgstr "Bewerk"
 
 #: scoremodel/modules/user/authentication.py:14
 msgid "Log on"
-msgstr "Log on"
+msgstr "Aanmelden"
 
 #: scoremodel/templates/base.html:42
 msgid "Toggle navigation"
-msgstr "Toggle navigation"
+msgstr "Navigatie in/uit-schakelen"
 
 #: scoremodel/templates/base.html:54
 #: scoremodel/templates/admin/admin_navigation.html:6
@@ -297,7 +297,7 @@ msgstr "FAQ"
 #: scoremodel/templates/base.html:57 scoremodel/templates/admin/base.html:41
 #: scoremodel/views/site/__init__.py:63
 msgid "Documents"
-msgstr "Documents"
+msgstr "Documenten"
 
 #: scoremodel/templates/base.html:58 scoremodel/views/site/__init__.py:77
 msgid "Disclaimer"
@@ -306,29 +306,29 @@ msgstr "Disclaimer"
 #: scoremodel/templates/base.html:62
 #: scoremodel/templates/admin/admin_navigation.html:9
 msgid "Log out"
-msgstr "Log out"
+msgstr "Afmelden"
 
 #: scoremodel/templates/base.html:66 scoremodel/templates/base.html:69
 msgid "Register"
-msgstr "Register"
+msgstr "Registreren"
 
 #: scoremodel/templates/base.html:66 scoremodel/templates/base.html:68
 msgid "Log in"
-msgstr "Log in"
+msgstr "Aanmelden"
 
 #: scoremodel/templates/admin/admin_navigation.html:7
 #: scoremodel/templates/admin/base.html:9
 msgid "Scoremodel administration"
-msgstr "Scoremodel administration"
+msgstr "Beheer Scoremodel"
 
 #: scoremodel/templates/admin/admin_navigation.html:8
 msgid "User administration"
-msgstr "User administration"
+msgstr "Gebruikersbeheer"
 
 #: scoremodel/templates/admin/base.html:31
 #: scoremodel/views/public/__init__.py:32
 msgid "Reports"
-msgstr "Reports"
+msgstr "Rapporten"
 
 #: scoremodel/templates/admin/base.html:32
 #: scoremodel/templates/admin/base.html:37
@@ -337,7 +337,7 @@ msgstr "Reports"
 #: scoremodel/templates/admin/base.html:52
 #: scoremodel/templates/admin/base.html:57
 msgid "List"
-msgstr "List"
+msgstr "Lijst"
 
 #: scoremodel/templates/admin/base.html:33
 #: scoremodel/templates/admin/base.html:38
@@ -346,23 +346,23 @@ msgstr "List"
 #: scoremodel/templates/admin/base.html:53
 #: scoremodel/templates/admin/base.html:58
 msgid "New"
-msgstr "New"
+msgstr "Nieuw"
 
 #: scoremodel/templates/admin/base.html:36 scoremodel/views/admin/page.py:100
 msgid "Pages"
-msgstr "Pages"
+msgstr "Pagina’s"
 
 #: scoremodel/templates/admin/base.html:46
 msgid "Generic answers"
-msgstr "Generic answers"
+msgstr "Generieke antwoorden"
 
 #: scoremodel/templates/admin/base.html:51
 msgid "Generic risk factors"
-msgstr "Generic risk factors"
+msgstr "Generieke risicofactoren"
 
 #: scoremodel/templates/admin/base.html:56
 msgid "Users"
-msgstr "Users"
+msgstr "Gebruikers"
 
 #: scoremodel/templates/admin/document/create.html:12
 #: scoremodel/templates/admin/document/create.html:66
@@ -375,11 +375,11 @@ msgstr "Document"
 
 #: scoremodel/templates/admin/document/create.html:18
 msgid "Document name"
-msgstr "Document name"
+msgstr "Documentnaam"
 
 #: scoremodel/templates/admin/document/create.html:25
 msgid "Document description"
-msgstr "Document description"
+msgstr "Documentbeschrijving"
 
 #: scoremodel/templates/admin/document/create.html:30
 #: scoremodel/templates/admin/page/edit.html:39
@@ -387,16 +387,16 @@ msgid ""
 "You can use <a href=\"https://daringfireball.net/projects/markdown/"
 "\">Markdown</a> syntax in this field."
 msgstr ""
-"You can use <a href=\"https://daringfireball.net/projects/markdown/"
-"\">Markdown</a> syntax in this field."
+"U kan in dit veld <a href=\"https://daringfireball.net/projects/markdown/"
+"\">Markdown</a>-syntax gebruiken."
 
 #: scoremodel/templates/admin/document/create.html:36
 msgid "Document language"
-msgstr "Document language"
+msgstr "Taal van het document"
 
 #: scoremodel/templates/admin/document/create.html:68
 msgid "No file selected"
-msgstr "No file selected"
+msgstr "Geen bestand geselecteerd"
 
 #: scoremodel/templates/admin/document/list.html:7
 #: scoremodel/templates/admin/generic/list.html:6
@@ -410,7 +410,7 @@ msgstr "ID"
 #: scoremodel/templates/admin/report/delete.html:6
 #: scoremodel/templates/admin/user/delete.html:6
 msgid "Confirm deletion"
-msgstr "Confirm deletion"
+msgstr "Verwijderen bevestigen"
 
 #: scoremodel/templates/admin/generic/delete.html:9
 #: scoremodel/templates/admin/report/delete.html:9
@@ -420,35 +420,35 @@ msgid ""
 "Please press &lt;Confirm delete&gt; to confirm the deletion of the "
 "%(item_type)s called &ldquo;%(item_identifier)s&rdquo;."
 msgstr ""
-"Please press &lt;Confirm delete&gt; to confirm the deletion of the "
-"%(item_type)s called &ldquo;%(item_identifier)s&rdquo;."
+"Druk op &lt;Verwijderen bevestigen&gt; om de verwijdering van %(item_type)s "
+"met als identifier &ldquo;%(item_identifier)s&rdquo;."
 
 #: scoremodel/templates/admin/page/create.html:6
 #: scoremodel/templates/admin/page/edit.html:12
 #: scoremodel/views/admin/page.py:47 scoremodel/views/admin/page.py:62
 #: scoremodel/views/admin/page.py:88 scoremodel/views/admin/page.py:92
 msgid "Page"
-msgstr "Page"
+msgstr "Pagina"
 
 #: scoremodel/templates/admin/page/edit.html:35
 msgid "Content"
-msgstr "Content"
+msgstr "Inhoud"
 
 #: scoremodel/templates/admin/report/create.html:7
 #: scoremodel/templates/admin/report/delete.html:9
 #: scoremodel/templates/admin/report/edit.html:12
 #: scoremodel/views/admin/report.py:59 scoremodel/views/admin/report.py:64
 msgid "Report"
-msgstr "Report"
+msgstr "Rapport"
 
 #: scoremodel/templates/admin/report/edit.html:52
 msgid "Add section"
-msgstr "Add section"
+msgstr "Sectie toevoegen"
 
 #: scoremodel/templates/admin/report/edit.html:66
 #: scoremodel/templates/admin/report/edit.html:73
 msgid "New section"
-msgstr "New section"
+msgstr "Nieuwe sectie"
 
 #: scoremodel/templates/admin/report/edit.html:77
 #: scoremodel/templates/admin/report/edit.html:137
@@ -459,25 +459,25 @@ msgstr "Context"
 
 #: scoremodel/templates/admin/report/edit.html:79
 msgid "Section context"
-msgstr "Section context"
+msgstr "Sectiecontext"
 
 #: scoremodel/templates/admin/report/edit.html:89
 #: scoremodel/templates/admin/report/edit.html:187
 msgid "Remove"
-msgstr "Remove"
+msgstr "Verwijderen"
 
 #: scoremodel/templates/admin/report/edit.html:98
 msgid "Add question"
-msgstr "Add question"
+msgstr "Vraag toevoegen"
 
 #: scoremodel/templates/admin/report/edit.html:109
 #: scoremodel/templates/admin/report/edit.html:126
 msgid "New question"
-msgstr "New question"
+msgstr "Nieuwe vraag"
 
 #: scoremodel/templates/admin/report/edit.html:114
 msgid "Weight"
-msgstr "Weight"
+msgstr "Gewicht"
 
 #: scoremodel/templates/admin/report/edit.html:118
 msgid "1"
@@ -485,79 +485,79 @@ msgstr "1"
 
 #: scoremodel/templates/admin/report/edit.html:122
 msgid "Question"
-msgstr "Question"
+msgstr "Vraag"
 
 #: scoremodel/templates/admin/report/edit.html:130
 #: scoremodel/templates/public/report.html:90
 #: scoremodel/templates/public/section.html:62
 msgid "Example"
-msgstr "Example"
+msgstr "Voorbeeld"
 
 #: scoremodel/templates/admin/report/edit.html:133
 msgid "Question example"
-msgstr "Question example"
+msgstr "Voorbeeld bij de vraag"
 
 #: scoremodel/templates/admin/report/edit.html:140
 msgid "Question context"
-msgstr "Question context"
+msgstr "Context van de vraag"
 
 #: scoremodel/templates/admin/report/edit.html:144
 #: scoremodel/templates/public/report.html:86
 #: scoremodel/templates/public/section.html:58
 msgid "Risks"
-msgstr "Risks"
+msgstr "Risico’s"
 
 #: scoremodel/templates/admin/report/edit.html:147
 msgid "Question risks"
-msgstr "Question risks"
+msgstr "Risico's van de vraag"
 
 #: scoremodel/templates/admin/report/edit.html:151
 #: scoremodel/templates/admin/report/edit.html:153
 #: scoremodel/templates/public/report.html:18
 #: scoremodel/templates/public/report.html:67
 msgid "Actions"
-msgstr "Actions"
+msgstr "Acties"
 
 #: scoremodel/templates/admin/report/edit.html:157
 #: scoremodel/templates/public/section.html:43
 msgid "Risk factor"
-msgstr "Risk factor"
+msgstr "Risicofactor"
 
 #: scoremodel/templates/admin/report/edit.html:169
 msgid "Answers"
-msgstr "Answers"
+msgstr "Antwoorden"
 
 #: scoremodel/templates/admin/report/list.html:8
 msgid "Sections"
-msgstr "Sections"
+msgstr "Secties"
 
 #: scoremodel/templates/admin/user/create.html:5
 #: scoremodel/templates/admin/user/edit.html:5
 msgid "E-mail address"
-msgstr "E-mail address"
+msgstr "E-mailadres"
 
 #: scoremodel/templates/admin/user/create.html:44
 #: scoremodel/templates/admin/user/edit.html:44
 msgid "Roles"
-msgstr "Roles"
+msgstr "Rollen"
 
 #: scoremodel/templates/admin/user/delete.html:9
 #: scoremodel/templates/public/report.html:47
 #: scoremodel/views/admin/user.py:147 scoremodel/views/admin/user.py:150
 msgid "User"
-msgstr "User"
+msgstr "Gebruiker"
 
 #: scoremodel/templates/admin/user/list.html:7
 msgid "User name"
-msgstr "User name"
+msgstr "Gebruikersnaam"
 
 #: scoremodel/templates/admin/user/list.html:8
 msgid "User role"
-msgstr "User role"
+msgstr "Gebruikersrol"
 
 #: scoremodel/templates/error/403.html:4
 msgid "Access forbidden"
-msgstr "Access forbidden"
+msgstr "Geen toegang"
 
 #: scoremodel/templates/error/403.html:5
 #, python-format
@@ -566,13 +566,13 @@ msgid ""
 "error, please <a href=\"%(contact)s\">contact the administrator</a>. Please "
 "return to the <a href=\"%(index)s\">main page</a>."
 msgstr ""
-"You do not have the rights to view this page. If you believe this is an "
-"error, please <a href=\"%(contact)s\">contact the administrator</a>. Please "
-"return to the <a href=\"%(index)s\">main page</a>."
+"U heeft niet de rechten om deze pagina te bekijken. Als u denkt dat dit een "
+"fout is dat, neem dan <a href=\"%(contact)s\">contact op met de beheerder</"
+"a>. Ga terug naar de <a href=\"%(index)s\">Hoofdpagina</a>."
 
 #: scoremodel/templates/error/404.html:4
 msgid "Page not found"
-msgstr "Page not found"
+msgstr "Pagina niet gevonden"
 
 #: scoremodel/templates/error/404.html:5
 #, python-format
@@ -581,47 +581,48 @@ msgid ""
 "www.google.com/search?q=%(page_name)s&as_sitesearch=scoremodel.org"
 "\">searching for it</a> or return to the <a href=\"%(index)s\">main page</a>."
 msgstr ""
-"We could not find the page you requested. You could try <a href=\"https://"
-"www.google.com/search?q=%(page_name)s&as_sitesearch=scoremodel.org"
-"\">searching for it</a> or return to the <a href=\"%(index)s\">main page</a>."
+"We kunnen de door u opgevraagde pagina niet vinden. U kon proberen te <a "
+"href=\"https://www.google.com/search?q="
+"%(page_name)s&as_sitesearch=scoremodel.org\">zoeken voor het</a> of ga terug "
+"naar de <a href=\"%(index)s\">Hoofdpagina</a>."
 
 #: scoremodel/templates/login/form.html:3
 msgid "Email address"
-msgstr "Email address"
+msgstr "E-mailadres"
 
 #: scoremodel/templates/public/list.html:8
 #: scoremodel/templates/site/home.html:21
 msgid "Creation date"
-msgstr "Creation date"
+msgstr "Aanmaakdatum"
 
 #: scoremodel/templates/public/list.html:22
 #: scoremodel/templates/site/home.html:37
 #: scoremodel/views/public/__init__.py:69
 msgid "New report"
-msgstr "New report"
+msgstr "Nieuw rapport"
 
 #: scoremodel/templates/public/report.html:13
 msgid "Table of contents"
-msgstr "Table of contents"
+msgstr "Inhoudsopgave"
 
 #: scoremodel/templates/public/report.html:16
 #: scoremodel/templates/public/report.html:36
 msgid "Report data"
-msgstr "Report data"
+msgstr "Rapportgegevens"
 
 #: scoremodel/templates/public/report.html:17
 #: scoremodel/templates/public/report.html:59
 msgid "Graph"
-msgstr "Graph"
+msgstr "Grafiek"
 
 #: scoremodel/templates/public/report.html:24
 #: scoremodel/templates/public/report.html:103
 msgid "Results"
-msgstr "Results"
+msgstr "Resultaten"
 
 #: scoremodel/templates/public/report.html:51
 msgid "Creation time"
-msgstr "Creation time"
+msgstr "Aanmaakdatum en -tijd"
 
 #: scoremodel/templates/public/report.html:72
 msgid "Score"
@@ -630,37 +631,37 @@ msgstr "Score"
 #: scoremodel/templates/public/report.html:82
 #: scoremodel/templates/public/report.html:114
 msgid "Not completed"
-msgstr "Not completed"
+msgstr "Niet voltooid"
 
 #: scoremodel/templates/public/report.html:88
 msgid "Action"
-msgstr "Action"
+msgstr "Actie"
 
 #: scoremodel/templates/public/section.html:88
 #, python-format
 msgid "Total score for section \"%(section_title)s\":"
-msgstr "Total score for section \"%(section_title)s\":"
+msgstr "Totale score voor sectie \"%(section_title)s\":"
 
 #: scoremodel/templates/public/section.html:104
 #: scoremodel/views/public/__init__.py:119
 msgid "Edit report"
-msgstr "Edit report"
+msgstr "Rapport bewerken"
 
 #: scoremodel/templates/public/section.html:114
 msgid "Overview"
-msgstr "Overview"
+msgstr "Overzicht"
 
 #: scoremodel/templates/site/documents.html:8
 msgid "Description"
-msgstr "Description"
+msgstr "Beschrijving"
 
 #: scoremodel/templates/site/home.html:11
 msgid "Report list"
-msgstr "Report list"
+msgstr "Rapportlijst"
 
 #: scoremodel/templates/site/home.html:38
 msgid "Press \"Start\" to create a new report."
-msgstr "Press \"Start\" to create a new report."
+msgstr "Druk op \"Start\" om een nieuw rapport te maken."
 
 #: scoremodel/templates/site/home.html:39
 msgid "Start"
@@ -671,16 +672,16 @@ msgid ""
 "You are currently not logged in.\n"
 "Please provide your username and password or create a new account."
 msgstr ""
-"You are currently not logged in.\n"
-"Please provide your username and password or create a new account."
+"U bent momenteel niet aangemeld.\n"
+"Geef uw gebruikersnaam en wachtwoord of maak een nieuwe account aan."
 
 #: scoremodel/views/admin/answer.py:37 scoremodel/views/admin/risk_factor.py:34
 msgid "Missing required form input."
-msgstr "Missing required form input."
+msgstr "Verplichte elementen in het formulier ontbreken."
 
 #: scoremodel/views/admin/answer.py:40
 msgid "An answer called {0} already exists."
-msgstr "An answer called {0} already exists."
+msgstr "Een antwoord genaamd {0} bestaat al."
 
 #: scoremodel/views/admin/answer.py:43 scoremodel/views/admin/answer.py:64
 #: scoremodel/views/admin/answer.py:78 scoremodel/views/admin/answer.py:101
@@ -697,180 +698,182 @@ msgstr "An answer called {0} already exists."
 #: scoremodel/views/public/__init__.py:110
 #: scoremodel/views/public/__init__.py:136
 msgid "An unexpected error occurred."
-msgstr "An unexpected error occurred."
+msgstr "Er is een onverwachte fout opgetreden."
 
 #: scoremodel/views/admin/answer.py:47
 msgid "Answer created successfully."
-msgstr "Answer created successfully."
+msgstr "Antwoord met succes aangemaakt."
 
 #: scoremodel/views/admin/answer.py:61
 msgid "No answer with id {0} exists."
-msgstr "No answer with id {0} exists."
+msgstr "Een antwoord met id {0} bestaat niet."
 
 #: scoremodel/views/admin/answer.py:81 scoremodel/views/admin/risk_factor.py:77
 msgid "Update successful."
-msgstr "Update successful."
+msgstr "Bijwerken gelukt"
 
 #: scoremodel/views/admin/answer.py:98
 msgid "This answer does not exist."
-msgstr "This answer does not exist."
+msgstr "Dit antwoord bestaat niet."
 
 #: scoremodel/views/admin/answer.py:106
 msgid "Answer removed."
-msgstr "Answer removed."
+msgstr "Antwoord verwijderd."
 
 #: scoremodel/views/admin/answer.py:109
 msgid "Answer could not be removed."
-msgstr "Answer could not be removed."
+msgstr "Antwoord kon niet worden verwijderd."
 
 #: scoremodel/views/admin/auth.py:19 scoremodel/views/admin/auth.py:25
 msgid "Invalid username or password."
-msgstr "Invalid username or password."
+msgstr "Ongeldige gebruikersnaam of wachtwoord."
 
 #: scoremodel/views/admin/auth.py:36
 msgid "You have been logged out."
-msgstr "You have been logged out."
+msgstr "U bent afgemeld."
 
 #: scoremodel/views/admin/document.py:24 scoremodel/views/admin/document.py:62
 msgid "No document with id {0}"
-msgstr "No document with id {0}"
+msgstr "Geen document met id {0}"
 
 #: scoremodel/views/admin/document.py:27 scoremodel/views/admin/document.py:65
 #: scoremodel/views/admin/page.py:60 scoremodel/views/admin/page.py:76
 #: scoremodel/views/admin/user.py:103
 msgid "An unexpected error occurred: {0}"
-msgstr "An unexpected error occurred: {0}"
+msgstr "Er is een onverwachte fout opgetreden: {0}"
 
 #: scoremodel/views/admin/document.py:76
 msgid "Unable to delete attached file. The document was not deleted"
-msgstr "Unable to delete attached file. The document was not deleted"
+msgstr ""
+"Niet in staat om gekoppeld bestand te verwijderen. Het document is niet "
+"verwijderd"
 
 #: scoremodel/views/admin/document.py:81
 msgid "Document {0} deleted"
-msgstr "Document {0} deleted"
+msgstr "Document {0} verwijderd"
 
 #: scoremodel/views/admin/document.py:84
 msgid "Unable to delete document {0}"
-msgstr "Unable to delete document {0}"
+msgstr "Document {0} kon niet verwijderd worden"
 
 #: scoremodel/views/admin/page.py:34
 msgid "This page already exists."
-msgstr "This page already exists."
+msgstr "Deze pagina bestaat al."
 
 #: scoremodel/views/admin/page.py:37 scoremodel/views/admin/report.py:83
 #: scoremodel/views/admin/user.py:55 scoremodel/views/admin/user.py:100
 #: scoremodel/views/public/__init__.py:56
 #: scoremodel/views/public/__init__.py:107
 msgid "A required form element was not submitted: {0}"
-msgstr "A required form element was not submitted: {0}"
+msgstr "Een verplicht veld in het formulier is niet ingevuld: {0}"
 
 #: scoremodel/views/admin/page.py:43
 msgid "Page created"
-msgstr "Page created"
+msgstr "Pagina aangemaakt"
 
 #: scoremodel/views/admin/page.py:57 scoremodel/views/admin/page.py:73
 msgid "No page with id {0}"
-msgstr "No page with id {0}"
+msgstr "Geen pagina met id {0}"
 
 #: scoremodel/views/admin/page.py:82
 msgid "Page {0} deleted"
-msgstr "Page {0} deleted"
+msgstr "Pagina {0} verwijderd"
 
 #: scoremodel/views/admin/page.py:85
 msgid "Unable to delete page {0}"
-msgstr "Unable to delete page {0}"
+msgstr "Pagina {0} kon niet verwijderd worden."
 
 #: scoremodel/views/admin/report.py:32 scoremodel/views/admin/report.py:47
 msgid "No report with id {0} exists."
-msgstr "No report with id {0} exists."
+msgstr "Een rapport met id {0} bestaat niet."
 
 #: scoremodel/views/admin/report.py:52
 msgid "Report {0} removed."
-msgstr "Report {0} removed."
+msgstr "Rapport {0} verwijderd."
 
 #: scoremodel/views/admin/report.py:54
 msgid "Failed to remove report {0}."
-msgstr "Failed to remove report {0}."
+msgstr "Rapport {0} kon niet verwijderd worden."
 
 #: scoremodel/views/admin/report.py:80
 msgid "A report called {0} already exists."
-msgstr "A report called {0} already exists."
+msgstr "Het rapport {0} al bestaat."
 
 #: scoremodel/views/admin/report.py:90
 msgid "Report created."
-msgstr "Report created."
+msgstr "Rapport aangemaakt."
 
 #: scoremodel/views/admin/risk_factor.py:18
 msgid "Risk Factor"
-msgstr "Risk Factor"
+msgstr "Risicofactor"
 
 #: scoremodel/views/admin/risk_factor.py:37
 msgid "An risk_factor called {0} already exists."
-msgstr "An risk_factor called {0} already exists."
+msgstr "De risk_factor {0} al bestaat."
 
 #: scoremodel/views/admin/risk_factor.py:44
 msgid "risk_factor created successfully."
-msgstr "risk_factor created successfully."
+msgstr "risk_factor met succes aangemaakt."
 
 #: scoremodel/views/admin/risk_factor.py:59
 msgid "No risk_factor with id {0} exists."
-msgstr "No risk_factor with id {0} exists."
+msgstr "Een risk_factor met id {0} bestaat niet."
 
 #: scoremodel/views/admin/risk_factor.py:71
 msgid "No risk_factor with id {0}."
-msgstr "No risk_factor with id {0}."
+msgstr "Geen risk_factor met id {0}."
 
 #: scoremodel/views/admin/risk_factor.py:95
 msgid "This risk factor does not exist."
-msgstr "This risk factor does not exist."
+msgstr "Deze risicofactor bestaat niet."
 
 #: scoremodel/views/admin/risk_factor.py:104
 msgid "Risk factor removed."
-msgstr "Risk factor removed."
+msgstr "Risicofactor verwijderd."
 
 #: scoremodel/views/admin/risk_factor.py:107
 msgid "Risk factor could not be removed."
-msgstr "Risk factor could not be removed."
+msgstr "Risicofactor kon niet worden verwijderd."
 
 #: scoremodel/views/admin/user.py:52
 msgid "A user called {0} already exists."
-msgstr "A user called {0} already exists."
+msgstr "Een gebruiker genaamd {0} bestaat al."
 
 #: scoremodel/views/admin/user.py:77
 msgid "A user with id {0} does not exist."
-msgstr "A user with id {0} does not exist."
+msgstr "Een gebruiker met id {0} bestaat niet."
 
 #: scoremodel/views/admin/user.py:97 scoremodel/views/admin/user.py:132
 msgid "No user with id {0}"
-msgstr "No user with id {0}"
+msgstr "Geen gebruiker met id {0}"
 
 #: scoremodel/views/admin/user.py:135
 msgid "An unexpected error occured: {0}"
-msgstr "An unexpected error occured: {0}"
+msgstr "Er is een onverwachte fout opgetreden: {0}"
 
 #: scoremodel/views/admin/user.py:141
 msgid "User {0} deleted"
-msgstr "User {0} deleted"
+msgstr "Gebruiker {0} verwijderd"
 
 #: scoremodel/views/admin/user.py:144
 msgid "Unable to delete user {0}"
-msgstr "Unable to delete user {0}"
+msgstr "Gebruiker {0} kon niet verwijderd worden"
 
 #: scoremodel/views/api/__init__.py:253
 msgid "You cannot update lang_id!"
-msgstr "You cannot update lang_id!"
+msgstr "U kunt lang_id niet bijwerken!"
 
 #: scoremodel/views/api/__init__.py:255
 msgid "You cannot update menu_link_id!"
-msgstr "You cannot update menu_link_id!"
+msgstr "U kunt menu_link_id niet bijwerken!"
 
 #: scoremodel/views/api/__init__.py:296
 msgid "You cannot modify original_filename!"
-msgstr "You cannot modify original_filename!"
+msgstr "U kunt original_filename niet wijzigen!"
 
 #: scoremodel/views/api/__init__.py:298
 msgid "You cannot modify filename!"
-msgstr "You cannot modify filename!"
+msgstr "U kunt de bestandsnaam niet wijzigen!"
 
 #: scoremodel/views/public/__init__.py:28
 #: scoremodel/views/public/__init__.py:39
@@ -879,16 +882,16 @@ msgstr "You cannot modify filename!"
 #: scoremodel/views/public/__init__.py:166
 #: scoremodel/views/public/__init__.py:196
 msgid "You can only view your own reports."
-msgstr "You can only view your own reports."
+msgstr "U kunt alleen uw eigen rapporten bekijken."
 
 #: scoremodel/views/public/__init__.py:53
 msgid "This report already exists."
-msgstr "This report already exists."
+msgstr "Dit rapport bestaat al."
 
 #: scoremodel/views/public/__init__.py:65
 msgid "Report created"
-msgstr "Report created"
+msgstr "Rapport aangemaakt"
 
 #: scoremodel/views/public/__init__.py:84
 msgid "This report does not exist."
-msgstr "This report does not exist."
+msgstr "Dit rapport bestaat niet."

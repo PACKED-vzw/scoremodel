@@ -41,7 +41,3 @@ def v_logout():
 def v_register():
     pass
 
-
-@admin.route('/set_locale/<string:locale_name>', methods=['POST'])
-def v_set_locale(locale_name):
-    pass

@@ -1,5 +1,7 @@
 from flask import session
 from flask.ext.login import current_user
+from scoremodel.modules.api.user import UserApi
+from scoremodel.modules.error import DatabaseItemDoesNotExist
 from scoremodel import app
 
 
@@ -25,3 +27,15 @@ class Locale:
             return True
         else:
             return False
+
+    def set_locale(self, new_locale):
+        user_api = UserApi()
+        if new_locale in app.config['LANGUAGES']:
+            if self.set_session_locale(new_locale) is True:
+                if current_user.is_authenticated:
+                    try:
+                        user_api.set_locale(current_user.id, new_locale)
+                    except DatabaseItemDoesNotExist:
+                        return False
+                return True
+        return False

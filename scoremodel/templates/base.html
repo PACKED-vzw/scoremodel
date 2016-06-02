@@ -19,12 +19,8 @@
     <script src="{{ url_for('static', filename='lib/bower_components/bootstrap/dist/js/bootstrap.js') }}"></script>
     <script src="{{ url_for('static', filename='lib/bower_components/bootstrap/js/tab.js') }}"></script>
     <script src="{{ url_for('static', filename='lib/bower_components/bootstrap/js/collapse.js') }}"></script>
-    <!-- D3 -->
-    <script src="{{ url_for('static', filename='lib/bower_components/d3/d3.js') }}"></script>
-    <script src="{{ url_for('static', filename='lib/bower_components/radar-chart-d3/src/radar-chart.js') }}"></script>
-    <link href="{{ url_for('static', filename='lib/bower_components/radar-chart-d3/src/radar-chart.css') }}"
-          rel="stylesheet"/>
     <!-- Local scripts -->
+    <script src="{{ url_for('static', filename='lib/scoremodel/jquery/public/locale.js') }}"></script>
     <!-- Local CSS -->
     <link rel="stylesheet" href="{{ url_for('static', filename='screen.css') }}" media="screen"/>
     <link rel="stylesheet" href="{{ url_for('static', filename='print.css') }}" media="print"/>
@@ -77,9 +73,9 @@
                         <li class="dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"
                                        aria-haspopup="true" aria-expanded="false">{{ session['locale'] }}</a>
-                            <ul class="dropdown-menu">
+                            <ul class="dropdown-menu" id="locale_switcher">
                                     {% for locale in config['LANGUAGES'] %}
-                                        <li><a href="{{ url_for('admin.v_set_locale', locale_name=locale, next=request.path) }}">{{ locale }}</a></li>
+                                        <li><a href="#" id="{{ locale }}">{{ locale }}</a></li>
                                     {% endfor %}
                                 </ul>
                         </li>
