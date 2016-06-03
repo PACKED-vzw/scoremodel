@@ -61,7 +61,12 @@ class User(db.Model):
 
     def verify_password(self, input_password):
         bit_input = input_password.encode('utf-8')
-        if bcrypt.hashpw(bit_input, self.password_hash.encode('utf-8')) == self.password_hash.encode('utf-8'):
+        # Check needed because mysql returns strings (in unicode), but sqlite returns bits
+        if isinstance(self.password_hash, str):
+            password_hash = self.password_hash.encode('utf-8')
+        else:
+            password_hash = self.password_hash
+        if bcrypt.hashpw(bit_input, password_hash) == password_hash:
             return True
         else:
             return False

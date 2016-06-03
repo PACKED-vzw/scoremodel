@@ -9,6 +9,21 @@ from scoremodel import db
 
 class MenuLinkApi(GenericApi):
 
+    simple_params = ['menu_link']
+    complex_params = []
+    required_params = ['menu_link']
+    possible_params = simple_params + complex_params
+
+    def create(self, input_data):
+        cleaned_data = self.parse_input_data(input_data)
+        existing_menu_link = MenuLink.query.filter(MenuLink.menu_link == cleaned_data['menu_link']).first()
+        if existing_menu_link:
+            raise DatabaseItemAlreadyExists(_e['item_exists'].format(MenuLink, cleaned_data['menu_link']))
+        new_menu_link = MenuLink(menu_link=cleaned_data['menu_link'])
+        db.session.add(new_menu_link)
+        db.session.commit()
+        return new_menu_link
+
     def list(self):
         return MenuLink.query.all()
 
@@ -23,3 +38,6 @@ class MenuLinkApi(GenericApi):
         if not existing_menu_link:
             raise DatabaseItemDoesNotExist(_e['item_not_exists'].format(MenuLink, menu_link))
         return existing_menu_link
+
+    def parse_input_data(self, input_data):
+        return self.clean_input_data(MenuLink, input_data, self.possible_params, self.required_params, self.complex_params)

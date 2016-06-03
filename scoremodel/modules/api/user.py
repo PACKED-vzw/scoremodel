@@ -1,6 +1,7 @@
 from flask.ext.babel import gettext as _
 from scoremodel.modules.msg.messages import module_error_msg as _e
 from sqlalchemy.orm import load_only
+from sqlalchemy.exc import OperationalError
 from copy import copy, deepcopy
 from scoremodel.modules.api.generic import GenericApi
 from scoremodel.modules.api.role import RoleApi
@@ -176,5 +177,7 @@ def load_user(user_id):
     try:
         user = a_user.read(int(user_id))
     except DatabaseItemDoesNotExist:
+        user = None
+    except OperationalError:
         user = None
     return user

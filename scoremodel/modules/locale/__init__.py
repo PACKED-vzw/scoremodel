@@ -21,6 +21,8 @@ class Locale:
     def get_current_locale(self):
         if 'locale' in session:
             return session['locale']
+        if not current_user:
+            return app.config['BABEL_DEFAULT_LOCALE']
         if current_user.is_anonymous or not current_user.locale:
             return app.config['BABEL_DEFAULT_LOCALE']
         return current_user.locale

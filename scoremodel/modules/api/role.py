@@ -76,12 +76,12 @@ class RoleApi(GenericApi):
         return existing_roles
 
     def clean_input(self, unclean_data):
-        cleaned_data = self.clean_input_data(unclean_data, complex_params=self.complex_params,
+        cleaned_data = self.clean_input_data(Role, unclean_data, complex_params=self.complex_params,
                                              possible_params=self.possible_params, required_params=self.required_params)
         return cleaned_data
 
     def get_by_role(self, input_role):
-        existing_role = Role.query.filter_by(Role.role == input_role).first()
+        existing_role = Role.query.filter(Role.role == input_role).first()
         if existing_role is None:
             raise DatabaseItemDoesNotExist(_e['item_not_exists'].format(Role, input_role))
         return existing_role
