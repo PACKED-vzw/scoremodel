@@ -1,19 +1,16 @@
-from migrate.versioning import api
-from os.path import exists
-from config import SQLALCHEMY_DATABASE_URI, SQLALCHEMY_MIGRATE_REPO
-from scoremodel import db
-from scoremodel.models.general import *
-from scoremodel.models.public import *
-from scoremodel.models.user import *
+from scoremodel.modules.setup import AppSetup
+from flask.ext.sqlalchemy import SQLAlchemy
+from scoremodel.models.general import RiskFactor, Report, Answer, Question, Section
+from scoremodel.models.public import UserReport, QuestionAnswer
+from scoremodel.models.user import Role, User
+from scoremodel.models.pages import Page, Document, Lang, MenuLink
 
 ##
 # TODO: Update for MySQL
 ##
 
+app = AppSetup().app
+db = SQLAlchemy(app)
+
 db.create_all()
 
-if not exists(SQLALCHEMY_MIGRATE_REPO):
-    api.create(SQLALCHEMY_MIGRATE_REPO, 'database repository')
-    api.version_control(SQLALCHEMY_DATABASE_URI, SQLALCHEMY_MIGRATE_REPO)
-else:
-    api.version_control(SQLALCHEMY_DATABASE_URI, SQLALCHEMY_MIGRATE_REPO, api.version(SQLALCHEMY_MIGRATE_REPO))

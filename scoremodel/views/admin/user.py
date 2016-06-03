@@ -9,10 +9,7 @@ from scoremodel.modules.error import DatabaseItemAlreadyExists, RequiredAttribut
 from scoremodel.views.admin import admin
 
 a_roles = RoleApi()
-db_roles = a_roles.list()
-possible_roles = []
-for db_role in db_roles:
-    possible_roles.append((db_role.id, db_role.role))
+
 
 
 @admin.route('/user/view/<int:user_id>')
@@ -35,6 +32,10 @@ def v_user_list():
 @login_required
 @must_be_admin
 def v_user_create():
+    db_roles = a_roles.list()
+    possible_roles = []
+    for db_role in db_roles:
+        possible_roles.append((db_role.id, db_role.role))
     form = UserCreateForm()
     form.roles.choices = possible_roles
 
@@ -70,6 +71,10 @@ def v_user_create():
 def v_user_edit(user_id):
     form = UserModifyForm()
     a_user = UserApi()
+    db_roles = a_roles.list()
+    possible_roles = []
+    for db_role in db_roles:
+        possible_roles.append((db_role.id, db_role.role))
     form.roles.choices = possible_roles
     try:
         existing_user = a_user.read(user_id)

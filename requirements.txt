@@ -7,3 +7,4 @@ bcrypt
 markdown
 flask-markdown
 gunicorn
+mysql-connector
