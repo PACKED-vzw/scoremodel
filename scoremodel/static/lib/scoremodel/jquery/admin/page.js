@@ -29,10 +29,10 @@ function save_page(page_id) {
         url: '/api/v2/page/' + page_id,
         data: JSON.stringify(page_data),
         success: function(data, status) {
-            $('#save_button').html(success_button('Saved'));
+            success_button('#save_button', 'Saved');
         },
         error: function(jqXHR, status, error) {
-            $('#save_button').html(error_button(error));
+            error_button('#save_button', error);
         }
     });
 }
@@ -53,12 +53,13 @@ function draw(deferred) {
         $('#content')
             .val(page.content)
             .change(function(){
-                $('#save_button').html(default_button('Save'))
+                $('#save_button')
                     .find('button')
                     .click(function(){
                         var page_id = $('#page_id').val();
                         draw(save_page(page_id));
                     });
+                default_button('#save_button', 'Save');
             });
         $('#save_button')
             .find('button')
@@ -81,7 +82,7 @@ function get_page(page_id) {
         url: '/api/v2/page/' + page_id,
         success: function(data, status) {},
         error: function(jqXHR, status, error) {
-            $('#save_button').html(error_button(error));
+            error_button('#save_button', error);
         }
     });
 }

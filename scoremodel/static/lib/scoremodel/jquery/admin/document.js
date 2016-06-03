@@ -47,10 +47,10 @@ function save_document() {
             data: JSON.stringify(form_data),
             success: function (data, status) {
                 var document = data.data;
-                $('#save_button').html(success_button('Saved'));
+                success_button('#save_button', 'Saved');
             },
             error: function (jqXHR, status, error) {
-                $('#save_button').html(error_button(error));
+                error_button('#save_button', error);
             }
         });
     } else {
@@ -60,11 +60,11 @@ function save_document() {
             data: JSON.stringify(form_data),
             success: function (data, status) {
                 var document = data.data;
-                $('#save_button').html(success_button('Saved'));
+                success_button('#save_button', 'Saved');
                 window.location.replace('/admin/document/list');
             },
             error: function (jqXHR, status, error) {
-                $('#save_button').html(error_button(error));
+                error_button('#save_button', error);
             }
         });
     }
@@ -82,7 +82,7 @@ function get_document(document_id) {
         success: function(data, status) {
         },
         error: function (jqXHR, status, error) {
-            $('#save_button').html(error_button(error));
+            error_button('#save_button', error);
         }
     });
 }
@@ -95,7 +95,7 @@ function draw(deferred) {
             for(var i = 0; i < data_fields.length; i++) {
                 $('#' + data_fields[i]).val(document[data_fields[i]])
                     .change(function() {
-                        $('#save_button').html(default_button('Save'));
+                        success_button('#save_button', 'Saved');
                     });
             }
             draw_preview(document.filename, document.mimetype);
@@ -108,7 +108,6 @@ function upload_handler() {
             dataType: 'json',
             add: function (e, data) {
                 $('#save_button')
-                    .html(default_button('Save'))
                     .find('button').click(function() {
                     $.when(save_document()).then(function(document_api_response) {
                         var document = document_api_response.data;

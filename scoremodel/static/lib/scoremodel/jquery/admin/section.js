@@ -129,7 +129,7 @@ function store_section(section_id) {
 
         },
         error: function (jqXHR, status, error) {
-            $('#section_' + section_id + '_save_button').html(error_button(error));
+            error_button('#section_' + section_id + '_save_button', error);
             /* Add change handlers */
             for (i = 0; i < section_data_fields.length; i++) {
                 add_change_handler(section_id, '#section_' + section_data_fields[i] + '_' + section_id);
@@ -173,7 +173,7 @@ function redraw_section(old_section_id, section_data) {
         .click(function () {
             delete_section(new_section_id);
         });
-    $('#section_' + new_section_id + '_save_button').html(success_button('Saved'));
+    success_button('#section_' + new_section_id + '_save_button', 'Saved');
     /* Add change handlers */
     for (i = 0; i < section_data_fields.length; i++) {
         add_change_handler(new_section_id, '#section_' + section_data_fields[i] + '_' + new_section_id);
@@ -209,7 +209,7 @@ function delete_section(section_id) {
                 $('#section_panel_' + section_id).remove();
             },
             error: function (jqXHR, status, error) {
-                $('#section_' + section_id + '_remove_button').html(error_button(error));
+                error_button('#section_' + section_id + '_remove_button', error);
             }
         });
     }
@@ -224,15 +224,15 @@ function delete_section(section_id) {
 function add_change_handler(section_id, field_selector) {
     $(field_selector).change(function () {
         $('#section_' + section_id + '_save_button')
-            .html(save_button('Save'))
             .find('button').click(function () {
             save_section(section_id);
         });
+        default_button('#section_' + section_id + '_save_button', 'Save');
         $('#section_' + section_id + '_remove_button')
-            .html(default_button('Remove'))
             .find('button').click(function () {
             delete_section(section_id);
         });
+        default_button('#section_' + section_id + '_remove_button', 'Remove');
     });
 }
 

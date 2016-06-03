@@ -55,15 +55,15 @@ function save_report(report_id) {
                 .change(function() {
                     /* Reset the 'Save' button if the contents of this field changes */
                     $('#report_save_button')
-                        .html(save_button('Save'))
                         .find('button').click(function () {
                         save_report(report_id);
                     });
+                    default_button('#report_save_button', 'Save');
                 });
-            $('#report_save_button').html(success_button('Saved'));
+            success_button('#report_save_button', 'Saved');
         },
         error: function(jqXHR, status, error) {
-            $('#report_save_button').html(error_button(error));
+            error_button('#report_save_button', error);
         }
     });
 }

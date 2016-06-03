@@ -120,7 +120,7 @@ function store_question(question_id, section_id) {
         success: function (data, status) {
         },
         error: function (jqXHR, status, error) {
-            $('#question_' + question_id + '_save_button').html(error_button(error));
+            error_button('#question_' + question_id + '_save_button', error);
             /* Add change handlers */
             for (i = 0; i < question_keys.length; i++) {
                 add_change_handler(question_id, section_id, '#question_' + question_keys[i] + '_' + question_id);
@@ -148,7 +148,7 @@ function redraw_question(old_question_id, question_data, section_id) {
     }
     $('#question_' + old_question_id).replaceWith(question_template.render(new_question_data));
     /* Saved button */
-    $('#question_' + new_question_id + '_save_button').html(success_button('Saved'));
+    success_button('#question_' + new_question_id + '_save_button', 'Saved');
     /* Set selected answer(s) */
     for (i = 0; i < question_data.answers.length; i++) {
         var answer_id = question_data.answers[i].id;
@@ -189,7 +189,7 @@ function delete_question(question_id) {
                 $('#question_' + question_id).remove();
             },
             error: function (jqXHR, status, error) {
-                $('#question_' + question_id + '_remove_button').html(error_button(error));
+                error_button('#question_' + question_id + '_remove_button', error);
             }
         });
     }
@@ -217,14 +217,14 @@ function get_parent_section_id(question_id) {
 function add_change_handler(question_id, section_id, field_selector) {
     $(field_selector).change(function () {
         $('#question_' + question_id + '_save_button')
-            .html(save_button('Save'))
             .find('button').click(function () {
             save_question(question_id, section_id);
         });
+        default_button('#question_' + question_id + '_save_button', 'Save');
         $('#question_' + question_id + '_remove_button')
-            .html(default_button('Remove'))
             .find('button').click(function () {
             delete_question(question_id, section_id);
         });
+        default_button('#question_' + question_id + '_remove_button', 'Remove');
     });
 }

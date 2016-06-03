@@ -68,7 +68,7 @@ def v_user_report_new(user_id):
             report_template = report_api.read(new_user_report.report_id)
             first_section = report_template.ordered_sections[0]
             flash(_('Report created'))
-            return redirect(url_for('public.v_user_report_section', report_id=new_user_report.id, user_id=current_user.id,
+            return redirect(url_for('public.v_user_report_section', user_report_id=new_user_report.id, user_id=current_user.id,
                                     section_id=first_section.id))
     else:
         return render_template('public/create.html', form=form, title=_('New report'))
