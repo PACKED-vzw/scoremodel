@@ -5,7 +5,7 @@ import datetime
 class UserReport(db.Model):
     __tablename__ = 'UserReport'
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String, index=True)
+    name = db.Column(db.String(255), index=True)
     creation_time = db.Column(db.DateTime)
     last_modified = db.Column(db.DateTime)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))

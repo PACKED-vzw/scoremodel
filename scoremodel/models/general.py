@@ -32,7 +32,7 @@ Risicofactor
 class Answer(db.Model):
     __tablename__ = 'Answer'
     id = db.Column(db.Integer, primary_key=True)
-    answer = db.Column(db.Text, nullable=False, index=True)
+    answer = db.Column(db.String(255), nullable=False, index=True)
     value = db.Column(db.Integer, nullable=True, default=1)
     order_in_question = db.Column(db.Integer, nullable=False, default=0)
     lang_id = db.Column(db.Integer, db.ForeignKey('Lang.id'))
@@ -65,7 +65,7 @@ answers = db.Table('answer_question',
 class RiskFactor(db.Model):
     __tablename__ = 'RiskFactor'
     id = db.Column(db.Integer, primary_key=True)
-    risk_factor = db.Column(db.Text, index=True, unique=True)
+    risk_factor = db.Column(db.String(255), index=True, unique=True)
     value = db.Column(db.Integer, nullable=False, default=1)
     lang_id = db.Column(db.Integer, db.ForeignKey('Lang.id'))
     questions_single = db.relationship('Question', backref='risk_factor', lazy='dynamic')
@@ -96,7 +96,7 @@ risk_factors = db.Table('riskfactor_question',
 class Report(db.Model):
     __tablename__ = 'Report'
     id = db.Column(db.Integer, primary_key=True)
-    title = db.Column(db.Text, index=True, nullable=False)
+    title = db.Column(db.String(255), index=True, nullable=False)
     sections = db.relationship('Section', backref='report', lazy='dynamic')
     lang_id = db.Column(db.Integer, db.ForeignKey('Lang.id'))
     user_reports = db.relationship('UserReport', backref='template', lazy='dynamic')
@@ -123,7 +123,7 @@ class Report(db.Model):
 class Section(db.Model):
     __tablename__ = 'Section'
     id = db.Column(db.Integer, primary_key=True)
-    title = db.Column(db.Text, index=True, nullable=False)
+    title = db.Column(db.String(255), index=True, nullable=False)
     context = db.Column(db.Text)
     order_in_report = db.Column(db.Integer, nullable=False, default=0)
     questions = db.relationship('Question', backref='section', lazy='dynamic')
@@ -209,7 +209,7 @@ class Section(db.Model):
 class Question(db.Model):
     __tablename__ = 'Question'
     id = db.Column(db.Integer, primary_key=True)
-    question = db.Column(db.Text, index=True, nullable=False)
+    question = db.Column(db.String(512), index=True, nullable=False)
     context = db.Column(db.Text)
     risk = db.Column(db.Text)
     example = db.Column(db.Text)
