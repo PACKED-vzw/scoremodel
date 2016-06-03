@@ -11,6 +11,13 @@ DB_HOST = 'localhost'
 DB_NAME = 'scoremodel'
 DB_USER = 'scoremodel'
 DB_PASS = 'scoremodel'
+##
+# MySQL SSL connections
+##
+use_ssl = False
+SSL_CA = '/etc/mysql/certs/ca-cert.pem'
+SSL_KEY = '/etc/mysql/keys/client-key.pem'
+SSL_CERT = '/etc/mysql/certs/client-cert.pem'
 
 ##
 # Flask-WTF
@@ -32,5 +39,10 @@ UPLOAD_FOLDER = 'uploads'
 ALLOWED_EXTENSIONS = ('txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif')
 MAX_CONTENT_LENGTH = 16 * 1024 * 1024  # 16 MB
 
-SQLALCHEMY_DATABASE_URI = 'mysql://{user}:{passw}@{host}/{db}'.format(user=DB_USER, passw=DB_PASS,
-                                                                      host=DB_HOST, db=DB_NAME)
+if use_ssl is True:
+    SQLALCHEMY_DATABASE_URI = 'mysql://{user}:{passw}@{host}/{db}?ssl_key={ssl_key}&ssl_cert={ssl_cert}'.format(
+        user=DB_USER, passw=DB_PASS,
+        host=DB_HOST, db=DB_NAME, ssl_key=SSL_KEY, ssl_cert=SSL_CERT)
+else:
+    SQLALCHEMY_DATABASE_URI = 'mysql://{user}:{passw}@{host}/{db}'.format(user=DB_USER, passw=DB_PASS,
+                                                                          host=DB_HOST, db=DB_NAME)
