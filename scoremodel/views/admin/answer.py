@@ -5,9 +5,12 @@ from flask import request, make_response, render_template, redirect, url_for, fl
 from flask.ext.login import login_required
 from scoremodel.modules.user.authentication import must_be_admin
 from scoremodel.modules.api.answer import AnswerApi
+from scoremodel.modules.api.lang import LangApi
 from scoremodel.modules.forms.generic import GenericDeleteForm
 from scoremodel.modules.forms.answers import AnswerCreateForm
 from scoremodel.modules.error import DatabaseItemAlreadyExists, RequiredAttributeMissing, DatabaseItemDoesNotExist
+
+lang_api = LangApi()
 
 
 @admin.route('/answer/list')
@@ -25,11 +28,13 @@ def v_answer_list():
 @must_be_admin
 def v_answer_create():
     form = AnswerCreateForm()
+    form.lang.choices = [(l.id, l.lang) for l in lang_api.list()]
     if request.method == 'POST' and form.validate_on_submit():
         a_api = AnswerApi()
         input_data = {
             'answer': form.answer.data,
-            'value': form.value.data
+            'value': form.value.data,
+            'lang_id': form.lang.data
         }
         try:
             a_api.create(input_data)
@@ -54,6 +59,7 @@ def v_answer_create():
 @must_be_admin
 def v_answer_edit(id):
     form = AnswerCreateForm()
+    form.lang.choices = [(l.id, l.lang) for l in lang_api.list()]
     a_api = AnswerApi()
     try:
         existing_answer = a_api.read(id)
@@ -67,7 +73,8 @@ def v_answer_edit(id):
     if request.method == 'POST' and form.validate_on_submit():
         input_data = {
             'answer': form.answer.data,
-            'value': form.value.data
+            'value': form.value.data,
+            'lang_id': form.lang.data
         }
         try:
             a_api.update(id, input_data=input_data)
@@ -83,6 +90,7 @@ def v_answer_edit(id):
     # Fill in the values
     form.answer.data = existing_answer.answer
     form.value.data = existing_answer.value
+    form.lang.data = existing_answer.lang_id
     return render_template('admin/answer/create.html', form=form, action_url=url_for('admin.v_answer_edit', id=id))
 
 

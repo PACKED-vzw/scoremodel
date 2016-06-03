@@ -92,3 +92,9 @@ class DocumentApi(GenericApi):
         """
         all_documents = Document.query.filter(Document.filename == filename).all()
         return all_documents
+
+    def by_lang(self, language):
+        lang_api = LangApi()
+        db_lang = lang_api.by_lang(language)
+        all_documents = Document.query.filter(Document.lang_id == db_lang.id).all()
+        return all_documents

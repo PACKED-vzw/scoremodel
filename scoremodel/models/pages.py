@@ -9,6 +9,9 @@ class Lang(db.Model):
     lang = db.Column(db.String(255), index=True)
     pages = db.relationship('Page', backref='lang', lazy='dynamic')
     documents = db.relationship('Document', backref='lang', lazy='dynamic')
+    reports = db.relationship('Report', backref='lang', lazy='dynamic')
+    answers = db.relationship('Answer', backref='lang', lazy='dynamic')
+    risk_factors = db.relationship('RiskFactor', backref='lang', lazy='dynamic')
 
     def __init__(self, lang):
         self.lang = lang

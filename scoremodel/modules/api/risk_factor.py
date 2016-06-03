@@ -3,15 +3,17 @@ from scoremodel.modules.msg.messages import module_error_msg as _e
 from scoremodel.models.general import RiskFactor
 from scoremodel.modules.error import RequiredAttributeMissing, DatabaseItemAlreadyExists, DatabaseItemDoesNotExist
 from scoremodel.modules.api.generic import GenericApi
+from scoremodel.modules.api.lang import LangApi
 from scoremodel import db
 
 
 class RiskFactorApi(GenericApi):
     complex_params = []
-    simple_params = ['risk_factor', 'value']
+    simple_params = ['risk_factor', 'value', 'lang_id']
 
     def __init__(self, risk_factor_id=None):
         self.risk_factor_id = risk_factor_id
+        self.lang_api = LangApi()
 
     def create(self, input_data):
         """
@@ -75,7 +77,16 @@ class RiskFactorApi(GenericApi):
         risk_factors = RiskFactor.query.all()
         return risk_factors
 
+    def by_lang(self, lang):
+        """
+        List all in a given language
+        :return:
+        """
+        existing_lang = self.lang_api.by_lang(lang)
+        existing_reports = RiskFactor.query.filter(RiskFactor.lang_id == existing_lang.id).all()
+        return existing_reports
+
     def parse_input_data(self, input_data):
-        possible_params = ['risk_factor', 'value']
-        required_params = ['risk_factor']
+        possible_params = ['risk_factor', 'value', 'lang_id']
+        required_params = ['risk_factor', 'lang_id']
         return self.clean_input_data(RiskFactor, input_data, possible_params, required_params, self.complex_params)

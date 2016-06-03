@@ -14,6 +14,10 @@ class Locale:
     def current_locale(self):
         return self.get_current_locale()
 
+    @property
+    def fallback_locale(self):
+        return app.config['BABEL_DEFAULT_LOCALE']
+
     def get_current_locale(self):
         if 'locale' in session:
             return session['locale']

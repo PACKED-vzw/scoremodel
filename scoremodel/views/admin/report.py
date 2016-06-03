@@ -5,9 +5,14 @@ from scoremodel.modules.user.authentication import must_be_admin
 from scoremodel.modules.api.report import ReportApi
 from scoremodel.modules.api.answer import AnswerApi
 from scoremodel.modules.api.risk_factor import RiskFactorApi
+from scoremodel.modules.api.lang import LangApi
+from scoremodel.modules.locale import Locale
 from scoremodel.modules.report.admin import ReportCreateForm, ReportDeleteForm
 from scoremodel.modules.error import DatabaseItemAlreadyExists, RequiredAttributeMissing, DatabaseItemDoesNotExist
 from flask.ext.babel import gettext as _
+
+lang_api = LangApi()
+locale_api = Locale()
 
 
 @admin.route('/reports', methods=['GET'])
@@ -31,8 +36,11 @@ def v_report_edit(report_id):
     except DatabaseItemDoesNotExist:
         flash(_('No report with id {0} exists.').format(report_id))
         return redirect(url_for('admin.v_report_list'))
-    return render_template('admin/report/edit.html', report=existing_report, all_risk_factors=a_risk_factor.list(),
-                           all_answers=a_answer.list())
+    # Do not use fallback_locale for the answers and risk_factor choices: if they don't exist, the administrator
+    # must create them.
+    return render_template('admin/report/edit.html', report=existing_report,
+                           all_risk_factors=a_risk_factor.by_lang(locale_api.current_locale),
+                           all_answers=a_answer.by_lang(locale_api.current_locale), languages=lang_api.list())
 
 
 @admin.route('/reports/id/<int:report_id>/delete', methods=['GET', 'POST'])
@@ -69,10 +77,12 @@ def v_report_delete(report_id):
 @must_be_admin
 def v_report_create():
     form = ReportCreateForm()
+    form.lang.choices = [(l.id, l.lang) for l in lang_api.list()]
     if request.method == 'POST' and form.validate_on_submit():
         a_report = ReportApi()
         input_data = {
-            'title': form.title.data
+            'title': form.title.data,
+            'lang_id': form.lang.data
         }
         try:
             new_report = a_report.create(input_data)
@@ -83,7 +93,7 @@ def v_report_create():
             flash(_('A required form element was not submitted: {0}').format(e))
             return render_template('admin/report/create.html', form=form)
         except Exception as e:  # Remove this after debugging
-        #    flash('An unexpected error occurred: {0}'.format(e))
+            #    flash('An unexpected error occurred: {0}'.format(e))
             flash(_('An unexpected error occurred.'))
             return render_template('admin/report/create.html', form=form)
         else:

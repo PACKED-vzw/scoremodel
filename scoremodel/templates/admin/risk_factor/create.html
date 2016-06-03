@@ -2,12 +2,12 @@
 {% block admin_content %}
     <form method="post" action="{{ action_url }}">
         <div class="form-group">
-            <label for="answer.name">{{ _('Answer') }}</label>
-            {{ form.answer(class_='form-control', id='answer.name') }}
-            {% if form.answer.errors %}
+            <label for="risk_factor.name">{{ _('Risk factor') }}</label>
+            {{ form.risk_factor(class_='form-control', id='risk_factor.name') }}
+            {% if form.risk_factor.errors %}
                 <div class="alert alert-danger">
                     <ul>
-                        {% for error in form.answer.errors %}
+                        {% for error in form.risk_factor.errors %}
                             <li>{{ error }}</li>
                         {% endfor %}
                     </ul>
@@ -15,8 +15,8 @@
             {% endif %}
         </div>
         <div class="form-group">
-            <label for="answer.value">{{ _('Value') }}</label>
-            {{ form.value(class_='form-control', id='answer.value') }}
+            <label for="risk_factor.value">{{ _('Value') }}</label>
+            {{ form.value(class_='form-control', id='risk_factor.value') }}
             {% if form.value.errors %}
                 <div class="alert alert-danger">
                     <ul>
@@ -28,8 +28,8 @@
             {% endif %}
         </div>
     <div class="form-group">
-            <label for="answer.lang">{{ _('Language') }}</label>
-            {{ form.lang(class_='form-control', id='answer.lang') }}
+            <label for="risk_factor.lang">{{ _('Language') }}</label>
+            {{ form.lang(class_='form-control', id='risk_factor.lang') }}
             {% if form.lang.errors %}
                 <div class="alert alert-danger">
                     <ul>

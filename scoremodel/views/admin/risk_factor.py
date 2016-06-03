@@ -3,9 +3,13 @@ from flask.ext.login import login_required
 from flask.ext.babel import gettext as _
 from scoremodel.views.admin import admin
 from scoremodel.modules.api.risk_factor import RiskFactorApi
+from scoremodel.modules.api.lang import LangApi
 from scoremodel.modules.error import RequiredAttributeMissing, DatabaseItemDoesNotExist, DatabaseItemAlreadyExists
+from scoremodel.modules.forms.risk_factors import RiskFactorCreateForm
 from scoremodel.modules.forms.generic import GenericCreateForm, GenericDeleteForm
 from scoremodel.modules.user.authentication import must_be_admin
+
+lang_api = LangApi()
 
 
 @admin.route('/risk_factor/list')
@@ -22,11 +26,14 @@ def v_risk_factor_list():
 @login_required
 @must_be_admin
 def v_risk_factor_create():
-    form = GenericCreateForm()
+    form = RiskFactorCreateForm()
+    form.lang.choices = [(l.id, l.lang) for l in lang_api.list()]
     if request.method == 'POST' and form.validate_on_submit():
         a_api = RiskFactorApi()
         input_data = {
-            'risk_factor': form.name.data
+            'risk_factor': form.risk_factor.data,
+            'value': form.value.data,
+            'lang_id': form.lang.data
         }
         try:
             a_api.create(input_data)
@@ -44,14 +51,16 @@ def v_risk_factor_create():
             flash(_('risk_factor created successfully.'))
             return redirect(url_for('admin.v_risk_factor_list'))
     else:
-        return render_template('admin/generic/create.html', action_url=url_for('admin.v_risk_factor_create'), form=form)
+        return render_template('admin/risk_factor/create.html', action_url=url_for('admin.v_risk_factor_create'),
+                               form=form)
 
 
 @admin.route('/risk_factor/edit/<int:id>', methods=['GET', 'POST'])
 @login_required
 @must_be_admin
 def v_risk_factor_edit(id):
-    form = GenericCreateForm()
+    form = RiskFactorCreateForm()
+    form.lang.choices = [(l.id, l.lang) for l in lang_api.list()]
     a_api = RiskFactorApi()
     try:
         existing_risk_factor = a_api.read(risk_factor_id=id)
@@ -63,7 +72,9 @@ def v_risk_factor_edit(id):
         return redirect(url_for('admin.v_risk_factor_list'))
     if request.method == 'POST' and form.validate_on_submit():
         input_data = {
-            'risk_factor': form.name.data
+            'risk_factor': form.risk_factor.data,
+            'value': form.value.data,
+            'lang_id': form.lang.data
         }
         try:
             a_api.update(risk_factor_id=id, input_data=input_data)
@@ -78,9 +89,12 @@ def v_risk_factor_edit(id):
             return redirect(url_for('admin.v_risk_factor_list'))
     else:
         # Fill in the values
-        form.name.data = existing_risk_factor.risk_factor
-        return render_template('admin/generic/create.html', form=form, action_url=url_for('admin.v_risk_factor_edit',
-                                                                                          id=id))
+        form.risk_factor.data = existing_risk_factor.risk_factor
+        form.value.data = existing_risk_factor.value
+        form.lang.data = existing_risk_factor.lang_id
+        return render_template('admin/risk_factor/create.html', form=form,
+                               action_url=url_for('admin.v_risk_factor_edit',
+                                                  id=id))
 
 
 @admin.route('/risk_factor/delete/<int:id>', methods=['GET', 'POST'])

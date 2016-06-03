@@ -5,6 +5,7 @@
     <tr>
         <th>{{ _('ID') }}</th>
         <th>{{ _('Title') }}</th>
+        <th>{{ _('Language') }}</th>
         <th>{{ _('Sections') }}</th>
     </tr>
     </thead>
@@ -13,6 +14,7 @@
     <tr>
         <td>{{ report.id }}</td>
         <td>{{ report.title }}</td>
+        <td>{{ report.lang.lang }}</td>
         <td><div class="btn-group" role="group" aria-label="report_sections_{{report.id}}">
             {% for section in report.sections %}
             <button type="button" class="btn btn-default">{{section.title}}</button>

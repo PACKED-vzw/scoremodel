@@ -3,15 +3,17 @@ from scoremodel.modules.msg.messages import module_error_msg as _e
 from scoremodel.models.general import Question, Answer
 from scoremodel.modules.error import RequiredAttributeMissing, DatabaseItemAlreadyExists, DatabaseItemDoesNotExist
 from scoremodel.modules.api.generic import GenericApi
+from scoremodel.modules.api.lang import LangApi
 from scoremodel import db
 
 
 class AnswerApi(GenericApi):
     complex_params = []  # These should be a list in input_data
-    simple_params = ['answer', 'value']
+    simple_params = ['answer', 'value', 'lang_id']
 
     def __init__(self, answer_id=None):
         self.answer_id = answer_id
+        self.lang_api = LangApi()
 
     def create(self, input_data):
         """
@@ -26,7 +28,7 @@ class AnswerApi(GenericApi):
             existing_answer = None
         if existing_answer:
             raise DatabaseItemAlreadyExists(_e['item_exists'].format(Answer, cleaned_data['answer']))
-        new_answer = Answer(answer=cleaned_data['answer'], value=cleaned_data['value'])
+        new_answer = Answer(answer=cleaned_data['answer'], value=cleaned_data['value'], lang_id=cleaned_data['lang_id'])
         db.session.add(new_answer)
         db.session.commit()
         return new_answer
@@ -74,7 +76,16 @@ class AnswerApi(GenericApi):
         answers = Answer.query.all()
         return answers
 
+    def by_lang(self, lang):
+        """
+        List all answers in a given language
+        :return:
+        """
+        existing_lang = self.lang_api.by_lang(lang)
+        existing_reports = Answer.query.filter(Answer.lang_id == existing_lang.id).all()
+        return existing_reports
+
     def parse_input_data(self, input_data):
-        possible_params = ['answer', 'value']
-        required_params = ['answer']
+        possible_params = ['answer', 'value', 'lang_id']
+        required_params = ['answer', 'lang_id']
         return self.clean_input_data(Answer, input_data, possible_params, required_params, self.complex_params)

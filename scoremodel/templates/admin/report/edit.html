@@ -27,6 +27,20 @@
                                         </div>
                                     </div>
                                     <div class="form-group">
+                                        <label for="report_lang" class="col-sm-1 control-label">{{ _('Language') }}</label>
+                                        <div class="col-sm-11">
+                                            <select id="report_lang" class="form-control" disabled="disabled">
+                                                {% for lang in languages %}
+                                                    {% if lang.id == report.lang_id %}
+                                                        <option value="{{ lang.id }}" selected="selected">{{ lang.lang }}</option>
+                                                    {% else %}
+                                                        <option value="{{ lang.id }}">{{ lang.lang }}</option>
+                                                    {% endif %}
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
                                         <div class="col-sm-3 col-sm-offset-1" id="report_save_button">
                                             <button type="button" class="btn btn-default">
                                                 {{ _('Save') }}

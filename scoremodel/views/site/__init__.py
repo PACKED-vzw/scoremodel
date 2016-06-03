@@ -17,7 +17,6 @@ page_api = PageApi()
 locale_api = Locale()
 
 
-
 @site.route('/')
 @site.route('/home')
 def v_index():
@@ -58,8 +57,7 @@ def v_faq():
 def v_doc():
     document_api = DocumentApi()
     lang = locale_api.current_locale
-    #TODO: by lang
-    documents = document_api.list()
+    documents = document_api.by_lang(lang)
     return render_template('site/documents.html', documents=documents, title=_('Documents'))
 
 

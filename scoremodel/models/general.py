@@ -35,13 +35,15 @@ class Answer(db.Model):
     answer = db.Column(db.Text, nullable=False, index=True)
     value = db.Column(db.Integer, nullable=True, default=1)
     order_in_question = db.Column(db.Integer, nullable=False, default=0)
+    lang_id = db.Column(db.Integer, db.ForeignKey('Lang.id'))
     question_answers = db.relationship('QuestionAnswer', backref='answer_template', lazy='dynamic')
 
     def __repr__(self):
         return u'<Answer {0}: {1}>'.format(self.id, self.answer)
 
-    def __init__(self, answer, value=1, order=0):
+    def __init__(self, answer, lang_id, value=1, order=0):
         self.answer = answer
+        self.lang_id = lang_id
         self.value = value
         self.order_in_question = order
 
@@ -65,13 +67,15 @@ class RiskFactor(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     risk_factor = db.Column(db.Text, index=True, unique=True)
     value = db.Column(db.Integer, nullable=False, default=1)
+    lang_id = db.Column(db.Integer, db.ForeignKey('Lang.id'))
     questions_single = db.relationship('Question', backref='risk_factor', lazy='dynamic')
 
     def __repr__(self):
         return '<RiskFactor {0}>'.format(self.id)
 
-    def __init__(self, risk_factor, value=None):
+    def __init__(self, risk_factor, lang_id, value=None):
         self.risk_factor = risk_factor
+        self.lang_id = lang_id
         if value:
             self.value = value
 
@@ -94,13 +98,15 @@ class Report(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.Text, index=True, nullable=False)
     sections = db.relationship('Section', backref='report', lazy='dynamic')
+    lang_id = db.Column(db.Integer, db.ForeignKey('Lang.id'))
     user_reports = db.relationship('UserReport', backref='template', lazy='dynamic')
 
     def __repr__(self):
         return '<Report {0}>'.format(self.id)
 
-    def __init__(self, title):
+    def __init__(self, title, lang_id):
         self.title = title
+        self.lang_id = lang_id
 
     def output_obj(self):
         return {

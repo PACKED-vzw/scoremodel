@@ -9,10 +9,12 @@ from scoremodel.modules.api.user import UserApi
 from scoremodel.modules.api.user_report import UserReportApi
 from scoremodel.modules.error import DatabaseItemDoesNotExist, DatabaseItemAlreadyExists, RequiredAttributeMissing
 from scoremodel.modules.forms.public.report import UserReportCreateForm
+from scoremodel.modules.locale import Locale
 
 public = Blueprint('public', __name__, url_prefix='/scoremodel')
 
 user_report_api = UserReportApi()
+locale_api = Locale()
 
 
 @public.route('', methods=['GET'])
@@ -40,7 +42,10 @@ def v_user_report_new(user_id):
         abort(403)
     form = UserReportCreateForm()
     report_api = ReportApi()
-    form.report.choices = [(r.id, r.title) for r in report_api.list()]
+    choices = [(r.id, r.title) for r in report_api.by_lang(locale_api.current_locale)]
+    if len(choices) == 0:
+        choices = [(r.id, r.title) for r in report_api.by_lang(locale_api.fallback_locale)]
+    form.report.choices = choices
     if request.method == 'POST' and form.validate_on_submit():
         user_report_data = {
             'user_id': current_user.id,

@@ -41,7 +41,8 @@ $(document).ready(function(){
 
 function save_report(report_id) {
     var report_data = {
-        title: $('#report_title').val()
+        title: $('#report_title').val(),
+        lang_id: $('#report_lang').val()
     };
     $.ajax({
         method: 'PUT', /* Reports are always PUT, the exist before we get to this part of the application */
