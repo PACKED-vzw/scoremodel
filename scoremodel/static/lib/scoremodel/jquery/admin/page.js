@@ -54,7 +54,6 @@ function draw(deferred) {
             .val(page.content)
             .change(function(){
                 $('#save_button')
-                    .find('button')
                     .click(function(){
                         var page_id = $('#page_id').val();
                         draw(save_page(page_id));
@@ -62,7 +61,6 @@ function draw(deferred) {
                 default_button('#save_button', 'Save');
             });
         $('#save_button')
-            .find('button')
             .click(function(){
                 var page_id = $('#page_id').val();
                 draw(save_page(page_id));
