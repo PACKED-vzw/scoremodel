@@ -1,6 +1,6 @@
-$(document).ready(function(){
+$(document).ready(function () {
     var page_id = $('#page_id').val();
-    draw(get_page(page_id));
+    draw(get_page(page_id), true);
 
     /* Bootstap Markdown */
     $('#content').markdown({
@@ -28,10 +28,10 @@ function save_page(page_id) {
         method: 'PUT',
         url: '/api/v2/page/' + page_id,
         data: JSON.stringify(page_data),
-        success: function(data, status) {
+        success: function (data, status) {
             success_button('#save_button', 'Saved');
         },
-        error: function(jqXHR, status, error) {
+        error: function (jqXHR, status, error) {
             error_button('#save_button', error);
         }
     });
@@ -42,9 +42,11 @@ function save_page(page_id) {
  * Takes a deferred ($.ajax()) as input.
  * Sets the .onclick event on the save button.
  * @param deferred
+ * @param is_first_time: if set to true, it generates the onclick event. Otherwise, it doesn't. This prevents repeated
+ * submits with 1 click.
  */
-function draw(deferred) {
-    $.when(deferred).then(function(page_api_resp) {
+function draw(deferred, is_first_time) {
+    $.when(deferred).then(function (page_api_resp) {
         var page = page_api_resp.data;
         $('#lang').attr('value', page.lang);
         $('#lang_id').attr('value', page.lang_id);
@@ -52,19 +54,29 @@ function draw(deferred) {
         $('#menu_link_id').attr('value', page.menu_link_id);
         $('#content')
             .val(page.content)
-            .change(function(){
-                $('#save_button')
-                    .click(function(){
-                        var page_id = $('#page_id').val();
-                        draw(save_page(page_id));
-                    });
+            .change(function () {
+                /*$('#save_button')
+                 .click(function(){
+                 var page_id = $('#page_id').val();
+                 /* Required */
+                /*
+                 if (required_set_side_effects(['#content', '#menu_link', '#lang'])) {
+                 console.log('ok');
+                 draw(save_page(page_id));
+                 }
+                 });*/
                 default_button('#save_button', 'Save');
             });
-        $('#save_button')
-            .click(function(){
-                var page_id = $('#page_id').val();
-                draw(save_page(page_id));
-            });
+        if (is_first_time) {
+            $('#save_button')
+                .click(function () {
+                    var page_id = $('#page_id').val();
+                    /* Required */
+                    if (required_set_side_effects(['#content', '#menu_link', '#lang'])) {
+                        draw(save_page(page_id));
+                    }
+                });
+        }
     });
 }
 
@@ -78,9 +90,11 @@ function get_page(page_id) {
     return $.ajax({
         method: 'GET',
         url: '/api/v2/page/' + page_id,
-        success: function(data, status) {},
-        error: function(jqXHR, status, error) {
+        success: function (data, status) {
+        },
+        error: function (jqXHR, status, error) {
             error_button('#save_button', error);
         }
     });
 }
+

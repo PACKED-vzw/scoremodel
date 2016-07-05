@@ -12,7 +12,7 @@
                             <div class="form-group">
                                 <label for="report.title" class="col-sm-1 control-label">{{ _('Title') }}</label>
                                 <div class="col-sm-11">
-                                    {{ form.title(class_='form-control', id='report.title') }}
+                                    {{ form.title(class_='form-control', id='report.title', required='required') }}
                                     {% if form.title.errors %}
                                         <div class="alert alert-danger">
                                             <ul>
