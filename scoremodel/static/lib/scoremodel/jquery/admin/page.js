@@ -54,17 +54,7 @@ function draw(deferred, is_first_time) {
         $('#menu_link_id').attr('value', page.menu_link_id);
         $('#content')
             .val(page.content)
-            .change(function () {
-                /*$('#save_button')
-                 .click(function(){
-                 var page_id = $('#page_id').val();
-                 /* Required */
-                /*
-                 if (required_set_side_effects(['#content', '#menu_link', '#lang'])) {
-                 console.log('ok');
-                 draw(save_page(page_id));
-                 }
-                 });*/
+            .focus(function () {
                 default_button('#save_button', 'Save');
             });
         if (is_first_time) {
