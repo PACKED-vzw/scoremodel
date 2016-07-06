@@ -47,10 +47,15 @@ function required_set(selector) {
 
 function set_required_error(selector) {
     var element = $(selector);
-    if (!$(selector).parent('div').hasClass('has-error')) {
+    var parent = element.parent('div');
+    /* Setting an error only works on div.form-group */
+    while (!parent.hasClass('form-group')) {
+        parent = parent.parent('div');
+    }
+    if (!parent.hasClass('has-error')) {
             /* Prevent the error from appearing multiple times after repeated submits */
-            $(selector).parent('div')
-                .attr('class', 'has-error')
+            parent
+                .addClass('has-error')
                 .append('<span class="help-block">This element is required.</span>');
     }
 }

@@ -70,6 +70,7 @@ class FileRestApi(ScoremodelRestApi):
                 self.status_code = 404
                 self.msg = public_error_msg['item_not_exists'].format(self.file_api, linked_db_model.filename)
         if existing_file:
+            existing_file['linked_id'] = self.api_obj_id
             return existing_file
         else:
             return u''
@@ -103,13 +104,13 @@ class FileRestApi(ScoremodelRestApi):
                 created_file = self.file_api.create(self.request.files[self.form_file_field])
 
             try:
-                print(created_file)
                 self.attach_to_linked_db_model(original_filename=input_file.filename,
                                                filename=created_file['filename'])
             except DatabaseItemDoesNotExist as e:
                 self.status_code = 404
                 self.msg = public_error_msg['item_not_exists'].format(self.api, self.api_obj_id)
         if created_file is not None:
+            created_file['linked_id'] = self.api_obj_id
             return created_file
         else:
             return u''
