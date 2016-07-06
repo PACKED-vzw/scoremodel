@@ -167,7 +167,7 @@ function draw(deferred, is_first_time) {
         /* Add change handlers */
         var fields = ['lang_id', 'name', 'description'];
         for (var i = 0; i < fields.length; i++) {
-            $('#' + fields[i]).change(function(){
+            $('#' + fields[i]).focus(function(){
                 default_button('#save_button', 'Save');
             });
         }
