@@ -1,6 +1,6 @@
 $(document).ready(function () {
     var page_id = $('#page_id').val();
-    draw(get_page(page_id), true);
+    draw_page(get_page_data(page_id), true);
 
     /* Bootstap Markdown */
     $('#content').markdown({
@@ -18,7 +18,7 @@ $(document).ready(function () {
  * @param page_id
  * @returns {*}
  */
-function save_page(page_id) {
+function save_page_data(page_id) {
     var page_data = {
         lang_id: parseInt($('#lang_id').val()),
         menu_link_id: parseInt($('#menu_link_id').val()),
@@ -45,27 +45,26 @@ function save_page(page_id) {
  * @param is_first_time: if set to true, it generates the onclick event. Otherwise, it doesn't. This prevents repeated
  * submits with 1 click.
  */
-function draw(deferred, is_first_time) {
+function draw_page(deferred, is_first_time) {
     $.when(deferred).then(function (page_api_resp) {
         var page = page_api_resp.data;
         $('#lang').attr('value', page.lang);
         $('#lang_id').attr('value', page.lang_id);
         $('#menu_link').attr('value', page.menu_link);
         $('#menu_link_id').attr('value', page.menu_link_id);
-        $('#content')
-            .val(page.content)
-            .focus(function () {
-                default_button('#save_button', 'Save');
-            });
+        $('#content').val(page.content);
         if (is_first_time) {
             $('#save_button')
                 .click(function () {
                     var page_id = $('#page_id').val();
                     /* Required */
                     if (required_set_side_effects(['#content', '#menu_link', '#lang'])) {
-                        draw(save_page(page_id));
+                        draw_page(save_page_data(page_id));
                     }
                 });
+            $('#content').focus(function () {
+                default_button('#save_button', 'Save');
+            })
         }
     });
 }
@@ -76,7 +75,7 @@ function draw(deferred, is_first_time) {
  * @param page_id
  * @returns {*}
  */
-function get_page(page_id) {
+function get_page_data(page_id) {
     return $.ajax({
         method: 'GET',
         url: '/api/v2/page/' + page_id,

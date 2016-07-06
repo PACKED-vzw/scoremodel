@@ -90,9 +90,9 @@ $(document).ready(function () {
     });
     if ($('#document_id').val() < 0) {
         /* A new document, no data from the API */
-        draw(null, true);
+        draw_document(null, true);
     } else {
-        draw(get_document_data(), true);
+        draw_document(get_document_data(), true);
     }
 });
 
@@ -152,7 +152,7 @@ function get_document_data() {
  * @param deferred
  * @param is_first_time
  */
-function draw(deferred, is_first_time) {
+function draw_document(deferred, is_first_time) {
     if (deferred) {
         $.when(deferred).then(function(document_api_response) {
             var document = document_api_response.data;
@@ -174,7 +174,7 @@ function draw(deferred, is_first_time) {
         /* Add click handler to save button */
         $('#save_button').click(function() {
             if (required_set_side_effects(['#lang_id', '#name'])) {
-                draw(save_document_data());
+                draw_document(save_document_data());
             }
         });
     }

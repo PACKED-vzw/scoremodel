@@ -16,12 +16,13 @@ $(document).ready(function () {
  * @returns {boolean}
  */
 function new_question(section_id) {
-    var last_id = $('#last_question_id').attr('value');
+    var last_id_el = $('#last_question_id');
+    var last_id = last_id_el.attr('value');
     var question = {
         id: last_id - 1,
         answers: []
     };
-    $('#last_question_id').attr('value', last_id - 1);
+    last_id_el.attr('value', last_id - 1);
     return add_question(question, section_id);
 }
 
@@ -56,14 +57,18 @@ function add_question(question, section_id) {
         .find('select option[value=' + question.risk_factor_id + ']').attr("selected", "selected");
 
     /* Add .click-callback to the save button */
-    $('#question_' + question.id + '_save_button').find('button')
+    $('#question_' + question.id + '_save_button')
         .click(function () {
+            console.log('clicked');
             save_question(question.id, section_id);
         });
-    $('#question_' + question.id + '_remove_button').find('button')
+    $('#question_' + question.id + '_remove_button')
         .click(function () {
             delete_question(question.id, section_id);
         });
+    for (i = 0; i < question_keys.length; i++) {
+        add_change_handler(question.id, section_id, '#question_' + question_keys[i] + '_' + question.id);
+    }
     return true;
 }
 
@@ -79,7 +84,15 @@ function save_question(question_id, section_id) {
     if (section_id < 0) {
         save_section(section_id);
     } else {
-        store_question(question_id, section_id);
+        $.when(store_question(question_id, section_id)).then(
+            function success(question_api_response) {
+                console.log(question_api_response.data);
+                success_button('#question_' + question_api_response.data.id + '_save_button', 'Saved');
+            },
+            function error(jqXHR, status, error) {
+                error_button('#question_' + question_id + '_save_button', error);
+            }
+        );
     }
 
 }
@@ -137,7 +150,8 @@ function store_question(question_id, section_id) {
  */
 function redraw_question(old_question_id, question_data, section_id) {
     /* Redraw the template */
-    var aria_state = $('#question_' + old_question_id).find('.panel-heading').attr('aria-expanded');
+    var old_question = $('#question_' + old_question_id);
+    var aria_state = old_question.find('.panel-heading').attr('aria-expanded');
     var new_question_id = question_data.id;
     var question_template = $.templates('#question-template');
     var new_question_data = {
@@ -146,7 +160,7 @@ function redraw_question(old_question_id, question_data, section_id) {
     for (var i = 0; i < question_keys.length; i++) {
         new_question_data['question_' + question_keys[i]] = question_data[question_keys[i]];
     }
-    $('#question_' + old_question_id).replaceWith(question_template.render(new_question_data));
+    old_question.replaceWith(question_template.render(new_question_data));
     /* Saved button */
     success_button('#question_' + new_question_id + '_save_button', 'Saved');
     /* Set selected answer(s) */
@@ -169,9 +183,9 @@ function redraw_question(old_question_id, question_data, section_id) {
     }
     /* Delete button */
     $('#question_' + new_question_id + '_remove_button')
-        .find('button').click(function () {
-        delete_question(new_question_id, section_id);
-    });
+        .click(function () {
+            delete_question(new_question_id, section_id);
+        });
 }
 
 /**
@@ -215,16 +229,16 @@ function get_parent_section_id(question_id) {
  * @param field_selector
  */
 function add_change_handler(question_id, section_id, field_selector) {
-    $(field_selector).change(function () {
+    $(field_selector).focus(function () {
         $('#question_' + question_id + '_save_button')
-            .find('button').click(function () {
-            save_question(question_id, section_id);
-        });
+            .click(function () {
+                save_question(question_id, section_id);
+            });
         default_button('#question_' + question_id + '_save_button', 'Save');
         $('#question_' + question_id + '_remove_button')
-            .find('button').click(function () {
-            delete_question(question_id, section_id);
-        });
+            .click(function () {
+                delete_question(question_id, section_id);
+            });
         default_button('#question_' + question_id + '_remove_button', 'Remove');
     });
 }
