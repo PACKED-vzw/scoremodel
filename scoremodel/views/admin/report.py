@@ -31,6 +31,7 @@ def v_report_edit(report_id):
     a_report = ReportApi()
     a_answer = AnswerApi()
     a_risk_factor = RiskFactorApi()
+    a_lang = LangApi()
     try:
         existing_report = a_report.read(report_id)
     except DatabaseItemDoesNotExist:
@@ -38,9 +39,10 @@ def v_report_edit(report_id):
         return redirect(url_for('admin.v_report_list'))
     # Do not use fallback_locale for the answers and risk_factor choices: if they don't exist, the administrator
     # must create them.
+    report_lang = a_lang.read(existing_report.lang_id)
     return render_template('admin/report/edit.html', report=existing_report,
-                           all_risk_factors=a_risk_factor.by_lang(locale_api.current_locale),
-                           all_answers=a_answer.by_lang(locale_api.current_locale), languages=lang_api.list())
+                           all_risk_factors=a_risk_factor.by_lang(report_lang.lang),
+                           all_answers=a_answer.by_lang(report_lang.lang), languages=lang_api.list())
 
 
 @admin.route('/reports/id/<int:report_id>/delete', methods=['GET', 'POST'])
