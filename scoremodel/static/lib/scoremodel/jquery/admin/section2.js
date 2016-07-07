@@ -3,6 +3,13 @@
  */
 
 function delete_section_button(section_id) {
+    if (section_id < 0) {
+        delete_section_data(section_id);
+    } else {
+        $.when(delete_section_data(section_id)).then(function() {
+            $('#section_panel_' + section_id).remove();
+        });
+    }
 }
 
 function add_section_button() {
@@ -15,8 +22,8 @@ function add_section_button() {
         context: null
     };
     $('#sections').append(draw_section_template(section_data));
-    add_focus_handlers(last_section_id);
-    add_click_handlers(last_section_id);
+    add_section_focus_handlers(last_section_id);
+    add_section_click_handlers(last_section_id);
 }
 
 function save_section_button(section_id) {
@@ -75,7 +82,6 @@ function get_section_data(section_id) {
 
 function draw_section(deferred, is_first_time, old_section_id) {
     /* Render the template */
-    var section_id = $('#last_section_id').val();
     if (deferred) {
         $.when(deferred).then(function success(section_api_data, status, jqXHR) {
             var section = section_api_data.data;
@@ -93,9 +99,9 @@ function draw_section(deferred, is_first_time, old_section_id) {
             /* Add the focus and click handlers */
             if (is_first_time) {
                 /* Focus */
-                add_focus_handlers(section.id);
+                add_section_focus_handlers(section.id);
                 /* Click */
-                add_click_handlers(section.id);
+                add_section_click_handlers(section.id);
             }
         }, function error(jqXHR, status, error) {
             /* We can't set the error_button here, as we don't know the section_id */
@@ -103,24 +109,54 @@ function draw_section(deferred, is_first_time, old_section_id) {
     }
 }
 
+/**
+ * Delete a section.
+ * If the section has questions, delete those as well.
+ * @param section_id
+ */
 function delete_section_data(section_id) {
-}
-
-function add_focus_handlers(section_id) {
-    var fields = ['section_title_' + section_id, 'section_context_' + section_id];
-    for (var i = 0; i < fields.length; i++) {
-        $('#' + fields[i]).focus(function () {
-            default_button('#section_' + section_id + '_save_button', 'Save');
+    $('#questions_section_' + section_id).find('.question').each(function(){
+        var contains_id = $(this).attr('id'); /* The value of the id attribute of div.question is like question_id */
+        var id_parts = contains_id.split('_');
+        delete_question_data(id_parts[id_parts.length - 1]);
+    });
+    /* If section_id < 0, simple remove it from the DOM (it was not saved) */
+    if (section_id < 0) {
+        $('#section_panel_' + section_id).remove();
+    } else {
+        return $.ajax({
+            method: 'DELETE',
+            url: '/api/v2/section/' + section_id,
+            success: function() {},
+            error: function (jqXHR, status, error) {
+                error_button('#section_' + section_id + '_remove_button', error);
+            }
         });
     }
 }
 
-function add_click_handlers(section_id) {
+function add_section_focus_handlers(section_id) {
+    var fields = ['section_title_' + section_id, 'section_context_' + section_id];
+    for (var i = 0; i < fields.length; i++) {
+        $('#' + fields[i]).focus(function () {
+            default_button('#section_' + section_id + '_save_button', 'Save');
+            default_button('#section_' + section_id + '_remove_button', 'Remove');
+        });
+    }
+}
+
+function add_section_click_handlers(section_id) {
     $('#section_' + section_id + '_save_button').click(function () {
-        save_section_button(section_id);
+        if (required_set_side_effects(['#section_title_' + section_id])) {
+            save_section_button(section_id);
+        }
     });
     $('#section_' + section_id + '_remove_button').click(function () {
         delete_section_button(section_id);
+    });
+    $('#add_question_button_section_' + section_id).click(function() {
+        /* From question.js */
+        add_question_button(section_id);
     });
 }
 
@@ -167,9 +203,9 @@ function replace_existing_section(old_section_id, section_data) {
         set_collapsed_state('#section_panel_' + new_section_id);
     }
     /* Focus */
-    add_focus_handlers(new_section_id);
+    add_section_focus_handlers(new_section_id);
     /* Click */
-    add_click_handlers(new_section_id);
+    add_section_click_handlers(new_section_id);
     /* Success button */
     success_button('#section_' + new_section_id + '_save_button', 'Saved');
 }
