@@ -52,6 +52,7 @@ class Answer(db.Model):
             'id': self.id,
             'answer': self.answer,
             'value': self.value,
+            'lang_id': self.lang_id,
             'order_in_question': self.order_in_question
         }
 
@@ -83,6 +84,7 @@ class RiskFactor(db.Model):
         return {
             'id': self.id,
             'risk_factor': self.risk_factor,
+            'lang_id': self.lang_id,
             'value': self.value
         }
 
@@ -112,6 +114,7 @@ class Report(db.Model):
         return {
             'id': self.id,
             'title': self.title,
+            'lang_id': self.lang_id,
             'sections': [s.output_obj() for s in self.ordered_sections]
         }
 
