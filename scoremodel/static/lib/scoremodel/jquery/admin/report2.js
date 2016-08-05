@@ -32,7 +32,6 @@ function save_report_data() {
         url: url,
         data: JSON.stringify(report_data),
         success: function () {
-            success_button('#report_save_button', 'Saved');
         },
         error: function (jqXHR, status, error) {
             error_button($('#report_save_button', error));
@@ -47,14 +46,20 @@ function save_report_chain() {
     $.when(save_report_data()).then(function () {
         $('#sections').children().each(function () {
             var section_id = $(this).attr('id').substr(14);
-            $.when(save_section_data(section_id)).then(function () {
-                $('#questions_section_' + section_id).children().each(function () {
-                    var question_id = $(this).attr('id').substr(9);
-                    $.when(save_question_data(question_id)).then(function () {
-                        //draw_report(get_report_data(), false);
+            if (required_set_side_effects(['#section_title_' + section_id])) {
+                $.when(save_section_data(section_id)).then(function () {
+                    $('#questions_section_' + section_id).children().each(function () {
+                        var question_id = $(this).attr('id').substr(9);
+                        if (required_set_side_effects(['#question_weight_' + question_id, '#question_question_' + question_id,
+                                '#question_answer_' + question_id, '#question_risk_factor_' + question_id])) {
+                            $.when(save_question_data(question_id)).then(function () {
+                                /* Don't redraw the report, it is not necessary and produces unclear output */
+                                //draw_report(get_report_data(), false);
+                            });
+                        }
                     });
                 });
-            })
+            }
         });
     });
 }
