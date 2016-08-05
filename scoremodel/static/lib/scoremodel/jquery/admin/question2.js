@@ -17,15 +17,88 @@ function add_question_button(section_id) {
 }
 
 function delete_question_button(question_id) {
+    if (question_id < 0) {
+        delete_question_data(question_id);
+    } else {
+        $.when(delete_question_data(question_id)).then(function() {
+            $('#question_' + question_id).remove();
+        });
+    }
 }
 
 function save_question_button(question_id) {
+    var section_id = $('#question_section_id_' + question_id).val();
+    var report_id = $('#report_id').val();
+    var deferreds = [];
+    if (section_id < 0) {
+        /* Every question must be a part of a section. If section_id < 0, this section does not
+           yet exist in the database. So, save it first. */
+        if (report_id < 0) {
+            deferreds.append(save_report_data());
+        }
+        deferreds.append(save_section_data(section_id));
+    }
+    deferreds.append(save_question_data(question_id));
+    if (deferreds.length == 3) {
+        /* A report was saved, just redraw it and be done with it */
+        $.when(deferreds).then(function(report, section, question) {
+            draw_report()
+        })
+    }
+    $.when(deferreds).then(function(report, section, question){});
 }
 
 function save_question_data(question_id) {
+    var question_data = {
+        section_id: $('#question_section_id_' + question_id).val(),
+        question: $('#question_question_' + question_id).val(),
+        weight: $('#question_weight_' + question_id).val(),
+        example: $('#question_example_' + question_id).val(),
+        context: $('#question_context_' + question_id).val(),
+        risk: $('#question_risk_' + question_id).val(),
+        action: $('#question_action_' + question_id).val(),
+        risk_factor_id: $('#question_risk_factor_' + question_id).val(),
+        answers: []
+    };
+    var answers = $('#question_answer_' + question_id).val();
+    if (answers !== null) {
+        /* The API expects this to be an array */
+        question_data.answers = answers;
+    }
+
+    var url;
+    var method;
+    if (question_id < 0) {
+        url = '/api/v2/question';
+        method = 'POST';
+    } else {
+        url = '/api/v2/question/' + question_id;
+        method = 'PUT';
+    }
+    return $.ajax({
+        url: url,
+        method: method,
+        data: JSON.stringify(question_data),
+        success: function (data, status) {},
+        error: function (jqXHR, status, error) {
+            error_button('#question_' + question_id + '_save_button', error);
+        }
+    });
 }
 
 function delete_question_data(question_id) {
+    if (question_id < 0) {
+        $('#question_' + question_id).remove();
+    } else {
+        return $.ajax({
+            method: 'DELETE',
+            url: '/api/v2/question/' + question_id,
+            success: function(data, status) {},
+            error: function(jqXHR, status, error) {
+                error_button('#question_' + question_id + '_save_button', error);
+            }
+        });
+    }
 }
 
 function get_question_data(question_id) {
