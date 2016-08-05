@@ -6,7 +6,7 @@ function delete_section_button(section_id) {
     if (section_id < 0) {
         delete_section_data(section_id);
     } else {
-        $.when(delete_section_data(section_id)).then(function() {
+        $.when(delete_section_data(section_id)).then(function () {
             $('#section_panel_' + section_id).remove();
         });
     }
@@ -23,22 +23,8 @@ function add_section_button() {
     };
     $('#sections').append(draw_section_template(section_data));
     add_section_focus_handlers(last_section_id);
-    add_section_click_handlers(last_section_id);
 }
 
-function save_section_button(section_id) {
-    var report_id = $('#report_id').val();
-    if (report_id < 0) {
-        /* We must first save the report */
-        $.when(save_report_data()).then(function success(report_data, status, jqXHR) {
-            /* data.data = report */
-            draw_report(jqXHR, false, true);
-            draw_section(save_section_data(section_id), false, section_id);
-        });
-    } else {
-        draw_section(save_section_data(section_id), false, section_id);
-    }
-}
 
 function save_section_data(section_id) {
     var section_data = {
@@ -63,7 +49,7 @@ function save_section_data(section_id) {
 
         },
         error: function (jqXHR, status, error) {
-            error_button('#section_' + section_id + '_save_button', error);
+            error_button('#report_save_button', error);
         }
     });
 }
@@ -75,7 +61,7 @@ function get_section_data(section_id) {
         success: function (data, status) {
         },
         error: function (jqXHR, status, error) {
-            error_button('#section_' + section_id + '_save_button', error);
+            error_button('#report_save_button', error);
         }
     });
 }
@@ -100,8 +86,11 @@ function draw_section(deferred, is_first_time, old_section_id) {
             if (is_first_time) {
                 /* Focus */
                 add_section_focus_handlers(section.id);
-                /* Click */
-                add_section_click_handlers(section.id);
+                /* Add question */
+                $('#add_question_button_section_' + section.id).click(function () {
+                    /* From question.js */
+                    add_question_button(section.id);
+                });
             }
         }, function error(jqXHR, status, error) {
             /* We can't set the error_button here, as we don't know the section_id */
@@ -115,8 +104,9 @@ function draw_section(deferred, is_first_time, old_section_id) {
  * @param section_id
  */
 function delete_section_data(section_id) {
-    $('#questions_section_' + section_id).find('.question').each(function(){
-        var contains_id = $(this).attr('id'); /* The value of the id attribute of div.question is like question_id */
+    $('#questions_section_' + section_id).find('.question').each(function () {
+        var contains_id = $(this).attr('id');
+        /* The value of the id attribute of div.question is like question_id */
         var id_parts = contains_id.split('_');
         delete_question_data(id_parts[id_parts.length - 1]);
     });
@@ -127,7 +117,8 @@ function delete_section_data(section_id) {
         return $.ajax({
             method: 'DELETE',
             url: '/api/v2/section/' + section_id,
-            success: function() {},
+            success: function () {
+            },
             error: function (jqXHR, status, error) {
                 error_button('#section_' + section_id + '_remove_button', error);
             }
@@ -139,25 +130,9 @@ function add_section_focus_handlers(section_id) {
     var fields = ['section_title_' + section_id, 'section_context_' + section_id];
     for (var i = 0; i < fields.length; i++) {
         $('#' + fields[i]).focus(function () {
-            default_button('#section_' + section_id + '_save_button', 'Save');
-            default_button('#section_' + section_id + '_remove_button', 'Remove');
+            default_button('#report_save_button', 'Save');
         });
     }
-}
-
-function add_section_click_handlers(section_id) {
-    $('#section_' + section_id + '_save_button').click(function () {
-        if (required_set_side_effects(['#section_title_' + section_id])) {
-            save_section_button(section_id);
-        }
-    });
-    $('#section_' + section_id + '_remove_button').click(function () {
-        delete_section_button(section_id);
-    });
-    $('#add_question_button_section_' + section_id).click(function() {
-        /* From question.js */
-        add_question_button(section_id);
-    });
 }
 
 /**
@@ -205,7 +180,6 @@ function replace_existing_section(old_section_id, section_data) {
     /* Focus */
     add_section_focus_handlers(new_section_id);
     /* Click */
-    add_section_click_handlers(new_section_id);
     /* Success button */
     success_button('#section_' + new_section_id + '_save_button', 'Saved');
 }

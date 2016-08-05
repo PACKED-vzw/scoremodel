@@ -27,24 +27,19 @@
                                         </div>
                                     </div>
                                     <div class="form-group">
-                                        <label for="report_lang" class="col-sm-1 control-label">{{ _('Language') }}</label>
+                                        <label for="report_lang"
+                                               class="col-sm-1 control-label">{{ _('Language') }}</label>
                                         <div class="col-sm-11">
                                             <select id="report_lang" class="form-control" disabled="disabled">
                                                 {% for lang in languages %}
                                                     {% if lang.id == report.lang_id %}
-                                                        <option value="{{ lang.id }}" selected="selected">{{ lang.lang }}</option>
+                                                        <option value="{{ lang.id }}"
+                                                                selected="selected">{{ lang.lang }}</option>
                                                     {% else %}
                                                         <option value="{{ lang.id }}">{{ lang.lang }}</option>
                                                     {% endif %}
                                                 {% endfor %}
                                             </select>
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <div class="col-sm-3 col-sm-offset-1">
-                                            <button type="button" class="btn btn-default" id="report_save_button">
-                                                {{ _('Save') }}
-                                            </button>
                                         </div>
                                     </div>
                                 </form>
@@ -53,14 +48,15 @@
                         <div class="row">
                             <div class="col-xs-12" id="sections">
                                 <!-- Sections -->
-
-                                <div>
-                                </div>
-
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-xs-12">
+                            <div class="col-sm-3 col-sm-offset-1">
+                                <button type="button" class="btn btn-default" id="report_save_button">
+                                    {{ _('Save') }}
+                                </button>
+                            </div>
+                            <div class="col-sm-3">
                                 <!-- Add new section -->
                                 <button type="button" class="btn btn-info"
                                         id="add_section_button">{{ _('Add section') }}
@@ -94,10 +90,6 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <div class="col-sm-3 col-sm-offset-1">
-                            <button type="button" class="btn btn-default" id="section_{% raw %}{{:section_id}}{% endraw %}_save_button">{{ _('Save') }}
-                            </button>
-                            </div>
                         <div  class="col-sm-3 col-sm-offset-1">
                             <button type="button" class="btn btn-default" id="section_{% raw %}{{:section_id}}{% endraw %}_remove_button">
                                 {{ _('Remove') }}
@@ -113,6 +105,7 @@
                 </button>
             </div>
         </div>
+
 
         </script>
         <script id="question-template" type="text/x-jsrender">
@@ -195,10 +188,6 @@
                 </div>
             </div>
                 <div class="form-group">
-                        <div class="col-sm-3 col-sm-offset-1">
-                            <button type="button" class="btn btn-default" id="question_{% raw %}{{:question_id}}{% endraw %}_save_button">{{ _('Save') }}
-                            </button>
-                            </div>
                         <div  class="col-sm-3 col-sm-offset-1">
                             <button type="button" class="btn btn-default" id="question_{% raw %}{{:question_id}}{% endraw %}_remove_button">
                                 {{ _('Remove') }}
@@ -208,6 +197,7 @@
         </form>
     </div>
 </div>
+
 
         </script>
     </div>

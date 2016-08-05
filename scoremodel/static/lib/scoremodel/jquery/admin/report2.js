@@ -2,6 +2,7 @@
  * Created by pieter on 6/07/16.
  */
 $(document).ready(function () {
+
     draw_report(get_report_data(), true);
 
     $('#add_section_button').click(function () {
@@ -39,6 +40,25 @@ function save_report_data() {
     });
 }
 
+function save_report_chain() {
+    /* TODO: check for required stuff */
+    //required_set_side_effects(['#section_title_' + section_id])
+    /* TODO: onchange */
+    $.when(save_report_data()).then(function () {
+        $('#sections').children().each(function () {
+            var section_id = $(this).attr('id').substr(14);
+            $.when(save_section_data(section_id)).then(function () {
+                $('#questions_section_' + section_id).children().each(function () {
+                    var question_id = $(this).attr('id').substr(9);
+                    $.when(save_question_data(question_id)).then(function () {
+                        //draw_report(get_report_data(), false);
+                    });
+                });
+            })
+        });
+    });
+}
+
 function get_report_data() {
     var report_id = $('#report_id').val();
     return $.ajax({
@@ -59,14 +79,14 @@ function draw_report(deferred, is_first_time, is_reload) {
                 $('#report_title').val(report.title);
                 $('#report_lang').val(report.lang_id);
                 /* Add sections */
-                /* Do not re-add the sections if this is a reload (saving an existing report) */
-                /* Otherwise, we will have duplicates! */
-                if (!is_reload) {
-                    for (var i = 0; i < report.sections.length; i++) {
-                        /* From section.js */
-                        draw_section(get_section_data(report.sections[i].id), true);
-                    }
+                /* Remove the old sections first */
+                $('#sections').children().remove();
+                for (var i = 0; i < report.sections.length; i++) {
+                    /* From section.js */
+                    /* As we removed the old sections, it is always "the first time" */
+                    draw_section(get_section_data(report.sections[i].id), true);
                 }
+
             },
             function error(jqXHR, status, error) {
                 error_button('#report_save_button', error);
@@ -83,7 +103,7 @@ function draw_report(deferred, is_first_time, is_reload) {
         /* Add click handler */
         $('#report_save_button').click(function () {
             if (required_set_side_effects(['#report_title', '#report_lang'])) {
-                draw_report(save_report_data(), false, true);
+                save_report_chain();
             }
         });
     }
