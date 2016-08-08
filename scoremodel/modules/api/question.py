@@ -137,3 +137,13 @@ class QuestionApi(GenericApi):
         db.session.commit()
         return question_entity
 
+    def query(self, question_question):
+        """
+        Select a question by its name ("question"): this attribute is unique
+        :param question_question:
+        :return:
+        """
+        existing_question = Question.query.filter(Question.question == question_question).first()
+        if not existing_question:
+            raise DatabaseItemDoesNotExist(_e['item_not_exists'].format(Question, question_question))
+        return existing_question

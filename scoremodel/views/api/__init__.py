@@ -15,6 +15,7 @@ from scoremodel.modules.api.question import QuestionApi
 from scoremodel.modules.api.question_answer import QuestionAnswerApi
 from scoremodel.modules.api.user_report import UserReportApi
 from scoremodel.modules.api.report import ReportApi
+from scoremodel.modules.api.report.create import ReportCreateApi
 from scoremodel.modules.api.risk_factor import RiskFactorApi
 from scoremodel.modules.api.section import SectionApi
 from scoremodel.modules.api.page import PageApi
@@ -34,6 +35,15 @@ api = Blueprint('api', __name__, url_prefix='/api/v2')
 @must_be_admin
 def v_api_report(report_id=None):
     a_api = ScoremodelRestApi(api_class=ReportApi, o_request=request, api_obj_id=report_id)
+    return a_api.response
+
+
+@api.route('/dev/report', methods=['POST'])
+@api.route('/dev/report/<int:report_id>', methods=['PUT', 'DELETE', 'GET'])
+#@login_required
+#@must_be_admin
+def v_api_report_dev(report_id=None):
+    a_api = ScoremodelRestApi(api_class=ReportCreateApi, o_request=request, api_obj_id=report_id)
     return a_api.response
 
 

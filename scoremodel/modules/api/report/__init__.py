@@ -14,12 +14,13 @@ class ReportApi(GenericApi):
     def __init__(self, report_id=None):
         self.report_id = report_id
         self.lang_api = LangApi()
+        self.created = []
 
     def create(self, input_data):
         """
         Create a new report. See QuestionApi.create()
-        :param input_data: 
-        :return: 
+        :param input_data:
+        :return:
         """
         cleaned_data = self.parse_input_data(input_data)
         existing_report = Report.query.filter(Report.title == cleaned_data['title']).first()
@@ -33,8 +34,8 @@ class ReportApi(GenericApi):
     def read(self, report_id):
         """
         Get a report by its id. See QuestionApi.read()
-        :param report_id: 
-        :return: 
+        :param report_id:
+        :return:
         """
         existing_report = Report.query.filter(Report.id == report_id).first()
         if existing_report is None:
