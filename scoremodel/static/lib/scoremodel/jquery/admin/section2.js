@@ -23,15 +23,21 @@ function add_section_button() {
     };
     $('#sections').append(draw_section_template(section_data));
     add_section_focus_handlers(last_section_id);
+    add_question_click_handlers(last_section_id);
+}
+
+
+function section_data_from_form(section_id) {
+    return {
+        title: $('#section_title_' + section_id).val(),
+        context: $('#section_context_' + section_id).val(),
+        report_id: $('#report_id').val()
+    }
 }
 
 
 function save_section_data(section_id) {
-    var section_data = {
-        title: $('#section_title_' + section_id).val(),
-        context: $('#section_context_' + section_id).val(),
-        report_id: $('#report_id').val()
-    };
+    var section_data = section_data_from_form(section_id);
     var url;
     var method;
     if (section_id < 0) {
@@ -86,11 +92,7 @@ function draw_section(deferred, is_first_time, old_section_id) {
             if (is_first_time) {
                 /* Focus */
                 add_section_focus_handlers(section.id);
-                /* Add question */
-                $('#add_question_button_section_' + section.id).click(function () {
-                    /* From question.js */
-                    add_question_button(section.id);
-                });
+                add_section_click_handlers(section.id);
             }
         }, function error(jqXHR, status, error) {
             /* We can't set the error_button here, as we don't know the section_id */
@@ -133,6 +135,16 @@ function add_section_focus_handlers(section_id) {
             default_button('#report_save_button', 'Save');
         });
     }
+}
+
+function add_section_click_handlers(section_id) {
+    $('#section_' + section_id + '_remove_button').click(function () {
+        delete_section_button(section_id);
+    });
+    $('#add_question_button_section_' + section_id).click(function() {
+        /* From question.js */
+        add_question_button(section_id);
+    });
 }
 
 /**
@@ -180,6 +192,7 @@ function replace_existing_section(old_section_id, section_data) {
     /* Focus */
     add_section_focus_handlers(new_section_id);
     /* Click */
+    add_section_click_handlers(new_section_id);
     /* Success button */
     success_button('#section_' + new_section_id + '_save_button', 'Saved');
 }

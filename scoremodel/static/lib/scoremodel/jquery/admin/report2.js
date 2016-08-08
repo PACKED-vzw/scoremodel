@@ -12,12 +12,16 @@ $(document).ready(function () {
 
 });
 
-function save_report_data() {
-    var report_id = $('#report_id').val();
-    var report_data = {
+function report_data_from_form() {
+    return {
         title: $('#report_title').val(),
         lang_id: $('#report_lang').val()
     };
+}
+
+function save_report_data() {
+    var report_id = $('#report_id').val();
+    var report_data = report_data_from_form();
     var url;
     var method;
     if (report_id < 0) {
@@ -43,24 +47,44 @@ function save_report_chain() {
     /* TODO: check for required stuff */
     //required_set_side_effects(['#section_title_' + section_id])
     /* TODO: onchange */
-    $.when(save_report_data()).then(function () {
-        $('#sections').children().each(function () {
-            var section_id = $(this).attr('id').substr(14);
-            if (required_set_side_effects(['#section_title_' + section_id])) {
-                $.when(save_section_data(section_id)).then(function () {
-                    $('#questions_section_' + section_id).children().each(function () {
-                        var question_id = $(this).attr('id').substr(9);
-                        if (required_set_side_effects(['#question_weight_' + question_id, '#question_question_' + question_id,
-                                '#question_answer_' + question_id, '#question_risk_factor_' + question_id])) {
-                            $.when(save_question_data(question_id)).then(function () {
-                                /* Don't redraw the report, it is not necessary and produces unclear output */
-                                //draw_report(get_report_data(), false);
-                            });
-                        }
-                    });
-                });
-            }
+    var report = report_data_from_form();
+    var report_id = $('#report_id').val();
+
+    report.sections = [];
+    $('#sections').children().each(function() {
+        var section_id = $(this).attr('id').substr(14);
+        var section = section_data_from_form(section_id);
+        section.id = parseInt(section_id);
+        section.questions = [];
+        // Check for required fields
+        $('#questions_section_' + section_id).children().each(function() {
+            var question_id = $(this).attr('id').substr(9);
+            var question = question_data_from_form(question_id);
+            question.id = parseInt(question_id);
+            section.questions.push(question);
         });
+        report.sections.push(section);
+    });
+
+    var url;
+    var method;
+    if (report_id < 0) {
+        url = '/api/v2/dev/report';
+        method = 'POST';
+    } else {
+        url = '/api/v2/dev/report/' + report_id;
+        method = 'PUT';
+    }
+
+    return $.ajax({
+        method: method,
+        url: url,
+        data: JSON.stringify(report),
+        success: function () {
+        },
+        error: function (jqXHR, status, error) {
+            error_button($('#report_save_button', error));
+        }
     });
 }
 

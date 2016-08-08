@@ -12,8 +12,8 @@ function add_question_button(section_id) {
         answers: []
     };
     $('#questions_section_' + section_id).append(draw_question_template(question_data));
-    console.log(last_question_id);
     add_question_focus_handlers(last_question_id);
+    add_question_click_handlers(last_question_id);
 }
 
 function delete_question_button(question_id) {
@@ -26,8 +26,7 @@ function delete_question_button(question_id) {
     }
 }
 
-
-function save_question_data(question_id) {
+function question_data_from_form(question_id) {
     var question_data = {
         section_id: $('#question_section_id_' + question_id).val(),
         question: $('#question_question_' + question_id).val(),
@@ -44,6 +43,12 @@ function save_question_data(question_id) {
         /* The API expects this to be an array */
         question_data.answers = answers;
     }
+    return question_data;
+}
+
+function save_question_data(question_id) {
+    var question_data = question_data_from_form(question_id);
+
 
     var url;
     var method;
@@ -112,6 +117,7 @@ function draw_question(deferred, is_first_time, old_question_id) {
             }
             if (is_first_time) {
                 add_question_focus_handlers(question.id);
+                add_question_click_handlers(question.id);
             }
         });
     }
@@ -155,6 +161,7 @@ function replace_existing_question(old_question_id, question_data) {
         .find('select option[value=' + question_data.risk_factor_id + ']').attr("selected", "selected");
 
     add_question_focus_handlers(new_question_id);
+    add_question_click_handlers(new_question_id);
 
 }
 
@@ -168,4 +175,10 @@ function add_question_focus_handlers(question_id) {
             default_button('#report_save_button', 'Save');
         });
     }
+}
+
+function add_question_click_handlers(question_id) {
+    $('#question_' + question_id + '_remove_button').click(function () {
+        delete_question_button(question_id);
+    });
 }
