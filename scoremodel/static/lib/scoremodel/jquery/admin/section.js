@@ -1,212 +1,125 @@
-// TODO: change handler on all input fields
-
-$(document).ready(function () {
-
-});
-
-var section_data_fields = ['title', 'context'];
-
 /**
- * Create a new section that has not yet been submitted to the database. We submit sections to the DB when
- *  - a user clicks "Save"
- *  - a user adds a question
- *  - a user saves a question in a new section
- * New, uncommitted sections always have an id < 0.
+ * Created by pieter on 7/07/16.
  */
-function new_section() {
-    /* We must have an unique id, which should be a < 0, because the application has no
-     ids < 0. To make sure we don't use two times the same id, we get and set it form
-     input.id = last_section_id. We get the value and substract 1.
-     When a section is committed to the database, its id changes to the one it
-     received in the DB */
-    var last_id = $('#last_section_id').attr('value');
-    /* .title and .context must be present, but must have a null value so this script defaults
-     to the strings provided by flask/jinja, which are translated */
-    var section = {
-        id: last_id - 1,
-        title: null,
-        context: null,
-        questions: []
-    };
-    $('#last_section_id').attr('value', last_id - 1);
-    return add_section(section);
-}
 
-/**
- * From a section object, add a new section to the DOM.
- *  - Get the template (using jsrender) called '#section-template' (part of the DOM already, but hidden)
- *  - Fill in section_id, section_title and section_context
- *  - Render it
- *  - Append it to #sections
- * @param section
- */
-function add_section(section) {
-    var section_template = $.templates('#section-template');
-    var template_vars = {
-        section_id: section.id,
-        section_title: section.title,
-        section_context: section.context
-    };
-    $('#sections').append(section_template.render(template_vars));
-    /* Add questions */
-    for (var i = 0; i < section.questions.length; i++) {
-        var question = section.questions[i];
-        add_question(question, section.id);
-    }
-    /* Add .click-callback to the save button */
-    $('#section_' + section.id + '_save_button').find('button')
-        .click(function () {
-            save_section(section.id);
-        });
-    $('#section_' + section.id + '_remove_button').find('button')
-        .click(function () {
-            delete_section(section.id);
-        });
-    /*
-     Add new question button
-     */
-    $('#add_question_button_section_' + section.id).click(function () {
-        new_question(section.id);
-    });
-    return true;
-}
-
-/**
- * Save the current section.
- *  - Store the current section (store_section)
- *  - Store all dependent questions (store_question)
- *  - Redraw the dependent questions (redraw_question)
- *  - Redraw the current section (redraw_section)
- *
- *  We must store all dependent questions, because otherwise
- *  the values the user has entered will be lost upon redrawing.
- * @param section_id
- */
-function save_section(section_id) {
-    $.when(store_section(section_id)).then(function (section_api_resp) {
-        var section_data = section_api_resp.data;
-        var new_section_id = section_data.id;
-        $('#questions_section_' + section_id).find('.question').each(function(){
-            var id_parts = $(this).attr('id').split('_');
-            var question_id = id_parts[id_parts.length - 1];
-            $.when(store_question(question_id, new_section_id)).then(function (question_api_resp) {
-                var question_data = question_api_resp.data;
-                redraw_question(question_id, question_data, section_id);
-            });
-        });
-        redraw_section(section_id, section_data);
-    });
-}
-
-/**
- * Store a section.
- * Returns $.ajax().
- * @param section_id
- * @returns {*}
- */
-function store_section(section_id) {
-    var report_id = $('#report_id').attr('value');
-    var data = {
-        report_id: report_id
-    };
-    for (var i = 0; i < section_data_fields.length; i++) {
-        data[section_data_fields[i]] = $('#section_' + section_data_fields[i] + '_' + section_id).val();
-    }
-    /* If section_id < 0, we have to create a new section */
-    var method = 'PUT';
-    var url = '/api/v2/section/' + section_id;
+function delete_section_button(section_id) {
     if (section_id < 0) {
-        method = 'POST';
+        delete_section_data(section_id);
+    } else {
+        $.when(delete_section_data(section_id)).then(function () {
+            $('#section_panel_' + section_id).remove();
+        });
+    }
+}
+
+function add_section_button() {
+    var last_section_id_el = $('#last_section_id');
+    var last_section_id = parseInt(last_section_id_el.val()) - 1;
+    last_section_id_el.val(last_section_id);
+    var section_data = {
+        id: last_section_id,
+        title: null,
+        context: null
+    };
+    $('#sections').append(draw_section_template(section_data));
+    add_section_focus_handlers(last_section_id);
+    add_question_click_handlers(last_section_id);
+}
+
+
+function section_data_from_form(section_id) {
+    return {
+        title: $('#section_title_' + section_id).val(),
+        context: $('#section_context_' + section_id).val(),
+        report_id: $('#report_id').val()
+    }
+}
+
+
+function save_section_data(section_id) {
+    var section_data = section_data_from_form(section_id);
+    var url;
+    var method;
+    if (section_id < 0) {
         url = '/api/v2/section';
+        method = 'POST';
+    } else {
+        url = '/api/v2/section/' + section_id;
+        method = 'PUT';
     }
     return $.ajax({
         method: method,
         url: url,
-        data: JSON.stringify(data),
-        /*async: false, /* We don't want this to return immediately, as we call it in save_question to get the id
-         of the new section. If this returns immediately, we get the old ID. */
-        success: function (data, status) {
+        data: JSON.stringify(section_data),
+        success: function (data) {
 
         },
         error: function (jqXHR, status, error) {
-            error_button('#section_' + section_id + '_save_button', error);
-            /* Add change handlers */
-            for (i = 0; i < section_data_fields.length; i++) {
-                add_change_handler(section_id, '#section_' + section_data_fields[i] + '_' + section_id);
-            }
+            error_button('#report_save_button', error);
         }
     });
 }
 
-/**
- * Redraw an existing section, keeping the questions.
- * @param old_section_id (the original section_id, e.g. -1 if it is a new one)
- * @param section_data
- */
-function redraw_section(old_section_id, section_data) {
-    /* Redraw the template, but keep the questions */
-    /* We could just get the questions from the API again, but
-     this might cause the work a user just has done in an
-     unsaved question to be lost.
-     We cannot simply first save the questions, as you can't
-     create a new question without an existing section_id.
-     So you wouldn't be able to create a new section with a
-     new question and save it.
-     Better options might be available. */
-    var questions = $('#questions_section_' + old_section_id).contents().clone(true);
-    /* We use the old, negative, section_id */
-    /* As you can only save a section when aria-expanded is true, we keep this setting
-     to prevent panels from closing abruptly, confusing users. */
-    var aria_state = $('#section_panel_' + old_section_id).find('.panel-heading').attr('aria-expanded');
-    var new_section_id = section_data.id;
-    var section_template = $.templates('#section-template');
-    var new_section_data = {
-        section_id: new_section_id
-    };
-    for (var i = 0; i < section_data_fields.length; i++) {
-        new_section_data['section_' + section_data_fields[i]] = section_data[section_data_fields[i]];
-    }
+function get_section_data(section_id) {
+    return $.ajax({
+        method: 'GET',
+        url: '/api/v2/section/' + section_id,
+        success: function (data, status) {
+        },
+        error: function (jqXHR, status, error) {
+            error_button('#report_save_button', error);
+        }
+    });
+}
 
-    $('#section_panel_' + old_section_id).replaceWith(section_template.render(new_section_data));
-    $('#questions_section_' + new_section_id).replaceWith(questions);
-    $('#section_' + new_section_id + '_remove_button').find('button')
-        .click(function () {
-            delete_section(new_section_id);
+function draw_section(deferred, is_first_time, old_section_id) {
+    /* Render the template */
+    if (deferred) {
+        $.when(deferred).then(function success(section_api_data, status, jqXHR) {
+            var section = section_api_data.data;
+            /* If old_section_id, do not append but replace */
+            if (old_section_id) {
+                replace_existing_section(old_section_id, section);
+            } else {
+                $('#sections').append(draw_section_template(section));
+                /* Add the questions */
+                for (var j = 0; j < section.questions.length; j++) {
+                    /* From question.js */
+                    draw_question(get_question_data(section.questions[j].id), true);
+                }
+            }
+            /* Add the focus and click handlers */
+            if (is_first_time) {
+                /* Focus */
+                add_section_focus_handlers(section.id);
+                add_section_click_handlers(section.id);
+            }
+        }, function error(jqXHR, status, error) {
+            /* We can't set the error_button here, as we don't know the section_id */
         });
-    success_button('#section_' + new_section_id + '_save_button', 'Saved');
-    /* Add change handlers */
-    for (i = 0; i < section_data_fields.length; i++) {
-        add_change_handler(new_section_id, '#section_' + section_data_fields[i] + '_' + new_section_id);
-    }
-    /* Collapsed or not? */
-    if (aria_state == 'true') {
-        set_collapsed_state('#section_panel_' + new_section_id);
     }
 }
 
 /**
  * Delete a section.
- * If section_id < 0, just remove it from the DOM.
- * Else, also remove it via the API.
+ * If the section has questions, delete those as well.
  * @param section_id
  */
-function delete_section(section_id) {
-    /* Call DELETE on all dependent questions */
+function delete_section_data(section_id) {
     $('#questions_section_' + section_id).find('.question').each(function () {
-        var id_parts = $(this).attr('id');
-        if (typeof(id_parts) !== 'undefined') {
-            id_parts = id_parts.split('_');
-            delete_question(id_parts[id_parts.length - 1]);
-        }
+        var contains_id = $(this).attr('id');
+        /* The value of the id attribute of div.question is like question_id */
+        var id_parts = contains_id.split('_');
+        delete_question_data(id_parts[id_parts.length - 1]);
     });
+    /* If section_id < 0, simple remove it from the DOM (it was not saved) */
     if (section_id < 0) {
         $('#section_panel_' + section_id).remove();
     } else {
         return $.ajax({
             method: 'DELETE',
             url: '/api/v2/section/' + section_id,
-            success: function (data, status) {
-                $('#section_panel_' + section_id).remove();
+            success: function () {
             },
             error: function (jqXHR, status, error) {
                 error_button('#section_' + section_id + '_remove_button', error);
@@ -215,25 +128,73 @@ function delete_section(section_id) {
     }
 }
 
-/**
- * Add .change handlers to reset the buttons to their default state when the
- * user changes something in an input field.
- * @param section_id
- * @param field_selector
- */
-function add_change_handler(section_id, field_selector) {
-    $(field_selector).change(function () {
-        $('#section_' + section_id + '_save_button')
-            .find('button').click(function () {
-            save_section(section_id);
+function add_section_focus_handlers(section_id) {
+    var fields = ['section_title_' + section_id, 'section_context_' + section_id];
+    for (var i = 0; i < fields.length; i++) {
+        $('#' + fields[i]).focus(function () {
+            default_button('#report_save_button', 'Save');
         });
-        default_button('#section_' + section_id + '_save_button', 'Save');
-        $('#section_' + section_id + '_remove_button')
-            .find('button').click(function () {
-            delete_section(section_id);
-        });
-        default_button('#section_' + section_id + '_remove_button', 'Remove');
+    }
+}
+
+function add_section_click_handlers(section_id) {
+    $('#section_' + section_id + '_remove_button').click(function () {
+        delete_section_button(section_id);
     });
+    $('#add_question_button_section_' + section_id).click(function() {
+        /* From question.js */
+        add_question_button(section_id);
+    });
+}
+
+/**
+ * Given the object section_data (containing section_data.id, section_data.title, section_data.context),
+ * render the jquery template #section_template with section_data as a parameter.
+ * @param section_data
+ */
+function draw_section_template(section_data) {
+    var section_template = $.templates('#section-template');
+    var template_data = {
+        section_id: section_data.id,
+        section_title: section_data.title,
+        section_context: section_data.context
+    };
+    return section_template.render(template_data);
+}
+
+/**
+ * Replace an existing section.
+ * Redraw the template, but keep the questions
+ * We could just get the questions from the API again, but
+ * this might cause the work a user just has done in an
+ * unsaved question to be lost.
+ * We cannot simply first save the questions, as you can't
+ * create a new question without an existing section_id.
+ * So you wouldn't be able to create a new section with a
+ * new question and save it.
+ * Better options might be available
+ * @param old_section_id
+ * @param section_data
+ */
+function replace_existing_section(old_section_id, section_data) {
+    var old_section = $('#section_panel_' + old_section_id);
+    var questions = $('#questions_section_' + old_section_id).contents().clone(true);
+    /* As you can only save a section when aria-expanded is true, we keep this setting
+     to prevent panels from closing abruptly, confusing users. */
+    var aria_state = old_section.find('.panel-heading').attr('aria-expanded');
+    var new_section_id = section_data.id;
+    old_section.replaceWith(draw_section_template(section_data));
+    $('#questions_section_' + new_section_id).replaceWith(questions);
+    /* Collapsed or not? */
+    if (aria_state == 'true') {
+        set_collapsed_state('#section_panel_' + new_section_id);
+    }
+    /* Focus */
+    add_section_focus_handlers(new_section_id);
+    /* Click */
+    add_section_click_handlers(new_section_id);
+    /* Success button */
+    success_button('#section_' + new_section_id + '_save_button', 'Saved');
 }
 
 /**
