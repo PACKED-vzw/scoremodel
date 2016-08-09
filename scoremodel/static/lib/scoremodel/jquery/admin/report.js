@@ -69,10 +69,10 @@ function save_report_chain() {
     var url;
     var method;
     if (report_id < 0) {
-        url = '/api/v2/dev/report';
+        url = '/api/v2/report';
         method = 'POST';
     } else {
-        url = '/api/v2/dev/report/' + report_id;
+        url = '/api/v2/report/' + report_id;
         method = 'PUT';
     }
 

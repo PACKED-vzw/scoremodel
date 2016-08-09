@@ -34,18 +34,8 @@ api = Blueprint('api', __name__, url_prefix='/api/v2')
 @login_required
 @must_be_admin
 def v_api_report(report_id=None):
-    a_api = ScoremodelRestApi(api_class=ReportApi, o_request=request, api_obj_id=report_id)
-    return a_api.response
-
-
-@api.route('/dev/report', methods=['POST'])
-@api.route('/dev/report/<int:report_id>', methods=['PUT', 'DELETE', 'GET'])
-@login_required
-@must_be_admin
-def v_api_report_dev(report_id=None):
     a_api = ScoremodelRestApi(api_class=ReportCreateApi, o_request=request, api_obj_id=report_id)
     return a_api.response
-
 
 @api.route('/section', methods=['POST'])
 @api.route('/section/<int:section_id>', methods=['PUT', 'DELETE'])
