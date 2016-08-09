@@ -87,6 +87,10 @@ class ScoremodelRestApi:
             self.msg = public_error_msg['item_exists'].format(self.api)
             self.status_code = 400
             created_object = None
+        except DatabaseItemDoesNotExist:
+            self.msg = public_error_msg['item_not_exists'].format(self.api)
+            self.status_code = 404
+            created_object = None
         #except Exception as e:
         #    self.msg = public_error_msg['error_occurred'].format(e)
         #    self.status_code = 400
@@ -140,6 +144,10 @@ class ScoremodelRestApi:
         except DatabaseItemDoesNotExist:
             self.msg = public_error_msg['item_not_exists'].format(self.api, item_id)
             self.status_code = 404
+            updated_object = None
+        except DatabaseItemAlreadyExists:
+            self.msg = public_error_msg['item_exists'].format(self.api)
+            self.status_code = 400
             updated_object = None
         #except Exception as e:
         #    self.msg = public_error_msg['error_occurred'].format(e)

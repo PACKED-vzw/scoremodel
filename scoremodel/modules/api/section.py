@@ -17,9 +17,10 @@ class SectionApi(GenericApi):
     # TODO auto-generate total_score from attached questions?
     ##
 
-    def __init__(self, section_id=None):
+    def __init__(self, section_id=None, autocommit=True):
         self.section_id = section_id
         self.a_report = scoremodel.modules.api.report.ReportApi()
+        self.autocommit = autocommit
 
     def create(self, input_data):
         """
@@ -29,20 +30,10 @@ class SectionApi(GenericApi):
         :return:
         """
         cleaned_data = self.parse_input_data(input_data)
-        existing_section = Section.query.filter(and_(Section.title == cleaned_data['title'],
-                                                     Section.report_id == cleaned_data['report_id'])).first()
-        if existing_section is not None:
+        if self.db_exists(cleaned_data['title'], cleaned_data['report_id']):
             raise DatabaseItemAlreadyExists(_e['item_already_in']
                                             .format(Section, cleaned_data['title'], Report, cleaned_data['report_id']))
-        new_section = Section(title=cleaned_data['title'], context=cleaned_data['context'],
-                              order=cleaned_data['order_in_report'])
-        db.session.add(new_section)
-        db.session.commit()
-        # Add to the report
-        report = self.a_report.read(cleaned_data['report_id'])
-        new_section.report = report
-        db.session.commit()
-        return new_section
+        return self.db_create(cleaned_data, self.a_report.read(cleaned_data['report_id']))
 
     def read(self, section_id):
         """
@@ -66,10 +57,7 @@ class SectionApi(GenericApi):
         """
         cleaned_data = self.parse_input_data(input_data)
         existing_section = self.read(section_id)
-        existing_section = self.update_simple_attributes(existing_section, self.simple_params, cleaned_data)
-        # Store
-        db.session.commit()
-        return existing_section
+        return self.db_update(existing_section, cleaned_data)
 
     def delete(self, section_id):
         """
@@ -79,7 +67,7 @@ class SectionApi(GenericApi):
         """
         existing_section = self.read(section_id)
         db.session.delete(existing_section)
-        db.session.commit()
+        self.store()
         return True
 
     def parse_input_data(self, input_data):
@@ -96,3 +84,49 @@ class SectionApi(GenericApi):
 
     def list(self):
         return []
+
+    def store(self):
+        if self.autocommit:
+            db.session.commit()
+
+    def db_create(self, cleaned_data, report):
+        """
+        Create a section. This is a collection of all the write actions to the database, so we can wrap
+        them in a transaction. We have to separate the "read" (query) actions as SQLAlchemy commits everything
+        before querying (http://docs.sqlalchemy.org/en/latest/orm/session_basics.html).
+        :param cleaned_data:
+        :param report:
+        :return:
+        """
+        new_section = Section(title=cleaned_data['title'], context=cleaned_data['context'],
+                              order=cleaned_data['order_in_report'])
+        db.session.add(new_section)
+        # Add to the report
+        new_section.report = report
+        self.store()
+        return new_section
+
+    def db_update(self, existing_section, cleaned_data):
+        """
+        See self.db_create() on why this function exists.
+        :param existing_section:
+        :param cleaned_data:
+        :return:
+        """
+        existing_section = self.update_simple_attributes(existing_section, self.simple_params, cleaned_data)
+        # Store
+        self.store()
+        return existing_section
+
+    def db_exists(self, section_title, report_id):
+        """
+
+        :param section_title:
+        :param report_id:
+        :return:
+        """
+        existing_section = Section.query.filter(and_(Section.title == section_title,
+                                                     Section.report_id == report_id)).first()
+        if existing_section is not None:
+            return True
+        return False

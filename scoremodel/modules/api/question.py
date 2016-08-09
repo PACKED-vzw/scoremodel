@@ -11,13 +11,15 @@ from scoremodel import db
 
 
 class QuestionApi(GenericApi):
-    simple_attributes = ['question', 'context', 'risk', 'example', 'weight', 'order_in_section', 'section_id', 'action', 'risk_factor_id']
+    simple_attributes = ['question', 'context', 'risk', 'example', 'weight', 'order_in_section', 'section_id', 'action',
+                         'risk_factor_id']
     complex_params = ['answers']  # These should be a list in input_data
 
-    def __init__(self, question_id=None):
+    def __init__(self, question_id=None, autocommit=True):
         self.question_id = question_id
         self.a_section = scoremodel.modules.api.section.SectionApi()
         self.a_risk_factor = RiskFactorApi()
+        self.autocommit = autocommit
 
     def create(self, input_data):
         """
@@ -34,31 +36,12 @@ class QuestionApi(GenericApi):
         """
         cleaned_data = self.parse_input_data(input_data)
         # Check whether this question already exists
-        existing_question = Question.query.filter(and_(Question.question == cleaned_data['question'],
-                                                       Question.section_id == cleaned_data['section_id'])).first()
-        if existing_question:
-            # Already exists
+        if self.db_exists(cleaned_data['question'], cleaned_data['section_id']):
             raise DatabaseItemAlreadyExists(_e['item_already_in'].format(Question, cleaned_data['question'], Section,
                                                                          cleaned_data['section_id']))
-        new_question = Question(question=cleaned_data['question'], context=cleaned_data['context'],
-                                risk=cleaned_data['risk'], example=cleaned_data['example'],
-                                weight=cleaned_data['weight'], order=cleaned_data['order_in_section'],
-                                action=cleaned_data['action'])
-        db.session.add(new_question)
-        db.session.commit()
-        # Add to the section
-        section = self.a_section.read(cleaned_data['section_id'])
-        new_question.section = section
-        # Add the answers
-        for answer_id in cleaned_data['answers']:
-            new_question.answers.append(self.get_answer(answer_id))
-        # Add the risk factor
-        risk_factor = self.a_risk_factor.read(cleaned_data['risk_factor_id'])
-        new_question.risk_factor = risk_factor
-        # Store everything in the database
-        db.session.commit()
-        # Return the question object
-        return new_question
+        return self.db_create(cleaned_data, self.a_section.read(cleaned_data['section_id']),
+                              self.db_get_answers(cleaned_data['answers']),
+                              self.a_risk_factor.read(cleaned_data['risk_factor_id']))
 
     def read(self, question_id):
         """
@@ -84,19 +67,9 @@ class QuestionApi(GenericApi):
         """
         existing_question = self.read(question_id)
         cleaned_data = self.parse_input_data(input_data)
-        existing_question = self.update_simple_attributes(existing_question, self.simple_attributes, cleaned_data)
-        # Update the section
-        section = self.a_section.read(cleaned_data['section_id'])
-        existing_question.section = section
-        # Update answers
-        existing_question = self.remove_answers(existing_question)
-        for answer_id in cleaned_data['answers']:
-            existing_question.answers.append(self.get_answer(answer_id))
-        # Update risk factors
-        risk_factor = self.a_risk_factor.read(cleaned_data['risk_factor_id'])
-        existing_question.risk_factor = risk_factor
-        db.session.commit()
-        return existing_question
+        return self.db_update(existing_question, cleaned_data, self.a_section.read(cleaned_data['section_id']),
+                              self.db_get_answers(cleaned_data['answers']),
+                              self.a_risk_factor.read(cleaned_data['risk_factor_id']))
 
     def delete(self, question_id):
         """
@@ -106,7 +79,7 @@ class QuestionApi(GenericApi):
         """
         existing_question = self.read(question_id)
         db.session.delete(existing_question)
-        db.session.commit()
+        self.store()
         return True
 
     def parse_input_data(self, input_data):
@@ -134,7 +107,7 @@ class QuestionApi(GenericApi):
     def remove_answers(self, question_entity):
         for answer in question_entity.answers:
             question_entity.answers.remove(answer)
-        db.session.commit()
+        self.store()
         return question_entity
 
     def query(self, question_question):
@@ -147,3 +120,81 @@ class QuestionApi(GenericApi):
         if not existing_question:
             raise DatabaseItemDoesNotExist(_e['item_not_exists'].format(Question, question_question))
         return existing_question
+
+    def store(self):
+        if self.autocommit:
+            db.session.commit()
+
+    def db_get_answers(self, answer_ids):
+        """
+        From a list of answer ids, get the list of answer database objects
+        :param answer_ids:
+        :return:
+        """
+        answers = []
+        for answer_id in answer_ids:
+            answers.append(self.get_answer(answer_id))
+        return answers
+
+    def db_update(self, existing_question, cleaned_data, section, answers, risk_factor):
+        """
+        See self.db_create() why this function exists.
+        :param existing_question:
+        :param cleaned_data:
+        :param section:
+        :param answers:
+        :param risk_factor:
+        :return:
+        """
+        existing_question = self.update_simple_attributes(existing_question, self.simple_attributes, cleaned_data)
+        # Update the section
+        existing_question.section = section
+        # Update answers
+        existing_question = self.remove_answers(existing_question)
+        for answer in answers:
+            existing_question.answers.append(answer)
+        # Update risk factors
+        existing_question.risk_factor = risk_factor
+        self.store()
+        return existing_question
+
+    def db_create(self, cleaned_data, section, answers, risk_factor):
+        """
+        Create a question. This is a collection of all the write actions to the database, so we can wrap
+        them in a transaction. We have to separate the "read" (query) actions as SQLAlchemy commits everything
+        before querying (http://docs.sqlalchemy.org/en/latest/orm/session_basics.html).
+        :param cleaned_data:
+        :param section:
+        :param answers:
+        :param risk_factor:
+        :return:
+        """
+        new_question = Question(question=cleaned_data['question'], context=cleaned_data['context'],
+                                risk=cleaned_data['risk'], example=cleaned_data['example'],
+                                weight=cleaned_data['weight'], order=cleaned_data['order_in_section'],
+                                action=cleaned_data['action'])
+        db.session.add(new_question)
+        # Add to the section
+        new_question.section = section
+        # Add the answers
+        for answer in answers:
+            new_question.answers.append(answer)
+        # Add the risk factor
+        new_question.risk_factor = risk_factor
+        # Store everything in the database
+        self.store()
+        # Return the question object
+        return new_question
+
+    def db_exists(self, question_question, section_id):
+        """
+
+        :param question_question:
+        :param section_id:
+        :return:
+        """
+        existing_question = Question.query.filter(and_(Question.question == question_question,
+                                                       Question.section_id == section_id)).first()
+        if existing_question:
+            return True
+        return False
