@@ -33,7 +33,9 @@ class ReportCreateApi(ReportApi):
         # Note that updates to existing items will not be rolled back.
         question_api = QuestionApi(autocommit=False)
         section_api = SectionApi(autocommit=False)
-        prepared_data = self.parse_input_data(report_data)
+        prepared_data = {
+            'report': self.parse_input_data(report_data)
+        }
         if 'sections' not in report_data:
             raise RequiredAttributeMissing(_e['attr_missing'].format('sections'))
 
@@ -100,9 +102,12 @@ class ReportCreateApi(ReportApi):
         for unclean_section in unclean_sections:
             unclean_questions = unclean_section['questions']
             unclean_section['report_id'] = created_report.id
-            created_section = self.add_section(unclean_section)
+            clean_section = section_api.parse_input_data(unclean_section)
+            # Problem with updates
+            created_section = self.add_section(clean_section, created_report)
             for unclean_question in unclean_questions:
-                pass
+                unclean_question['section_id'] = created_section.id
+                clean_question = question_api.parse_input_data(unclean_question)
 
         # Commit
         db.session.commit()
@@ -168,19 +173,19 @@ class ReportCreateApi(ReportApi):
                 raise e
         return existing_question
 
-    def add_section(self, section_data):
+    def add_section(self, section_data, report, section=None):
         section_api = SectionApi()
         if 'id' in section_data and section_data['id'] > 0:
             # Update
             try:
-                existing_section = section_api.update(section_data['id'], section_data)
+                existing_section = section_api.db_update(section, section_data)
             except Exception as e:
                 self.rollback()
                 raise e
         else:
             # Create
             try:
-                existing_section = section_api.create(section_data)
+                existing_section = section_api.db_create(section_data, report)
             except Exception as e:
                 self.rollback()
                 raise e
