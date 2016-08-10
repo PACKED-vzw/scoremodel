@@ -10,7 +10,8 @@ class UserReport(db.Model):
     last_modified = db.Column(db.DateTime)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     report_id = db.Column(db.Integer, db.ForeignKey('Report.id'))
-    question_answers = db.relationship('QuestionAnswer', backref='user_report', lazy='dynamic')
+    question_answers = db.relationship('QuestionAnswer', backref='user_report', lazy='dynamic',
+                                       cascade='all, delete-orphan')
 
     def __init__(self, name, user_id, report_id, creation_time=None):
         self.name = name

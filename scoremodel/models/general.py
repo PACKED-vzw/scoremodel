@@ -99,9 +99,9 @@ class Report(db.Model):
     __tablename__ = 'Report'
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(255), index=True, nullable=False)
-    sections = db.relationship('Section', backref='report', lazy='dynamic')
+    sections = db.relationship('Section', backref='report', lazy='dynamic', cascade='all, delete-orphan')
     lang_id = db.Column(db.Integer, db.ForeignKey('Lang.id'))
-    user_reports = db.relationship('UserReport', backref='template', lazy='dynamic')
+    user_reports = db.relationship('UserReport', backref='template', lazy='dynamic', cascade='all, delete-orphan')
 
     def __repr__(self):
         return '<Report {0}>'.format(self.id)
@@ -129,7 +129,7 @@ class Section(db.Model):
     title = db.Column(db.String(255), index=True, nullable=False)
     context = db.Column(db.Text)
     order_in_report = db.Column(db.Integer, nullable=False, default=0)
-    questions = db.relationship('Question', backref='section', lazy='dynamic')
+    questions = db.relationship('Question', backref='section', lazy='dynamic', cascade='all, delete-orphan')
     report_id = db.Column(db.Integer, db.ForeignKey(Report.id))
 
     def __repr__(self):
@@ -235,7 +235,8 @@ class Question(db.Model):
                               backref=db.backref('questions', lazy='dynamic'),
                               lazy='dynamic'
                               )
-    question_answers = db.relationship('QuestionAnswer', backref='question_template', lazy='dynamic')
+    question_answers = db.relationship('QuestionAnswer', backref='question_template', lazy='dynamic',
+                                       cascade='all, delete-orphan')
     # TODO: make weight dependent on risk_factors! (risk_factors must have a weight: hoog: 3, midden: 2, laag: 1
 
     def __repr__(self):
