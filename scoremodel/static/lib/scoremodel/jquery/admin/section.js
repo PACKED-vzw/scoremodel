@@ -23,7 +23,7 @@ function add_section_button() {
     };
     $('#sections').append(draw_section_template(section_data));
     add_section_focus_handlers(last_section_id);
-    add_question_click_handlers(last_section_id);
+    add_section_click_handlers(last_section_id);
 }
 
 

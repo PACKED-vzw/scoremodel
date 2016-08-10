@@ -83,6 +83,7 @@ function save_report_chain() {
         url: url,
         data: JSON.stringify(report),
         success: function () {
+             success_button('#report_save_button', 'Saved');
         },
         error: function (jqXHR, status, error) {
             error_button($('#report_save_button', error));
@@ -134,7 +135,7 @@ function draw_report(deferred, is_first_time, is_reload) {
         /* Add click handler */
         $('#report_save_button').click(function () {
             if (required_set_side_effects(['#report_title', '#report_lang'])) {
-                draw_report(save_report_chain());
+                draw_report(save_report_chain(), false, true);
             }
         });
     }
