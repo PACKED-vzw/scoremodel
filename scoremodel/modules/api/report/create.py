@@ -1,6 +1,7 @@
 from scoremodel.modules.api.report import ReportApi
 from scoremodel.modules.api.section import SectionApi
 from scoremodel.modules.api.question import QuestionApi
+from scoremodel.modules.api.risk_factor import RiskFactorApi
 from scoremodel.modules.msg.messages import module_error_msg as _e
 from scoremodel.models.general import Report
 from scoremodel.modules.error import RequiredAttributeMissing, DatabaseItemAlreadyExists, DatabaseItemDoesNotExist
@@ -17,6 +18,97 @@ from flask.ext.babel import lazy_gettext as _
 
 
 class ReportCreateApi(ReportApi):
+
+    def db_check(self, report_data):
+        """
+        For a report, check that reports, sections and questions do not already exist
+        in the database when they are new.
+        :param report_data:
+        :return:
+        """
+        section_api = SectionApi(autocommit=False)
+        question_api = QuestionApi(autocommit=False)
+        if 'sections' not in report_data:
+            raise RequiredAttributeMissing(_e['attr_missing'].format('sections'))
+        if 'id' in report_data and report_data['id'] > 0:
+            # Check the DB
+            for section in report_data['sections']:
+                # If there is no title, this will be caught by the other error checking routines
+                if 'title' in section:
+                    if 'id' not in section or section['id'] < 0:
+                        if section_api.db_exists(section['title'], report_data['id']):
+                            raise DatabaseItemAlreadyExists(_e['item_already_in'].format('Section', section['title'],
+                                                                                         'Report', report_data['id']))
+                if 'id' in section and section['id'] > 0:
+                    # No sense in checking for questions in a section that doesn't exist
+                    if 'questions' not in section:
+                        raise RequiredAttributeMissing(_e['attr_missing'].format('questions'))
+                    for question in section['questions']:
+                        if 'question' in question:
+                            if 'id' not in question or question['id'] < 0 :
+                                if question_api.db_exists(question['question'], section['id']):
+                                    raise DatabaseItemAlreadyExists(
+                                        _e['item_already_in'].format('Question', question['question'],
+                                                                     'Section', section['id']))
+        return True
+
+    def error_check(self, report_data):
+        """
+        Check all input for errors. The called functions will throw exceptions
+        themselves. We are not trying to catch them, but to trigger them before
+        we try to commit everything to the DB. This should prevent inconsistent data
+        in the DB.
+        :param report_data:
+        :return:
+        """
+        section_api = SectionApi(autocommit=False)
+        question_api = QuestionApi(autocommit=False)
+        risk_factor_api = RiskFactorApi()
+
+        # Database check
+        if self.db_check(report_data) is not True:
+            raise Exception(_('An unexpected error occurred.'))
+
+        # Check for attributes
+        if 'sections' not in report_data:
+            raise RequiredAttributeMissing(_e['attr_missing'].format('sections'))
+        cleaned_report = self.parse_input_data(report_data)
+
+        # Check for duplicates (two sections with the same title)
+        duplicate_sections = []
+        for section in report_data['sections']:
+            if 'questions' not in section:
+                raise RequiredAttributeMissing(_e['attr_missing'].format('questions'))
+
+            # Check for attributes
+            cleaned_section = section_api.parse_input_data(section)
+            # Duplicate check
+            if section['title'] not in duplicate_sections:
+                duplicate_sections.append(section['title'])
+            else:
+                raise DatabaseItemAlreadyExists(_e['item_already_in'].format('Section', section['title'],
+                                                                             'Report', report_data['id']))
+
+            duplicate_questions = []
+            for question in section['questions']:
+                # Check for attributes
+                cleaned_question = question_api.parse_input_data(question)
+                # Check for duplicates
+                if question['question'] not in duplicate_questions:
+                    duplicate_questions.append(question['question'])
+                else:
+                    raise DatabaseItemAlreadyExists(
+                        _e['item_already_in'].format('Question', question['question'],
+                                                     'Section', section['id']))
+                # Check for answers
+                # We must use the cleaned data, because 'answers' is not required,
+                # and attempting to loop over None gets an error.
+                for answer_id in cleaned_question['answers']:
+                    answer = question_api.get_answer(answer_id)
+                # Check for risk_factor
+                risk_factor = risk_factor_api.read(cleaned_question['risk_factor_id'])
+        return True
+
     def create(self, report_data, autocommit=False):
         """
         Create a report, but with all sections and questions attached.
@@ -27,132 +119,10 @@ class ReportCreateApi(ReportApi):
         :param autocommit:
         :return:
         """
-        # A list of objects that have been created by this action.
-        # This list will be deleted when an error occurs. We should be using transactions, but
-        # in mysql you can't have transactions and foreign keys. We need the latter.
-        # Note that updates to existing items will not be rolled back.
-        question_api = QuestionApi(autocommit=False)
-        section_api = SectionApi(autocommit=False)
-        prepared_data = {
-            'report': self.parse_input_data(report_data)
-        }
-        if 'sections' not in report_data:
-            raise RequiredAttributeMissing(_e['attr_missing'].format('sections'))
-
-        ##
-        # Check the sections
-        # 1) Check whether any new section has the same title as a section already in the DB
-        # 2) Check whether any new section has a title equal to another section
-        if 'id' in report_data and report_data['id'] > 0:
-            # This report already exists, has an id and thus the sections can be tested for existence.
-            # Otherwise, if it is a new report, they can't exist already (sections must be unique in a report)
-            for unclean_section in report_data['sections']:
-                clean_section = self.parse_input_data(unclean_section)
-                if section_api.db_exists(clean_section['title'], report_data['id']):
-                    raise DatabaseItemAlreadyExists(_e['item_already_in']
-                                                    .format('Section', clean_section['title'], report_data['id']))
-        # Check for duplicate sections
-        counted = {}
-        for item in report_data['sections']:
-            if item['title'] in counted:
-                counted[item['title']] = + 1
-                raise DatabaseItemAlreadyExists(_('Error: duplicate section title {0}').format(item['title']))
-            else:
-                counted[item['title']] = 1
-
-        ##
-        # Check the questions
-        # 1) Check whether any new question has the same title ("question") as one already in the DB
-        # 2) Check whether any new question has a title equal to another question
-        for section in report_data['sections']:
-            if 'questions' not in section:
-                raise RequiredAttributeMissing(_e['attr_missing'].format('questions'))
-            if 'id' in section and section['id'] > 0:
-                for question in section['questions']:
-                    clean_question = question_api.parse_input_data(question)
-                    if question_api.db_exists(clean_question['question'], section['id']):
-                        raise DatabaseItemAlreadyExists(_e['item_already_in']
-                                                    .format('Question', clean_question['question'], section['id']))
-            # Check for duplicate questions
-            counted = {}
-            for item in section['questions']:
-                if item['question'] in counted:
-                    counted[item['question']] = + 1
-                    raise DatabaseItemAlreadyExists(_('Error: duplicate question {0}').format(item['question']))
-                else:
-                    counted[item['question']] = 1
-
-
-        ##
-        # Start the transaction
-        # 1) Add the report
-        # 2) Add any new section and update existing ones
-        # 3) Add any new questions and update existing ones
-        # -> rollback when something goes wrong + raise the error
-        # begin transaction
-        db.session.begin(subtransactions=True)
-        # switch off autocommit
-
-        # The create function of ReportApi will strip all attributes that are not
-        # defined in the DB. So we store this one to prevent it from being lost.
-        unclean_sections = report_data['sections']
-        clean_report_data = self.parse_input_data(report_data)
-        created_report = self.db_create(clean_report_data, False)
-
-        for unclean_section in unclean_sections:
-            unclean_questions = unclean_section['questions']
-            unclean_section['report_id'] = created_report.id
-            clean_section = section_api.parse_input_data(unclean_section)
-            # Problem with updates
-            created_section = self.add_section(clean_section, created_report)
-            for unclean_question in unclean_questions:
-                unclean_question['section_id'] = created_section.id
-                clean_question = question_api.parse_input_data(unclean_question)
-
-        # Commit
-        db.session.commit()
-
-        return created_report
+        pass
 
     def update(self, report_id, input_data, autocommit=False):
-        existing_report = self.read(report_id)
-
-        if 'sections' not in input_data:
-            raise RequiredAttributeMissing(_e['attr_missing'].format('sections'))
-        sections = input_data['sections']
-
-        # start transaction
-        db.session.begin(subtransactions=True)
-        section_api = SectionApi(autocommit=False)
-        question_api = QuestionApi(autocommit=False)
-
-        existing_report = super(ReportCreateApi, self).update(report_id, input_data, autocommit=False)
-
-        # Remove all sections in existing_report that are not part of input_data['sections']
-        # Sections (and questions) cannot exist if they are not part of a report
-        for section in existing_report.sections:
-            if section.id not in [s['id'] for s in sections]:
-                section_api.delete(section.id)
-
-        for new_section in sections:
-            new_section['report_id'] = existing_report.id
-            questions = new_section['questions']
-
-            existing_section = self.add_section(new_section)
-
-            for question in existing_section.questions:
-                if question.id not in [q['id'] for q in questions]:
-                    question_api.delete(question.id)
-
-            for new_question in questions:
-                new_question['section_id'] = existing_section.id
-
-                existing_question = self.add_question(new_question)
-
-        # Commit
-        db.session.commit()
-
-        return existing_report
+        pass
 
     def add_question(self, question_data):
         question_api = QuestionApi()
