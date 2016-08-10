@@ -31,7 +31,8 @@ function section_data_from_form(section_id) {
     return {
         title: $('#section_title_' + section_id).val(),
         context: $('#section_context_' + section_id).val(),
-        report_id: $('#report_id').val()
+        report_id: $('#report_id').val(),
+        id: section_id
     }
 }
 

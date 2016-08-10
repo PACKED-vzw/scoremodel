@@ -36,7 +36,8 @@ function question_data_from_form(question_id) {
         risk: $('#question_risk_' + question_id).val(),
         action: $('#question_action_' + question_id).val(),
         risk_factor_id: $('#question_risk_factor_' + question_id).val(),
-        answers: []
+        answers: [],
+        id: question_id
     };
     var answers = $('#question_answer_' + question_id).val();
     if (answers !== null) {

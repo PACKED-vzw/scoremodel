@@ -37,6 +37,7 @@ def v_api_report(report_id=None):
     a_api = ScoremodelRestApi(api_class=ReportCreateApi, o_request=request, api_obj_id=report_id)
     return a_api.response
 
+
 @api.route('/section', methods=['POST'])
 @api.route('/section/<int:section_id>', methods=['PUT', 'DELETE'])
 @login_required

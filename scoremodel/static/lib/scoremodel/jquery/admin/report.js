@@ -15,7 +15,8 @@ $(document).ready(function () {
 function report_data_from_form() {
     return {
         title: $('#report_title').val(),
-        lang_id: $('#report_lang').val()
+        lang_id: $('#report_lang').val(),
+        id: $('#report_id').val()
     };
 }
 
@@ -47,6 +48,7 @@ function save_report_chain() {
     /* TODO: check for required stuff */
     //required_set_side_effects(['#section_title_' + section_id])
     /* TODO: onchange */
+    /* We should reload, or at least the IDs */
     var report = report_data_from_form();
     var report_id = $('#report_id').val();
 
@@ -132,7 +134,7 @@ function draw_report(deferred, is_first_time, is_reload) {
         /* Add click handler */
         $('#report_save_button').click(function () {
             if (required_set_side_effects(['#report_title', '#report_lang'])) {
-                save_report_chain();
+                draw_report(save_report_chain());
             }
         });
     }

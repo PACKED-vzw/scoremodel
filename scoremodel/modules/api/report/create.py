@@ -127,9 +127,9 @@ class ReportCreateApi(ReportApi):
         for s in report_data['sections']:
             if 'id' in s:
                 new_sections.append(s)
-        for original_section in original_sections:
-            if original_section.id not in new_sections:
-                section_api.delete(original_section.id)
+        #for original_section in original_sections:
+        #    if original_section.id not in new_sections:
+        #        section_api.delete(original_section.id)
 
         for section in report_data['sections']:
             section['report_id'] = created_report.id
@@ -144,9 +144,9 @@ class ReportCreateApi(ReportApi):
             for q in section['questions']:
                 if 'id' in q:
                     new_questions.append(q)
-            for original_question in original_questions:
-                if original_question.id not in new_questions:
-                    question_api.delete(original_question.id)
+            #for original_question in original_questions:
+            #    if original_question.id not in new_questions:
+            #        question_api.delete(original_question.id)
             for question in section['questions']:
                 question['section_id'] = created_section.id
                 if 'id' in question and question['id'] > 0:
@@ -157,12 +157,12 @@ class ReportCreateApi(ReportApi):
                     created_question = question_api.create(question)
         return created_report
 
-    def create(self, report_data):
+    def create(self, input_data):
         """
         Create a report, but with all sections and questions attached.
         Every section/question has an id. If it is negative, we consider
         it to be a new section/question. Otherwise, we update.
-        :param report_data:
+        :param input_data:
         :return:
         """
         # We're now simply going to add report, section and question using the default api functions.
@@ -175,23 +175,23 @@ class ReportCreateApi(ReportApi):
         # everything in a transaction, we use self.check_error() to check for input errors. It will
         # bail out before it commits if there is one. All other errors will still result in inconsistent
         # data. So this is a TODO.
-        if self.error_check(report_data) is not True:
+        if self.error_check(input_data) is not True:
             raise Exception(_e('An unexpected error occurred.'))
-        if 'id' in report_data and report_data['id'] > 0:
+        if 'id' in input_data and input_data['id'] > 0:
             # This is an update
-            return self.update(report_data['id'], report_data)
-        created_report = super(ReportCreateApi, self).create(report_data)
-        return self.store_chain(report_data, created_report)
+            return self.update(input_data['id'], input_data)
+        created_report = super(ReportCreateApi, self).create(input_data)
+        return self.store_chain(input_data, created_report)
 
-    def update(self, report_id, report_data):
+    def update(self, report_id, input_data):
         """
         Update an existing report.
         :param report_id:
-        :param report_data:
+        :param input_data:
         :return:
         """
-        report_data['id'] = report_id
-        if self.error_check(report_data) is not True:
+        input_data['id'] = report_id
+        if self.error_check(input_data) is not True:
             raise Exception(_e('An unexpected error occurred.'))
-        updated_report = super(ReportCreateApi, self).update(report_id, report_data)
-        return self.store_chain(report_data, updated_report)
+        updated_report = super(ReportCreateApi, self).update(report_id, input_data)
+        return self.store_chain(input_data, updated_report)

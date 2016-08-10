@@ -141,10 +141,10 @@ class ScoremodelRestApi:
             additional_opts = {}
         try:
             updated_object = self.api.update(item_id, input_data=input_data, **additional_opts)
-        except DatabaseItemDoesNotExist:
-            self.msg = public_error_msg['item_not_exists'].format(self.api, item_id)
-            self.status_code = 404
-            updated_object = None
+        #except DatabaseItemDoesNotExist:
+        #    self.msg = public_error_msg['item_not_exists'].format(self.api, item_id)
+        #    self.status_code = 404
+        #    updated_object = None
         except DatabaseItemAlreadyExists:
             self.msg = public_error_msg['item_exists'].format(self.api)
             self.status_code = 400
