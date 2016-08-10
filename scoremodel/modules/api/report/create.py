@@ -109,61 +109,89 @@ class ReportCreateApi(ReportApi):
                 risk_factor = risk_factor_api.read(cleaned_question['risk_factor_id'])
         return True
 
-    def create(self, report_data, autocommit=False):
+    def store_chain(self, report_data, created_report):
+        """
+        For an already stored report (created_report), store all sections
+        and attached questions in the DB. Will automatically distinguish between
+        new sections/questions and updated sections/questions.
+        :param report_data:
+        :param created_report:
+        :return:
+        """
+        section_api = SectionApi()
+        question_api = QuestionApi()
+        # Check for sections that were originally part of created_report, but are not anymore
+        # We delete those.
+        original_sections = created_report.sections
+        new_sections = []
+        for s in report_data['sections']:
+            if 'id' in s:
+                new_sections.append(s)
+        for original_section in original_sections:
+            if original_section.id not in new_sections:
+                section_api.delete(original_section.id)
+
+        for section in report_data['sections']:
+            section['report_id'] = created_report.id
+            if 'id' in section and section['id'] > 0:
+                # An update
+                created_section = section_api.update(section['id'], section)
+            else:
+                # A new creation
+                created_section = section_api.create(section)
+            original_questions = created_section.questions
+            new_questions = []
+            for q in section['questions']:
+                if 'id' in q:
+                    new_questions.append(q)
+            for original_question in original_questions:
+                if original_question.id not in new_questions:
+                    question_api.delete(original_question.id)
+            for question in section['questions']:
+                question['section_id'] = created_section.id
+                if 'id' in question and question['id'] > 0:
+                    # An update
+                    created_question = question_api.update(question['id'], question)
+                else:
+                    # A new creation
+                    created_question = question_api.create(question)
+        return created_report
+
+    def create(self, report_data):
         """
         Create a report, but with all sections and questions attached.
         Every section/question has an id. If it is negative, we consider
         it to be a new section/question. Otherwise, we update.
-        (implement rollback??) TODO
         :param report_data:
-        :param autocommit:
         :return:
         """
-        pass
+        # We're now simply going to add report, section and question using the default api functions.
+        # While we should be using transactions, so we can roll back when an error occurs, we can't.
+        # SQLAlchemy flushes all pending commits when a read query is executed, and the API requires
+        # a lot of read queries (error checking, answer getting etc.). While we can get rid of some
+        # we still need others. Furthermore, MySQL does not defer checking foreign keys until the
+        # transaction has been committed. So to store sections, we first have to commit the report.
+        # Otherwise, the foreign keys won't match. As this defeats the entire purpose of wrapping
+        # everything in a transaction, we use self.check_error() to check for input errors. It will
+        # bail out before it commits if there is one. All other errors will still result in inconsistent
+        # data. So this is a TODO.
+        if self.error_check(report_data) is not True:
+            raise Exception(_e('An unexpected error occurred.'))
+        if 'id' in report_data and report_data['id'] > 0:
+            # This is an update
+            return self.update(report_data['id'], report_data)
+        created_report = super(ReportCreateApi, self).create(report_data)
+        return self.store_chain(report_data, created_report)
 
-    def update(self, report_id, input_data, autocommit=False):
-        pass
-
-    def add_question(self, question_data):
-        question_api = QuestionApi()
-        cleaned_data = question_api.parse_input_data(question_data)
-        if 'id' in question_data and question_data['id'] > 0:
-            # Update
-            try:
-                #existing_question = question_api.update(question_data['id'], question_data)
-                existing_question = question_api.db_update('', cleaned_data)
-            except Exception as e:
-                self.rollback()
-                raise e
-        else:
-            try:
-                existing_question = question_api.create(question_data)
-            except Exception as e:
-                self.rollback()
-                raise e
-        return existing_question
-
-    def add_section(self, section_data, report, section=None):
-        section_api = SectionApi()
-        if 'id' in section_data and section_data['id'] > 0:
-            # Update
-            try:
-                existing_section = section_api.db_update(section, section_data)
-            except Exception as e:
-                self.rollback()
-                raise e
-        else:
-            # Create
-            try:
-                existing_section = section_api.db_create(section_data, report)
-            except Exception as e:
-                self.rollback()
-                raise e
-        return existing_section
-
-    def generic_delete(self, database_object):
-        db.session.delete(database_object)
-        return True
-
-    def rollback(self):
-        db.session.rollback()
+    def update(self, report_id, report_data):
+        """
+        Update an existing report.
+        :param report_id:
+        :param report_data:
+        :return:
+        """
+        report_data['id'] = report_id
+        if self.error_check(report_data) is not True:
+            raise Exception(_e('An unexpected error occurred.'))
+        updated_report = super(ReportCreateApi, self).update(report_id, report_data)
+        return self.store_chain(report_data, updated_report)

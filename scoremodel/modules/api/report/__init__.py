@@ -16,7 +16,7 @@ class ReportApi(GenericApi):
         self.lang_api = LangApi()
         self.autocommit = autocommit
 
-    def create(self, input_data, autocommit=None):
+    def create(self, input_data):
         """
         Create a new report. See QuestionApi.create()
         :param input_data:
@@ -26,7 +26,7 @@ class ReportApi(GenericApi):
         cleaned_data = self.parse_input_data(input_data)
         if self.db_exists(cleaned_data['title']):
             raise DatabaseItemAlreadyExists(_e['item_exists'].format(Report, cleaned_data['title']))
-        return self.db_create(cleaned_data, autocommit)
+        return self.db_create(cleaned_data)
 
     def read(self, report_id):
         """
@@ -39,7 +39,7 @@ class ReportApi(GenericApi):
             raise DatabaseItemDoesNotExist(_e['item_not_exists'].format(Report, report_id))
         return existing_report
 
-    def update(self, report_id, input_data, autocommit=None):
+    def update(self, report_id, input_data):
         """
         Update an existing report. See QuestionApi.update()
         :param report_id:
@@ -49,7 +49,7 @@ class ReportApi(GenericApi):
         """
         cleaned_data = self.parse_input_data(input_data)
         existing_report = self.read(report_id)
-        return self.db_update(existing_report, cleaned_data, autocommit)
+        return self.db_update(existing_report, cleaned_data)
 
     def delete(self, report_id, autocommit=None):
         """
@@ -108,7 +108,7 @@ class ReportApi(GenericApi):
             return True
         return False
 
-    def db_create(self, cleaned_data, autocommit=False):
+    def db_create(self, cleaned_data, autocommit=True):
         """
         Create a report. This is a collection of all the write actions to the database, so we can wrap
         them in a transaction. We have to separate the "read" (query) actions as SQLAlchemy commits everything
@@ -122,7 +122,7 @@ class ReportApi(GenericApi):
         self.store(autocommit)
         return new_report
 
-    def db_update(self, existing_report, cleaned_data, autocommit=False):
+    def db_update(self, existing_report, cleaned_data, autocommit=True):
         """
         See self.db_create()
         :param existing_report:
