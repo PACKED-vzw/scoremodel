@@ -16,17 +16,22 @@
                         <li><a href="#rapportgegevens">{{ _('Report data') }}</a></li>
                         <li><a href="#grafiek">{{ _('Graph') }}</a></li>
                         <li><a href="#actieplan">{{ _('Actions') }}</a></li>
+                    <li>
                         <ul>
                             {% for section in report_template.sections %}
                                 <li><a href="#actieplan_{{ section.id }}">{{ section.title }}</a></li>
                             {% endfor %}
                         </ul>
+                    </li>
+
                         <li><a href="#resultaten">{{ _('Results') }}</a></li>
-                        <ul>
+                        <li>
+                            <ul>
                             {% for section in report_template.sections %}
                                 <li><a href="#resultaten_{{ section.id }}">{{ section.title }}</a></li>
                             {% endfor %}
                         </ul>
+                        </li>
                     </ul>
                 </nav>
             </div>
