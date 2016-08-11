@@ -56,6 +56,7 @@ function set_required_error(selector) {
             /* Prevent the error from appearing multiple times after repeated submits */
             parent
                 .addClass('has-error')
+                .find('div')
                 .append('<span class="help-block">This element is required.</span>');
     }
 }

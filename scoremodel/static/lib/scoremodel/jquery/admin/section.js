@@ -213,3 +213,8 @@ function set_collapsed_state(selector) {
         .attr('aria-expanded', true)
         .addClass('collapse in');
 }
+
+function required_check_section(section_id) {
+    var required = ['#section_title_' + section_id];
+    return required_set_side_effects(required);
+}

@@ -47,20 +47,31 @@ function save_report_data() {
 function save_report_chain() {
     /* TODO: check for required stuff */
     //required_set_side_effects(['#section_title_' + section_id])
-    /* TODO: onchange */
-    /* We should reload, or at least the IDs */
+
+    var required_missing = false;
+
+    if (!required_check_report()) {
+        required_missing = true;
+    }
+
     var report = report_data_from_form();
     var report_id = $('#report_id').val();
 
     report.sections = [];
     $('#sections').children().each(function() {
         var section_id = $(this).attr('id').substr(14);
+        if (!required_check_section(section_id)) {
+            required_missing = true;
+        }
         var section = section_data_from_form(section_id);
         section.id = parseInt(section_id);
         section.questions = [];
         // Check for required fields
         $('#questions_section_' + section_id).children().each(function() {
             var question_id = $(this).attr('id').substr(9);
+            if (!required_check_question(question_id)) {
+                required_missing = true;
+            }
             var question = question_data_from_form(question_id);
             question.id = parseInt(question_id);
             section.questions.push(question);
@@ -76,6 +87,10 @@ function save_report_chain() {
     } else {
         url = '/api/v2/report/' + report_id;
         method = 'PUT';
+    }
+
+    if (required_missing) {
+        return null;
     }
 
     return $.ajax({
@@ -134,9 +149,12 @@ function draw_report(deferred, is_first_time, is_reload) {
         }
         /* Add click handler */
         $('#report_save_button').click(function () {
-            if (required_set_side_effects(['#report_title', '#report_lang'])) {
-                draw_report(save_report_chain(), false, true);
-            }
+            draw_report(save_report_chain(), false, true);
         });
     }
+}
+
+function required_check_report() {
+    var required = ['#report_title', '#report_lang'];
+    return required_set_side_effects(required);
 }
