@@ -1,5 +1,6 @@
 {% extends 'admin/base.html' %}
 {% block admin_content %}
+    <script src="{{ url_for('static', filename='lib/bower_components/jquery-ui/jquery-ui.js') }}"></script>
     <script src="{{ url_for('static', filename='lib/scoremodel/jquery/admin/buttons.js') }}"></script>
     <script src="{{ url_for('static', filename='lib/scoremodel/jquery/admin/question.js') }}"></script>
     <script src="{{ url_for('static', filename='lib/scoremodel/jquery/admin/section.js') }}"></script>
@@ -98,7 +99,7 @@
                     </div>
                 </form>
                 <!-- Questions -->
-                <div id="questions_section_{% raw %}{{:section_id}}{% endraw %}">
+                <div id="questions_section_{% raw %}{{:section_id}}{% endraw %}" class="questions">
                 </div>
                 <!-- New question -->
                 <button type="button" class="btn btn-info" id="add_question_button_section_{% raw %}{{:section_id}}{% endraw %}">{{ _('Add question') }}

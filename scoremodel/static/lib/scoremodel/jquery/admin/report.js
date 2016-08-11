@@ -10,6 +10,13 @@ $(document).ready(function () {
         add_section_button();
     });
 
+    $('#sections').sortable(
+        {
+            items: '> .section',
+            cursor: 'move'
+        }
+    );
+
 });
 
 function report_data_from_form() {
@@ -58,21 +65,27 @@ function save_report_chain() {
     var report_id = $('#report_id').val();
 
     report.sections = [];
+    var section_order = 0;
     $('#sections').children().each(function() {
+        section_order = section_order + 1;
         var section_id = $(this).attr('id').substr(14);
         if (!required_check_section(section_id)) {
             required_missing = true;
         }
         var section = section_data_from_form(section_id);
         section.id = parseInt(section_id);
+        section.order_in_report = section_order;
         section.questions = [];
         // Check for required fields
+        var question_order = 0;
         $('#questions_section_' + section_id).children().each(function() {
+            question_order = question_order + 1;
             var question_id = $(this).attr('id').substr(9);
             if (!required_check_question(question_id)) {
                 required_missing = true;
             }
             var question = question_data_from_form(question_id);
+            question.order_in_section = question_order;
             question.id = parseInt(question_id);
             section.questions.push(question);
         });
@@ -88,6 +101,10 @@ function save_report_chain() {
         url = '/api/v2/report/' + report_id;
         method = 'PUT';
     }
+
+    //var s = $('#sections').sortable('toArray');
+
+    //console.log(s);
 
     if (required_missing) {
         return null;

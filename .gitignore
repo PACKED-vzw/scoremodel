@@ -65,3 +65,4 @@ config.py
 ._DS_Store
 .DS_Store
 ._DS*
+scoremodel/static/lib/bower_components

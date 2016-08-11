@@ -23,6 +23,7 @@
     "jsrender": "~0.9.75",
     "bootstrap-markdown": "~2.10.0",
     "blueimp-file-upload": "jquery-file-upload#^9.12.3",
-    "jquery": "~2.2.4"
+    "jquery": "~2.2.4",
+    "jquery-ui": "~1.12.0"
   }
 }

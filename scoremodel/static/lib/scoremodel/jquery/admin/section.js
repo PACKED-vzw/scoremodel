@@ -2,6 +2,9 @@
  * Created by pieter on 7/07/16.
  */
 
+$(document).ready(function () {
+});
+
 function delete_section_button(section_id) {
     if (section_id < 0) {
         delete_section_data(section_id);
@@ -95,6 +98,10 @@ function draw_section(deferred, is_first_time, old_section_id) {
                 add_section_focus_handlers(section.id);
                 add_section_click_handlers(section.id);
             }
+            $('#questions_section_' + section.id).sortable({
+                items: '> .question',
+                cursor: 'move'
+            });
         }, function error(jqXHR, status, error) {
             /* We can't set the error_button here, as we don't know the section_id */
         });

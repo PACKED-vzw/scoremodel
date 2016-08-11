@@ -167,6 +167,11 @@ class Section(db.Model):
         }
 
     @property
+    def highest_order(self):
+        return self.ordered_questions[-1].order_in_section
+
+
+    @property
     def ordered_questions(self):
         return sorted(self.questions, key=lambda question: question.order_in_section)
 
