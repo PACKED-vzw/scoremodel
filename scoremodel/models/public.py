@@ -32,8 +32,16 @@ class UserReport(db.Model):
             'name': self.name,
             'user_id': self.user_id,
             'report_id': self.report_id,
+            'total_score': self.total_score,
             'question_answers': [q.output_obj() for q in self.question_answers]
         }
+
+    @property
+    def total_score(self):
+        total_score = 0
+        for qa in self.question_answers:
+            total_score += qa.score * qa.question_template.section.weight
+        return total_score
 
 
 class QuestionAnswer(db.Model):

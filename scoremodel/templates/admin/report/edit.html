@@ -79,6 +79,14 @@
             <div class="panel-body collapse" id="section_collapse_{% raw %}{{:section_id}}{% endraw %}">
                 <form novalidate class="form-horizontal">
                     <div class="form-group">
+                    <label for="section_weight_{% raw %}{{:section_id}}{% endraw %}" class="control-label col-sm-1"><strong>{{ _('Weight') }}</strong></label>
+                    <div class="col-sm-11">
+                        <input id="section_weight_{% raw %}{{:section_id}}{% endraw %}" type="number" min="1"
+                               max="10"
+                               integer class="form-control" required="required" value="{% raw %}{{if section_weight}}{{:section_weight}}{{else}}{% endraw %}{{ _('1') }}{% raw %}{{/if}}{% endraw %}"/>
+                    </div>
+                    </div>
+                    <div class="form-group">
                         <label for="section_title_{% raw %}{{:section_id}}{% endraw %}" class="control-label col-sm-1"><strong>{{ _('Title') }}</strong></label>
                         <div class="col-sm-11">
                             <input id="section_title_{% raw %}{{:section_id}}{% endraw %}" type="text" class="form-control" required="required" value="{% raw %}{{if section_title}}{{:section_title}}{{else}}{% endraw %}{{ _('New section') }}{% raw %}{{/if}}{% endraw %}"/>
@@ -122,7 +130,7 @@
             <div class="form-group">
                 <label for="question_weight_{% raw %}{{:question_id}}{% endraw %}" class="control-label col-sm-3"><strong>{{ _('Weight') }}</strong></label>
                 <div class="col-sm-9">
-                    <input id="question_weight_{% raw %}{{:question_id}}{% endraw %}" type="number" min="0"
+                    <input id="question_weight_{% raw %}{{:question_id}}{% endraw %}" type="number" min="1"
                            max="10"
                            integer class="form-control" required="required" value="{% raw %}{{if question_weight}}{{:question_weight}}{{else}}{% endraw %}{{ _('1') }}{% raw %}{{/if}}{% endraw %}"/>
                 </div>

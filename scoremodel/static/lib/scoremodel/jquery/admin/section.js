@@ -34,6 +34,7 @@ function section_data_from_form(section_id) {
     return {
         title: $('#section_title_' + section_id).val(),
         context: $('#section_context_' + section_id).val(),
+        weight: $('#section_weight_' + section_id).val(),
         report_id: $('#report_id').val(),
         id: section_id
     }
@@ -137,7 +138,7 @@ function delete_section_data(section_id) {
 }
 
 function add_section_focus_handlers(section_id) {
-    var fields = ['section_title_' + section_id, 'section_context_' + section_id];
+    var fields = ['section_title_' + section_id, 'section_context_' + section_id, 'section_weight_' + section_id];
     for (var i = 0; i < fields.length; i++) {
         $('#' + fields[i]).focus(function () {
             default_button('#report_save_button', 'Save');
@@ -165,7 +166,8 @@ function draw_section_template(section_data) {
     var template_data = {
         section_id: section_data.id,
         section_title: section_data.title,
-        section_context: section_data.context
+        section_context: section_data.context,
+        section_weight: section_data.weight
     };
     return section_template.render(template_data);
 }
@@ -222,6 +224,6 @@ function set_collapsed_state(selector) {
 }
 
 function required_check_section(section_id) {
-    var required = ['#section_title_' + section_id];
+    var required = ['#section_title_' + section_id, '#section_weight_' + section_id];
     return required_set_side_effects(required);
 }
