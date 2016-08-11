@@ -129,16 +129,18 @@ class Section(db.Model):
     title = db.Column(db.String(255), index=True, nullable=False)
     context = db.Column(db.Text)
     order_in_report = db.Column(db.Integer, nullable=False, default=0)
+    weight = db.Column(db.Integer, nullable=False, default=1)
     questions = db.relationship('Question', backref='section', lazy='dynamic', cascade='all, delete-orphan')
     report_id = db.Column(db.Integer, db.ForeignKey(Report.id))
 
     def __repr__(self):
         return u'<Section {0}: {1}>'.format(self.id, self.title)
 
-    def __init__(self, title, context=None, order=0):
+    def __init__(self, title, context=None, order=0, weight=1):
         self.title = title
         self.context = context
         self.order_in_report = order
+        self.weight = weight
 
     def output_obj(self):
         if not self.next_in_report:
@@ -159,6 +161,7 @@ class Section(db.Model):
             'order_in_report': self.order_in_report,
             'questions': [q.output_obj() for q in self.ordered_questions],
             'report_id': self.report_id,
+            'weight': self.weight,
             'next_section_id': next_section_id,
             'previous_section_id': previous_section_id
         }
