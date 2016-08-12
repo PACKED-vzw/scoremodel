@@ -103,6 +103,35 @@ def v_report_create():
             return redirect(url_for('admin.v_report_edit', report_id=new_report.id))
     return render_template('admin/report/create.html', form=form)
 
+
+@admin.route('/reports/benchmark', methods=['GET'])
+@login_required
+@must_be_admin
+def v_report_benchmark_report():
+    pass
+
+
+@admin.route('/reports/benchmark/create', methods=['GET', 'POST'])
+@login_required
+@must_be_admin
+def v_report_benchmark_create():
+    pass
+
+
+@admin.route('/reports/benchmark/<int:benchmark_report_id>/delete', methods=['GET', 'POST'])
+@login_required
+@must_be_admin
+def v_report_benchmark_delete(benchmark_report_id):
+    pass
+
+
+@admin.route('/reports/benchmark/<int:benchmark_report_id>/edit', methods=['GET'])
+@login_required
+@must_be_admin
+def v_report_benchmark_edit(benchmark_report_id):
+    pass
+
+
 ##
 # Helpers (TODO?)
 ##

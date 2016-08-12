@@ -59,5 +59,6 @@ class UserReportApi(GenericApi):
         :param input_data:
         :return:
         """
-        cleaned_data = self.clean_input_data(Section, input_data, self.possible_params, self.required_params, self.complex_params)
+        cleaned_data = self.clean_input_data(Section, input_data, self.possible_params, self.required_params,
+                                             self.complex_params)
         return cleaned_data
