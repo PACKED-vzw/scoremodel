@@ -152,6 +152,8 @@ class UserApi(GenericApi):
         # Update password
         if update_password is True:
             existing_user.set_password(unhashed_password)
+        # Update session token
+        existing_user.set_session_token()
         return existing_user
 
     def get_user_reports(self, user_id):
@@ -170,14 +172,43 @@ class UserApi(GenericApi):
         db.session.commit()
         return existing_user
 
+    def by_api_key(self, api_key):
+        existing_user = User.query.filter(User.api_key == api_key).first()
+        if not existing_user:
+            raise DatabaseItemDoesNotExist(_e['item_not_exists'].format(User, api_key))
+        return existing_user
+
+    def by_session_token(self, session_token):
+        existing_user = User.query.filter(User.session_token == session_token).first()
+        if not existing_user:
+            raise DatabaseItemDoesNotExist(_e['item_not_exists'].format(User, session_token))
+        return existing_user
+
 
 @login_manager.user_loader
-def load_user(user_id):
-    a_user = UserApi()
+def load_user(session_token):
     try:
-        user = a_user.read(int(user_id))
+        user = UserApi().by_session_token(session_token)
     except DatabaseItemDoesNotExist:
         user = None
     except OperationalError:
+        user = None
+    except Exception as e:
+        user = None
+    return user
+
+
+@login_manager.request_loader
+def load_user_from_request(request):
+    if 'api_key' not in request.values:
+        return None
+    api_key = request.values['api_key']
+    try:
+        user = UserApi().by_api_key(api_key)
+    except DatabaseItemDoesNotExist:
+        user = None
+    except OperationalError:
+        user = None
+    except Exception as e:
         user = None
     return user

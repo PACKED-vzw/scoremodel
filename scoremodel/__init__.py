@@ -3,12 +3,14 @@ from flask.ext.sqlalchemy import SQLAlchemy
 from flask.ext.babel import Babel, gettext as _
 from flask.ext.login import LoginManager, current_user
 from flask.ext.markdown import Markdown
+from flask_wtf.csrf import CsrfProtect
 from scoremodel.modules.setup import AppSetup
 
 app = AppSetup().app
 db = SQLAlchemy(app)
 Markdown(app)
 babel = Babel(app)
+csrf = CsrfProtect(app)
 login_manager = LoginManager()
 login_manager.session_protection = 'strong'
 login_manager.init_app(app)
@@ -68,6 +70,11 @@ def v_setup():
         return render_template('setup.html', username=admin['user'].email, password=admin['password'])
     else:
         return render_template('setup.html', form=form)
+
+
+@app.errorhandler(400)
+def bad_request(e):
+    return e
 
 
 if __name__ == '__main__':

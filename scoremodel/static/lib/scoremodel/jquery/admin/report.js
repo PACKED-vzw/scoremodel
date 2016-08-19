@@ -114,6 +114,9 @@ function save_report_chain() {
         method: method,
         url: url,
         data: JSON.stringify(report),
+        headers: {
+            'X-CSRFToken': csrf_token
+        },
         success: function () {
              success_button('#report_save_button', 'Saved');
         },

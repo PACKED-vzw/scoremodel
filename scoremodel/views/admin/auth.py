@@ -20,7 +20,8 @@ def v_login():
         else:
             if user.verify_password(form.password.data):
                 login_user(user, form.remember_me.data)
-                return redirect(request.args.get('next') or url_for('site.v_index'))
+                next_url = request.args.get('next')
+                return redirect(next_url or url_for('site.v_index'))
             else:
                 flash(_('Invalid username or password.'))
     ##

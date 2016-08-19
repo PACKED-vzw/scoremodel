@@ -55,6 +55,9 @@ function save_section_data(section_id) {
     return $.ajax({
         method: method,
         url: url,
+        headers: {
+            'X-CSRFToken': csrf_token
+        },
         data: JSON.stringify(section_data),
         success: function (data) {
 

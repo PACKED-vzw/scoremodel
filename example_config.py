@@ -24,6 +24,14 @@ SSL_CERT = '/etc/mysql/certs/client-cert.pem'
 ##
 WTF_CSRF_ENABLED = True
 SECRET_KEY = 'secret_key'
+BASE_URL = 'http://localhost:5000/'
+
+##
+# Log-in
+##
+REMEMBER_COOKIE_SECURE = True
+REMEMBER_COOKIE_HTTPONLY = True
+SESSION_PROTECTION = "strong"
 
 ##
 # Babel

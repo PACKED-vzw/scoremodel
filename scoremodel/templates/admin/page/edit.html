@@ -3,6 +3,9 @@
     <script src="{{ url_for('static', filename='lib/bower_components/bootstrap-markdown/js/bootstrap-markdown.js') }}"></script>
     <script src="{{ url_for('static', filename='lib/scoremodel/jquery/admin/buttons.js') }}"></script>
     <script src="{{ url_for('static', filename='lib/scoremodel/jquery/admin/page.js') }}"></script>
+    <script type="text/javascript">
+        var csrf_token = "{{ csrf_token() }}";
+    </script>
     <div class="container-fluid">
         <div class="row">
             <div class="col-md-9 col-sm-9">

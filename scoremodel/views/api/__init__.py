@@ -24,11 +24,12 @@ from scoremodel.modules.locale import Locale
 from scoremodel.modules.error import DatabaseItemDoesNotExist, RequiredAttributeMissing, FileDoesNotExist
 from scoremodel.modules.msg.messages import public_api_msg, public_error_msg
 from scoremodel.modules.user.authentication import must_be_admin, requires_auth
-from scoremodel import db, app
+from scoremodel import db, app, csrf
 
 api = Blueprint('api', __name__, url_prefix='/api/v2')
 
 
+@csrf.exempt
 @api.route('/report', methods=['POST'])
 @api.route('/report/<int:report_id>', methods=['PUT', 'DELETE'])
 @login_required
@@ -74,6 +75,7 @@ def v_api_risk_factor(risk_factor_id=None):
     return a_api.response
 
 
+@csrf.exempt
 @api.route('/report', methods=['GET'])
 @api.route('/report/<int:report_id>', methods=['GET'])
 def v_api_public_report(report_id=None):
@@ -81,6 +83,7 @@ def v_api_public_report(report_id=None):
     return a_api.response
 
 
+@csrf.exempt
 @api.route('/section', methods=['GET'])
 @api.route('/section/<int:section_id>', methods=['GET'])
 def v_api_public_section(section_id=None):
@@ -88,6 +91,7 @@ def v_api_public_section(section_id=None):
     return a_api.response
 
 
+@csrf.exempt
 @api.route('/question', methods=['GET'])
 @api.route('/question/<int:question_id>', methods=['GET'])
 def v_api_public_question(question_id=None):
@@ -95,6 +99,7 @@ def v_api_public_question(question_id=None):
     return a_api.response
 
 
+@csrf.exempt
 @api.route('/answer', methods=['GET'])
 @api.route('/answer/<int:answer_id>', methods=['GET'])
 def v_api_public_answer(answer_id=None):
@@ -102,6 +107,7 @@ def v_api_public_answer(answer_id=None):
     return a_api.response
 
 
+@csrf.exempt
 @api.route('/risk_factor', methods=['GET'])
 @api.route('/risk_factor/<int:risk_factor_id>', methods=['GET'])
 def v_api_public_risk_factor(risk_factor_id=None):
@@ -261,6 +267,7 @@ def v_api_page(page_id=None):
     return a_api.response
 
 
+@csrf.exempt
 @api.route('/page', methods=['GET'])
 @api.route('/page/<int:page_id>', methods=['GET'])
 def v_api_public_page(page_id=None):
@@ -335,6 +342,7 @@ def v_api_document_resource(document_id):
     return send_from_directory(app.config['UPLOAD_FULL_PATH'], existing_file['filename'])
 
 
+@csrf.exempt
 @api.route('/resource/<string:resource_name>', methods=['GET'])
 def v_api_resource(resource_name):
     file_api = FileApi()
@@ -347,6 +355,7 @@ def v_api_resource(resource_name):
     return send_from_directory(app.config['UPLOAD_FULL_PATH'], existing_file['filename'])
 
 
+@csrf.exempt
 @api.route('/document/<int:document_id>', methods=['GET'])
 @api.route('/document')
 def v_api_document(document_id=None):

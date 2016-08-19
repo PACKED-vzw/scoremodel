@@ -55,6 +55,13 @@ class ScoremodelRestApi:
             self.translate = self.translated_functions(self.translation_table)
         else:
             self.translate = self.translated_functions(translate)
+        ##
+        # Normally we would use .get_data() and convert the bytes to a string
+        # but CsrfProtect() already parses the form, thus emptying .get_data()
+        # We use this trick so all other functions remain unchanged.
+        # Note that we still have to implement some kind of error reporting when
+        # the automatic parsing fails.
+        ##
         input_data_raw = self.request.get_data()
         input_data_string = input_data_raw.decode('utf-8')
         ##
@@ -77,6 +84,17 @@ class ScoremodelRestApi:
         # Set self.response
         ##
         self.response = self.create_response(self.output_data)
+
+    def fix_flask_wtf(self):
+        """
+        The parsed data contains one key and no value. Normally, we parse
+        the data from request.get_data(), but the csrf-protection interferes with that,
+        parsing the data and not chaging it, causing .get_data() to return empty.
+        :param parsed_input_data:
+        :return:
+        """
+        for key in self.request.form.to_dict(flat=False).keys():
+            return key
 
     def post(self, input_data, additional_opts=None):
         if not additional_opts:
@@ -292,3 +310,10 @@ class ScoremodelRestApi:
             call_function = getattr(self.api, api_function)
             translation[our_function] = call_function
         return translation
+
+    def csrf(self):
+        """
+
+        :return:
+        """
+        # Check the origin and referer headers

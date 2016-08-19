@@ -2,6 +2,7 @@ import bcrypt
 from hashlib import sha512
 from scoremodel import db
 import scoremodel.models.public
+from scoremodel.modules.user.token import Token
 
 
 class Role(db.Model):
@@ -32,6 +33,8 @@ class User(db.Model):
     reports = db.relationship('UserReport', backref='user', lazy='dynamic')
     authenticated = db.Column(db.Boolean, default=False)
     locale = db.Column(db.String(8), default='nl')
+    api_key = db.Column(db.String(255), nullable=False, unique=True)
+    session_token = db.Column(db.String(255), nullable=False, unique=True)
     roles = db.relationship('Role',
                             secondary=users_roles,
                             primaryjoin=(users_roles.c.user_id == id),
@@ -43,6 +46,8 @@ class User(db.Model):
         self.email = email
         self.username = self.email
         self.set_password(password)
+        self.set_api_key()
+        self.set_session_token()
 
     def __repr__(self):
         return '<User {0}>'.format(self.username)
@@ -78,7 +83,11 @@ class User(db.Model):
         return False
 
     def get_id(self):
-        return str(self.id)
+        """
+        Returns the session_token, not the ID (see #Alternative Tokens at https://flask-login.readthedocs.io/en/latest/)
+        :return:
+        """
+        return self.session_token
 
     def is_authenticated(self):
         return self.authenticated
@@ -88,3 +97,9 @@ class User(db.Model):
             if role.role == role_name:
                 return True
         return False
+
+    def set_api_key(self):
+        self.api_key = Token().unique_token(User, 'api_key', 64)
+
+    def set_session_token(self):
+        self.session_token = Token().unique_token(User, 'session_token', 64)

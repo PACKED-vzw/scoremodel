@@ -63,6 +63,9 @@ function save_question_data(question_id) {
     return $.ajax({
         url: url,
         method: method,
+        headers: {
+            'X-CSRFToken': csrf_token
+        },
         data: JSON.stringify(question_data),
         success: function (data, status) {},
         error: function (jqXHR, status, error) {
