@@ -7,7 +7,10 @@ from scoremodel.modules.api.answer import AnswerApi
 from scoremodel.modules.api.risk_factor import RiskFactorApi
 from scoremodel.modules.api.lang import LangApi
 from scoremodel.modules.locale import Locale
+from scoremodel.modules.api.benchmark import BenchmarkApi
+from scoremodel.modules.api.benchmark_report import BenchmarkReportApi
 from scoremodel.modules.report.admin import ReportCreateForm, ReportDeleteForm
+from scoremodel.modules.forms.benchmark_report import BenchmarkReportCreateForm
 from scoremodel.modules.error import DatabaseItemAlreadyExists, RequiredAttributeMissing, DatabaseItemDoesNotExist
 from flask.ext.babel import gettext as _
 
@@ -108,14 +111,42 @@ def v_report_create():
 @login_required
 @must_be_admin
 def v_report_benchmark_report():
-    pass
+    return render_template('admin/report/benchmark/list.html', benchmarks=BenchmarkReportApi().list())
 
 
 @admin.route('/reports/benchmark/create', methods=['GET', 'POST'])
+@admin.route('/reports/benchmark/create/report/<int:report_id>', methods=['GET'])
 @login_required
 @must_be_admin
-def v_report_benchmark_create():
-    pass
+def v_report_benchmark_create(report_id=None):
+    form = BenchmarkReportCreateForm()
+    report_api = ReportApi()
+    benchmark_report_api = BenchmarkReportApi()
+    choices = [(r.id, r.title) for r in report_api.list()]
+    form.report.choices = choices
+    if report_id:
+        form.report.data = report_id
+    if request.method == 'POST' and form.validate_on_submit():
+        benchmark_report_data = {
+            'title': form.name.data,
+            'report_id': form.report.data
+        }
+        try:
+            new_benchmark_report = benchmark_report_api.create(benchmark_report_data)
+        except DatabaseItemAlreadyExists as e:
+            flash(_('This report already exists.'))
+            return redirect(url_for('admin.v_report_benchmark_create'))
+        except RequiredAttributeMissing as e:
+            flash(_('A required form element was not submitted: {0}').format(e))
+            return redirect(url_for('admin.v_report_benchmark_create'))
+        except Exception as e:
+            flash(_('An unexpected error occurred.'))
+            return redirect(url_for('admin.v_report_benchmark_create'))
+        else:
+            flash('Benchmark created')
+            return redirect(url_for('admin.v_report_benchmark_edit', benchmark_report_id=new_benchmark_report.id))
+    else:
+        return render_template('admin/report/benchmark/create.html', form=form, title=_('New benchmark'))
 
 
 @admin.route('/reports/benchmark/<int:benchmark_report_id>/delete', methods=['GET', 'POST'])

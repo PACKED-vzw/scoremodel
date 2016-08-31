@@ -3,7 +3,6 @@ from sqlalchemy import and_
 from scoremodel.modules.msg.messages import module_error_msg as _e
 from scoremodel.modules.error import RequiredAttributeMissing, DatabaseItemAlreadyExists, DatabaseItemDoesNotExist
 from scoremodel.modules.api.generic import GenericApi
-from scoremodel.modules.api.benchmark import BenchmarkApi
 from scoremodel.modules.api.report import ReportApi
 from scoremodel.modules.api.lang import LangApi
 from scoremodel.models.general import BenchmarkReport
@@ -51,7 +50,7 @@ class BenchmarkReportApi(GenericApi):
         return True
 
     def list(self):
-        return []
+        return BenchmarkReport.query.all()
 
     def parse_input_data(self, input_data):
         return self.clean_input_data(BenchmarkReport, input_data, self.possible_params, self.required_params,
