@@ -24,6 +24,7 @@ o	Titel
 o	Context
 o	Aggregatiescore totaal
 •	Rapport
+    Benchmark
 Acties
 Risicofactor
 """
@@ -37,6 +38,7 @@ class Answer(db.Model):
     order_in_question = db.Column(db.Integer, nullable=False, default=0)
     lang_id = db.Column(db.Integer, db.ForeignKey('Lang.id'))
     question_answers = db.relationship('QuestionAnswer', backref='answer_template', lazy='dynamic')
+    benchmark = db.relationship('Benchmark', backref='answer', lazy='dynamic')
 
     def __repr__(self):
         return u'<Answer {0}: {1}>'.format(self.id, self.answer)
@@ -102,6 +104,8 @@ class Report(db.Model):
     sections = db.relationship('Section', backref='report', lazy='dynamic', cascade='all, delete-orphan')
     lang_id = db.Column(db.Integer, db.ForeignKey('Lang.id'))
     user_reports = db.relationship('UserReport', backref='template', lazy='dynamic', cascade='all, delete-orphan')
+    benchmark_reports = db.relationship('BenchmarkReport', backref='report', lazy='dynamic',
+                                        cascade='all, delete-orphan')
 
     def __repr__(self):
         return '<Report {0}>'.format(self.id)
@@ -213,7 +217,7 @@ class Section(db.Model):
             # Prevent division by zero errors
             return 100
         else:
-            return 100/self.total_score
+            return 100 / self.total_score
 
 
 class Question(db.Model):
@@ -244,6 +248,8 @@ class Question(db.Model):
                               )
     question_answers = db.relationship('QuestionAnswer', backref='question_template', lazy='dynamic',
                                        cascade='all, delete-orphan')
+    benchmark = db.relationship('Benchmark', backref='question', lazy='dynamic', cascade='all, delete-orphan')
+
     # TODO: make weight dependent on risk_factors! (risk_factors must have a weight: hoog: 3, midden: 2, laag: 1
 
     def __repr__(self):
@@ -294,4 +300,44 @@ class Question(db.Model):
             'risk_factor_id': self.risk_factor_id,
             'answers': [a.output_obj() for a in self.answers],
             'maximum_score': self.maximum_score
+        }
+
+
+class BenchmarkReport(db.Model):
+    __tablename__ = 'BenchmarkReport'
+    id = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.String(255), index=True)
+    report_id = db.Column(db.Integer, db.ForeignKey(Report.id))
+    benchmarks = db.relationship('Benchmark', backref='benchmark_report', lazy='dynamic', cascade='all, delete-orphan')
+
+    def __init__(self, title):
+        self.title = title
+
+    def output_obj(self):
+        return {
+            'id': self.id,
+            'title': self.title,
+            'report_id': self.report_id,
+            'benchmarks': [b.output_obj() for b in self.benchmarks]
+        }
+
+
+class Benchmark(db.Model):
+    __tablename__ = 'Benchmark'
+    id = db.Column(db.Integer, primary_key=True)
+    question_id = db.Column(db.Integer, db.ForeignKey(Question.id))
+    answer_id = db.Column(db.Integer, db.ForeignKey(Answer.id))
+    benchmark_report_id = db.Column(db.Integer, db.ForeignKey(BenchmarkReport.id))
+
+    @property
+    def score(self):
+        return self.question.weight * self.answer.value * self.question.risk_factor.value
+
+    def output_obj(self):
+        return {
+            'id': self.id,
+            'question_id': self.question_id,
+            'answer_id': self.answer_id,
+            'score': self.score,
+            'benchmark_report_id': self.benchmark_report_id
         }

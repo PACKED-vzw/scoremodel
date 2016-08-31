@@ -74,6 +74,14 @@ def v_api_risk_factor(risk_factor_id=None):
     return a_api.response
 
 
+@api.route('/benchmark', methods=['POST'])
+@api.route('/benchmark/<int:benchmark_report_id>', methods=['PUT', 'DELETE'])
+@login_required
+@must_be_admin
+def v_api_benchmark(benchmark_report_id=None):
+    pass
+
+
 @csrf.exempt
 @api.route('/report', methods=['GET'])
 @api.route('/report/<int:report_id>', methods=['GET'])
@@ -125,6 +133,12 @@ def v_api_question_answer(question_answer_id=None):
     a_api = ScoremodelRestApi(api_class=QuestionAnswerApi, o_request=request, api_obj_id=question_answer_id,
                               hooks=[hook_insert_current_user])
     return a_api.response
+
+
+@api.route('/benchmark', methods=['GET'])
+@api.route('/benchmark/<int:benchmark_report_id>', methods=['GET'])
+def v_api_public_benchmark(benchmark_report_id=None):
+    pass
 
 
 ##
