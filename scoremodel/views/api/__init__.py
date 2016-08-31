@@ -20,6 +20,7 @@ from scoremodel.modules.api.risk_factor import RiskFactorApi
 from scoremodel.modules.api.section import SectionApi
 from scoremodel.modules.api.page import PageApi
 from scoremodel.modules.api.document import DocumentApi
+from scoremodel.modules.api.benchmark import BenchmarkApi
 from scoremodel.modules.locale import Locale
 from scoremodel.modules.error import DatabaseItemDoesNotExist, RequiredAttributeMissing, FileDoesNotExist
 from scoremodel.modules.msg.messages import public_api_msg, public_error_msg
@@ -74,14 +75,6 @@ def v_api_risk_factor(risk_factor_id=None):
     return a_api.response
 
 
-@api.route('/benchmark', methods=['POST'])
-@api.route('/benchmark/<int:benchmark_report_id>', methods=['PUT', 'DELETE'])
-@login_required
-@must_be_admin
-def v_api_benchmark(benchmark_report_id=None):
-    pass
-
-
 @csrf.exempt
 @api.route('/report', methods=['GET'])
 @api.route('/report/<int:report_id>', methods=['GET'])
@@ -133,12 +126,6 @@ def v_api_question_answer(question_answer_id=None):
     a_api = ScoremodelRestApi(api_class=QuestionAnswerApi, o_request=request, api_obj_id=question_answer_id,
                               hooks=[hook_insert_current_user])
     return a_api.response
-
-
-@api.route('/benchmark', methods=['GET'])
-@api.route('/benchmark/<int:benchmark_report_id>', methods=['GET'])
-def v_api_public_benchmark(benchmark_report_id=None):
-    pass
 
 
 ##
@@ -206,13 +193,55 @@ def v_api_get_question_answer(user_report_id, question_id):
     return a_api.response
 
 
-@api.route('/user_report', methods=['GET', 'POST'])
-@api.route('/user_report/<int:user_report_id>', methods=['PUT', 'DELETE', 'GET'])
+@api.route('/benchmark', methods=['POST'])
+@api.route('/benchmark/<int:benchmark_id>', methods=['PUT', 'DELETE'])
+@login_required
+def v_api_benchmark(benchmark_id=None):
+    a_api = ScoremodelRestApi(api_class=BenchmarkApi, o_request=request, api_obj_id=benchmark_id)
+    return a_api.response
+
+
+@csrf.exempt
+@api.route('/benchmark/<int:benchmark_report_id>/question/<int:question_id>', methods=['PUT', 'DELETE'])
+@login_required
+def v_api_benchmark_report(benchmark_report_id, question_id):
+    # Requires new API
+    a_api = ScoremodelRestApi(api_class=BenchmarkApi, o_request=request, api_obj_id=benchmark_id)
+    return a_api.response
+
+
+@csrf.exempt
+@api.route('/benchmark', methods=['GET'])
+@api.route('/benchmark/<int:benchmark_id>', methods=['GET'])
+@login_required
+def v_api_benchmark_get(benchmark_id=None):
+    a_api = ScoremodelRestApi(api_class=BenchmarkApi, o_request=request, api_obj_id=benchmark_id)
+    return a_api.response
+
+
+@csrf.exempt
+@api.route('/user_report', methods=['GET'])
+@api.route('/user_report/<int:user_report_id>', methods=['GET'])
+@login_required
+def v_api_user_report_get(user_report_id=None):
+    # Create a hook to insert current_user.id in the original data.
+    def hook_insert_current_user(input_data):
+        parsed_data = input_data
+        parsed_data['user_id'] = current_user.id
+        return parsed_data
+
+    a_api = ScoremodelRestApi(api_class=UserReportApi, o_request=request, api_obj_id=user_report_id,
+                              hooks=[hook_insert_current_user])
+    return a_api.response
+
+
+@api.route('/user_report', methods=['POST'])
+@api.route('/user_report/<int:user_report_id>', methods=['PUT', 'DELETE'])
 @login_required
 def v_api_user_report(user_report_id=None):
     # Create a hook to insert current_user.id in the original data.
     def hook_insert_current_user(input_data):
-        parsed_data =input_data
+        parsed_data = input_data
         parsed_data['user_id'] = current_user.id
         return parsed_data
 
@@ -341,6 +370,7 @@ def v_api_document(document_id=None):
     return a_api.response
 
 
+@csrf.exempt
 @api.route('/locale/<string:locale_name>', methods=['POST'])
 @api.route('/locale', methods=['GET'])
 def v_set_locale(locale_name=None):

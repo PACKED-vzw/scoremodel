@@ -67,6 +67,9 @@ class BenchmarkApi(GenericApi):
     def list(self):
         return []
 
+    def by_benchmark_report_id(self, benchmark_report_id):
+        return Benchmark.query.filter(Benchmark.benchmark_report_id == benchmark_report_id).all()
+
     def parse_input_data(self, input_data):
         return self.clean_input_data(Benchmark, input_data, self.possible_params, self.required_params,
                                      self.complex_params)

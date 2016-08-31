@@ -160,7 +160,13 @@ def v_report_benchmark_delete(benchmark_report_id):
 @login_required
 @must_be_admin
 def v_report_benchmark_edit(benchmark_report_id):
-    pass
+    benchmark_report = BenchmarkReportApi().read(benchmark_report_id)
+    benchmarks = BenchmarkApi().by_benchmark_report_id(benchmark_report_id)
+    ordered_benchmarks = {}
+    for benchmark in benchmarks:
+        ordered_benchmarks[benchmark.question_id] = benchmark
+    return render_template('admin/report/benchmark/edit.html', benchmark_report_id=benchmark_report_id,
+                           benchmark_report=benchmark_report, benchmarks=ordered_benchmarks)
 
 
 ##

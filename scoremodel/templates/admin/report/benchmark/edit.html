@@ -1,0 +1,168 @@
+{% extends 'admin/base.html' %}
+{% block admin_content %}
+    <script src="{{ url_for('static', filename='lib/bower_components/jquery-ui/jquery-ui.js') }}"></script>
+    <script src="{{ url_for('static', filename='lib/scoremodel/jquery/admin/benchmark.js') }}"></script>
+    <script type="text/javascript">
+        var csrf_token = "{{ csrf_token() }}";
+    </script>
+    <div class="container">
+        <div class="page-header">
+            <h1>{{ benchmark_report.title }}</h1>
+        </div>
+        <div class="well">
+            <p>{{ benchmark_report.report.title }}</p>
+        </div>
+        <div class="row">
+            <form novalidate>
+                <input id="report_id" type="hidden" value="{{ benchmark_report_id }}"/>
+                <div class="container">
+                    {% for section in benchmark_report.report.sections %}
+                        <div class="row">
+                            <div class="container">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <h2>{{ section.title }}</h2>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="container">
+                                        {% for question in section.questions %}
+                                            <div class="row">
+                                                <div class="container">
+                                                    <div class="row">
+                                                        <div class="col-md-12">
+                                                            <h3>{{ question.question }}</h3>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-sm-3">
+                                                            <button class="btn btn-default" type="button"
+                                                                    data-toggle="collapse"
+                                                                    data-target="#question_context_{{ question.id }}"
+                                                                    aria-expanded="false"
+                                                                    aria-controls="question_context_{{ question.id }}">
+                                                                {{ _('Context') }}
+                                                                <span class="caret"></span>
+                                                            </button>
+                                                            <div class="collapse"
+                                                                 id="question_context_{{ question.id }}">
+                                                                <div class="well">
+                                                                    {{ question.context }}
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-sm-3">
+                                                            <button class="btn btn-default" type="button"
+                                                                    data-toggle="collapse"
+                                                                    data-target="#question_example_{{ question.id }}"
+                                                                    aria-expanded="false"
+                                                                    aria-controls="question_example_{{ question.id }}">
+                                                                {{ _('Example') }}
+                                                                <span class="caret"></span>
+                                                            </button>
+                                                            <div class="collapse"
+                                                                 id="question_example_{{ question.id }}">
+                                                                <div class="well">
+                                                                    {{ question.example }}
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-sm-3">
+                                                            <button class="btn btn-default" type="button"
+                                                                    data-toggle="collapse"
+                                                                    data-target="#question_risk_{{ question.id }}"
+                                                                    aria-expanded="false"
+                                                                    aria-controls="question_risk_{{ question.id }}">
+                                                                {{ _('Risk') }}
+                                                                <span class="caret"></span>
+                                                            </button>
+                                                            <div class="collapse" id="question_risk_{{ question.id }}">
+                                                                <div class="well">
+                                                                    {{ question.risk }}
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-sm-3">
+                                                            <button class="btn btn-default" type="button"
+                                                                    data-toggle="collapse"
+                                                                    data-target="#question_action_{{ question.id }}"
+                                                                    aria-expanded="false"
+                                                                    aria-controls="question_action_{{ question.id }}">
+                                                                {{ _('Action') }}
+                                                                <span class="caret"></span>
+                                                            </button>
+                                                            <div class="collapse"
+                                                                 id="question_action_{{ question.id }}">
+                                                                <div class="well">
+                                                                    {{ question.action }}
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="container">
+                                                            <div class="row">
+                                                                <div class="col-md-12">
+                                                                    <h4>{{ _('Answers') }}</h4>
+                                                                </div>
+                                                            </div>
+                                                            <div class="row">
+                                                                {% for answer in question.answers %}
+                                                                    <div class="radio">
+                                                                        <label>
+                                                                            {% if benchmarks[question.id] is defined and answer.id == benchmarks[question.id].answer_id %}
+                                                                                <input type="radio"
+                                                                                       value="{{ answer.id }}"
+                                                                                       id="questions_{{ question.id }}_{{ answer.id }}"
+                                                                                       name="questions_{{ question.id }}"
+                                                                                       checked
+                                                                                       autocomplete="off"/>
+                                                                                {{ answer.answer }}
+                                                                            {% else %}
+                                                                                <input type="radio"
+                                                                                       value="{{ answer.id }}"
+                                                                                       id="questions_{{ question.id }}_{{ answer.id }}"
+                                                                                       name="questions_{{ question.id }}"
+                                                                                       autocomplete="off"/>
+                                                                                {{ answer.answer }}
+                                                                            {% endif %}
+                                                                        </label>
+                                                                    </div>
+                                                                {% endfor %}
+                                                            <div class="radio">
+                                                                <label>
+                                                                    <input type="radio"
+                                                                           value="-1"
+                                                                           id="questions_{{ question.id }}_none"
+                                                                           name="questions_{{ question.id }}" />
+                                                                    {{ _('Not part of the benchmark') }}
+                                                                </label>
+                                                            </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="container">
+                                                            <div class="row">
+                                                                <div class="col-md-12">
+                                                                    <div class="alert alert-warning" role="alert">
+                                                                        <p>
+                                                                            {{ _('Risk factor') }}: {{ question.risk_factor.risk_factor }}</p>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </form>
+        </div>
+    </div>
+{% endblock %}
