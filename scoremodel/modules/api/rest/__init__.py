@@ -21,4 +21,3 @@ class RestApi:
 
     def headers(self):
         self.__response.headers['Content-Type'] = 'application/json'
-        self.__response.headers['Access-Control-Allow-Origin'] = '*'

@@ -43,6 +43,7 @@ function save_report_data() {
         method: method,
         url: url,
         data: JSON.stringify(report_data),
+        contentType: 'application/json',
         success: function () {
         },
         error: function (jqXHR, status, error) {
@@ -117,6 +118,7 @@ function save_report_chain() {
         headers: {
             'X-CSRFToken': csrf_token
         },
+        contentType: 'application/json',
         success: function () {
              success_button('#report_save_button', 'Saved');
         },

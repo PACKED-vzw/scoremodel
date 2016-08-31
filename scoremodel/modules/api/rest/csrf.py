@@ -22,3 +22,6 @@ class CSRFApi:
             if referer.scheme == self.base_url.scheme and referer.netloc == self.base_url.netloc:
                 return True
         return False
+
+    def token(self):
+        pass

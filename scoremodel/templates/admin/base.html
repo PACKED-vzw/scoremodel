@@ -22,6 +22,9 @@
     <!-- Local scripts -->
     <script src="{{ url_for('static', filename='lib/scoremodel/jquery/public/locale.js') }}"></script>
     <script src="{{ url_for('static', filename='lib/scoremodel/jquery/form.js') }}"></script>
+    <script type="text/javascript">
+        var csrf_token = "{{ csrf_token() }}";
+    </script>
 </head>
 <body>
 {% include 'admin/admin_navigation.html' %}

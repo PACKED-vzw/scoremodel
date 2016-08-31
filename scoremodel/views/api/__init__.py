@@ -29,7 +29,6 @@ from scoremodel import db, app, csrf
 api = Blueprint('api', __name__, url_prefix='/api/v2')
 
 
-@csrf.exempt
 @api.route('/report', methods=['POST'])
 @api.route('/report/<int:report_id>', methods=['PUT', 'DELETE'])
 @login_required
@@ -121,14 +120,8 @@ def v_api_public_risk_factor(risk_factor_id=None):
 def v_api_question_answer(question_answer_id=None):
     # Create a hook to insert current_user.id in the original data.
     def hook_insert_current_user(input_data):
-        try:
-            parsed_data = json.loads(input_data)
-        except ValueError as e:
-            # If parsing the data as JSON fails, return to ScoremodelApi so
-            # it can handle the failure gracefully.
-            return input_data
-        parsed_data['user_id'] = current_user.id
-        return json.dumps(parsed_data)
+        input_data['user_id'] = current_user.id
+        return input_data
     a_api = ScoremodelRestApi(api_class=QuestionAnswerApi, o_request=request, api_obj_id=question_answer_id,
                               hooks=[hook_insert_current_user])
     return a_api.response
@@ -147,32 +140,22 @@ def v_api_create_question_answer(user_report_id, question_id, answer_id):
     # Create a hook to insert current_user.id in the original data.
     def hook_insert_current_user(input_data):
         if input_data:
-            try:
-                parsed_data = json.loads(input_data)
-            except ValueError as e:
-                # If parsing the data as JSON fails, return to ScoremodelApi so
-                # it can handle the failure gracefully.
-                return input_data
+            parsed_data = input_data
         else:
             parsed_data = {}
         parsed_data['user_id'] = current_user.id
-        return json.dumps(parsed_data)
+        return parsed_data
 
     # Create a hook to insert user_report_id, question_id and answer_id into input_data
     def hook_insert_ids(input_data):
         if input_data:
-            try:
-                parsed_data = json.loads(input_data)
-            except ValueError as e:
-                # If parsing the data as JSON fails, return to ScoremodelApi so
-                # it can handle the failure gracefully.
-                return input_data
+            parsed_data  = input_data
         else:
             parsed_data = {}
         parsed_data['user_report_id'] = user_report_id
         parsed_data['question_id'] = question_id
         parsed_data['answer_id'] = answer_id
-        return json.dumps(parsed_data)
+        return parsed_data
 
     # api_obj_id can not be None, but it is ignored in this case
     a_api = QuestionAnswerQueryRestApi(api_class=QuestionAnswerApi, o_request=request, api_obj_id='',
@@ -180,37 +163,28 @@ def v_api_create_question_answer(user_report_id, question_id, answer_id):
     return a_api.response
 
 
+@csrf.exempt
 @api.route('/user_report/<int:user_report_id>/question/<int:question_id>', methods=['GET'])
 @login_required
 def v_api_get_question_answer(user_report_id, question_id):
     # Create a hook to insert current_user.id in the original data.
     def hook_insert_current_user(input_data):
         if input_data:
-            try:
-                parsed_data = json.loads(input_data)
-            except ValueError as e:
-                # If parsing the data as JSON fails, return to ScoremodelApi so
-                # it can handle the failure gracefully.
-                return input_data
+            parsed_data = input_data
         else:
             parsed_data = {}
         parsed_data['user_id'] = current_user.id
-        return json.dumps(parsed_data)
+        return parsed_data
 
     # Create a hook to insert user_report_id, question_id and answer_id into input_data
     def hook_insert_ids(input_data):
         if input_data:
-            try:
-                parsed_data = json.loads(input_data)
-            except ValueError as e:
-                # If parsing the data as JSON fails, return to ScoremodelApi so
-                # it can handle the failure gracefully.
-                return input_data
+            parsed_data = input_data
         else:
             parsed_data = {}
         parsed_data['user_report_id'] = user_report_id
         parsed_data['question_id'] = question_id
-        return json.dumps(parsed_data)
+        return parsed_data
 
     # api_obj_id can not be None, but it is ignored in this case
     a_api = QuestionAnswerQuestionQueryRestApi(api_class=QuestionAnswerApi, o_request=request, api_obj_id='',
@@ -224,14 +198,9 @@ def v_api_get_question_answer(user_report_id, question_id):
 def v_api_user_report(user_report_id=None):
     # Create a hook to insert current_user.id in the original data.
     def hook_insert_current_user(input_data):
-        try:
-            parsed_data = json.loads(input_data)
-        except ValueError as e:
-            # If parsing the data as JSON fails, return to ScoremodelApi so
-            # it can handle the failure gracefully.
-            return input_data
+        parsed_data =input_data
         parsed_data['user_id'] = current_user.id
-        return json.dumps(parsed_data)
+        return parsed_data
 
     a_api = ScoremodelRestApi(api_class=UserReportApi, o_request=request, api_obj_id=user_report_id,
                               hooks=[hook_insert_current_user])
@@ -247,10 +216,7 @@ def v_api_page(page_id=None):
         if not page_id:
             # It is a .create()
             return input_data
-        try:
-            parsed_data = json.loads(input_data)
-        except ValueError as e:
-            return input_data
+        parsed_data = input_data
         page_api = PageApi()
         current_page = page_api.read(page_id)
         if 'lang_id' not in parsed_data or 'menu_link_id' not in parsed_data:
@@ -289,10 +255,7 @@ def v_api_document_create():
 # Forbid updating the document filename
 def v_api_document_edit(document_id):
     def hook_check_filename(input_data):
-        try:
-            parsed_data = json.loads(input_data)
-        except ValueError as e:
-            return input_data
+        parsed_data = input_data
         document_api = DocumentApi()
         try:
             existing_document = document_api.read(document_id)
@@ -319,6 +282,7 @@ def v_api_document_resource_upload(document_id):
     return a_api.response
 
 
+@csrf.exempt
 @api.route('/document/<int:document_id>/resource', methods=['GET'])
 def v_api_document_resource(document_id):
     file_api = FileApi()

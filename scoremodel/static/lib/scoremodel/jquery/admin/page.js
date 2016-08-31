@@ -27,6 +27,10 @@ function save_page_data(page_id) {
     return $.ajax({
         method: 'PUT',
         url: '/api/v2/page/' + page_id,
+        headers: {
+            'X-CSRFToken': csrf_token
+        },
+        contentType: 'application/json',
         data: JSON.stringify(page_data),
         success: function (data, status) {
             success_button('#save_button', 'Saved');

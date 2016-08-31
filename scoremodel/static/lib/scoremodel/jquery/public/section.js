@@ -121,6 +121,10 @@ function submit_answer(user_report_id, question_id, answer_id){
             $.ajax({
                 method: 'PUT',
                 url: '/api/v2/question_answer/' + question_answer_id,
+                headers: {
+                        'X-CSRFToken': csrf_token
+                    },
+                contentType: 'application/json',
                 data: JSON.stringify({
                     user_report_id: user_report_id,
                     question_id: question_id,
@@ -143,6 +147,10 @@ function submit_answer(user_report_id, question_id, answer_id){
                 $.ajax({
                     method: 'POST',
                     url: '/api/v2/question_answer',
+                    contentType: 'application/json',
+                    headers: {
+                        'X-CSRFToken': csrf_token
+                    },
                     data: JSON.stringify({
                         user_report_id: user_report_id,
                         question_id: question_id,

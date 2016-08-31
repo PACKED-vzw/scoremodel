@@ -1,4 +1,5 @@
 import json
+from werkzeug.exceptions import BadRequest
 from scoremodel.modules.error import RequiredAttributeMissing, DatabaseItemAlreadyExists, DatabaseItemDoesNotExist, \
     IllegalEntityType
 from scoremodel.modules.msg.messages import public_api_msg, public_error_msg
@@ -62,39 +63,27 @@ class ScoremodelRestApi:
         # Note that we still have to implement some kind of error reporting when
         # the automatic parsing fails.
         ##
-        input_data_raw = self.request.get_data()
-        input_data_string = input_data_raw.decode('utf-8')
-        ##
-        # Perform the hooks
-        # If a hook fails, we error out immediately
-        ##
-        try:
-            for hook in hooks:
-                input_data_string = hook(input_data_string)
-        except Exception as e:
-            self.msg = public_error_msg['error_occurred'].format(e)
-            self.status_code = 400
-        else:
-            ##
-            # Parse the original request and execute the correct self.action() for the request.method
-            ##
-            self.parse_request(input_data_string=input_data_string, api_obj_id=api_obj_id,
-                               additional_opts=additional_opts)
+        input_data_json = {}
+        if self.request.method != 'GET' and self.request.method != 'DELETE':
+            try:
+                input_data_json = self.request.get_json(force=True, silent=False)
+            except BadRequest as e:
+                self.msg = public_error_msg['error_occurred'].format(e)
+                self.status_code = 400
+        if self.status_code != 400:
+            try:
+                for hook in hooks:
+                    input_data_json = hook(input_data_json)
+            except Exception as e:
+                self.msg = public_error_msg['error_occurred'].format(e)
+                self.status_code = 400
+            else:
+                self.parse_request(input_data_json=input_data_json, api_obj_id=api_obj_id,
+                                   additional_opts=additional_opts)
         ##
         # Set self.response
         ##
         self.response = self.create_response(self.output_data)
-
-    def fix_flask_wtf(self):
-        """
-        The parsed data contains one key and no value. Normally, we parse
-        the data from request.get_data(), but the csrf-protection interferes with that,
-        parsing the data and not chaging it, causing .get_data() to return empty.
-        :param parsed_input_data:
-        :return:
-        """
-        for key in self.request.form.to_dict(flat=False).keys():
-            return key
 
     def post(self, input_data, additional_opts=None):
         if not additional_opts:
@@ -196,11 +185,11 @@ class ScoremodelRestApi:
         else:
             return u''
 
-    def parse_get(self, api_obj_id=None, input_data_string=None, additional_opts=None):
+    def parse_get(self, api_obj_id=None, input_data_json=None, additional_opts=None):
         """
         Parse a GET request
         :param api_obj_id:
-        :param input_data_string:
+        :param input_data_json:
         :param additional_opts:
         :return:
         """
@@ -211,7 +200,7 @@ class ScoremodelRestApi:
                 self.msg = public_error_msg['missing_argument'].format('api_obj_id')
                 self.status_code = 400
         else:
-            self.output_data = self.get(api_obj_id, self.parse_json(input_data_string))
+            self.output_data = self.get(api_obj_id, input_data_json)
 
     def parse_delete(self, api_obj_id=None, additional_opts=None):
         """
@@ -226,11 +215,11 @@ class ScoremodelRestApi:
         else:
             self.output_data = self.delete(api_obj_id, additional_opts=additional_opts)
 
-    def parse_put(self, api_obj_id=None, input_data_string=None, additional_opts=None):
+    def parse_put(self, api_obj_id=None, input_data_json=None, additional_opts=None):
         """
         Parse a PUT request
         :param api_obj_id:
-        :param input_data_string:
+        :param input_data_json:
         :param additional_opts:
         :return:
         """
@@ -238,46 +227,46 @@ class ScoremodelRestApi:
             self.msg = public_error_msg['missing_argument'].format('api_obj_id')
             self.status_code = 400
         else:
-            if self.parse_json(input_data_string) is not None:
-                self.output_data = self.put(api_obj_id, self.parse_json(input_data_string),
+            if input_data_json is not None:
+                self.output_data = self.put(api_obj_id, input_data_json,
                                             additional_opts=additional_opts)
             else:
                 self.msg = public_error_msg['missing_argument'].format('body')
                 self.status_code = 400
 
-    def parse_post(self, input_data_string, additional_opts=None):
+    def parse_post(self, input_data_json, additional_opts=None):
         """
         Parse a POST request
-        :param input_data_string:
+        :param input_data_json:
         :param additional_opts:
         :return:
         """
-        if self.parse_json(input_data_string) is not None:
-            self.output_data = self.post(self.parse_json(input_data_string), additional_opts=additional_opts)
+        if input_data_json is not None:
+            self.output_data = self.post(input_data_json, additional_opts=additional_opts)
         else:
             self.msg = public_error_msg['missing_argument'].format('body')
             self.status_code = 400
 
-    def parse_request(self, input_data_string=None, api_obj_id=None, additional_opts=None):
+    def parse_request(self, input_data_json=None, api_obj_id=None, additional_opts=None):
         """
         Parse the original request:
             - Check for missing arguments and input
             - Execute self.action() for the request.method (self.request)
         This function has many sub functions (parse_*) to allow for easier
         subclassing.
-        :param input_data_string:
+        :param input_data_json: (parsed JSON request data)
         :param api_obj_id:
         :param additional_opts:
         :return:
         """
         if self.request.method == 'GET':
-            self.parse_get(api_obj_id, input_data_string, additional_opts=additional_opts)
+            self.parse_get(api_obj_id, input_data_json, additional_opts=additional_opts)
         elif self.request.method == 'DELETE':
             self.parse_delete(api_obj_id, additional_opts=additional_opts)
         elif self.request.method == 'PUT':
-            self.parse_put(api_obj_id, input_data_string, additional_opts=additional_opts)
+            self.parse_put(api_obj_id, input_data_json, additional_opts=additional_opts)
         elif self.request.method == 'POST':
-            self.parse_post(input_data_string, additional_opts=additional_opts)
+            self.parse_post(input_data_json, additional_opts=additional_opts)
         else:
             self.msg = public_error_msg['illegal_action'].format(self.request.method)
             self.status_code = 405
