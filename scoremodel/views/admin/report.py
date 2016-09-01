@@ -7,8 +7,8 @@ from scoremodel.modules.api.answer import AnswerApi
 from scoremodel.modules.api.risk_factor import RiskFactorApi
 from scoremodel.modules.api.lang import LangApi
 from scoremodel.modules.locale import Locale
-from scoremodel.modules.api.benchmark import BenchmarkApi
-from scoremodel.modules.api.benchmark_report import BenchmarkReportApi
+from scoremodel.modules.api.benchmark.benchmark import BenchmarkApi
+from scoremodel.modules.api.benchmark.report import BenchmarkReportApi
 from scoremodel.modules.report.admin import ReportCreateForm, ReportDeleteForm
 from scoremodel.modules.forms.benchmark_report import BenchmarkReportCreateForm
 from scoremodel.modules.error import DatabaseItemAlreadyExists, RequiredAttributeMissing, DatabaseItemDoesNotExist

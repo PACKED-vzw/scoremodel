@@ -98,10 +98,10 @@ class ScoremodelRestApi:
             self.msg = public_error_msg['item_not_exists'].format(self.api)
             self.status_code = 404
             created_object = None
-        #except Exception as e:
-        #    self.msg = public_error_msg['error_occurred'].format(e)
-        #    self.status_code = 400
-        #    created_object = None
+        except Exception as e:
+            self.msg = public_error_msg['error_occurred'].format(e)
+            self.status_code = 400
+            created_object = None
         else:
             self.msg = public_api_msg['item_created'].format(self.api, created_object.id)
         if created_object is not None:
@@ -148,18 +148,18 @@ class ScoremodelRestApi:
             additional_opts = {}
         try:
             updated_object = self.api.update(item_id, input_data=input_data, **additional_opts)
-        #except DatabaseItemDoesNotExist:
-        #    self.msg = public_error_msg['item_not_exists'].format(self.api, item_id)
-        #    self.status_code = 404
-        #    updated_object = None
+        except DatabaseItemDoesNotExist:
+            self.msg = public_error_msg['item_not_exists'].format(self.api, item_id)
+            self.status_code = 404
+            updated_object = None
         except DatabaseItemAlreadyExists:
             self.msg = public_error_msg['item_exists'].format(self.api)
             self.status_code = 400
             updated_object = None
-        #except Exception as e:
-        #    self.msg = public_error_msg['error_occurred'].format(e)
-        #    self.status_code = 400
-        #    updated_object = None
+        except Exception as e:
+            self.msg = public_error_msg['error_occurred'].format(e)
+            self.status_code = 400
+            updated_object = None
         else:
             self.msg = public_api_msg['item_updated'].format(self.api, updated_object.id)
         if updated_object is not None:

@@ -31,25 +31,30 @@ function get_question_id(name_attr){
 function submit_benchmark(benchmark_report_id, question_id, answer_id){
     $.ajax({
         method: 'GET',
-        url: '/api/v2/benchmark/' + benchmark_report_id + '/question/' + question_id,
+        url: '/api/v2/benchmark_report/' + benchmark_report_id + '/question/' + question_id,
         success: function(data, status){
             /*
             When successful, this combination already exists. If so, get the ID from data.data and perform a PUT
             request.
              */
-            var question_answer_id = data.data.id;
+            var benchmark_id = data.data.id;
+            var benchmark_data = {
+                benchmark_report_id: benchmark_report_id,
+                question_id: question_id
+            };
+            if (answer_id > 0) {
+                benchmark_data['answer_id'] = answer_id;
+            }
+
+
             $.ajax({
                 method: 'PUT',
-                url: '/api/v2/question_answer/' + question_answer_id,
+                url: '/api/v2/benchmark/' + benchmark_id,
                 headers: {
                         'X-CSRFToken': csrf_token
                     },
                 contentType: 'application/json',
-                data: JSON.stringify({
-                    user_report_id: user_report_id,
-                    question_id: question_id,
-                    answer_id: answer_id
-                }),
+                data: JSON.stringify(benchmark_data),
                 success: function(data, status){
                     //console.log(status);
                 },
@@ -64,18 +69,22 @@ function submit_benchmark(benchmark_report_id, question_id, answer_id){
              */
             console.log(status);
             if (error == 'NOT FOUND') {
+                var benchmark_data = {
+                    benchmark_report_id: benchmark_report_id,
+                    question_id: question_id
+                };
+                if (answer_id > 0) {
+                    benchmark_data['answer_id'] = answer_id;
+                }
+
                 $.ajax({
                     method: 'POST',
-                    url: '/api/v2/question_answer',
+                    url: '/api/v2/benchmark',
                     contentType: 'application/json',
                     headers: {
                         'X-CSRFToken': csrf_token
                     },
-                    data: JSON.stringify({
-                        user_report_id: user_report_id,
-                        question_id: question_id,
-                        answer_id: answer_id
-                    }),
+                    data: JSON.stringify(benchmark_data),
                     success: function(data, status){},
                     error: function(jqXHR, status, error){}
                 });

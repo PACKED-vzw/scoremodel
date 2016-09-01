@@ -129,15 +129,25 @@
                                                                         </label>
                                                                     </div>
                                                                 {% endfor %}
-                                                            <div class="radio">
-                                                                <label>
-                                                                    <input type="radio"
-                                                                           value="-1"
-                                                                           id="questions_{{ question.id }}_none"
-                                                                           name="questions_{{ question.id }}" />
-                                                                    {{ _('Not part of the benchmark') }}
-                                                                </label>
-                                                            </div>
+                                                                <div class="radio">
+                                                                    <label>
+                                                                        {% if benchmarks[question.id] is defined and benchmarks[question.id].not_in_benchmark == True %}
+                                                                            <input type="radio"
+                                                                                   value="-1"
+                                                                                   id="questions_{{ question.id }}_none"
+                                                                                   name="questions_{{ question.id }}"
+                                                                                   checked
+                                                                                   autocomplete="off"/>
+                                                                            {{ _('Not part of the benchmark') }}
+                                                                        {% else %}
+                                                                            <input type="radio"
+                                                                                   value="-1"
+                                                                                   id="questions_{{ question.id }}_none"
+                                                                                   name="questions_{{ question.id }}"/>
+                                                                            {{ _('Not part of the benchmark') }}
+                                                                        {% endif %}
+                                                                    </label>
+                                                                </div>
                                                             </div>
                                                         </div>
                                                     </div>

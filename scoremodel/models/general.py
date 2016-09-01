@@ -328,16 +328,28 @@ class Benchmark(db.Model):
     question_id = db.Column(db.Integer, db.ForeignKey(Question.id))
     answer_id = db.Column(db.Integer, db.ForeignKey(Answer.id))
     benchmark_report_id = db.Column(db.Integer, db.ForeignKey(BenchmarkReport.id))
+    not_in_benchmark = db.Column(db.Boolean, default=False)
+
+    def __init__(self):
+        pass
 
     @property
     def score(self):
         return self.question.weight * self.answer.value * self.question.risk_factor.value
 
     def output_obj(self):
-        return {
-            'id': self.id,
-            'question_id': self.question_id,
-            'answer_id': self.answer_id,
-            'score': self.score,
-            'benchmark_report_id': self.benchmark_report_id
-        }
+        if self.not_in_benchmark:
+            return {
+                'id': self.id,
+                'question_id': self.question_id,
+                'benchmark_report_id': self.benchmark_report_id,
+                'not_in_benchmark': self.not_in_benchmark
+            }
+        else:
+            return {
+                'id': self.id,
+                'question_id': self.question_id,
+                'answer_id': self.answer_id,
+                'score': self.score,
+                'benchmark_report_id': self.benchmark_report_id
+            }
