@@ -7,6 +7,7 @@ from scoremodel.modules.api.answer import AnswerApi
 from scoremodel.modules.api.risk_factor import RiskFactorApi
 from scoremodel.modules.api.lang import LangApi
 from scoremodel.modules.locale import Locale
+from scoremodel.modules.forms.generic import GenericDeleteForm
 from scoremodel.modules.api.benchmark.benchmark import BenchmarkApi
 from scoremodel.modules.api.benchmark.report import BenchmarkReportApi
 from scoremodel.modules.report.admin import ReportCreateForm, ReportDeleteForm
@@ -153,7 +154,29 @@ def v_report_benchmark_create(report_id=None):
 @login_required
 @must_be_admin
 def v_report_benchmark_delete(benchmark_report_id):
-    pass
+    form = GenericDeleteForm()
+    benchmark_report_api = BenchmarkReportApi()
+    try:
+        existing_benchmark_report = benchmark_report_api.read(benchmark_report_id)
+    except DatabaseItemDoesNotExist:
+        flash(_('No benchmark report with id {0} exists.').format(benchmark_report_id))
+        return url_for('admin.v_report_benchmark_report')
+    if request.method == 'POST' and form.validate_on_submit():
+        try:
+            if benchmark_report_api.delete(benchmark_report_id) is True:
+                flash(_('Benchmark report {0} removed.').format(benchmark_report_id))
+            else:
+                flash(_('Failed to remove benchmark report {0}.').format(benchmark_report_id))
+        except Exception as e:
+            flash(_('An unexpected error occurred.'))
+            return render_template('admin/generic/delete.html', action_url=url_for('admin.v_report_benchmark_delete',
+                                                                                   benchmark_report_id=benchmark_report_id),
+                                   item_type=_('Benchmark eport'), item_identifier=existing_benchmark_report.title, form=form)
+        else:
+            return redirect(url_for('admin.v_report_benchmark_report'))
+    return render_template('admin/generic/delete.html', action_url=url_for('admin.v_report_benchmark_delete',
+                                                                                   benchmark_report_id=benchmark_report_id),
+                                   item_type=_('Benchmark eport'), item_identifier=existing_benchmark_report.title, form=form)
 
 
 @admin.route('/reports/benchmark/<int:benchmark_report_id>/edit', methods=['GET'])
