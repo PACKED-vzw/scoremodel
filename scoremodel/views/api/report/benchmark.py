@@ -3,6 +3,7 @@ from flask.ext.login import login_required
 
 from scoremodel.modules.api.rest.scoremodel import ScoremodelRestApi
 from scoremodel.modules.api.benchmark.benchmark import BenchmarkApi
+from scoremodel.modules.api.benchmark.report import BenchmarkReportApi
 from scoremodel.modules.api.benchmark.rest_api import BenchmarkQueryRestApi
 from scoremodel import csrf
 from scoremodel.views.api import api
@@ -36,4 +37,12 @@ def v_api_benchmark_report(benchmark_report_id, question_id):
 @login_required
 def v_api_benchmark_get(benchmark_id=None):
     a_api = ScoremodelRestApi(api_class=BenchmarkApi, o_request=request, api_obj_id=benchmark_id)
+    return a_api.response
+
+
+@csrf.exempt
+@api.route('/benchmark_report/<int:benchmark_report_id>', methods=['GET'])
+@login_required
+def v_api_benchmark_report_get(benchmark_report_id):
+    a_api = ScoremodelRestApi(api_class=BenchmarkReportApi, o_request=request, api_obj_id=benchmark_report_id)
     return a_api.response

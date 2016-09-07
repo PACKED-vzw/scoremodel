@@ -6,7 +6,12 @@
     <link href="{{ url_for('static', filename='lib/bower_components/radar-chart-d3/src/radar-chart.css') }}"
           rel="stylesheet"/>
     <!-- Local scripts -->
-    <script src="{{ url_for('static', filename='lib/scoremodel/jquery/public/report.js') }}"></script>
+    <script type="text/javascript">
+        var report_id = {{ report_template.id }};
+        var user_report_id = {{ user_report.id }};
+    </script>
+    <script src="{{ url_for('static', filename='lib/scoremodel/jquery/public/graph.js') }}"></script>
+    <script src="{{ url_for('static', filename='lib/scoremodel/jquery/public/report2.js') }}"></script>
     <div class="container">
         <div class="row">
             <div class="col-md-9">

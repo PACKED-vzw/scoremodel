@@ -26,6 +26,16 @@ class UserReport(db.Model):
     def creation_date(self):
         return self.creation_time.date()
 
+    @property
+    def by_section(self):
+        questions_by_section = {s.id: [] for s in self.template.sections}
+        for question in self.question_answers:
+            if question.question_template.section_id in questions_by_section:
+                questions_by_section[question.question_template.section_id].append(question)
+            else:
+                questions_by_section[question.question_template.section_id] = [question]
+        return questions_by_section
+
     def output_obj(self):
         return {
             'id': self.id,
@@ -33,7 +43,14 @@ class UserReport(db.Model):
             'user_id': self.user_id,
             'report_id': self.report_id,
             'total_score': self.total_score,
-            'question_answers': [q.output_obj() for q in self.question_answers]
+            'question_answers': [q.output_obj() for q in self.question_answers],
+            'question_answers_by_section': [
+                {
+                    'section_id': key,
+                    'question_answers': [q.output_obj() for q in value]
+                }
+                for (key, value) in self.by_section.items()
+            ]
         }
 
     @property

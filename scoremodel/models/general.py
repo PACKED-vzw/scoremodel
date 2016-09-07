@@ -119,7 +119,8 @@ class Report(db.Model):
             'id': self.id,
             'title': self.title,
             'lang_id': self.lang_id,
-            'sections': [s.output_obj() for s in self.ordered_sections]
+            'sections': [s.output_obj() for s in self.ordered_sections],
+            'benchmark_reports': [b.id for b in self.benchmark_reports]
         }
 
     @property
@@ -313,12 +314,29 @@ class BenchmarkReport(db.Model):
     def __init__(self, title):
         self.title = title
 
+    @property
+    def by_section(self):
+        benchmarks_by_section = {s.id: [] for s in self.report.sections}
+        for benchmark in self.benchmarks:
+            if benchmark.question.section_id in benchmarks_by_section:
+                benchmarks_by_section[benchmark.question.section_id].append(benchmark)
+            else:
+                benchmarks_by_section[benchmark.question.section_id] = [benchmark]
+        return benchmarks_by_section
+
     def output_obj(self):
         return {
             'id': self.id,
             'title': self.title,
             'report_id': self.report_id,
-            'benchmarks': [b.output_obj() for b in self.benchmarks]
+            'benchmarks': [b.output_obj() for b in self.benchmarks],
+            'benchmarks_by_section': [
+                {
+                    'section_id': key,
+                    'benchmarks': [b.output_obj() for b in value]
+                }
+                for (key, value) in self.by_section.items()
+            ]
         }
 
 
@@ -351,5 +369,7 @@ class Benchmark(db.Model):
                 'question_id': self.question_id,
                 'answer_id': self.answer_id,
                 'score': self.score,
-                'benchmark_report_id': self.benchmark_report_id
+                'benchmark_report_id': self.benchmark_report_id,
+                'multiplication_factor': self.question.section.multiplication_factor,
+                'not_in_benchmark': self.not_in_benchmark
             }

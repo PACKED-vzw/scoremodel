@@ -142,7 +142,6 @@ function submit_answer(user_report_id, question_id, answer_id){
             /*
             If it doesn't exist, use a POST request to /api/v2/question_answer
              */
-            console.log(status);
             if (error == 'NOT FOUND') {
                 $.ajax({
                     method: 'POST',

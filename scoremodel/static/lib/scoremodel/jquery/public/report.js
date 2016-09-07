@@ -2,11 +2,81 @@
  * Created by pieter on 18/05/16.
  */
 
-$(document).ready(function() {
+$(document).ready(function () {
     var scores = data_for_graph();
     var sections = sections_by_id();
     draw(scores, sections);
 });
+
+/**
+ * Get a report
+ * @param report_id
+ * @returns {*}
+ */
+function get_report(report_id) {
+    return $.ajax({
+        method: 'GET',
+        url: '/api/v2/report/' + report_id,
+        contentType: 'application/json',
+        success: function () {
+        },
+        error: function (jqXHR, status, error) {
+            console.log(error);
+        }
+    });
+}
+
+/**
+ * Get the benchmarking score for this report.
+ * Do this via an ajax call to /api/v2/
+ * @params benchmark_report_id
+ * @returns deferred
+ */
+function get_benchmark_score(benchmark_report_id) {
+    return $.ajax({
+        method: 'GET',
+        url: '/api/v2/benchmark_report/' + benchmark_report_id,
+        contentType: 'application/json',
+        success: function () {
+        },
+        error: function (jqXHR, status, error) {
+            console.log(error);
+        }
+    });
+}
+// met transition en toevoegingen aan de graph => make graph global
+// dit in functie van draw stoppen
+// order by section
+function draw_benchmark(report_id, chart_data) {
+    $.when(get_report(report_id)).then(function (report_api_response) {
+        for (var i = 0; i <= report_api_response.data.benchmark_reports.length; i++) {
+            var benchmark_report_id = report_api_response.data.benchmark_reports[i];
+            $.when(get_benchmark_score(benchmark_report_id)).then(function (benchmark_api_response) {
+                var axes = [];
+                for (var i = 0; i < benchmark_api_response.data.benchmarks_by_section.length; i++) {
+                    var section = benchmark_api_response.data.benchmarks_by_section[i];
+                    var score = 0;
+                    for (var j = 0; j < section.benchmarks.length; j++) {
+                        var benchmark = section.benchmarks[j];
+                        if (benchmark.not_in_benchmark == true) {
+                            score = +0;
+                        } else {
+                            score = +benchmark.score;
+                        }
+                    }
+                    axes.push({
+                        axis: section.section_id,
+                        value: score
+                    })
+                }
+                chart_data.push({
+                    className: benchmark_api_response.data.title,
+                    axes: axes
+                })
+            });
+        }
+    });
+}
 
 /**
  * Fetch the data from the DOM to create the graph.
@@ -16,7 +86,7 @@ $(document).ready(function() {
  */
 function data_for_graph() {
     var scores = {};
-    $('.score').each(function(){
+    $('.score').each(function () {
         var score = $(this).html();
         var section = $(this).attr('id').split('_');
         var section_id = section[1];
@@ -33,7 +103,7 @@ function data_for_graph() {
  */
 function sections_by_id() {
     var sections = {};
-    $('.sectie').each(function(){
+    $('.sectie').each(function () {
         var section_title = $(this).html();
         var section = $(this).attr('id').split('_');
         var section_id = section[1];
@@ -50,13 +120,8 @@ function sections_by_id() {
  */
 function draw(scores, sections) {
 
-    var data = [
-    ];
+    var chart_data = [];
 
-    var benchmark = {
-        className: 'benchmark',
-        axes: []
-    };
     var result = {
         className: 'Resultaten',
         axes: []
@@ -72,30 +137,8 @@ function draw(scores, sections) {
         }
     }
 
-    data.push(result);
+    var c_Graph = new Graph();
+    c_Graph.add_data('Resultaten', result.axes);
 
-
-    var chart = RadarChart.chart();
-
-    chart.config({
-        minValue: 0,
-        maxValue: 100
-    });
-
-    /*var data = [
-  {
-    className: 'germany', // optional can be used for styling
-    axes: [
-      {axis: "strength", value: 13, yOffset: 10},
-      {axis: "intelligence", value: 6},
-      {axis: "charisma", value: 5},
-      {axis: "dexterity", value: 9},
-      {axis: "luck", value: 2, xOffset: -20}
-    ]
-  }*/
-
-    var svg = d3.select('#graph').append('svg')
-      .attr('width', 600)
-      .attr('height', 600);
-    svg.append('g').classed('focus', 1).datum(data).call(chart);
+    c_Graph.update();
 }
