@@ -1,6 +1,8 @@
 {% extends 'base.html' %}
 {% block content %}
-        <!-- D3 -->
+    <!-- Bower -->
+    <script src="{{ url_for('static', filename='lib/bower_components/bootstrap/js/transition.js') }}"></script>
+    <!-- D3 -->
     <script src="{{ url_for('static', filename='lib/bower_components/d3/d3.js') }}"></script>
     <script src="{{ url_for('static', filename='lib/bower_components/radar-chart-d3/src/radar-chart.js') }}"></script>
     <link href="{{ url_for('static', filename='lib/bower_components/radar-chart-d3/src/radar-chart.css') }}"
@@ -14,28 +16,20 @@
     <script src="{{ url_for('static', filename='lib/scoremodel/jquery/public/report.js') }}"></script>
     <div class="container">
         <div class="row">
+            <!-- TOC -->
             <div class="col-md-9">
                 <h1><a name="inhoudstafel">{{ _('Table of contents') }}</a></h1>
                 <nav>
                     <ul role="menu">
                         <li><a href="#rapportgegevens">{{ _('Report data') }}</a></li>
                         <li><a href="#grafiek">{{ _('Graph') }}</a></li>
-                        <li><a href="#actieplan">{{ _('Actions') }}</a></li>
-                    <li>
-                        <ul>
-                            {% for section in report_template.sections %}
-                                <li><a href="#actieplan_{{ section.id }}">{{ section.title }}</a></li>
-                            {% endfor %}
-                        </ul>
-                    </li>
-
                         <li><a href="#resultaten">{{ _('Results') }}</a></li>
                         <li>
                             <ul>
-                            {% for section in report_template.sections %}
-                                <li><a href="#resultaten_{{ section.id }}">{{ section.title }}</a></li>
-                            {% endfor %}
-                        </ul>
+                                {% for section in report_template.sections %}
+                                    <li><a href="#resultaten_{{ section.id }}">{{ section.title }}</a></li>
+                                {% endfor %}
+                            </ul>
                         </li>
                     </ul>
                 </nav>
@@ -64,78 +58,101 @@
                 </table>
             </div>
         </div>
+        <!-- Graph -->
         <div class="row">
-            <div class="col-md-9">
+            <div class="col-md-12 col-sm-12">
                 <h1><a name="grafiek">{{ _('Graph') }}</a></h1>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12 col-sm-12">
                 <div id="graph">
 
                 </div>
             </div>
         </div>
+        <!-- Sections -->
         <div class="row">
-            <div class="col-md-9">
-                <h1><a name="actieplan">{{ _('Actions') }}</a></h1>
-                {% for section in report_template.sections %}
-                    <div class="row">
-                        <div class="col-md-12">
-                            <h2><a name="actieplan_{{ section.id }}"><span class="sectie" id="section_{{ section.id }}">{{ section.title }}</span></a></h2>
-                            <span class="label label-default">{{ _('Score') }}: <span id="score_{{ section.id }}" class="score">{{ all_scores[section.id] | round | int }}</span>%</span>
-                            {% for question in section.questions %}
-                                {% if question_answers[question.id] is not defined or question_answers[question.id].answer_template.value != question.highest_answer %}
-                                    <div class="row">
-                                        <div class="col-md-12">
-                                            <h3>{{ question.question }}</h3>
-                                            <span class="label label-info">{{ question.risk_factor.risk_factor }}</span>
-                                            {% if question_answers[question.id] is defined %}
-                                                <span class="label label-danger">{{ question_answers[question.id].answer_template.answer }}</span>
-                                            {% else %}
-                                                <span class="label label-warning">{{ _('Not completed') }}</span>
-                                            {% endif %}
-                                            <h4>{{ _('Context') }}</h4>
-                                            <p>{{ question.context }}</p>
-                                            <h4>{{ _('Risks') }}</h4>
-                                            <p>{{ question.risk }}</p>
-                                            <h4>{{ _('Action') }}</h4>
-                                            <p>{{ question.action }}</p>
-                                            <h4>{{ _('Example') }}</h4>
-                                            <p>{{ question.example }}</p>
-                                        </div>
-                                    </div>
-                                {% endif %}
-                            {% endfor %}
-                        </div>
-                    </div>
-                {% endfor %}
+            <div class="col-md-12 col-sm-12">
+                <h1><a name="resultaten">{{ _('Results') }}</a></h1>
             </div>
         </div>
-        <div class="row">
-            <div class="col-md-9">
-                <h1><a name="resultaten">{{ _('Results') }}</a></h1>
-                {% for section in report_template.sections %}
-                    <div class="row">
-                        <div class="col-md-12">
-                            <h2><a name="resultaten_{{ section.id }}">{{ section.title }}</a></h2>
+        {% for section in report_template.sections %}
+            <div class="row">
+                <div class="col-md-12 col-sm-12 panel panel-default">
+                    <div class="panel-body">
+                        <div class="container">
+                            <div class="row">
+                                <div class="col-md-12 col-sm-12">
+                                    <a name="resultaten_{{ section.id }}"><h2>{{ section.title }}</h2></a>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12 col-sm-12">
+                                    <!-- Scores -->
+                            <span class="label label-default">{{ _('Score') }}: <span id="score_{{ section.id }}"
+                                                                                      class="score">{{ all_scores[section.id] | round | int }}</span>%</span>
+                                    {% for benchmark_report_id, benchmark_report in benchmarks_by_section[section.id].items() %}
+                                        <span class="label label-default">{{ _('Benchmark') }} {{ benchmark_report.title }}: <span
+                                                id="score_bm_{{ benchmark_report_id }}_{{ section.id }}"
+                                                class="score">{{ benchmark_report.section_score | round | int }}</span>%</span>
+                                    {% endfor %}
+                                </div>
+                            </div>
                             {% for question in section.questions %}
                                 <div class="row">
-                                    <div class="col-md-12">
-                                        <h3>{{ question.question }}</h3>
-                                        <span class="label label-info">{{ question.risk_factor.risk_factor }}</span>
-                                        {% if question_answers[question.id] is not defined %}
-                                            <span class="label label-warning">{{ _('Not completed') }}</span>
-                                        {% else %}
-                                            {% if question_answers[question.id].answer_template.value == question.highest_answer %}
-                                                <span class="label label-success">{{ question_answers[question.id].answer_template.answer }}</span>
-                                            {% else %}
-                                                <span class="label label-danger">{{ question_answers[question.id].answer_template.answer }}</span>
-                                            {% endif %}
-                                        {% endif %}
+                                    <div class="col-md-12 col-sm-12">
+                                        <div class="container">
+                                            <div class="row">
+                                                <div class="col-md-11 col-sm-11">
+                                                    <h3>{{ question.question }}
+                                                        <small>
+                                                            ({{ _('Risk factor') }}: {{ question.risk_factor.risk_factor }})
+                                                        </small>
+                                                    </h3>
+                                                </div>
+                                            </div>
+                                            <div class="row" style="margin-left: 5px;">
+                                                <div class="col-md-11 col-sm-11">
+                                                    <!-- Answers -->
+                                                    {% if question_answers[question.id] is defined %}
+                                                        {% if question_answers[question.id].answer_template.value != question.highest_answer %}
+                                                            <span class="label label-danger">{{ question_answers[question.id].answer_template.answer }}</span>
+                                                        {% else %}
+                                                            <span class="label label-success">{{ question_answers[question.id].answer_template.answer }}</span>
+                                                        {% endif %}
+                                                    {% else %}
+                                                        <span class="label label-warning">{{ _('Not completed') }}</span>
+                                                    {% endif %}
+                                                    <!-- Benchmark answers -->
+                                                    {% for benchmark_report_id, benchmark_report in benchmarks_by_section[section.id].items() %}
+                                                        {% if benchmark_report.benchmarks[question.id] is defined %}
+                                                            <span class="label label-default">{{ benchmark_report.title }}: <span
+                                                                    id="answer_bm_{{ benchmark_report_id }}_{{ question.id }}">{{ benchmark_report.benchmarks[question.id].answer.answer }}</span></span>
+                                                        {% endif %}
+                                                    {% endfor %}
+                                                </div>
+                                            </div>
+                                            <div class="row" style="margin-left: 5px;">
+                                                <div class="col-md-8 col-sm-8">
+                                                    <h4>{{ _('Context') }}</h4>
+                                                    <p style="margin-left: 1em; font-size: 1em;">{{ question.context }}</p>
+                                                    <h4>{{ _('Risks') }}</h4>
+                                                    <p style="margin-left: 1em; font-size: 1em;">{{ question.risk }}</p>
+                                                    <h4>{{ _('Example') }}</h4>
+                                                    <p style="margin-left: 1em; font-size: 1em;">{{ question.example }}</p>
+                                                    <h4>{{ _('Action') }}</h4>
+                                                    <p style="margin-left: 1em; font-size: 1em;">{{ question.action }}</p>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             {% endfor %}
                         </div>
                     </div>
-                {% endfor %}
+                </div>
             </div>
-        </div>
+        {% endfor %}
     </div>
 {% endblock %}

@@ -68,8 +68,9 @@ def v_user_report_new(user_id):
             report_template = report_api.read(new_user_report.report_id)
             first_section = report_template.ordered_sections[0]
             flash(_('Report created'))
-            return redirect(url_for('public.v_user_report_section', user_report_id=new_user_report.id, user_id=current_user.id,
-                                    section_id=first_section.id))
+            return redirect(
+                url_for('public.v_user_report_section', user_report_id=new_user_report.id, user_id=current_user.id,
+                        section_id=first_section.id))
     else:
         return render_template('public/create.html', form=form, title=_('New report'))
 
@@ -115,8 +116,9 @@ def v_user_report_edit(user_id, user_report_id):
             flash(_('An unexpected error occurred.'))
             return redirect(url_for('public.v_user_report_list_by_user', user_id=current_user.id))
         else:
-            return redirect(url_for('public.v_user_report_section', user_id=current_user.id, user_report_id=edited_user_report.id,
-                                    section_id=edited_user_report.template.ordered_sections[0].id))
+            return redirect(
+                url_for('public.v_user_report_section', user_id=current_user.id, user_report_id=edited_user_report.id,
+                        section_id=edited_user_report.template.ordered_sections[0].id))
     else:
         form.report.default = str(existing_user_report.report_id)
         form.name.default = existing_user_report.name
@@ -154,7 +156,7 @@ def v_user_report_section(user_id, user_report_id, section_id):
     for question_answer in user_report.question_answers:
         question_answers[question_answer.question_id] = question_answer
 
-    return render_template('public/section.html',
+    return render_template('public/section2.html',
                            title=current_section.title,
                            section=current_section,
                            user_report_id=user_report_id,
@@ -172,8 +174,37 @@ def v_user_report_check(user_id, user_report_id):
         abort(403)
     user_report = user_report_api.read(user_report_id)
 
+    # Benchmarks
+    benchmarks_by_section = {}
+    for bm_report in user_report.template.benchmark_reports:
+        for section_id, benchmarks in bm_report.by_section.items():
+            section_score = 0
+            for benchmark in benchmarks:
+                # TODO: make multiplication_factor cleaner
+                section_score += benchmark.score * benchmark.question.section.multiplication_factor
+            if section_id in benchmarks_by_section:
+                if bm_report.id in benchmarks_by_section[section_id]:
+                    raise Exception(
+                        'Multiple values for the same benchmark_report in the same section. This is an error.')
+                else:
+                    benchmarks_by_section[section_id][bm_report.id] = {
+                        'title': bm_report.title,
+                        'section_score': section_score,
+                        'benchmarks': {b.question_id: b for b in bm_report.by_section[section_id]}
+                    }
+            else:
+                benchmarks_by_section[section_id] = {
+                    bm_report.id: {
+                        'title': bm_report.title,
+                        'section_score': section_score,
+                        'benchmarks': {b.question_id: b for b in bm_report.by_section[section_id]}
+                    }
+                }
+    print(benchmarks_by_section)
+
     # Get all question_answers for this report and order them by question_id, so we can compare
     # question.answer.answer_id to question_answers['question_id'].answer_id
+
     question_answers = {}
     all_scores = {}
 
@@ -183,14 +214,15 @@ def v_user_report_check(user_id, user_report_id):
     for question_answer in user_report.question_answers:
         question_answers[question_answer.question_id] = question_answer
         all_scores[question_answer.question_template.section.id] += question_answer.score * \
-                                                                        question_answer.multiplication_factor
+                                                                    question_answer.multiplication_factor
 
     return render_template('public/report.html',
                            report_template=user_report.template,
                            user_report=user_report,
                            user_report_creation_time='{:%Y-%m-%d %H:%M:%S}'.format(user_report.creation_time),
                            question_answers=question_answers,
-                           all_scores=all_scores
+                           all_scores=all_scores,
+                           benchmarks_by_section=benchmarks_by_section
                            )
 
 
