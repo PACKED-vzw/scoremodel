@@ -287,6 +287,10 @@ class Question(db.Model):
         else:
             return 0
 
+    @property
+    def ordered_answers(self):
+        return sorted(self.answers, key=lambda a: a.value, reverse=True)
+
     def output_obj(self):
         return {
             'id': self.id,
@@ -300,7 +304,8 @@ class Question(db.Model):
             'action': self.action,
             'risk_factor_id': self.risk_factor_id,
             'answers': [a.output_obj() for a in self.answers],
-            'maximum_score': self.maximum_score
+            'maximum_score': self.maximum_score,
+            'ordered_answers': [a.output_obj() for a in self.ordered_answers]
         }
 
 
