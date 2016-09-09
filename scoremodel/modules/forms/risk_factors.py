@@ -5,7 +5,7 @@ from flask.ext.babel import lazy_gettext as _
 
 
 class RiskFactorCreateForm(Form):
-    risk_factor = StringField(_('Answer'), validators=[InputRequired()])
+    risk_factor = StringField(_('Risk Factor'), validators=[InputRequired()])
     value = IntegerField(_('Value'), validators=[InputRequired()], default=1)
     lang = SelectField(_('Language'), validators=[InputRequired()], coerce=int)
     submit = SubmitField(_('Submit'))

@@ -63,7 +63,7 @@ class RoleApi(GenericApi):
         :return:
         """
         existing_role = self.read(role_id)
-        db.session.remove(existing_role)
+        db.session.delete(existing_role)
         db.session.commit()
         return True
 

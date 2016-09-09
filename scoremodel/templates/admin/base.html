@@ -58,6 +58,11 @@
                 <li class=""><a href="{{ url_for('admin.v_risk_factor_create') }}">{{ _('New') }}</a></li>
             </ul>
             <ul class="nav nav-sidebar">
+                <li class="dropdown-header">{{ _('Generic organisation types') }}</li>
+                <li class=""><a href="{{ url_for('admin.v_organisation_type_list') }}">{{ _('List') }}</a></li>
+                <li class=""><a href="{{ url_for('admin.v_organisation_type_create') }}">{{ _('New') }}</a></li>
+            </ul>
+            <ul class="nav nav-sidebar">
                 <li class="dropdown-header">{{ _('Users') }}</li>
                 <li><a href="{{ url_for('admin.v_user_list') }}">{{ _('List') }}</a></li>
                 <li><a href="{{ url_for('admin.v_user_create') }}">{{ _('New') }}</a></li>

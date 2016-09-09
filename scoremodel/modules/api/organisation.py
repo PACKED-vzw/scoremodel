@@ -40,7 +40,7 @@ class OrganisationApi(GenericApi):
 
     def delete(self, organisation_id):
         existing_organisation = self.read(organisation_id)
-        db.session.remove(existing_organisation)
+        db.session.delete(existing_organisation)
         db.session.commit()
         return True
 

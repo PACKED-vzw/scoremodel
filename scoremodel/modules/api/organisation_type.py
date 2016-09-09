@@ -34,7 +34,7 @@ class OrganisationTypeApi(GenericApi):
 
     def delete(self, type_id):
         existing_type = self.read(type_id)
-        db.session.remove(existing_type)
+        db.session.delete(existing_type)
         db.session.commit()
         return True
 
