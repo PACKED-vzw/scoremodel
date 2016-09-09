@@ -36,6 +36,35 @@ class UserReport(db.Model):
                 questions_by_section[question.question_template.section_id] = [question]
         return questions_by_section
 
+    @property
+    def benchmarks_by_section(self):
+        bm_by_section = {}
+        for bm_report in self.template.benchmark_reports:
+            for section_id, benchmarks in bm_report.by_section.items():
+                section_score = 0
+                for benchmark in benchmarks:
+                    # TODO: make multiplication_factor cleaner
+                    section_score += benchmark.score * benchmark.question.section.multiplication_factor
+                if section_id in bm_by_section:
+                    if bm_report.id in bm_by_section[section_id]:
+                        raise Exception(
+                            'Multiple values for the same benchmark_report in the same section. This is an error.')
+                    else:
+                        bm_by_section[section_id][bm_report.id] = {
+                            'title': bm_report.title,
+                            'section_score': section_score,
+                            'benchmarks': {b.question_id: b for b in bm_report.by_section[section_id]}
+                        }
+                else:
+                    bm_by_section[section_id] = {
+                        bm_report.id: {
+                            'title': bm_report.title,
+                            'section_score': section_score,
+                            'benchmarks': {b.question_id: b for b in bm_report.by_section[section_id]}
+                        }
+                    }
+        return bm_by_section
+
     def output_obj(self):
         return {
             'id': self.id,

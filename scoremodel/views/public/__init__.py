@@ -156,13 +156,14 @@ def v_user_report_section(user_id, user_report_id, section_id):
     for question_answer in user_report.question_answers:
         question_answers[question_answer.question_id] = question_answer
 
-    return render_template('public/section2.html',
+    return render_template('public/section.html',
                            title=current_section.title,
                            section=current_section,
                            user_report_id=user_report_id,
                            question_answers=question_answers,
                            next_section=current_section.next_in_report,
-                           previous_section=current_section.previous_in_report
+                           previous_section=current_section.previous_in_report,
+                           benchmarks_by_section=user_report.benchmarks_by_section
                            )
 
 
@@ -174,33 +175,6 @@ def v_user_report_check(user_id, user_report_id):
         abort(403)
     user_report = user_report_api.read(user_report_id)
 
-    # Benchmarks
-    benchmarks_by_section = {}
-    for bm_report in user_report.template.benchmark_reports:
-        for section_id, benchmarks in bm_report.by_section.items():
-            section_score = 0
-            for benchmark in benchmarks:
-                # TODO: make multiplication_factor cleaner
-                section_score += benchmark.score * benchmark.question.section.multiplication_factor
-            if section_id in benchmarks_by_section:
-                if bm_report.id in benchmarks_by_section[section_id]:
-                    raise Exception(
-                        'Multiple values for the same benchmark_report in the same section. This is an error.')
-                else:
-                    benchmarks_by_section[section_id][bm_report.id] = {
-                        'title': bm_report.title,
-                        'section_score': section_score,
-                        'benchmarks': {b.question_id: b for b in bm_report.by_section[section_id]}
-                    }
-            else:
-                benchmarks_by_section[section_id] = {
-                    bm_report.id: {
-                        'title': bm_report.title,
-                        'section_score': section_score,
-                        'benchmarks': {b.question_id: b for b in bm_report.by_section[section_id]}
-                    }
-                }
-    print(benchmarks_by_section)
 
     # Get all question_answers for this report and order them by question_id, so we can compare
     # question.answer.answer_id to question_answers['question_id'].answer_id
@@ -222,7 +196,7 @@ def v_user_report_check(user_id, user_report_id):
                            user_report_creation_time='{:%Y-%m-%d %H:%M:%S}'.format(user_report.creation_time),
                            question_answers=question_answers,
                            all_scores=all_scores,
-                           benchmarks_by_section=benchmarks_by_section
+                           benchmarks_by_section=user_report.benchmarks_by_section
                            )
 
 
