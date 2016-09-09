@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+{% block content %}
+    <div class="container">
+        <div class="row">
+            <div class="col-md-8 col-sm-8">
+                <h1>{{ _('Register') }}</h1>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-8 col-sm-8">
+                <form method="post" action="{{ url_for('admin.v_register') }}">
+                    {{ form.csrf_token }}
+                    <div class="form-group">
+                        <label for="username">{{ _('E-mail address') }}</label>
+                        {{ form.email(class_='form-control', id='username') }}
+                    </div>
+                    <div class="form-group">
+                        <label for="password">{{ _('Password') }}</label>
+                        {{ form.password(class_='form-control', id='password') }}
+                    </div>
+                    <div class="form-group">
+                        <label for="repeat_password">{{ _('Repeat password') }}</label>
+                        {{ form.password_match(class_='form-control', id='repeat_password') }}
+                    </div>
+                    <div class="form-group">
+                        <label for="language">{{ _('Language') }}</label>
+                        {{ form.language(class_='form-control', id='language') }}
+                    </div>
+                    <div class="form-group">
+                        <label for="organisation_name">{{ _('Organisation name (optional)') }}</label>
+                        {{ form.organisation_name(class_='form-control', id='organisation_name') }}
+                    </div>
+                    <div class="form-group">
+                        <label for="organisation_type">{{ _('Organisation type (optional)') }}</label>
+                        {{ form.organisation_name(class_='form-control', id='organisation_name') }}
+                    </div>
+                    <div class="form-group">
+                        <label for="organisation_size">{{ _('Organisation size (optional)') }}</label>
+                        {{ form.organisation_name(class_='form-control', id='organisation_name') }}
+                    </div>
+                    <div class="form-group">
+                        {{ form.submit(class_='btn btn-default') }}
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}

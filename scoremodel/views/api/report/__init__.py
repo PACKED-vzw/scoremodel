@@ -8,7 +8,7 @@ from scoremodel.modules.api.report import ReportApi
 from scoremodel.modules.api.report.create import ReportCreateApi
 from scoremodel.modules.api.risk_factor import RiskFactorApi
 from scoremodel.modules.api.section import SectionApi
-from scoremodel.modules.user.authentication import must_be_admin, requires_auth
+from scoremodel.modules.user.authentication import must_be_admin
 from scoremodel import csrf
 
 from scoremodel.views.api import api

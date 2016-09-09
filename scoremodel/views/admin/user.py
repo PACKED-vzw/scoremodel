@@ -11,7 +11,6 @@ from scoremodel.views.admin import admin
 a_roles = RoleApi()
 
 
-
 @admin.route('/user/view/<int:user_id>')
 @login_required
 @must_be_admin
@@ -45,7 +44,8 @@ def v_user_create():
             'email': form.email.data,
             'password': form.password.data,
             'roles': form.roles.data,
-            'username': form.email.data
+            'username': form.email.data,
+
         }
         try:
             new_user = a_user.create(input_data)
@@ -137,8 +137,8 @@ def v_user_delete(user_id):
         flash(_('No user with id {0}').format(user_id))
         return redirect(url_for('admin.v_user_list'))
     except Exception as e:
-        flash(_('An unexpected error occured: {0}').format(e))
-        # flash('An unexpected erro occured.')
+        flash(_('An unexpected error occurred: {0}').format(e))
+        # flash('An unexpected error occurred.')
         return redirect(url_for('admin.v_user_list'))
 
     if request.method == 'POST' and form.validate_on_submit():

@@ -18,13 +18,37 @@ class Role(db.Model):
 
 
 users_roles = db.Table('users_roles',
-                       db.Column('user_id', db.Integer, db.ForeignKey('users.id')),
+                       db.Column('user_id', db.Integer, db.ForeignKey('User.id')),
                        db.Column('role_id', db.Integer, db.ForeignKey('roles.id'))
                        )
 
 
+class OrganisationType(db.Model):
+    __tablename__ = 'OrganisationType'
+    id = db.Column(db.Integer, primary_key=True)
+    type = db.Column(db.String(255), index=True, unique=True)
+    organisations = db.relationship('Organisation', backref='type', lazy='dynamic')
+
+    def __init__(self, type):
+        self.type = type
+
+
+class Organisation(db.Model):
+    __tablename__ = 'Organisation'
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(255), index=True)
+    type_id = db.Column(db.Integer, db.ForeignKey(OrganisationType.id))
+    size = db.Column(db.String(255))
+    users = db.relationship('User', backref='organisation', lazy='dynamic')
+
+    def __init__(self, name, size=None):
+        self.name = name
+        if size:
+            self.size = size
+
+
 class User(db.Model):
-    __tablename__ = 'users'
+    __tablename__ = 'User'
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(255), index=True, unique=True, nullable=False)
     email = db.Column(db.String(255), index=True, unique=True, nullable=False)
@@ -32,9 +56,10 @@ class User(db.Model):
     questions = db.relationship('QuestionAnswer', backref='user', lazy='dynamic')
     reports = db.relationship('UserReport', backref='user', lazy='dynamic')
     authenticated = db.Column(db.Boolean, default=False)
-    locale = db.Column(db.String(8), default='nl')
+    lang_id = db.Column(db.Integer, db.ForeignKey('Lang.id'))
     api_key = db.Column(db.String(255), nullable=False, unique=True)
     session_token = db.Column(db.String(255), nullable=False, unique=True)
+    organisation_id = db.Column(db.Integer, db.ForeignKey(Organisation.id))
     roles = db.relationship('Role',
                             secondary=users_roles,
                             primaryjoin=(users_roles.c.user_id == id),
@@ -103,3 +128,7 @@ class User(db.Model):
 
     def set_session_token(self):
         self.session_token = Token().unique_token(User, 'session_token', 64)
+
+    @property
+    def locale(self):
+        return self.lang.lang

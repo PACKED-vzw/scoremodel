@@ -12,6 +12,7 @@ class Lang(db.Model):
     reports = db.relationship('Report', backref='lang', lazy='dynamic')
     answers = db.relationship('Answer', backref='lang', lazy='dynamic')
     risk_factors = db.relationship('RiskFactor', backref='lang', lazy='dynamic')
+    users = db.relationship('User', backref='lang', lazy='dynamic')
 
     def __init__(self, lang):
         self.lang = lang

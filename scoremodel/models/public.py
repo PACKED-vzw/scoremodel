@@ -8,7 +8,7 @@ class UserReport(db.Model):
     name = db.Column(db.String(255), index=True)
     creation_time = db.Column(db.DateTime)
     last_modified = db.Column(db.DateTime)
-    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    user_id = db.Column(db.Integer, db.ForeignKey('User.id'))
     report_id = db.Column(db.Integer, db.ForeignKey('Report.id'))
     question_answers = db.relationship('QuestionAnswer', backref='user_report', lazy='dynamic',
                                        cascade='all, delete-orphan')
@@ -93,7 +93,7 @@ class UserReport(db.Model):
 class QuestionAnswer(db.Model):
     __tablename__ = 'QuestionAnswer'
     id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    user_id = db.Column(db.Integer, db.ForeignKey('User.id'))
     question_id = db.Column(db.Integer, db.ForeignKey('Question.id'))
     answer_id = db.Column(db.Integer, db.ForeignKey('Answer.id'))
     user_report_id = db.Column(db.Integer, db.ForeignKey(UserReport.id))

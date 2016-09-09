@@ -7,14 +7,19 @@ from scoremodel.modules.api.generic import GenericApi
 from scoremodel.modules.api.role import RoleApi
 from scoremodel.models.user import User
 from scoremodel.models.public import UserReport
+from scoremodel.modules.api.lang import LangApi
+from scoremodel.modules.api.organisation import OrganisationApi
 from scoremodel import db, login_manager
-from scoremodel.modules.error import RequiredAttributeMissing, DatabaseItemAlreadyExists, DatabaseItemDoesNotExist,\
+from scoremodel.modules.error import RequiredAttributeMissing, DatabaseItemAlreadyExists, DatabaseItemDoesNotExist, \
     InvalidPassword
+
+
+# TODO: update user
 
 
 class UserApi(GenericApi):
     complex_params = ['questions', 'reports', 'roles']  # List of role_ids
-    simple_params = ['email', 'password', 'username', 'locale']
+    simple_params = ['email', 'password', 'username', 'lang_id', 'organisation_id']
     required_params = ['email', 'password']
     possible_params = simple_params + complex_params
 
@@ -40,8 +45,14 @@ class UserApi(GenericApi):
         # Add the roles
         for role_id in cleaned_data['roles']:
             new_user.roles.append(self.a_role.read(role_id))
-        if cleaned_data['locale']:
-            new_user.locale = cleaned_data['locale']
+        # Locale
+        if cleaned_data['lang_id']:
+            existing_lang = LangApi().read(cleaned_data['lang_id'])
+            new_user.lang = existing_lang
+        # Organisation
+        if cleaned_data['organisation_id']:
+            existing_organisation = OrganisationApi().read(cleaned_data['organisation_id'])
+            new_user.organisation = existing_organisation
         db.session.commit()
         return new_user
 
@@ -75,6 +86,14 @@ class UserApi(GenericApi):
         existing_user = self.remove_roles(existing_user)
         for role_id in cleaned_data['roles']:
             existing_user.roles.append(self.a_role.read(role_id))
+            # Locale
+        if cleaned_data['lang_id']:
+            existing_lang = LangApi().read(cleaned_data['lang_id'])
+            existing_user.lang = existing_lang
+            # Organisation
+        if cleaned_data['organisation_id']:
+            existing_organisation = OrganisationApi().read(cleaned_data['organisation_id'])
+            existing_user.organisation = existing_organisation
         db.session.commit()
         return existing_user
 
@@ -168,7 +187,7 @@ class UserApi(GenericApi):
 
     def set_locale(self, user_id, locale):
         existing_user = self.read(user_id)
-        existing_user.locale = locale
+        existing_user.lang = LangApi().by_lang(locale)
         db.session.commit()
         return existing_user
 

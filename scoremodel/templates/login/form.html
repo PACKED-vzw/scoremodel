@@ -1,17 +1,30 @@
-    <form method="post" action="{{ url_for('admin.v_login', next=next) }}" class="form-inline">
-        <div class="form-group">
-            <label for="login.email">{{ _('Email address') }}</label>
-            {{ form.email(class_='form-control', id='login.email') }}
-            </div>
-        <div class="form-group">
-            <label for="login.password">{{ _('Password') }}</label>
-            {{ form.password(class_='form-control', id='login.password') }}
-            </div>
-        <div class="checkbox">
-            <label>
-                {{ form.remember_me }} {{ _('Remember me') }}
-            </label>
+<div class="container">
+    <div class="row">
+        <div class="col-md-8 col-sm-8">
+            <h1>{{ _('Log in') }}</h1>
         </div>
-        {{ form.csrf_token }}
-    {{ form.submit(class_='btn btn-default') }}
-    </form>
+    </div>
+    <div class="row">
+        <div class="col-md-8 col-sm-8">
+            <form method="post" action="{{ url_for('admin.v_login', next=next) }}">
+                <div class="form-group">
+                    <label for="login.email">{{ _('Email address') }}</label>
+                    {{ form.email(class_='form-control', id='login.email') }}
+                </div>
+                <div class="form-group">
+                    <label for="login.password">{{ _('Password') }}</label>
+                    {{ form.password(class_='form-control', id='login.password') }}
+                </div>
+                <div class="checkbox">
+                    <label>
+                        {{ form.remember_me }} {{ _('Remember me') }}
+                    </label>
+                </div>
+                {{ form.csrf_token }}
+                <div class="form-group">
+                    {{ form.submit(class_='btn btn-default') }}
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
