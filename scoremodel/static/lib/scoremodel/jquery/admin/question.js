@@ -72,24 +72,24 @@ function get_question_data(question_id) {
     });
 }
 
-function draw_question(deferred, is_first_time, old_question_id) {
+function draw_question(deferred, is_first_time) {
     if (deferred) {
         $.when(deferred).then(function success(question_api_data) {
             var question = question_api_data.data;
-            if (old_question_id) {
-                replace_existing_question(old_question_id, question);
-            } else {
-                $('#questions_section_' + question.section_id).append(draw_question_template(question));
-                /* Selected answer */
-                for (var i = 0; i < question.answers.length; i++) {
-                    var answer_id = question.answers[i].id;
-                    $('#question_answer_' + question.id)
-                        .find('option[value=' + answer_id + ']').attr("selected", "selected");
-                }
-                /* Selected risk factor */
-                $('#question_risk_factor_' + question.id)
-                    .find('option[value=' + question.risk_factor_id + ']').attr("selected", "selected");
+            var questions =  $('#questions_section_' + question.section_id);
+            questions
+                .find('#question_id_placeholder_' + question.id)
+                .replaceWith(draw_question_template(question));
+            /* Selected answer */
+            for (var i = 0; i < question.answers.length; i++) {
+                var answer_id = question.answers[i].id;
+                $('#question_answer_' + question.id)
+                    .find('option[value=' + answer_id + ']').attr("selected", "selected");
             }
+            /* Selected risk factor */
+            $('#question_risk_factor_' + question.id)
+                .find('option[value=' + question.risk_factor_id + ']').attr("selected", "selected");
+            
             if (is_first_time) {
                 add_question_focus_handlers(question.id);
                 add_question_click_handlers(question.id);

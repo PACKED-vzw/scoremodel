@@ -120,14 +120,17 @@ function draw_report(deferred, is_first_time, is_reload) {
     if (deferred) {
         $.when(deferred).then(function success(report_api_response) {
                 var report = report_api_response.data;
+                var sections = $('#sections');
                 $('#report_title').val(report.title);
                 $('#report_lang').val(report.lang_id);
                 /* Add sections */
                 /* Remove the old sections first */
-                $('#sections').children().remove();
+                sections.children().remove();
                 for (var i = 0; i < report.sections.length; i++) {
                     /* From section.js */
                     /* As we removed the old sections, it is always "the first time" */
+                    /* Problem: is async, but order is important! */
+                    sections.append('<div id="section_id_placeholder_' + report.sections[i].id + '"></div>');
                     draw_section(get_section_data(report.sections[i].id), true);
                 }
 

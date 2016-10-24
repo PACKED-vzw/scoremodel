@@ -53,29 +53,30 @@ function get_section_data(section_id) {
     });
 }
 
-function draw_section(deferred, is_first_time, old_section_id) {
+function draw_section(deferred, is_first_time) {
     /* Render the template */
     if (deferred) {
         $.when(deferred).then(function success(section_api_data, status, jqXHR) {
             var section = section_api_data.data;
-            /* If old_section_id, do not append but replace */
-            if (old_section_id) {
-                replace_existing_section(old_section_id, section);
-            } else {
-                $('#sections').append(draw_section_template(section));
-                /* Add the questions */
-                for (var j = 0; j < section.questions.length; j++) {
-                    /* From question.js */
-                    draw_question(get_question_data(section.questions[j].id), true);
-                }
+            var sections = $('#sections');
+            sections
+                .find('#section_id_placeholder_' + section.id)
+                .replaceWith(draw_section_template(section));
+            /* Add the questions */
+            var questions_dom = $('#questions_section_' + section.id);
+            for (var j = 0; j < section.questions.length; j++) {
+                /* From question.js */
+                questions_dom.append('<div id="question_id_placeholder_' + section.questions[j].id + '"></div>');
+                draw_question(get_question_data(section.questions[j].id), true);
             }
+
             /* Add the focus and click handlers */
             if (is_first_time) {
                 /* Focus */
                 add_section_focus_handlers(section.id);
                 add_section_click_handlers(section.id);
             }
-            $('#questions_section_' + section.id).sortable({
+            questions_dom.sortable({
                 items: '> .question',
                 cursor: 'move'
             });
@@ -126,7 +127,7 @@ function add_section_click_handlers(section_id) {
     $('#section_' + section_id + '_remove_button').click(function () {
         delete_section_button(section_id);
     });
-    $('#add_question_button_section_' + section_id).click(function() {
+    $('#add_question_button_section_' + section_id).click(function () {
         /* From question.js */
         add_question_button(section_id);
     });
