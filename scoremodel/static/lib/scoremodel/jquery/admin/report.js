@@ -152,6 +152,8 @@ function draw_report(deferred, is_first_time, is_reload) {
         }
         /* Add click handler */
         $('#report_save_button').click(function () {
+            $(this).empty();
+            $(this).append('<span><img src="/static/img/reload.gif" height="20px"> Saving</span>');
             draw_report(save_report_chain(), false, true);
         });
     }
