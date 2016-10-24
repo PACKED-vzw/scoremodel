@@ -92,11 +92,13 @@
                                     <!-- Scores -->
                             <span class="label label-default">{{ _('Score') }}: <span id="score_{{ section.id }}"
                                                                                       class="score">{{ all_scores[section.id] | round | int }}</span>%</span>
+                                {% if section.id in benchmarks_by_section %}
                                     {% for benchmark_report_id, benchmark_report in benchmarks_by_section[section.id].items() %}
                                         <span class="label label-default">{{ _('Benchmark') }} {{ benchmark_report.title }}: <span
                                                 id="score_bm_{{ benchmark_report_id }}_{{ section.id }}"
                                                 class="score">{{ benchmark_report.section_score | round | int }}</span>%</span>
                                     {% endfor %}
+                                {% endif %}
                                 </div>
                             </div>
                             {% for question in section.questions %}
@@ -125,12 +127,14 @@
                                                         <span class="label label-warning">{{ _('Not completed') }}</span>
                                                     {% endif %}
                                                     <!-- Benchmark answers -->
+                                                {% if section.id in benchmarks_by_section %}
                                                     {% for benchmark_report_id, benchmark_report in benchmarks_by_section[section.id].items() %}
                                                         {% if benchmark_report.benchmarks[question.id] is defined %}
                                                             <span class="label label-default">{{ benchmark_report.title }}: <span
                                                                     id="answer_bm_{{ benchmark_report_id }}_{{ question.id }}">{{ benchmark_report.benchmarks[question.id].answer.answer }}</span></span>
                                                         {% endif %}
                                                     {% endfor %}
+                                                {% endif %}
                                                 </div>
                                             </div>
                                             <div class="row" style="margin-left: 5px;">

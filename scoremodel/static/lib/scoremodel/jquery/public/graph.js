@@ -46,6 +46,5 @@ Graph.prototype.update = function() {
     if (typeof(this.graph) == 'undefined') {
         this.init();
     }
-    console.log(this.data);
     this.graph.datum(this.data).call(this.chart);
 };
