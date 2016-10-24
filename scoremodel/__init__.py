@@ -41,6 +41,12 @@ def get_locale():
     return locale_selector.current_locale
 
 
+@app.after_request
+def add_header(response):
+    response.headers['Cache-Control'] = 'no-cache'
+    return response
+
+
 @app.route('/')
 def v_index():
     if check_has_tables() is not True or check_has_admin() is not True:
