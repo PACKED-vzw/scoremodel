@@ -70,6 +70,7 @@
                                                                             data-toggle="collapse" aria-expanded="false"
                                                                             aria-controls="context_{{ question.id }}">{{ _('Context') }}</a>
                                                                     </li>
+                                                                    {#
                                                                     <li role="presentation"><a
                                                                             href="#risks_{{ question.id }}"
                                                                             data-toggle="collapse" aria-expanded="false"
@@ -80,6 +81,7 @@
                                                                             data-toggle="collapse" aria-expanded="false"
                                                                             aria-controls="example_{{ question.id }}">{{ _('Example') }}</a>
                                                                     </li>
+                                                                    #}
                                                                 </ul>
                                                             </div>
                                                         </div>
@@ -90,16 +92,16 @@
                                                                     {{ question.context }}
                                                                     <hr/>
                                                                 </div>
-                                                                <div class="collapse" id="risks_{{ question.id }}">
+                                                                {# <div class="collapse" id="risks_{{ question.id }}">
                                                                     <h4>{{ _('Risks' ) }}</h4>
                                                                     {{ question.risk }}
                                                                     <hr/>
-                                                                </div>
-                                                                <div class="collapse" id="example_{{ question.id }}">
+                                                                </div>#}
+                                                                {# <div class="collapse" id="example_{{ question.id }}">
                                                                     <h4>{{ _('Example' ) }}</h4>
                                                                     {{ question.example }}
                                                                     <hr/>
-                                                                </div>
+                                                                </div>#}
                                                             </div>
                                                         </div>
                                                     </div>
