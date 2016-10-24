@@ -14,10 +14,6 @@ function error_button(selector, message) {
         .text(message);
 }
 
-function save_button(selector, message) {
-    default_button(selector, message);
-}
-
 function default_button(selector, message) {
     $(selector)
         .attr('class', 'btn btn-default')

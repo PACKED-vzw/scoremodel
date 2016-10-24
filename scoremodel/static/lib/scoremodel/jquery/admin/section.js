@@ -41,33 +41,6 @@ function section_data_from_form(section_id) {
 }
 
 
-function save_section_data(section_id) {
-    var section_data = section_data_from_form(section_id);
-    var url;
-    var method;
-    if (section_id < 0) {
-        url = '/api/v2/section';
-        method = 'POST';
-    } else {
-        url = '/api/v2/section/' + section_id;
-        method = 'PUT';
-    }
-    return $.ajax({
-        method: method,
-        url: url,
-        headers: {
-            'X-CSRFToken': csrf_token
-        },
-        data: JSON.stringify(section_data),
-        success: function (data) {
-
-        },
-        error: function (jqXHR, status, error) {
-            error_button('#report_save_button', error);
-        }
-    });
-}
-
 function get_section_data(section_id) {
     return $.ajax({
         method: 'GET',

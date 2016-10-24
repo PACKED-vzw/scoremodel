@@ -27,31 +27,6 @@ function report_data_from_form() {
     };
 }
 
-function save_report_data() {
-    var report_id = $('#report_id').val();
-    var report_data = report_data_from_form();
-    var url;
-    var method;
-    if (report_id < 0) {
-        url = '/api/v2/report';
-        method = 'POST';
-    } else {
-        url = '/api/v2/report/' + report_id;
-        method = 'PUT';
-    }
-    return $.ajax({
-        method: method,
-        url: url,
-        data: JSON.stringify(report_data),
-        contentType: 'application/json',
-        success: function () {
-        },
-        error: function (jqXHR, status, error) {
-            error_button($('#report_save_button', error));
-        }
-    });
-}
-
 function save_report_chain() {
     /* TODO: check for required stuff */
     //required_set_side_effects(['#section_title_' + section_id])

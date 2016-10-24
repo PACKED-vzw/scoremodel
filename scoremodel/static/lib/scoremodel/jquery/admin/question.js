@@ -18,9 +18,9 @@ function add_question_button(section_id) {
 
 function delete_question_button(question_id) {
     if (question_id < 0) {
-        delete_question_data(question_id);
+        $('#question_' + question_id).remove();
     } else {
-        $.when(delete_question_data(question_id)).then(function() {
+        $.when(delete_question_data(question_id)).then(function () {
             $('#question_' + question_id).remove();
         });
     }
@@ -47,46 +47,17 @@ function question_data_from_form(question_id) {
     return question_data;
 }
 
-function save_question_data(question_id) {
-    var question_data = question_data_from_form(question_id);
-
-
-    var url;
-    var method;
-    if (question_id < 0) {
-        url = '/api/v2/question';
-        method = 'POST';
-    } else {
-        url = '/api/v2/question/' + question_id;
-        method = 'PUT';
-    }
+function delete_question_data(question_id) {
     return $.ajax({
-        url: url,
-        method: method,
-        headers: {
-            'X-CSRFToken': csrf_token
+        method: 'DELETE',
+        url: '/api/v2/question/' + question_id,
+        success: function (data, status) {
         },
-        data: JSON.stringify(question_data),
-        success: function (data, status) {},
         error: function (jqXHR, status, error) {
             error_button('#report_save_button', error);
         }
     });
-}
 
-function delete_question_data(question_id) {
-    if (question_id < 0) {
-        $('#question_' + question_id).remove();
-    } else {
-        return $.ajax({
-            method: 'DELETE',
-            url: '/api/v2/question/' + question_id,
-            success: function(data, status) {},
-            error: function(jqXHR, status, error) {
-                error_button('#report_save_button', error);
-            }
-        });
-    }
 }
 
 function get_question_data(question_id) {
