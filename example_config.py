@@ -47,10 +47,14 @@ UPLOAD_FOLDER = 'uploads'
 ALLOWED_EXTENSIONS = ('txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif')
 MAX_CONTENT_LENGTH = 16 * 1024 * 1024  # 16 MB
 
-if use_ssl is True:
-    SQLALCHEMY_DATABASE_URI = 'mysql+mysqlconnector://{user}:{passw}@{host}/{db}?ssl_key={ssl_key}&ssl_cert={ssl_cert}'.format(
-        user=DB_USER, passw=DB_PASS,
-        host=DB_HOST, db=DB_NAME, ssl_key=SSL_KEY, ssl_cert=SSL_CERT)
+if DEBUG is True:
+    SQLALCHEMY_DATABASE_URI = 'sqlite:///' + os.path.join(BASEDIR, 'app.db')
+    SQLALCHEMY_MIGRATE_REPO = os.path.join(BASEDIR, 'db_repository')
 else:
-    SQLALCHEMY_DATABASE_URI = 'mysql+mysqlconnector://{user}:{passw}@{host}/{db}'.format(user=DB_USER, passw=DB_PASS,
-                                                                          host=DB_HOST, db=DB_NAME)
+    if use_ssl is True:
+        SQLALCHEMY_DATABASE_URI = 'mysql+mysqlconnector://{user}:{passw}@{host}/{db}?ssl_key={ssl_key}&ssl_cert={ssl_cert}'.format(
+            user=DB_USER, passw=DB_PASS,
+            host=DB_HOST, db=DB_NAME, ssl_key=SSL_KEY, ssl_cert=SSL_CERT)
+    else:
+        SQLALCHEMY_DATABASE_URI = 'mysql+mysqlconnector://{user}:{passw}@{host}/{db}'.format(user=DB_USER, passw=DB_PASS,
+                                                                              host=DB_HOST, db=DB_NAME)
