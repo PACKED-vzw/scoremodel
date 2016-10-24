@@ -78,7 +78,10 @@ function draw_section(deferred, is_first_time) {
             }
             questions_dom.sortable({
                 items: '> .question',
-                cursor: 'move'
+                cursor: 'move',
+                update: function(ui, event) {
+                    default_button('#report_save_button', 'Save');
+                }
             });
         }, function error(jqXHR, status, error) {
             /* We can't set the error_button here, as we don't know the section_id */

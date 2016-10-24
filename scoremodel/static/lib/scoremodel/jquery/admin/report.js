@@ -13,7 +13,10 @@ $(document).ready(function () {
     $('#sections').sortable(
         {
             items: '> .section',
-            cursor: 'move'
+            cursor: 'move',
+            update: function (ui, event) {
+                default_button('#report_save_button', 'Save');
+            }
         }
     );
 
@@ -42,7 +45,7 @@ function save_report_chain() {
 
     report.sections = [];
     var section_order = 0;
-    $('#sections').children().each(function() {
+    $('#sections').children().each(function () {
         section_order = section_order + 1;
         var section_id = $(this).attr('id').substr(14);
         if (!required_check_section(section_id)) {
@@ -54,7 +57,7 @@ function save_report_chain() {
         section.questions = [];
         // Check for required fields
         var question_order = 0;
-        $('#questions_section_' + section_id).children().each(function() {
+        $('#questions_section_' + section_id).children().each(function () {
             question_order = question_order + 1;
             var question_id = $(this).attr('id').substr(9);
             if (!required_check_question(question_id)) {
@@ -95,7 +98,7 @@ function save_report_chain() {
         },
         contentType: 'application/json',
         success: function () {
-             success_button('#report_save_button', 'Saved');
+            success_button('#report_save_button', 'Saved');
         },
         error: function (jqXHR, status, error) {
             error_button($('#report_save_button', error));
