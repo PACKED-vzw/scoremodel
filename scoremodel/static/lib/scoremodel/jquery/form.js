@@ -59,6 +59,12 @@ function set_required_error(selector) {
                 .find('div')
                 .append('<span class="help-block">This element is required.</span>');
     }
+    var cannot_save = $('#cannot_save');
+    if (!cannot_save.hasClass('active')) {
+        cannot_save
+            .addClass('active')
+            .append('<span class="help-block">Form could not be submitted: required elements are missing.</span>');
+    }
 }
 
 function reset_required_error(selector) {
@@ -66,6 +72,12 @@ function reset_required_error(selector) {
     if ($(selector).parent('div').hasClass('has-error')) {
         $(selector).parent('div')
             .removeClass('has-error')
+            .find('.help-block').remove();
+    }
+    var cannot_save = $('#cannot_save');
+    if (cannot_save.hasClass('active')) {
+        cannot_save
+            .removeClass('active')
             .find('.help-block').remove();
     }
 }
