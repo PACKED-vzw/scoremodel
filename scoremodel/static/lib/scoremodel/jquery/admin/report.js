@@ -129,8 +129,8 @@ function draw_report(deferred, is_first_time, is_reload) {
                 for (var i = 0; i < report.sections.length; i++) {
                     /* From section.js */
                     /* As we removed the old sections, it is always "the first time" */
-                    /* Problem: is async, but order is important! */
-                    sections.append('<div id="section_id_placeholder_' + report.sections[i].id + '"></div>');
+                    /* Problem: is async, but order is important! (NOW FIXED)*/
+                    sections.append('<div class="panel panel-default" id="section_id_placeholder_' + report.sections[i].id + '"><div class="panel-heading"><h3 class="panel-title">' + report.sections[i].title + '</h3></div></div>');
                     draw_section(get_section_data(report.sections[i].id), true);
                 }
 

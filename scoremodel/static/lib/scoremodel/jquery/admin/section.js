@@ -66,7 +66,7 @@ function draw_section(deferred, is_first_time) {
             var questions_dom = $('#questions_section_' + section.id);
             for (var j = 0; j < section.questions.length; j++) {
                 /* From question.js */
-                questions_dom.append('<div id="question_id_placeholder_' + section.questions[j].id + '"></div>');
+                questions_dom.append('<div class="panel panel-default" id="question_id_placeholder_' + section.questions[j].id + '"><div class="panel-heading"><h4 class="panel-title">' + section.questions[j].question + '</h4></div></div>');
                 draw_question(get_question_data(section.questions[j].id), true);
             }
 
