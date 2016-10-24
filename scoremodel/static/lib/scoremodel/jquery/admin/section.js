@@ -149,57 +149,6 @@ function draw_section_template(section_data) {
     return section_template.render(template_data);
 }
 
-/**
- * Replace an existing section.
- * Redraw the template, but keep the questions
- * We could just get the questions from the API again, but
- * this might cause the work a user just has done in an
- * unsaved question to be lost.
- * We cannot simply first save the questions, as you can't
- * create a new question without an existing section_id.
- * So you wouldn't be able to create a new section with a
- * new question and save it.
- * Better options might be available
- * @param old_section_id
- * @param section_data
- */
-function replace_existing_section(old_section_id, section_data) {
-    var old_section = $('#section_panel_' + old_section_id);
-    var questions = $('#questions_section_' + old_section_id).contents().clone(true);
-    /* As you can only save a section when aria-expanded is true, we keep this setting
-     to prevent panels from closing abruptly, confusing users. */
-    var aria_state = old_section.find('.panel-heading').attr('aria-expanded');
-    var new_section_id = section_data.id;
-    old_section.replaceWith(draw_section_template(section_data));
-    $('#questions_section_' + new_section_id).replaceWith(questions);
-    /* Collapsed or not? */
-    if (aria_state == 'true') {
-        set_collapsed_state('#section_panel_' + new_section_id);
-    }
-    /* Focus */
-    add_section_focus_handlers(new_section_id);
-    /* Click */
-    add_section_click_handlers(new_section_id);
-    /* Success button */
-    success_button('#section_' + new_section_id + '_save_button', 'Saved');
-}
-
-/**
- * When updating a question/section, the DOM of that item is re-inserted using the template.
- * This has as side-effect that the item that was opened (not collapsed) is collapsed again
- * (which is the default state). This is annoying for users.
- * @param selector
- */
-function set_collapsed_state(selector) {
-    $(selector)
-        .find('.panel-heading')
-        .attr('aria-expanded', true);
-    $(selector)
-        .find('.panel-body')
-        .attr('aria-expanded', true)
-        .addClass('collapse in');
-}
-
 function required_check_section(section_id) {
     var required = ['#section_title_' + section_id, '#section_weight_' + section_id];
     return required_set_side_effects(required);

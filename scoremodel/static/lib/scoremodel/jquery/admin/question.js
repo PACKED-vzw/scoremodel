@@ -113,33 +113,6 @@ function draw_question_template(question_data) {
     return question_template.render(template_data);
 }
 
-function replace_existing_question(old_question_id, question_data) {
-    var old_question = $('#question_' + old_question_id);
-    /* As you can only save a section when aria-expanded is true, we keep this setting
-     to prevent panels from closing abruptly, confusing users. */
-    var aria_state = old_question.find('.panel-heading').attr('aria-expanded');
-    var new_question_id = question_data.id;
-    old_question.replaceWith(draw_question_template(question_data));
-    /* Collapsed or not? */
-    if (aria_state == 'true') {
-        set_collapsed_state('#question_panel_' + new_question_id);
-    }
-    /* Answers and risk_factor */
-    /* Selected answer */
-    for (var i = 0; i < question_data.answers.length; i++) {
-        var answer_id = question_data.answers[i].id;
-        $('#question_answer_' + new_question_id)
-            .find('select option[value=' + answer_id + ']').attr("selected", "selected");
-    }
-    /* Selected risk factor */
-    $('#question_risk_factor_' + new_question_id)
-        .find('select option[value=' + question_data.risk_factor_id + ']').attr("selected", "selected");
-
-    add_question_focus_handlers(new_question_id);
-    add_question_click_handlers(new_question_id);
-
-}
-
 function add_question_focus_handlers(question_id) {
     var fields = ['question_weight_' + question_id, 'question_question_' + question_id,
         'question_example_' + question_id, 'question_context_' + question_id,
