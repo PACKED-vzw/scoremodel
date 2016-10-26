@@ -2,7 +2,8 @@ from flask.ext.babel import gettext as _
 from sqlalchemy import and_, or_
 from scoremodel.modules.msg.messages import module_error_msg as _e
 from scoremodel.models.pages import Lang
-from scoremodel.modules.error import RequiredAttributeMissing, DatabaseItemAlreadyExists, DatabaseItemDoesNotExist
+from scoremodel.modules.error import RequiredAttributeMissing, DatabaseItemAlreadyExists, DatabaseItemDoesNotExist,\
+    MethodNotImplemented
 from scoremodel.modules.api.generic import GenericApi
 from scoremodel import db
 
@@ -32,6 +33,15 @@ class LangApi(GenericApi):
         if not existing_lang:
             raise DatabaseItemDoesNotExist(_e['item_not_exists'].format(Lang, lang_id))
         return existing_lang
+
+    def update(self, lang_id, input_data):
+        raise MethodNotImplemented
+
+    def delete(self, lang_id):
+        existing_lang = self.read(lang_id)
+        db.session.delete(existing_lang)
+        db.session.commit()
+        return True
 
     def by_lang(self, lang):
         existing_lang = Lang.query.filter(Lang.lang == lang).first()

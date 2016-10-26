@@ -44,6 +44,10 @@ class IDMissingForCUD(ApiException):
     pass
 
 
+class MethodNotImplemented(Exception):
+    pass
+
+
 @app.errorhandler(403)
 def forbidden(e):
     return render_template('error/403.html', title=e), 403

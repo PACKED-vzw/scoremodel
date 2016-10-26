@@ -2,7 +2,8 @@ from flask.ext.babel import gettext as _
 from sqlalchemy import and_, or_
 from scoremodel.modules.msg.messages import module_error_msg as _e
 from scoremodel.models.pages import MenuLink
-from scoremodel.modules.error import RequiredAttributeMissing, DatabaseItemAlreadyExists, DatabaseItemDoesNotExist
+from scoremodel.modules.error import RequiredAttributeMissing, DatabaseItemAlreadyExists, DatabaseItemDoesNotExist,\
+    MethodNotImplemented
 from scoremodel.modules.api.generic import GenericApi
 from scoremodel import db
 
@@ -32,6 +33,12 @@ class MenuLinkApi(GenericApi):
         if not existing_menu_link:
             raise DatabaseItemDoesNotExist(_e['item_not_exists'].format(MenuLink, menu_link_id))
         return existing_menu_link
+
+    def update(self, menu_link_id, input_data):
+        raise MethodNotImplemented
+
+    def delete(self, menu_link_id):
+        raise MethodNotImplemented
 
     def by_menu_link(self, menu_link):
         existing_menu_link = MenuLink.query.filter(MenuLink.menu_link == menu_link).first()
