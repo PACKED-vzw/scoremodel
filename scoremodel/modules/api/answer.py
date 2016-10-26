@@ -10,6 +10,8 @@ from scoremodel import db
 class AnswerApi(GenericApi):
     complex_params = []  # These should be a list in input_data
     simple_params = ['answer', 'value', 'lang_id']
+    possible_params = ['answer', 'value', 'lang_id']
+    required_params = ['answer', 'lang_id']
 
     def __init__(self, answer_id=None):
         self.answer_id = answer_id
@@ -82,10 +84,12 @@ class AnswerApi(GenericApi):
         :return:
         """
         existing_lang = self.lang_api.by_lang(lang)
-        existing_reports = Answer.query.filter(Answer.lang_id == existing_lang.id).all()
-        return existing_reports
+        existing_answers = Answer.query.filter(Answer.lang_id == existing_lang.id).all()
+        return existing_answers
 
     def parse_input_data(self, input_data):
-        possible_params = ['answer', 'value', 'lang_id']
-        required_params = ['answer', 'lang_id']
-        return self.clean_input_data(Answer, input_data, possible_params, required_params, self.complex_params)
+        cleaned_data = self.clean_input_data(Answer, input_data, self.possible_params, self.required_params,
+                                             self.complex_params)
+        # When updating, optional values that are not present are not automatically assigned their default values
+        if 'value' not in cleaned_data or cleaned_data['value'] is None:
+            cleaned_data['value'] = 1
