@@ -93,3 +93,4 @@ class AnswerApi(GenericApi):
         # When updating, optional values that are not present are not automatically assigned their default values
         if 'value' not in cleaned_data or cleaned_data['value'] is None:
             cleaned_data['value'] = 1
+        return cleaned_data
