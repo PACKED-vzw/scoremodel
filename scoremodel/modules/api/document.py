@@ -25,7 +25,7 @@ class DocumentApi(GenericApi):
         if not cleaned_data['lang_id']:
             cleaned_data['lang_id'] = 1
         existing_lang = self.lang_api.read(cleaned_data['lang_id'])
-        existing_document = Document.query.filter(and_(Document.filename == cleaned_data['name'],
+        existing_document = Document.query.filter(and_(Document.name == cleaned_data['name'],
                                                        Document.lang_id == cleaned_data['lang_id'])).first()
         if existing_document:
             raise DatabaseItemAlreadyExists(_('No two documents can have the same name and lang_id!'))
