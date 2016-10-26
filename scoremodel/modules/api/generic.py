@@ -64,7 +64,10 @@ class GenericApi:
         # Check whether the complex parameters are lists
         for complex_param in complex_params:
             if type(cleaned[complex_param]) is not list:
-                cleaned[complex_param] = [cleaned[complex_param]]
+                if cleaned[complex_param] is not None:
+                    cleaned[complex_param] = [cleaned[complex_param]]
+                else:
+                    cleaned[complex_param] = []
         # Check for nullability
         for possible_param in possible_params:
             if possible_param in db_class.__table__.columns:

@@ -144,6 +144,8 @@ class UserApi(GenericApi):
         cleaned_data = self.clean_input_data(User, unclean_data, complex_params=self.complex_params,
                                              possible_params=self.possible_params, required_params=self.required_params)
         cleaned_data['username'] = cleaned_data['email']
+        if 'roles' not in cleaned_data or len(cleaned_data['roles']) == 0:
+            cleaned_data['roles'] = [self.a_role.get_by_role('public').id]
         return cleaned_data
 
     def remove_roles(self, entity):
