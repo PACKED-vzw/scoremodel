@@ -99,8 +99,8 @@ def add_lang():
 
 
 def testing_db_setup():
+    add_tables()
     if not check_has_tables():
-        add_tables()
         add_roles()
         add_lang()
         add_menu_links()

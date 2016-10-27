@@ -22,6 +22,7 @@ class ApiTest(TestCase):
         return scoremodel.app
 
     def setUp(self):
+        scoremodel.app.db.create_all()
         with scoremodel.app.app_context():
             testing_db_setup()
 

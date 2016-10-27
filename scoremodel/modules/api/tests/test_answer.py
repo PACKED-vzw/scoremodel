@@ -5,7 +5,7 @@ from scoremodel.modules.api.tests import *
 
 class AnswerTest(ApiTest):
 
-    def _create(self):
+    def test_create(self):
         en = LangApi().by_lang('en')
         a = AnswerApi().create({'answer': 'No', 'lang_id': en.id})
         assert a in scoremodel.db.session
@@ -15,14 +15,14 @@ class AnswerTest(ApiTest):
         assert a_b.value == 5
         self.assertRaises(DatabaseItemAlreadyExists, AnswerApi().create, {'answer': 'No', 'lang_id': en.id})
 
-    def _read(self):
+    def test_read(self):
         en = LangApi().by_lang('en')
         a = AnswerApi().create({'answer': 'No', 'lang_id': en.id})
         assert a == AnswerApi().read(a.id)
         a_b = AnswerApi().create({'answer': 'Yes', 'lang_id': en.id})
         assert len(AnswerApi().by_lang(en.lang)) == 2
 
-    def _update(self):
+    def test_update(self):
         en = LangApi().by_lang('en')
         a = AnswerApi().create({'answer': 'No', 'lang_id': en.id, 'value': 5})
         a_b = AnswerApi().update(a.id, {'answer': 'Yes', 'lang_id': en.id})
@@ -31,7 +31,7 @@ class AnswerTest(ApiTest):
         assert a_b == AnswerApi().read(a.id)
         assert a_b.value == 1  # When updating, you have to provide all the values, including the unchanged ones
 
-    def _delete(self):
+    def test_delete(self):
         en = LangApi().by_lang('en')
         a = AnswerApi().create({'answer': 'No', 'lang_id': en.id})
         assert AnswerApi().delete(a.id) is True
