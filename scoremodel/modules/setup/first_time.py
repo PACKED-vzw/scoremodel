@@ -55,9 +55,13 @@ def add_admin():
     user_api = UserApi()
     role_api = RoleApi()
     admin_role = role_api.get_by_role('administrator')
+    if app.config['DEBUG'] is True:
+        password = 'admin'
+    else:
+        password = ''.join(SystemRandom().choice(string.ascii_uppercase + string.ascii_lowercase + string.digits) for _ in range(10))
     user_data = {
         'email': 'admin@packed.be',
-        'password': ''.join(SystemRandom().choice(string.ascii_uppercase + string.ascii_lowercase + string.digits) for _ in range(10)),
+        'password': password,
         'roles': [
             admin_role.id
         ]
@@ -79,5 +83,15 @@ def add_menu_links():
 def add_lang():
     languages = app.config['LANGUAGES']
     lang_api = LangApi()
+    if len(languages) == 0:
+        languages.append('en')
     for lang in languages:
         lang_api.create({'lang': lang})
+
+
+def testing_db_setup():
+    create_functions = (add_tables, add_roles, add_lang, add_menu_links)
+    for func in create_functions:
+        func()
+    adm = add_admin()
+    return adm
