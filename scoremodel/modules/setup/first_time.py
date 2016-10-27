@@ -90,8 +90,13 @@ def add_lang():
 
 
 def testing_db_setup():
-    create_functions = (add_tables, add_roles, add_lang, add_menu_links)
-    for func in create_functions:
-        func()
-    adm = add_admin()
-    return adm
+    if not check_has_tables():
+        add_tables()
+        add_roles()
+        add_lang()
+        add_menu_links()
+    if not check_has_admin():
+        adm = add_admin()
+        return adm
+    return True
+
