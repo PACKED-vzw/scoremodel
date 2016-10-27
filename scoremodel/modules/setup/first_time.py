@@ -7,6 +7,7 @@ from scoremodel.modules.api.lang import LangApi
 from scoremodel.modules.api.user import UserApi
 from scoremodel.modules.api.role import RoleApi
 from scoremodel.modules.api.menu_link import MenuLinkApi
+from scoremodel.modules.error import DatabaseItemDoesNotExist
 from random import SystemRandom
 from sqlalchemy.exc import OperationalError, NoSuchTableError
 from sqlalchemy import Table, MetaData
@@ -57,7 +58,10 @@ def add_roles():
     minimal_roles = ('administrator', 'public')
     role_api = RoleApi()
     for role in minimal_roles:
-        role_api.create({'role': role})
+        try:
+            role_api.get_by_role(role)
+        except DatabaseItemDoesNotExist:
+            role_api.create({'role': role})
 
 
 def add_admin():
@@ -75,18 +79,24 @@ def add_admin():
             admin_role.id
         ]
     }
-    admin = user_api.create(user_data)
-    return {
-        'user': admin,
-        'password': user_data['password']
-    }
+    try:
+        user_api.get_by_user('admin@packed.be')
+    except DatabaseItemDoesNotExist:
+        admin = user_api.create(user_data)
+        return {
+            'user': admin,
+            'password': user_data['password']
+        }
 
 
 def add_menu_links():
     menu_links = ('v_index', 'v_faq', 'v_disclaimer', 'v_doc')
     menu_link_api = MenuLinkApi()
     for menu_link in menu_links:
-        menu_link_api.create({'menu_link': menu_link})
+        try:
+            menu_link_api.by_menu_link(menu_link)
+        except DatabaseItemDoesNotExist:
+            menu_link_api.create({'menu_link': menu_link})
 
 
 def add_lang():
@@ -95,7 +105,10 @@ def add_lang():
     if len(languages) == 0:
         languages.append('en')
     for lang in languages:
-        lang_api.create({'lang': lang})
+        try:
+            lang_api.by_lang(lang)
+        except DatabaseItemDoesNotExist:
+            lang_api.create({'lang': lang})
 
 
 def testing_db_setup():
