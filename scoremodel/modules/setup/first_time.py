@@ -1,14 +1,15 @@
 from scoremodel import app, db
-from scoremodel.models.general import RiskFactor, Report, Answer, Question, Section
+from scoremodel.models.general import RiskFactor, Report, Answer, Question, Section, Benchmark, BenchmarkReport
 from scoremodel.models.public import UserReport, QuestionAnswer
-from scoremodel.models.user import Role, User
+from scoremodel.models.user import Role, User, Organisation, OrganisationType
 from scoremodel.models.pages import Page, Document, Lang, MenuLink
 from scoremodel.modules.api.lang import LangApi
 from scoremodel.modules.api.user import UserApi
 from scoremodel.modules.api.role import RoleApi
 from scoremodel.modules.api.menu_link import MenuLinkApi
 from random import SystemRandom
-from sqlalchemy.exc import OperationalError
+from sqlalchemy.exc import OperationalError, NoSuchTableError
+from sqlalchemy import Table, MetaData
 import string
 
 ##
@@ -25,10 +26,18 @@ def check_has_tables():
     If we get an OperationalError, the tables do not yet exist.
     :return:
     """
-    try:
-        users = User.query.all()
-    except OperationalError:
-        return False
+    tables = ('Answer', 'Section', 'Question', 'Report', 'BenchmarkReport', 'Benchmark', 'RiskFactor',
+              'Lang', 'MenuLink', 'Page', 'Document',
+              'UserReport', 'QuestionAnswer',
+              'Role', 'User', 'Organisation', 'OrganisationType')
+    for table in tables:
+        try:
+            o_t = eval(table)
+            t = o_t.query.all()
+        except NoSuchTableError:
+            return False
+        except OperationalError:
+            return False
     return True
 
 
