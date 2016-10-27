@@ -23,8 +23,8 @@ class ApiTest(TestCase):
 
     def setUp(self):
         scoremodel.db.create_all()
-        with scoremodel.app.app_context():
-            testing_db_setup()
+        #with scoremodel.app.app_context():
+        testing_db_setup()
 
     def tearDown(self):
         scoremodel.db.session.remove()
