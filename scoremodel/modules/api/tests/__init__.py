@@ -29,3 +29,5 @@ class ApiTest(TestCase):
     def tearDown(self):
         scoremodel.db.session.remove()
         scoremodel.db.drop_all()
+        scoremodel.db.session.commit()
+        pass

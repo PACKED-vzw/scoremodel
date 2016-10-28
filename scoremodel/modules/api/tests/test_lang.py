@@ -1,5 +1,6 @@
 from scoremodel.modules.api.lang import LangApi
 from scoremodel.modules.api.tests import *
+from scoremodel.models.pages import Lang
 
 
 class LangTest(ApiTest):
@@ -8,6 +9,7 @@ class LangTest(ApiTest):
         l = LangApi().create({'lang': 'zh'})
         assert l in scoremodel.db.session
         self.assertRaises(DatabaseItemAlreadyExists, LangApi().create, {'lang': 'zh'})
+        self.assertIsInstance(l, Lang)
 
     def test_read(self):
         l = LangApi().create({'lang': 'zh'})

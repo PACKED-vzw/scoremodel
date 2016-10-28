@@ -1,5 +1,6 @@
 from scoremodel.modules.api.user import UserApi
 from scoremodel.modules.api.tests import *
+from scoremodel.models.user import User
 
 
 class UserTest(ApiTest):
@@ -8,6 +9,7 @@ class UserTest(ApiTest):
         u = UserApi().create({'email': 'foo@bar.be', 'password': '123'})
         assert u in scoremodel.db.session
         assert 'public' in [r.role for r in u.roles]
+        self.assertIsInstance(u, User)
 
     def test_read(self):
         u = UserApi().create({'email': 'foo@bar.be', 'password': '123'})
@@ -26,6 +28,7 @@ class UserTest(ApiTest):
         u_x = UserApi().read(u.id)
         assert u_x.email == u_u.email
         assert UserApi().check_password(u_x.id, '456')
+        self.assertIsInstance(u_u, User)
 
     def test_delete(self):
         u = UserApi().create({'email': 'foo@bar.be', 'password': '123'})

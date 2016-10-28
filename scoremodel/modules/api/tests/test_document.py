@@ -1,5 +1,6 @@
 from scoremodel.modules.api.document import DocumentApi
 from scoremodel.modules.api.lang import LangApi
+from scoremodel.models.pages import Document
 from scoremodel.modules.api.tests import *
 
 
@@ -10,6 +11,7 @@ class DocumentTest(ApiTest):
         d = DocumentApi().create({'name': 'Foo', 'lang_id': en.id})
         assert d in scoremodel.db.session
         self.assertRaises(DatabaseItemAlreadyExists, DocumentApi().create, {'name': 'Foo', 'lang_id': en.id})
+        self.assertIsInstance(d, Document)
 
     def test_read(self):
         en = LangApi().by_lang('en')
@@ -24,6 +26,7 @@ class DocumentTest(ApiTest):
         assert d_u.name == 'Bar'
         assert d_u.id == d.id
         assert d_u == DocumentApi().read(d.id)
+        self.assertIsInstance(d_u, Document)
 
     def test_delete(self):
         en = LangApi().by_lang('en')
