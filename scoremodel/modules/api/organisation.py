@@ -16,6 +16,8 @@ class OrganisationApi(GenericApi):
     def create(self, input_data):
         clean_data = self.clean_input(input_data)
         new_organisation = Organisation(name=clean_data['name'])
+        # There can be multiple organisations with the same name; this is autocreated with new users and is purely
+        # informational.
         existing_type = OrganisationTypeApi().read(clean_data['type_id'])
         new_organisation.type = existing_type
         db.session.add(new_organisation)

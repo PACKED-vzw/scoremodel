@@ -3,7 +3,7 @@ from scoremodel.modules.msg.messages import module_error_msg as _e
 from scoremodel.modules.api.generic import GenericApi
 from scoremodel.models.user import OrganisationType
 from scoremodel import db
-from scoremodel.modules.error import DatabaseItemDoesNotExist
+from scoremodel.modules.error import DatabaseItemDoesNotExist, DatabaseItemAlreadyExists
 
 
 class OrganisationTypeApi(GenericApi):
@@ -14,6 +14,9 @@ class OrganisationTypeApi(GenericApi):
 
     def create(self, input_data):
         clean_data = self.clean_input(input_data)
+        existing_type = OrganisationType.query.filter(OrganisationType.type == clean_data['type']).first()
+        if existing_type:
+            raise DatabaseItemAlreadyExists(_e['item_exists'].format(OrganisationType, clean_data['type']))
         new_type = OrganisationType(type=clean_data['type'])
         db.session.add(new_type)
         db.session.commit()
