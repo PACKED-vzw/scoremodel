@@ -10,6 +10,8 @@ from scoremodel import db
 class ReportApi(GenericApi):
     simple_params = ['title', 'lang_id']
     complex_params = []
+    possible_params = ['title', 'lang_id']
+    required_params = ['title', 'lang_id']
 
     def __init__(self, report_id=None, autocommit=True):
         self.report_id = report_id
@@ -87,9 +89,8 @@ class ReportApi(GenericApi):
         :param input_data:
         :return:
         """
-        possible_params = ['title', 'lang_id']
-        required_params = ['title', 'lang_id']
-        return self.clean_input_data(Report, input_data, possible_params, required_params, self.complex_params)
+        return self.clean_input_data(Report, input_data, self.possible_params, self.required_params,
+                                     self.complex_params)
 
     def store(self, autocommit=None):
         if autocommit is None:

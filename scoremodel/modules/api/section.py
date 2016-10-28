@@ -12,6 +12,8 @@ from scoremodel import db
 class SectionApi(GenericApi):
     simple_params = ['title', 'context', 'order_in_report', 'report_id', 'weight']
     complex_params = []
+    possible_params = ['title', 'context', 'order_in_report', 'report_id', 'weight']
+    required_params = ['title', 'report_id']
 
     ##
     # TODO auto-generate total_score from attached questions?
@@ -77,9 +79,8 @@ class SectionApi(GenericApi):
         :param input_data:
         :return:
         """
-        possible_params = ['title', 'context', 'order_in_report', 'report_id', 'weight']
-        required_params = ['title', 'report_id']
-        cleaned_data = self.clean_input_data(Section, input_data, possible_params, required_params, self.complex_params)
+        cleaned_data = self.clean_input_data(Section, input_data, self.possible_params, self.required_params,
+                                             self.complex_params)
         return cleaned_data
 
     def list(self):

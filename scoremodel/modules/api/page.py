@@ -52,6 +52,8 @@ class PageApi(GenericApi):
         existing_page = self.read(page_id)
         existing_page.content = cleaned_data['content']
         # Language
+        if not cleaned_data['lang_id']:
+            cleaned_data['lang_id'] = 1
         existing_lang = self.lang_api.read(cleaned_data['lang_id'])
         # Menu link
         existing_menu_link = self.menu_link_api.read(cleaned_data['menu_link_id'])

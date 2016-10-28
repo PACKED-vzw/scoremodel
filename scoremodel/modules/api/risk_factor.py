@@ -10,6 +10,8 @@ from scoremodel import db
 class RiskFactorApi(GenericApi):
     complex_params = []
     simple_params = ['risk_factor', 'value', 'lang_id']
+    possible_params = ['risk_factor', 'value', 'lang_id']
+    required_params = ['risk_factor', 'lang_id']
 
     def __init__(self, risk_factor_id=None):
         self.risk_factor_id = risk_factor_id
@@ -87,6 +89,5 @@ class RiskFactorApi(GenericApi):
         return existing_reports
 
     def parse_input_data(self, input_data):
-        possible_params = ['risk_factor', 'value', 'lang_id']
-        required_params = ['risk_factor', 'lang_id']
-        return self.clean_input_data(RiskFactor, input_data, possible_params, required_params, self.complex_params)
+        return self.clean_input_data(RiskFactor, input_data, self.possible_params, self.required_params,
+                                     self.complex_params)
