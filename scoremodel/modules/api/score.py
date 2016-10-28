@@ -60,7 +60,9 @@ class ScoreApi:
                 'multiplication_factor': section.multiplication_factor,
                 'questions': []
             }
-            for question_id, question_answer in question_answer_api.get_for_section_by_question_id(section.id, current_user.id, user_report_id).items():
+            for question_id, question_answer in question_answer_api.get_for_section_by_question_id(section.id,
+                                                                                                   current_user.id,
+                                                                                                   user_report_id).items():
                 out_section['questions'].append({
                     'question_id': question_id,
                     'question_answer_id': question_answer.id,

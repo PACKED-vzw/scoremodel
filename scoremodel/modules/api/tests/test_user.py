@@ -34,4 +34,3 @@ class UserTest(ApiTest):
         u = UserApi().create({'email': 'foo@bar.be', 'password': '123'})
         assert UserApi().delete(u.id)
         assert u not in scoremodel.db.session
-
