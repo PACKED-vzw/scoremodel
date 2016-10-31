@@ -358,9 +358,13 @@ class Benchmark(db.Model):
 
     @property
     def score(self):
-        return self.question.weight * self.answer.value * self.question.risk_factor.value
+        if self.answer is None:
+            return 0
+        else:
+            return self.question.weight * self.answer.value * self.question.risk_factor.value
 
     def output_obj(self):
+        # The last case shouldn't happen: TODO: fix
         if self.not_in_benchmark or self.answer is None or self.question.risk_factor is None:
             return {
                 'id': self.id,
