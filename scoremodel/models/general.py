@@ -361,7 +361,7 @@ class Benchmark(db.Model):
         return self.question.weight * self.answer.value * self.question.risk_factor.value
 
     def output_obj(self):
-        if self.not_in_benchmark:
+        if self.not_in_benchmark or self.answer is None:
             return {
                 'id': self.id,
                 'question_id': self.question_id,
