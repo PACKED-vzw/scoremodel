@@ -80,6 +80,7 @@ def v_api_document_edit(document_id):
     return a_api.response
 
 
+@csrf.exempt
 @api.route('/document/<int:document_id>/resource', methods=['POST'])
 @login_required
 @must_be_admin

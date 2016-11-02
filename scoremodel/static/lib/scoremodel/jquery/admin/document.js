@@ -121,6 +121,10 @@ function save_document_data() {
     return $.ajax({
         url: url,
         method: method,
+        headers: {
+            'X-CSRFToken': csrf_token
+        },
+        contentType: 'application/json',
         data: JSON.stringify(form_data),
         success: function(data, status) {
             success_button('#save_button', 'Saved');
