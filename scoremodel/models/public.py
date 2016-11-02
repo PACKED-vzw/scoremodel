@@ -28,12 +28,12 @@ class UserReport(db.Model):
 
     @property
     def by_section(self):
-        questions_by_section = {s.id: [] for s in self.template.sections}
+        questions_by_section = {s.id: {'title': s.title, 'questions': []} for s in self.template.sections}
         for question in self.question_answers:
             if question.question_template.section_id in questions_by_section:
-                questions_by_section[question.question_template.section_id].append(question)
+                questions_by_section[question.question_template.section_id]['questions'].append(question)
             else:
-                questions_by_section[question.question_template.section_id] = [question]
+                questions_by_section[question.question_template.section_id]['questions'] = [question]
         return questions_by_section
 
     @property
@@ -76,7 +76,8 @@ class UserReport(db.Model):
             'question_answers_by_section': [
                 {
                     'section_id': key,
-                    'question_answers': [q.output_obj() for q in value]
+                    'section_title': value['title'],
+                    'question_answers': [q.output_obj() for q in value['questions']]
                 }
                 for (key, value) in self.by_section.items()
             ]

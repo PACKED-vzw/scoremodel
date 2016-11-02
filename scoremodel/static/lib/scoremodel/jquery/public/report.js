@@ -36,7 +36,7 @@ function draw_user_report(user_report_id) {
                 section_score = section_score + (question_answer.score * question_answer.multiplication_factor);
             }
             axes.push({
-                axis: section.section_id,
+                axis: section.section_title,
                 value: section_score
             });
         }
