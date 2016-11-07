@@ -10,6 +10,7 @@ from scoremodel.modules.api.user import UserApi
 from scoremodel.modules.api.user_report import UserReportApi
 from scoremodel.modules.error import DatabaseItemDoesNotExist, DatabaseItemAlreadyExists, RequiredAttributeMissing
 from scoremodel.modules.forms.public.report import UserReportCreateForm
+from scoremodel.modules.forms.generic import GenericDeleteForm
 from scoremodel.modules.locale import Locale
 
 public = Blueprint('public', __name__, url_prefix='/scoremodel')
@@ -33,6 +34,38 @@ def v_user_report_list_by_user(user_id):
     user_api = UserApi()
     reports_user = user_api.get_user_reports(user_id)
     return render_template('public/list.html', reports=reports_user, title=_('Reports'))
+
+
+@public.route('/user/<int:user_id>/report/<int:user_report_id>/delete', methods=['GET', 'POST'])
+@login_required
+def v_user_report_delete(user_id, user_report_id):
+    if current_user.id != user_id:
+        flash(_('You can only view your own reports.'))
+        abort(403)
+    form = GenericDeleteForm()
+    try:
+        existing_report = user_report_api.read(user_report_id)
+    except DatabaseItemDoesNotExist:
+        flash(_('No report with id {0} exists.').format(user_report_id))
+        return url_for('public.v_user_report_list_by_user', user_id=user_id)
+    if request.method == 'POST' and form.validate_on_submit():
+        try:
+            if user_report_api.delete(user_report_id) is True:
+                flash(_('Report {0} removed.').format(user_report_id))
+            else:
+                flash(_('Failed to remove report {0}.').format(user_report_id))
+        except Exception as e:
+            flash(_('An unexpected error occurred.'))
+            return render_template('admin/generic/delete.html', action_url=url_for('public.v_user_report_delete',
+                                                                                   user_report_id=user_report_id,
+                                                                                   user_id=user_id),
+                                   item_type=_('Report'), item_identifier=existing_report.name, form=form)
+        else:
+            return redirect(url_for('public.v_user_report_list_by_user', user_id=user_id))
+    return render_template('admin/generic/delete.html', action_url=url_for('public.v_user_report_delete',
+                                                                           user_report_id=user_report_id,
+                                                                           user_id=user_id),
+                           item_type=_('Report'), item_identifier=existing_report.name, form=form)
 
 
 @public.route('/user/<int:user_id>/report/new', methods=['GET', 'POST'])
@@ -177,7 +210,6 @@ def v_user_report_check(user_id, user_report_id):
         abort(403)
     user_report = user_report_api.read(user_report_id)
 
-
     # Get all question_answers for this report and order them by question_id, so we can compare
     # question.answer.answer_id to question_answers['question_id'].answer_id
 
@@ -224,7 +256,8 @@ def v_user_report_summary(user_id, user_report_id):
     highest_unanswered = []
 
     for question in user_report.template.questions_ordered_by_combined_weight:
-        if question['question_id'] not in question_answers or question_answers[question['question_id']].score < question['max_score']:
+        if question['question_id'] not in question_answers or question_answers[question['question_id']].score < \
+                question['max_score']:
             try:
                 highest_unanswered.append(QuestionApi().read(question['question_id']))
             except DatabaseItemDoesNotExist:
@@ -251,4 +284,3 @@ def v_user_report_summary(user_id, user_report_id):
                            benchmarks_by_question=benchmarks_by_question,
                            question_answers_by_id=question_answers
                            )
-
