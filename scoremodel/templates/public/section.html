@@ -186,7 +186,7 @@
                                    class="btn btn-default text-right">{{ next_section.title }}&nbsp;<span
                                         class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span></a>
                             {% else %}
-                                <a href="{{ url_for('public.v_user_report_check', user_id=current_user.id, user_report_id=user_report_id) }}"
+                                <a href="{{ url_for('public.v_user_report_summary', user_id=current_user.id, user_report_id=user_report_id) }}"
                                    class="btn btn-default text-right">{{ _('Overview') }}&nbsp;<span
                                         class="glyphicon glyphicon-chevron-right"
                                         aria-hidden="true"></span></a>
