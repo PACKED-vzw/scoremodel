@@ -130,8 +130,10 @@
                                                 {% if section.id in benchmarks_by_section %}
                                                     {% for benchmark_report_id, benchmark_report in benchmarks_by_section[section.id].items() %}
                                                         {% if benchmark_report.benchmarks[question.id] is defined %}
-                                                            <span class="label label-default">{{ benchmark_report.title }}: <span
-                                                                    id="answer_bm_{{ benchmark_report_id }}_{{ question.id }}">{{ benchmark_report.benchmarks[question.id].answer.answer }}</span></span>
+                                                            {% if benchmark_report.benchmarks[question.id].answer %}
+                                                                <span class="label label-default">{{ benchmark_report.title }}: <span
+                                                                        id="answer_bm_{{ benchmark_report_id }}_{{ question.id }}">{{ benchmark_report.benchmarks[question.id].answer.answer }}</span></span>
+                                                            {% endif %}
                                                         {% endif %}
                                                     {% endfor %}
                                                 {% endif %}
