@@ -87,6 +87,11 @@
                         {% for question in highest_unanswered %}
                             <div class="row">
                                 <div class="container">
+                                <div class="row">
+                                        <div class="col-md-8 col-sm-8">
+                                            <span class="label label-info">Sectie <em>{{ question.section.title }}</em></span>
+                                        </div>
+                                    </div>
                                     <div class="row">
                                         <div class="col-md-11 col-sm-11">
                                             <h2 class="h3">{{ question.question }}
