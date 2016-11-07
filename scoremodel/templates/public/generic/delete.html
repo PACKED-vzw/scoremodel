@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+{% block content %}
+    <div class="row">
+    <div class="col-sm-12 col-md-12">
+        <form method="post" action="{{ action_url }}">
+    <div class="panel panel-warning">
+        <div class="panel-heading">
+            <h1 class="panel-title">{{ _('Confirm deletion') }}</h1>
+        </div>
+        <div class="panel-body">
+            <p>{{ _('Please press &lt;Confirm delete&gt; to confirm the deletion of the %(item_type)s called &ldquo;%(item_identifier)s&rdquo;.', item_type=item_type, item_identifier=item_identifier) }}</p>
+        </div>
+    </div>
+    {{ form.csrf_token }}
+    <div class="form-group">
+        {{ form.submit(class_='btn btn-danger') }}
+    </div>
+</form>
+    </div>
+    </div>
+{% endblock %}

@@ -51,20 +51,20 @@ def v_user_report_delete(user_id, user_report_id):
     if request.method == 'POST' and form.validate_on_submit():
         try:
             if user_report_api.delete(user_report_id) is True:
-                flash(_('Report {0} removed.').format(user_report_id))
+                flash(_('Report {0} removed.').format(existing_report.name))
             else:
-                flash(_('Failed to remove report {0}.').format(user_report_id))
+                flash(_('Failed to remove report {0}.').format(existing_report.name))
         except Exception as e:
             flash(_('An unexpected error occurred.'))
-            return render_template('admin/generic/delete.html', action_url=url_for('public.v_user_report_delete',
-                                                                                   user_report_id=user_report_id,
-                                                                                   user_id=user_id),
+            return render_template('public/generic/delete.html', action_url=url_for('public.v_user_report_delete',
+                                                                                    user_report_id=user_report_id,
+                                                                                    user_id=user_id),
                                    item_type=_('Report'), item_identifier=existing_report.name, form=form)
         else:
             return redirect(url_for('public.v_user_report_list_by_user', user_id=user_id))
-    return render_template('admin/generic/delete.html', action_url=url_for('public.v_user_report_delete',
-                                                                           user_report_id=user_report_id,
-                                                                           user_id=user_id),
+    return render_template('public/generic/delete.html', action_url=url_for('public.v_user_report_delete',
+                                                                            user_report_id=user_report_id,
+                                                                            user_id=user_id),
                            item_type=_('Report'), item_identifier=existing_report.name, form=form)
 
 

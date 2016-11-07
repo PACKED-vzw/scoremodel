@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 {% block content %}
     <div class="row">
+    <div class="col-sm-12 col-md-12">
         <form method="post" action="{{ url_for('public.v_user_report_edit', user_id=current_user.id, user_report_id=report_id) }}">
             <div class="form-group">
                 <label for="user_report.name">{{ _('Report name') }}</label>
@@ -31,5 +32,6 @@
             {{ form.csrf_token }}
             {{ form.submit(class_='btn btn-default') }}
         </form>
+    </div>
     </div>
 {% endblock %}
