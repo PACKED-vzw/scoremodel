@@ -127,6 +127,18 @@ class Report(db.Model):
     def ordered_sections(self):
         return sorted(self.sections, key=lambda section: section.order_in_report)
 
+    @property
+    def questions_ordered_by_combined_weight(self):
+        unordered_questions = []
+        for section in self.sections:
+            for question in section.questions:
+                unordered_questions.append({
+                    'question_id': question.id,
+                    'combined_weight': question.risk_factor.value * question.weight * section.weight,
+                    'max_score': question.maximum_score
+                })
+        return sorted(unordered_questions, key=lambda q: q['combined_weight'], reverse=True)
+
 
 class Section(db.Model):
     __tablename__ = 'Section'
@@ -281,7 +293,7 @@ class Question(db.Model):
 
     @property
     def maximum_score(self):
-        sorted_answers = sorted(self.answers, key=lambda answer: answer.value)
+        sorted_answers = sorted(self.answers, key=lambda answer: answer.value, reverse=True)
         if len(sorted_answers) > 0:
             return sorted_answers[0].value * self.weight * self.risk_factor.value
         else:

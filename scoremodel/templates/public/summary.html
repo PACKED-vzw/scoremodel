@@ -1,0 +1,136 @@
+{% extends 'base.html' %}
+{% block content %}
+    <!-- Bower -->
+    <script src="{{ url_for('static', filename='lib/bower_components/bootstrap/js/transition.js') }}"></script>
+    <!-- D3 -->
+    <script src="{{ url_for('static', filename='lib/bower_components/d3/d3.js') }}"></script>
+    <script src="{{ url_for('static', filename='lib/bower_components/radar-chart-d3/src/radar-chart.js') }}"></script>
+    <link href="{{ url_for('static', filename='lib/bower_components/radar-chart-d3/src/radar-chart.css') }}"
+          rel="stylesheet"/>
+    <!-- Local scripts -->
+    <script type="text/javascript">
+        var report_id = {{ report_template.id }};
+        var user_report_id = {{ user_report.id }};
+    </script>
+    <script src="{{ url_for('static', filename='lib/scoremodel/jquery/public/graph.js') }}"></script>
+    <script src="{{ url_for('static', filename='lib/scoremodel/jquery/public/report.js') }}"></script>
+    <div class="container">
+        <!-- Bar -->
+        <div class="row">
+            <div class="col-md-8 col-sm-12 col-md-offset-2">
+                <div class="container">
+                    <div class="col-md-2 col-sm-2"><a href="{{ url_for('public.v_user_report_summary', user_id=current_user.id, user_report_id=user_report.id) }}">{{ _('Summary') }}</a></div>
+                    <div class="col-md-2 col-sm-2"><a href="{{ url_for('public.v_user_report_check', user_id=current_user.id, user_report_id=user_report.id) }}">{{ _('Full report') }}</a></div>
+                    <div class="col-md-2 col-sm-2"><a href="javascript:window.print()">{{ _('Print') }}</a></div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <!-- TOC -->
+            <div class="col-md-9">
+                <h1><a name="inhoudstafel">{{ _('Table of contents') }}</a></h1>
+                <nav>
+                    <ul role="menu">
+                        <li><a href="#rapportgegevens">{{ _('Report data') }}</a></li>
+                        <li><a href="#grafiek">{{ _('Graph') }}</a></li>
+                        <li><a href="#highest_unanswered">{{ _('Where to start') }}</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-9">
+                <h1><a name="rapportgegevens">{{ _('Report data') }}</a></h1>
+                <table class="table">
+                    <tr>
+                        <td>{{ _('Report name') }}</td>
+                        <td>{{ user_report.name }}</td>
+                    </tr>
+                    <tr>
+                        <td>{{ _('Report template') }}</td>
+                        <td>{{ report_template.title }}</td>
+                    </tr>
+                    <tr>
+                        <td>{{ _('User') }}</td>
+                        <td>{{ user_report.user.username }}</td>
+                    </tr>
+                    <tr>
+                        <td>{{ _('Creation time') }}</td>
+                        <td>{{ user_report_creation_time }}</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+        <!-- Graph -->
+        <div class="row">
+            <div class="col-md-12 col-sm-12">
+                <h1><a name="grafiek">{{ _('Graph') }}</a></h1>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12 col-sm-12">
+                <div id="graph">
+
+                </div>
+            </div>
+        </div>
+        <!-- Highest 5 unanswered questions -->
+        <div class="row">
+            <div class="col-md-12 col-sm-12">
+                <h1><a name="highest_unanswered">{{ _('Where to start') }}</a></h1>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12 col-sm-12 panel panel-default">
+                <div class="panel-body">
+                    <div class="container">
+                        {% for question_answer in highest_unanswered %}
+                            <div class="row">
+                                <div class="container">
+                                    <div class="row">
+                                        <div class="col-md-11 col-sm-11">
+                                            <h2 class="h3">{{ question_answer.question_template.question }}
+                                                <small>
+                                                    ({{ _('Risk factor') }}: {{ question_answer.question_template.risk_factor.risk_factor }})
+                                                </small>
+                                            </h2>
+                                        </div>
+                                    </div>
+                                    <div class="row" style="margin-left: 5px;">
+                                        <div class="col-md-11 col-sm-11">
+                                            <!-- Answers -->
+                                            {% if question_answer.answer_id %}
+                                                <span class="label label-danger">{{ question_answer.answer_template.answer }}</span>
+                                            {% else %}
+                                                <span class="label label-warning">{{ _('Not completed') }}</span>
+                                            {% endif %}
+                                            <!-- Benchmark answers -->
+                                            {% if question_answer.question_template.id in benchmarks_by_question %}
+                                                {% for benchmark in benchmarks_by_question[question_answer.question_template.id] %}
+                                                    <span class="label label-default">{{ benchmark.benchmark_report.title }}: <span
+                                                            id="answer_bm_{{ benchmark.benchmark_report.id }}_{{ question_answer.id }}">{{ benchmark.answer.answer }}</span></span>
+                                                {% endfor %}
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                    <div class="row" style="margin-left: 5px;">
+                                        <div class="col-md-8 col-sm-8">
+                                            <h4>{{ _('Context') }}</h4>
+                                            <p style="margin-left: 1em; font-size: 1em;">{{ question_answer.question_template.context|markdown }}</p>
+                                            {# <h4>{{ _('Risks') }}</h4>
+                                                    <p style="margin-left: 1em; font-size: 1em;">{{question_answer.question_template.risk|markdown}}</p> #}
+                                            {#  <h4>{{ _('Example') }}</h4>
+                                                    <p style="margin-left: 1em; font-size: 1em;">{{question_answer.question_template.example|markdown}}</p> #}
+                                            <h4>{{ _('Action') }}</h4>
+                                            <p style="margin-left: 1em; font-size: 1em;">{{ question_answer.question_template.action|markdown }}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

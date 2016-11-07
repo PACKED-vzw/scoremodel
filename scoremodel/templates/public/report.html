@@ -15,6 +15,16 @@
     <script src="{{ url_for('static', filename='lib/scoremodel/jquery/public/graph.js') }}"></script>
     <script src="{{ url_for('static', filename='lib/scoremodel/jquery/public/report.js') }}"></script>
     <div class="container">
+    <!-- Bar -->
+        <div class="row">
+            <div class="col-md-8 col-sm-12 col-md-offset-2">
+                <div class="container">
+                    <div class="col-md-2 col-sm-2"><a href="{{ url_for('public.v_user_report_summary', user_id=current_user.id, user_report_id=user_report.id) }}">{{ _('Summary') }}</a></div>
+                    <div class="col-md-2 col-sm-2"><a href="{{ url_for('public.v_user_report_check', user_id=current_user.id, user_report_id=user_report.id) }}">{{ _('Full report') }}</a></div>
+                    <div class="col-md-2 col-sm-2"><a href="javascript:window.print()">{{ _('Print') }}</a></div>
+                </div>
+            </div>
+        </div>
         <div class="row">
             <!-- TOC -->
             <div class="col-md-9">

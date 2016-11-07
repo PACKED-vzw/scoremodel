@@ -5,6 +5,7 @@ from flask.ext.babel import gettext as _
 from scoremodel.modules.api.question_answer import QuestionAnswerApi
 from scoremodel.modules.api.report import ReportApi
 from scoremodel.modules.api.section import SectionApi
+from scoremodel.modules.api.question import QuestionApi
 from scoremodel.modules.api.user import UserApi
 from scoremodel.modules.api.user_report import UserReportApi
 from scoremodel.modules.error import DatabaseItemDoesNotExist, DatabaseItemAlreadyExists, RequiredAttributeMissing
@@ -168,6 +169,7 @@ def v_user_report_section(user_id, user_report_id, section_id):
 
 
 @public.route('/user/<int:user_id>/report/<int:user_report_id>/check', methods=['GET'])
+@public.route('/user/<int:user_id>/report/<int:user_report_id>/full', methods=['GET'])
 @login_required
 def v_user_report_check(user_id, user_report_id):
     if current_user.id != user_id:
@@ -200,9 +202,52 @@ def v_user_report_check(user_id, user_report_id):
                            )
 
 
-@public.route('/user/<int:user_id>/report/<int:user_report_id>/print', methods=['GET'])
+@public.route('/user/<int:user_id>/report/<int:user_report_id>/summary', methods=['GET'])
 @login_required
-def v_user_report_print(user_id, user_report_id):
+def v_user_report_summary(user_id, user_report_id):
     if current_user.id != user_id:
         flash(_('You can only view your own reports.'))
         abort(403)
+    user_report = user_report_api.read(user_report_id)
+
+    question_answers = {}
+    all_scores = {}
+
+    for section in user_report.template.sections:
+        all_scores[section.id] = 0
+
+    for question_answer in user_report.question_answers:
+        question_answers[question_answer.question_id] = question_answer
+        all_scores[question_answer.question_template.section.id] += question_answer.score * \
+                                                                    question_answer.multiplication_factor
+
+    highest_unanswered = []
+
+    for question in user_report.template.questions_ordered_by_combined_weight:
+        if question['question_id'] not in question_answers or question_answers[question['question_id']].score < question['max_score']:
+            try:
+                highest_unanswered.append(question_answers[question['question_id']])
+            except DatabaseItemDoesNotExist:
+                pass
+
+    if len(highest_unanswered) >= 5:
+        visible_unanswered = highest_unanswered[:5]
+    else:
+        visible_unanswered = highest_unanswered
+
+    benchmarks_by_question = {}
+    for bm_r in user_report.template.benchmark_reports:
+        for bm in bm_r.benchmarks:
+            if bm.question_id in benchmarks_by_question:
+                benchmarks_by_question[bm.question_id].append(bm)
+            else:
+                benchmarks_by_question[bm.question_id] = [bm]
+
+    return render_template('public/summary.html',
+                           report_template=user_report.template,
+                           user_report=user_report,
+                           user_report_creation_time='{:%Y-%m-%d %H:%M:%S}'.format(user_report.creation_time),
+                           highest_unanswered=visible_unanswered,
+                           benchmarks_by_question=benchmarks_by_question
+                           )
+
