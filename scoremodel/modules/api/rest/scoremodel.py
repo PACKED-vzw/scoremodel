@@ -299,10 +299,3 @@ class ScoremodelRestApi:
             call_function = getattr(self.api, api_function)
             translation[our_function] = call_function
         return translation
-
-    def csrf(self):
-        """
-
-        :return:
-        """
-        # Check the origin and referer headers

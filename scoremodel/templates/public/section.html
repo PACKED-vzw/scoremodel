@@ -89,17 +89,17 @@
                                                             <div class="col-md-8 col-sm-8" id="extra_{{ question.id }}">
                                                                 <div class="collapse" id="context_{{ question.id }}">
                                                                     <h4>{{ _('Context' ) }}</h4>
-                                                                    {{ question.context }}
+                                                                    {{question.context|markdown}}
                                                                     <hr/>
                                                                 </div>
                                                                 {# <div class="collapse" id="risks_{{ question.id }}">
                                                                     <h4>{{ _('Risks' ) }}</h4>
-                                                                    {{ question.risk }}
+                                                                    {{question.risk|markdown}}
                                                                     <hr/>
                                                                 </div>#}
                                                                 {# <div class="collapse" id="example_{{ question.id }}">
                                                                     <h4>{{ _('Example' ) }}</h4>
-                                                                    {{ question.example }}
+                                                                    {{question.example|markdown}}
                                                                     <hr/>
                                                                 </div>#}
                                                             </div>
