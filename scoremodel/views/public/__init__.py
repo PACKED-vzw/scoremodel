@@ -226,7 +226,7 @@ def v_user_report_summary(user_id, user_report_id):
     for question in user_report.template.questions_ordered_by_combined_weight:
         if question['question_id'] not in question_answers or question_answers[question['question_id']].score < question['max_score']:
             try:
-                highest_unanswered.append(question_answers[question['question_id']])
+                highest_unanswered.append(QuestionApi().read(question['question_id']))
             except DatabaseItemDoesNotExist:
                 pass
 
@@ -248,6 +248,7 @@ def v_user_report_summary(user_id, user_report_id):
                            user_report=user_report,
                            user_report_creation_time='{:%Y-%m-%d %H:%M:%S}'.format(user_report.creation_time),
                            highest_unanswered=visible_unanswered,
-                           benchmarks_by_question=benchmarks_by_question
+                           benchmarks_by_question=benchmarks_by_question,
+                           question_answers_by_id=question_answers
                            )
 

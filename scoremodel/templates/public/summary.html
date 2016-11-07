@@ -84,14 +84,14 @@
             <div class="col-md-12 col-sm-12 panel panel-default">
                 <div class="panel-body">
                     <div class="container">
-                        {% for question_answer in highest_unanswered %}
+                        {% for question in highest_unanswered %}
                             <div class="row">
                                 <div class="container">
                                     <div class="row">
                                         <div class="col-md-11 col-sm-11">
-                                            <h2 class="h3">{{ question_answer.question_template.question }}
+                                            <h2 class="h3">{{ question.question }}
                                                 <small>
-                                                    ({{ _('Risk factor') }}: {{ question_answer.question_template.risk_factor.risk_factor }})
+                                                    ({{ _('Risk factor') }}: {{ question.risk_factor.risk_factor }})
                                                 </small>
                                             </h2>
                                         </div>
@@ -99,16 +99,16 @@
                                     <div class="row" style="margin-left: 5px;">
                                         <div class="col-md-11 col-sm-11">
                                             <!-- Answers -->
-                                            {% if question_answer.answer_id %}
-                                                <span class="label label-danger">{{ question_answer.answer_template.answer }}</span>
+                                            {% if question.id in question_answers_by_id %}
+                                                <span class="label label-danger">{{ question_answers_by_id[question.id].answer_template.answer }}</span>
                                             {% else %}
                                                 <span class="label label-warning">{{ _('Not completed') }}</span>
                                             {% endif %}
                                             <!-- Benchmark answers -->
-                                            {% if question_answer.question_template.id in benchmarks_by_question %}
-                                                {% for benchmark in benchmarks_by_question[question_answer.question_template.id] %}
+                                            {% if question.id in benchmarks_by_question %}
+                                                {% for benchmark in benchmarks_by_question[question.id] %}
                                                     <span class="label label-default">{{ benchmark.benchmark_report.title }}: <span
-                                                            id="answer_bm_{{ benchmark.benchmark_report.id }}_{{ question_answer.id }}">{{ benchmark.answer.answer }}</span></span>
+                                                            id="answer_bm_{{ benchmark.benchmark_report.id }}_{{ question.id }}">{{ benchmark.answer.answer }}</span></span>
                                                 {% endfor %}
                                             {% endif %}
                                         </div>
@@ -116,13 +116,13 @@
                                     <div class="row" style="margin-left: 5px;">
                                         <div class="col-md-8 col-sm-8">
                                             <h4>{{ _('Context') }}</h4>
-                                            <p style="margin-left: 1em; font-size: 1em;">{{ question_answer.question_template.context|markdown }}</p>
+                                            <p style="margin-left: 1em; font-size: 1em;">{{ question.context|markdown }}</p>
                                             {# <h4>{{ _('Risks') }}</h4>
-                                                    <p style="margin-left: 1em; font-size: 1em;">{{question_answer.question_template.risk|markdown}}</p> #}
+                                                    <p style="margin-left: 1em; font-size: 1em;">{{question.risk|markdown}}</p> #}
                                             {#  <h4>{{ _('Example') }}</h4>
-                                                    <p style="margin-left: 1em; font-size: 1em;">{{question_answer.question_template.example|markdown}}</p> #}
+                                                    <p style="margin-left: 1em; font-size: 1em;">{{question.example|markdown}}</p> #}
                                             <h4>{{ _('Action') }}</h4>
-                                            <p style="margin-left: 1em; font-size: 1em;">{{ question_answer.question_template.action|markdown }}</p>
+                                            <p style="margin-left: 1em; font-size: 1em;">{{ question.action|markdown }}</p>
                                         </div>
                                     </div>
                                 </div>
