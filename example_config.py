@@ -2,7 +2,7 @@ import os
 
 BASEDIR = os.path.abspath(os.path.dirname(__file__))
 
-DEBUG = True
+DEBUG = False
 
 ##
 # Database settings
@@ -24,7 +24,6 @@ SSL_CERT = '/etc/mysql/certs/client-cert.pem'
 ##
 WTF_CSRF_ENABLED = True
 SECRET_KEY = 'secret_key'
-BASE_URL = 'http://localhost:5000/'
 
 ##
 # Log-in
@@ -49,7 +48,6 @@ MAX_CONTENT_LENGTH = 16 * 1024 * 1024  # 16 MB
 
 if DEBUG is True:
     SQLALCHEMY_DATABASE_URI = 'sqlite:///' + os.path.join(BASEDIR, 'app.db')
-    SQLALCHEMY_MIGRATE_REPO = os.path.join(BASEDIR, 'db_repository')
 else:
     if use_ssl is True:
         SQLALCHEMY_DATABASE_URI = 'mysql+mysqlconnector://{user}:{passw}@{host}/{db}?ssl_key={ssl_key}&ssl_cert={ssl_cert}'.format(

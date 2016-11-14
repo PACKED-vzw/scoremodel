@@ -21,8 +21,14 @@
     <script src="{{ url_for('static', filename='lib/bower_components/bootstrap/js/collapse.js') }}"></script>
     <!-- Showdown -->
     <script src="{{ url_for('static', filename='lib/bower_components/showdown/dist/showdown.js') }}"></script>
-    <!-- Local scripts -->
+    <!-- Translations -->
+    <script src="{{ url_for('static', filename='lib/locale/translate.js') }}"></script>
+    <script src="{{ url_for('static', filename='locales/' + current_user.locale + '/icu.js') }}"></script>
     <script src="{{ url_for('static', filename='lib/scoremodel/jquery/public/locale.js') }}"></script>
+    <script id="locale_script">
+    set_js_locale('{{ current_user.locale }}');
+    </script>
+    <!-- Local scripts -->
     <script src="{{ url_for('static', filename='lib/scoremodel/jquery/form.js') }}"></script>
     <!-- Local CSS -->
     <link rel="stylesheet" href="{{ url_for('static', filename='screen.css') }}" media="screen"/>

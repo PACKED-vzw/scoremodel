@@ -57,13 +57,13 @@ function set_required_error(selector) {
             parent
                 .addClass('has-error')
                 .find('div')
-                .append('<span class="help-block">This element is required.</span>');
+                .append('<span class="help-block">' + _('This element is required.') + '</span>');
     }
     var cannot_save = $('#cannot_save');
     if (!cannot_save.hasClass('active')) {
         cannot_save
             .addClass('active')
-            .append('<span class="help-block">Form could not be submitted: required elements are missing.</span>');
+            .append('<span class="help-block">' + _('Form could not be submitted: required elements are missing.') + '</span>');
     }
 }
 

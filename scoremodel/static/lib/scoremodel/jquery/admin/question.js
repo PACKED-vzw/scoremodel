@@ -120,7 +120,7 @@ function add_question_focus_handlers(question_id) {
         'question_answer_' + question_id, 'question_risk_factor_' + question_id];
     for (var i = 0; i < fields.length; i++) {
         $('#' + fields[i]).focus(function () {
-            default_button('#report_save_button', 'Save');
+            default_button('#report_save_button', _('Save'));
         });
     }
 }

@@ -2,6 +2,7 @@ import bcrypt
 from hashlib import sha512
 from scoremodel import db
 import scoremodel.models.public
+from flask.ext.login import AnonymousUserMixin
 from scoremodel.modules.user.token import Token
 
 
@@ -132,3 +133,4 @@ class User(db.Model):
     @property
     def locale(self):
         return self.lang.lang
+

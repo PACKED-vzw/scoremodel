@@ -89,7 +89,7 @@ function draw_report_benchmark(report_id) {
                     });
                 }
                 /* Redraw the graph */
-                graph.add_data('Benchmark: ' + title, axes);
+                graph.add_data(_('Benchmark: ') + title, axes);
                 graph.update();
             })
         }

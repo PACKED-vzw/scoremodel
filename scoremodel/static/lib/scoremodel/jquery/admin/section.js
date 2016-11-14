@@ -80,7 +80,7 @@ function draw_section(deferred, is_first_time) {
                 items: '> .question',
                 cursor: 'move',
                 update: function(ui, event) {
-                    default_button('#report_save_button', 'Save');
+                    default_button('#report_save_button', _('Save'));
                 }
             });
         }, function error(jqXHR, status, error) {

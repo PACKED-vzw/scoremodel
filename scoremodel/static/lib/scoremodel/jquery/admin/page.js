@@ -33,7 +33,7 @@ function save_page_data(page_id) {
         contentType: 'application/json',
         data: JSON.stringify(page_data),
         success: function (data, status) {
-            success_button('#save_button', 'Saved');
+            success_button('#save_button', _('Saved'));
         },
         error: function (jqXHR, status, error) {
             error_button('#save_button', error);
@@ -67,7 +67,7 @@ function draw_page(deferred, is_first_time) {
                     }
                 });
             $('#content').focus(function () {
-                default_button('#save_button', 'Save');
+                default_button('#save_button', _('Save'));
             })
         }
     });

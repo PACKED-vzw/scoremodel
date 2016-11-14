@@ -1,0 +1,61 @@
+# Copyright (C) 2016 PACKED VZW
+# This file is distributed under the same license as the Scoremodel package.
+# Pieter De Praetere <pieter@packed.be>, 2016
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2016-11-09 11:15+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: scoremodel/jquery/admin/document.js:34
+#: scoremodel/jquery/admin/document.js:175 scoremodel/jquery/admin/page.js:70
+#: scoremodel/jquery/admin/question.js:123 scoremodel/jquery/admin/report.js:18
+#: scoremodel/jquery/admin/report.js:151 scoremodel/jquery/admin/section.js:83
+msgid "Save"
+msgstr ""
+
+#: scoremodel/jquery/admin/document.js:64
+msgid "Upload successful"
+msgstr ""
+
+#: scoremodel/jquery/admin/document.js:77
+msgid "0% Complete"
+msgstr ""
+
+#: scoremodel/jquery/admin/document.js:85
+msgid "% Complete"
+msgstr ""
+
+#: scoremodel/jquery/admin/document.js:130 scoremodel/jquery/admin/page.js:36
+#: scoremodel/jquery/admin/report.js:101
+msgid "Saved"
+msgstr ""
+
+#: scoremodel/jquery/admin/document.js:199
+msgid "Attached Document"
+msgstr ""
+
+#: scoremodel/jquery/admin/report.js:157
+msgid "Saving"
+msgstr ""
+
+#: scoremodel/jquery/form.js:60
+msgid "This element is required."
+msgstr ""
+
+#: scoremodel/jquery/form.js:66
+msgid "Form could not be submitted: required elements are missing."
+msgstr ""
+
+#: scoremodel/jquery/public/report.js:92
+msgid "Benchmark: "
+msgstr ""

@@ -30,6 +30,10 @@ from scoremodel.modules.locale import Locale
 from scoremodel.modules.setup.first_time import add_admin, add_lang, add_menu_links, add_roles, check_has_admin,\
     check_has_tables, add_tables
 from scoremodel.modules.forms.setup import SetupForm
+from scoremodel.modules.user.anonymous import ScAnonymousUser
+
+
+login_manager.anonymous_user = ScAnonymousUser
 
 # TODO: probleem met vragen van rapporten
 

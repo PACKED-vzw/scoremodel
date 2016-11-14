@@ -31,7 +31,7 @@ $(document).ready(function () {
     $('#input_file').fileupload({
         dataType: 'json',
         add: function(e, data) {
-            default_button('#save_button', 'Save');
+            default_button('#save_button', _('Save'));
             $('#progress_indicator').find('div').remove();
             var document_id = $('#document_id').val();
             if (document_id < 0) {
@@ -61,7 +61,7 @@ $(document).ready(function () {
         done: function(e, data) {
             var progress_indicator = $('#progress_indicator');
             progress_indicator.find('div').remove();
-            progress_indicator.append('<div class="btn btn-success" role="alert"><span class="glyphicon glyphicon-ok" aria-hidden="true"></span><span class="sr-only">Upload successful</span></div>');
+            progress_indicator.append('<div class="btn btn-success" role="alert"><span class="glyphicon glyphicon-ok" aria-hidden="true"></span><span class="sr-only">' + _('Upload successful') + '</span></div>');
             var uploaded = data.result.data;
             var document_id = $('#document_id').val(); /* The old, lesser than 0 document_id */
             if (document_id < 0) {
@@ -74,7 +74,7 @@ $(document).ready(function () {
         },
         start: function(e, data) {
             var progress_indicator = $('#progress_indicator');
-            progress_indicator.append('<div class="progress"><div id="progress_bar" class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0;"><span class="sr-only">0% Complete</span></div></div>');
+            progress_indicator.append('<div class="progress"><div id="progress_bar" class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0;"><span class="sr-only">' + _('0% Complete') + '</span></div></div>');
         },
         progress: function(e, data) {
             var progress = parseInt(data.loaded / data.total * 100, 10);
@@ -82,7 +82,7 @@ $(document).ready(function () {
             progress_bar
                 .attr('aria-valuenow', progress)
                 .css('width', progress + '%');
-            progress_bar.parent('div').find('.sr-only').text(progress + '% Complete');
+            progress_bar.parent('div').find('.sr-only').text(progress + _('% Complete'));
         },
         fail: function(e, data) {
             error_button('#save_button', data.textStatus);
@@ -127,7 +127,7 @@ function save_document_data() {
         contentType: 'application/json',
         data: JSON.stringify(form_data),
         success: function(data, status) {
-            success_button('#save_button', 'Saved');
+            success_button('#save_button', _('Saved'));
         },
         error: function(jqXHR, status, error) {
             error_button('#save_button', error);
@@ -172,7 +172,7 @@ function draw_document(deferred, is_first_time) {
         var fields = ['lang_id', 'name', 'description'];
         for (var i = 0; i < fields.length; i++) {
             $('#' + fields[i]).focus(function(){
-                default_button('#save_button', 'Save');
+                default_button('#save_button', _('Save'));
             });
         }
         /* Add click handler to save button */
@@ -196,7 +196,7 @@ function media_type(mimetype) {
  */
 function draw_preview(resource_filename, resource_mimetype) {
     if(media_type(resource_mimetype) != 'image') {
-        $('#current_document').replaceWith('<a class="media" href="/api/v2/resource/' + resource_filename + '" id="current_document"><span class="glyphicon glyphicon-file"></span><span class="sr-only">Attached Document</span></a>');
+        $('#current_document').replaceWith('<a class="media" href="/api/v2/resource/' + resource_filename + '" id="current_document"><span class="glyphicon glyphicon-file"></span><span class="sr-only">' + _('Attached Document') + '</span></a>');
     } else {
         /* Use img */
         $('#current_document').replaceWith('<img src="/api/v2/resource/' + resource_filename + '" alt="Current document" id="current_document"/>');

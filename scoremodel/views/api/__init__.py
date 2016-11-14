@@ -22,7 +22,7 @@ def v_set_locale(locale_name=None):
     data = u''
     if not locale_name:
         status_code = 200
-        data = json.dumps({'locale': locale_api.current_locale})
+        data = {'locale': locale_api.current_locale}
     else:
         if locale_api.set_locale(locale_name) is True:
             status_code = 200

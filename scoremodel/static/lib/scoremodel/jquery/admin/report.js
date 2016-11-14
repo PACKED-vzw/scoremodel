@@ -15,7 +15,7 @@ $(document).ready(function () {
             items: '> .section',
             cursor: 'move',
             update: function (ui, event) {
-                default_button('#report_save_button', 'Save');
+                default_button('#report_save_button', _('Save'));
             }
         }
     );
@@ -98,7 +98,7 @@ function save_report_chain() {
         },
         contentType: 'application/json',
         success: function () {
-            success_button('#report_save_button', 'Saved');
+            success_button('#report_save_button', _('Saved'));
         },
         error: function (jqXHR, status, error) {
             error_button($('#report_save_button', error));
@@ -133,6 +133,7 @@ function draw_report(deferred, is_first_time, is_reload) {
                     /* From section.js */
                     /* As we removed the old sections, it is always "the first time" */
                     /* Problem: is async, but order is important! (NOW FIXED)*/
+                    /* Use placeholders */
                     sections.append('<div class="panel panel-default" id="section_id_placeholder_' + report.sections[i].id + '"><div class="panel-heading"><h3 class="panel-title">' + report.sections[i].title + '</h3></div></div>');
                     draw_section(get_section_data(report.sections[i].id), true);
                 }
@@ -147,13 +148,13 @@ function draw_report(deferred, is_first_time, is_reload) {
         var fields = ['report_title', 'report_lang'];
         for (var i = 0; i < fields.length; i++) {
             $('#' + fields[i]).focus(function () {
-                default_button('#report_save_button', 'Save');
+                default_button('#report_save_button', _('Save'));
             });
         }
         /* Add click handler */
         $('#report_save_button').click(function () {
             $(this).empty();
-            $(this).append('<span><img src="/static/img/reload.gif" height="20px"> Saving</span>');
+            $(this).append('<span><img src="/static/img/reload.gif" height="20px"> ' + _('Saving') + '</span>');
             draw_report(save_report_chain(), false, true);
         });
     }

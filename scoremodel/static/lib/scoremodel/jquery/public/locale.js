@@ -11,6 +11,7 @@ $(document).ready(function(){
                 url: '/api/v2/locale/' + locale,
                 success: function(data, status) {
                     /* Locale is set server-side */
+                    set_js_locale(locale);
                     location.reload(true);
                 },
                 error: function(jqXHR, status, error) {}
@@ -18,3 +19,20 @@ $(document).ready(function(){
         });
     })
 });
+
+
+function set_js_locale(locale) {
+    $.ajax({
+        method: 'GET',
+        url: '/static/locales/' + locale + '/' + locale + '.json',
+        success: function(data, status) {
+            $.getScript('/static/locales/' + locale + '/icu.js')
+                .done(function(script, textStatus) {
+                    _.setTranslation(data);
+                });
+        },
+        error: function(jqXHR, status, error) {
+            console.log(error);
+        }
+    });
+}

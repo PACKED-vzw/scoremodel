@@ -1,0 +1,63 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2016-11-09 11:15+0100\n"
+"PO-Revision-Date: 2016-11-09 11:17+0100\n"
+"Language: en\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Last-Translator: Pieter De Praetere <pieter.de.praetere@helptux.be>\n"
+"Language-Team: \n"
+"X-Generator: Poedit 1.8.8\n"
+
+#: scoremodel/jquery/admin/document.js:34
+#: scoremodel/jquery/admin/document.js:175 scoremodel/jquery/admin/page.js:70
+#: scoremodel/jquery/admin/question.js:123 scoremodel/jquery/admin/report.js:18
+#: scoremodel/jquery/admin/report.js:151 scoremodel/jquery/admin/section.js:83
+msgid "Save"
+msgstr "Save"
+
+#: scoremodel/jquery/admin/document.js:64
+msgid "Upload successful"
+msgstr "Upload successful"
+
+#: scoremodel/jquery/admin/document.js:77
+msgid "0% Complete"
+msgstr "0% Complete"
+
+#: scoremodel/jquery/admin/document.js:85
+msgid "% Complete"
+msgstr "% Complete"
+
+#: scoremodel/jquery/admin/document.js:130 scoremodel/jquery/admin/page.js:36
+#: scoremodel/jquery/admin/report.js:101
+msgid "Saved"
+msgstr "Saved"
+
+#: scoremodel/jquery/admin/document.js:199
+msgid "Attached Document"
+msgstr "Attached Document"
+
+#: scoremodel/jquery/admin/report.js:157
+msgid "Saving"
+msgstr "Saving"
+
+#: scoremodel/jquery/form.js:60
+msgid "This element is required."
+msgstr "This element is required."
+
+#: scoremodel/jquery/form.js:66
+msgid "Form could not be submitted: required elements are missing."
+msgstr "Form could not be submitted: required elements are missing."
+
+#: scoremodel/jquery/public/report.js:92
+msgid "Benchmark: "
+msgstr "Benchmark: "
