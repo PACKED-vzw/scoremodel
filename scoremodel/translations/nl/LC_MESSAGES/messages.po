@@ -338,7 +338,7 @@ msgid ""
 "No %(what)s with identifier %(identifier)s does not exist in %(in_what)s "
 "with identifier %(in_identifier)s"
 msgstr ""
-"Geen %(what)s met als identifier %(identifier)s bestaat niet in "
+"Een %(what)s met als identifier %(identifier)s bestaat niet in "
 "%(in_what)s met als identifier %(in_identifier)s."
 
 #: scoremodel/modules/msg/messages.py:25
@@ -774,9 +774,9 @@ msgid ""
 "href=\"https://www.google.com/search?q=%(page_name)s&as_sitesearch=scoremodel.org\">searching"
 " for it</a> or return to the <a href=\"%(index)s\">main page</a>."
 msgstr ""
-"We kunnen de door u opgevraagde pagina niet vinden. U kon proberen te <a "
+"We kunnen de door u opgevraagde pagina niet vinden. U kan proberen om ernaar te <a "
 "href=\"https://www.google.com/search?q=%(page_name)s&as_sitesearch=scoremodel.org\">zoeken"
-" voor het</a> of ga terug naar de <a href=\"%(index)s\">Hoofdpagina</a>."
+"</a> of teruggaan naar de <a href=\"%(index)s\">Hoofdpagina</a>."
 
 #: scoremodel/templates/login/form.html:11
 msgid "Email address"
@@ -884,11 +884,12 @@ msgstr "Rapportlijst"
 msgid ""
 "Here you can find a list of all your reports. You can select a report to "
 "continue or <a href=\""
-msgstr ""
+msgstr "Hier kan u een lijst vinden met all uw rapporten. U kan er een "
+"selecteren om verder te gaan of u kan een <a href=\""
 
 #: scoremodel/templates/site/home.html:12
 msgid "\">create a new report</a>."
-msgstr ""
+msgstr "\">nieuw rapport aanmaken</a>."
 
 #: scoremodel/templates/site/home.html:38
 msgid "Press \"Start\" to create a new report."
