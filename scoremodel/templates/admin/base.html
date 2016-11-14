@@ -25,9 +25,15 @@
     <script src="{{ url_for('static', filename='locales/' + current_user.locale + '/icu.js') }}"></script>
     <script src="{{ url_for('static', filename='lib/locale/translate.js') }}"></script>
     <script src="{{ url_for('static', filename='lib/scoremodel/jquery/public/locale.js') }}"></script>
+{% if current_user.locale is not none %}
     <script id="locale_script">
-        set_js_locale('{{ current_user.locale }}');
+    set_js_locale('{{ current_user.locale }}');
     </script>
+{% else %}
+    <script id="locale_script">
+    set_js_locale('{{ config['BABEL_DEFAULT_LOCALE'] }}');
+    </script>
+{% endif %}
     <!-- Local scripts -->
     <script src="{{ url_for('static', filename='lib/scoremodel/jquery/form.js') }}"></script>
     <script type="text/javascript">
