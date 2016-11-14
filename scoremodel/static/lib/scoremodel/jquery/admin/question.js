@@ -73,6 +73,7 @@ function get_question_data(question_id) {
 }
 
 function draw_question(deferred, is_first_time) {
+    increment_counter();
     if (deferred) {
         $.when(deferred).then(function success(question_api_data) {
             var question = question_api_data.data;
@@ -94,6 +95,8 @@ function draw_question(deferred, is_first_time) {
                 add_question_focus_handlers(question.id);
                 add_question_click_handlers(question.id);
             }
+            decrement_counter();
+            remove_loader('#report_loading_gif');
         });
     }
 }

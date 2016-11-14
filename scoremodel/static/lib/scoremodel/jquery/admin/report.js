@@ -120,6 +120,11 @@ function get_report_data() {
 }
 
 function draw_report(deferred, is_first_time, is_reload) {
+    /*
+    Add a little loading gif. Delete after the last question has loaded.
+     */
+    increment_counter();
+    add_loader('#report_loading_gif');
     if (deferred) {
         $.when(deferred).then(function success(report_api_response) {
                 var report = report_api_response.data;
@@ -137,7 +142,8 @@ function draw_report(deferred, is_first_time, is_reload) {
                     sections.append('<div class="panel panel-default" id="section_id_placeholder_' + report.sections[i].id + '"><div class="panel-heading"><h3 class="panel-title">' + report.sections[i].title + '</h3></div></div>');
                     draw_section(get_section_data(report.sections[i].id), true);
                 }
-
+                decrement_counter();
+                remove_loader('#report_loading_gif');
             },
             function error(jqXHR, status, error) {
                 error_button('#report_save_button', error);

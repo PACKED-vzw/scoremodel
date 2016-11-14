@@ -1,5 +1,11 @@
 {% extends 'admin/base.html' %}
 {% block admin_content %}
+    <script type="text/javascript">
+    /* This could end badly if one request finishes directly before the other starts. But I don't think that
+    will happen. */
+        var async_counter = 0;
+    </script>
+    <script src="{{ url_for('static', filename='lib/scoremodel/jquery/admin/loader.js') }}"></script>
     <script src="{{ url_for('static', filename='lib/bower_components/jquery-ui/jquery-ui.js') }}"></script>
     <script src="{{ url_for('static', filename='lib/scoremodel/jquery/admin/buttons.js') }}"></script>
     <script src="{{ url_for('static', filename='lib/scoremodel/jquery/admin/question.js') }}"></script>
@@ -10,7 +16,16 @@
             <div class="col-xs-9">
                 <div class="report panel panel-default">
                     <div class="panel-heading">
-                        <h3 class="panel-title">{{ _('Report') }}</h3>
+                        <div class="container">
+                            <div class="row">
+                                <div class="col-xs-9 col-sm-9 col-md-9">
+                                    <h3 class="panel-title">{{ _('Report') }}</h3>
+                                </div>
+                                <div class="col-xs-3 col-sm-3 col-md-3" id="report_loading_gif">
+
+                                </div>
+                            </div>
+                        </div>
                     </div>
                     <div class="panel-body">
                         <div class="row">

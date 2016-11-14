@@ -55,6 +55,7 @@ function get_section_data(section_id) {
 
 function draw_section(deferred, is_first_time) {
     /* Render the template */
+    increment_counter();
     if (deferred) {
         $.when(deferred).then(function success(section_api_data, status, jqXHR) {
             var section = section_api_data.data;
@@ -83,6 +84,8 @@ function draw_section(deferred, is_first_time) {
                     default_button('#report_save_button', _('Save'));
                 }
             });
+            decrement_counter();
+            remove_loader('#report_loading_gif');
         }, function error(jqXHR, status, error) {
             /* We can't set the error_button here, as we don't know the section_id */
         });
