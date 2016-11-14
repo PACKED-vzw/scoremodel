@@ -24,6 +24,7 @@ function draw_user_report(user_report_id) {
             console.log(error);
         }
     });
+    add_loader('#graph');
     $.when(deferred).then(function(data) {
         var title = data.data.name;
         var sections = data.data.question_answers_by_section;
@@ -40,6 +41,7 @@ function draw_user_report(user_report_id) {
                 value: section_score
             });
         }
+        remove_loader('#graph');
         /* Redraw the graph */
         graph.add_data(title, axes);
         graph.update();

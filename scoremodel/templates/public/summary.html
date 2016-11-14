@@ -1,5 +1,10 @@
 {% extends 'base.html' %}
 {% block content %}
+    <script type="text/javascript">
+    /* This could end badly if one request finishes directly before the other starts. But I don't think that
+    will happen. */
+        var async_counter = 0;
+    </script>
     <!-- Bower -->
     <script src="{{ url_for('static', filename='lib/bower_components/bootstrap/js/transition.js') }}"></script>
     <!-- D3 -->
@@ -12,6 +17,7 @@
         var report_id = {{ report_template.id }};
         var user_report_id = {{ user_report.id }};
     </script>
+    <script src="{{ url_for('static', filename='lib/scoremodel/jquery/admin/loader.js') }}"></script>
     <script src="{{ url_for('static', filename='lib/scoremodel/jquery/public/graph.js') }}"></script>
     <script src="{{ url_for('static', filename='lib/scoremodel/jquery/public/report.js') }}"></script>
     <div class="container">
