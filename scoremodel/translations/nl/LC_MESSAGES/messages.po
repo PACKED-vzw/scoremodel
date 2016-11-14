@@ -884,8 +884,8 @@ msgstr "Rapportlijst"
 msgid ""
 "Here you can find a list of all your reports. You can select a report to "
 "continue or <a href=\""
-msgstr "Hier kan u een lijst vinden met all uw rapporten. U kan er een "
-"selecteren om verder te gaan of u kan een <a href=\""
+msgstr "Hier kan u een lijst vinden met all uw rapporten. U kan verder "
+"gaan met een rapport of u kan een <a href=\""
 
 #: scoremodel/templates/site/home.html:12
 msgid "\">create a new report</a>."
