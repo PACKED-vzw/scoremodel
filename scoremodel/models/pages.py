@@ -7,7 +7,6 @@ class Lang(db.Model):
     __tablename__ = 'Lang'
     id = db.Column(db.Integer, primary_key=True)
     lang = db.Column(db.String(255), index=True)
-    js_lang = db.Column(db.String(255), index=True)
     pages = db.relationship('Page', backref='lang', lazy='dynamic')
     documents = db.relationship('Document', backref='lang', lazy='dynamic')
     reports = db.relationship('Report', backref='lang', lazy='dynamic')
@@ -15,19 +14,15 @@ class Lang(db.Model):
     risk_factors = db.relationship('RiskFactor', backref='lang', lazy='dynamic')
     users = db.relationship('User', backref='lang', lazy='dynamic')
 
-    def __init__(self, lang, js_lang=None):
-        if not js_lang:
-            js_lang = lang
+    def __init__(self, lang,):
         self.lang = lang
-        self.js_lang = js_lang
 
     def __repr__(self):
         return u'<Lang {0}: {1}>'.format(self.id, self.lang)
 
     def output_obj(self):
         return {
-            'lang': self.lang,
-            'js_lang': self.js_lang
+            'lang': self.lang
         }
 
 
