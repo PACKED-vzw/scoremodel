@@ -4,7 +4,6 @@ from flask.ext.babel import Babel, gettext as _
 from flask.ext.login import LoginManager, current_user
 from flask.ext.markdown import Markdown
 from flask_wtf.csrf import CsrfProtect
-from flask.ext.debugtoolbar import DebugToolbarExtension
 from scoremodel.modules.setup import AppSetup
 
 app = AppSetup().app
@@ -12,9 +11,8 @@ db = SQLAlchemy(app)
 Markdown(app)
 babel = Babel(app)
 csrf = CsrfProtect(app)
-app.debug = True
+app.debug = False
 app.config['SECRET_KEY'] = 'SECRET'
-toolbar = DebugToolbarExtension(app)
 login_manager = LoginManager()
 login_manager.session_protection = 'strong'
 login_manager.init_app(app)
