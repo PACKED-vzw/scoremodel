@@ -71,7 +71,34 @@ def v_api_public_report(report_id=None):
 @api.route('/section', methods=['GET'])
 @api.route('/section/<int:section_id>', methods=['GET'])
 def v_api_public_section(section_id=None):
-    a_api = ScoremodelRestApi(api_class=SectionApi, o_request=request, api_obj_id=section_id)
+    ##
+    # Add total score
+    def hook_add_total_score(output_data):
+        if section_id is not None:
+            new_output = output_data
+            new_output['total_score'] = SectionApi().total_score(section_id)
+        else:
+            new_output = []
+            for item in output_data:
+                item['total_score'] = SectionApi().total_score(item['id'])
+                new_output.append(item)
+        return new_output
+
+    ##
+    # Add multiplication factor
+    def hook_add_multiplication_factor(output_data):
+        if section_id is not None:
+            new_output = output_data
+            new_output['multiplication_factor'] = SectionApi().multiplication_factor(section_id)
+        else:
+            new_output = []
+            for item in output_data:
+                item['multiplication_factor'] = SectionApi().multiplication_factor(item['id'])
+                new_output.append(item)
+        return new_output
+
+    a_api = ScoremodelRestApi(api_class=SectionApi, o_request=request, api_obj_id=section_id,
+                              posthooks=(hook_add_total_score, hook_add_multiplication_factor))
     return a_api.response
 
 
@@ -79,6 +106,19 @@ def v_api_public_section(section_id=None):
 @api.route('/question', methods=['GET'])
 @api.route('/question/<int:question_id>', methods=['GET'])
 def v_api_public_question(question_id=None):
+    ##
+    # Add maximum score
+    def hook_add_maximum_score(output_data):
+        if question_id is not None:
+            new_output = output_data
+            new_output['maximum_score'] = QuestionApi().maximum_score(question_id)
+        else:
+            new_output = []
+            for item in output_data:
+                item['maximum_score'] = QuestionApi().maximum_score(item['id'])
+                new_output.append(item)
+        return new_output
+
     a_api = ScoremodelRestApi(api_class=QuestionApi, o_request=request, api_obj_id=question_id)
     return a_api.response
 

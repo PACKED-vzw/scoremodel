@@ -4,6 +4,7 @@ from scoremodel.models.general import Report
 from scoremodel.modules.error import RequiredAttributeMissing, DatabaseItemAlreadyExists, DatabaseItemDoesNotExist
 from scoremodel.modules.api.generic import GenericApi
 from scoremodel.modules.api.lang import LangApi
+import scoremodel.modules.api.question
 from scoremodel import db
 
 
@@ -135,3 +136,15 @@ class ReportApi(GenericApi):
                                                         cleaned_data=cleaned_data)
         self.store(autocommit)
         return existing_report
+
+    def questions_by_combined_weight(self, report_id):
+        existing_report = self.read(report_id)
+        unordered_questions = []
+        for section in existing_report.sections:
+            for question in section.questions:
+                unordered_questions.append({
+                    'question_id': question.id,
+                    'combined_weight': question.risk_factor.value * question.weight * section.weight,
+                    'max_score': scoremodel.modules.api.question.QuestionApi().maximum_score(question.id)
+                })
+        return sorted(unordered_questions, key=lambda q: q['combined_weight'], reverse=True)

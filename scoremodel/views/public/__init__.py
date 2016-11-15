@@ -190,6 +190,8 @@ def v_user_report_section(user_id, user_report_id, section_id):
     for question_answer in user_report.question_answers:
         question_answers[question_answer.question_id] = question_answer
 
+    benchmarks_by_section = user_report_api.benchmarks_by_section(user_report_id)
+
     return render_template('public/section.html',
                            title=current_section.title,
                            section=current_section,
@@ -197,7 +199,7 @@ def v_user_report_section(user_id, user_report_id, section_id):
                            question_answers=question_answers,
                            next_section=current_section.next_in_report,
                            previous_section=current_section.previous_in_report,
-                           benchmarks_by_section=user_report.benchmarks_by_section
+                           benchmarks_by_section=benchmarks_by_section
                            )
 
 
@@ -221,8 +223,10 @@ def v_user_report_check(user_id, user_report_id):
 
     for question_answer in user_report.question_answers:
         question_answers[question_answer.question_id] = question_answer
-        all_scores[question_answer.question_template.section.id] += question_answer.score * \
-                                                                    question_answer.multiplication_factor
+        multiplication_factor = SectionApi().multiplication_factor(question_answer.question_template.section_id)
+        all_scores[question_answer.question_template.section_id] += question_answer.score * multiplication_factor
+
+    benchmarks_by_section = user_report_api.benchmarks_by_section(user_report_id)
 
     return render_template('public/report.html',
                            report_template=user_report.template,
@@ -230,7 +234,7 @@ def v_user_report_check(user_id, user_report_id):
                            user_report_creation_time='{:%Y-%m-%d %H:%M:%S}'.format(user_report.creation_time),
                            question_answers=question_answers,
                            all_scores=all_scores,
-                           benchmarks_by_section=user_report.benchmarks_by_section
+                           benchmarks_by_section=benchmarks_by_section
                            )
 
 
@@ -250,12 +254,13 @@ def v_user_report_summary(user_id, user_report_id):
 
     for question_answer in user_report.question_answers:
         question_answers[question_answer.question_id] = question_answer
+        multiplication_factor = SectionApi().multiplication_factor(question_answer.question_template.section_id)
         all_scores[question_answer.question_template.section.id] += question_answer.score * \
-                                                                    question_answer.multiplication_factor
+                                                                    multiplication_factor
 
     highest_unanswered = []
 
-    for question in user_report.template.questions_ordered_by_combined_weight:
+    for question in ReportApi().questions_by_combined_weight(user_report.template.id):
         if question['question_id'] not in question_answers or question_answers[question['question_id']].score < \
                 question['max_score']:
             try:

@@ -36,35 +36,6 @@ class UserReport(db.Model):
                 questions_by_section[question.question_template.section_id]['questions'] = [question]
         return questions_by_section
 
-    @property
-    def benchmarks_by_section(self):
-        bm_by_section = {}
-        for bm_report in self.template.benchmark_reports:
-            for section_id, benchmarks in bm_report.by_section.items():
-                section_score = 0
-                for benchmark in benchmarks:
-                    # TODO: make multiplication_factor cleaner
-                    section_score += benchmark.score * benchmark.question.section.multiplication_factor
-                if section_id in bm_by_section:
-                    if bm_report.id in bm_by_section[section_id]:
-                        raise Exception(
-                            'Multiple values for the same benchmark_report in the same section. This is an error.')
-                    else:
-                        bm_by_section[section_id][bm_report.id] = {
-                            'title': bm_report.title,
-                            'section_score': section_score,
-                            'benchmarks': {b.question_id: b for b in bm_report.by_section[section_id]}
-                        }
-                else:
-                    bm_by_section[section_id] = {
-                        bm_report.id: {
-                            'title': bm_report.title,
-                            'section_score': section_score,
-                            'benchmarks': {b.question_id: b for b in bm_report.by_section[section_id]}
-                        }
-                    }
-        return bm_by_section
-
     def output_obj(self):
         return {
             'id': self.id,
@@ -109,10 +80,6 @@ class QuestionAnswer(db.Model):
     def score(self):
         return self.question_template.weight * self.answer_template.value * self.question_template.risk_factor.value
 
-    @property
-    def multiplication_factor(self):
-        return self.question_template.section.multiplication_factor
-
     def output_obj(self):
         return {
             'id': self.id,
@@ -120,6 +87,5 @@ class QuestionAnswer(db.Model):
             'question_id': self.question_id,
             'answer_id': self.answer_id,
             'score': self.score,
-            'multiplication_factor': self.multiplication_factor,
             'user_report_id': self.user_report_id
         }

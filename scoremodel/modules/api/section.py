@@ -105,6 +105,7 @@ class SectionApi(GenericApi):
         # Add to the report
         new_section.report = report
         self.store()
+        self.set_maximum_score(new_section.id)
         return new_section
 
     def db_update(self, existing_section, cleaned_data):
@@ -117,6 +118,7 @@ class SectionApi(GenericApi):
         existing_section = self.update_simple_attributes(existing_section, self.simple_params, cleaned_data)
         # Store
         self.store()
+        self.set_maximum_score(existing_section.id)
         return existing_section
 
     def db_exists(self, section_title, report_id):
@@ -131,3 +133,38 @@ class SectionApi(GenericApi):
         if existing_section is not None:
             return True
         return False
+
+    def total_score(self, section_id):
+        """
+        Get the total of the maximum score for each question in this section.
+        :param section_id:
+        :return:
+        """
+        existing_section = self.read(section_id)
+        return existing_section.maximum_score
+
+    def multiplication_factor(self, section_id):
+        """
+        Multiply each score (in question_answer) by this to get the result x/100
+        :param section_id:
+        :return:
+        """
+        total_score = self.total_score(section_id)
+        if total_score == 0:
+            return 100
+        else:
+            return 100 / total_score
+
+    def set_maximum_score(self, section_id):
+        """
+        Set the maximum score for this section. This is defined as adding all the maximum scores of the dependent
+        questions.
+        :param section_id:
+        :return:
+        """
+        existing_section = self.read(section_id)
+        maximum = 0
+        for question in existing_section.questions:
+            maximum = maximum + scoremodel.modules.api.question.QuestionApi().maximum_score(question.id)
+        existing_section.maximum_score = maximum
+        self.store()

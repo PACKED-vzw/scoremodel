@@ -6,6 +6,7 @@ from scoremodel.modules.error import RequiredAttributeMissing, DatabaseItemAlrea
 from scoremodel.modules.api.generic import GenericApi
 from scoremodel.modules.api.section import SectionApi
 from scoremodel.modules.api.report import ReportApi
+from scoremodel.modules.api.benchmark.report import BenchmarkReportApi
 from scoremodel import db
 import datetime
 
@@ -62,3 +63,38 @@ class UserReportApi(GenericApi):
         cleaned_data = self.clean_input_data(Section, input_data, self.possible_params, self.required_params,
                                              self.complex_params)
         return cleaned_data
+
+    def benchmarks_by_section(self, user_report_id):
+        """
+        Get all benchmark questions (grouped per report) per section.
+        :param user_report_id:
+        :return:
+        """
+        bm_by_section = {}
+        benchmark_report_api = BenchmarkReportApi()
+        existing_user_report = self.read(user_report_id)
+        for benchmark_report in existing_user_report.template.benchmark_reports:
+            benchmark_questions_by_section = benchmark_report_api.questions_by_section(benchmark_report.id)
+            for section_id, benchmarks in benchmark_questions_by_section.items():
+                section_score = 0
+                multiplication_factor = SectionApi().multiplication_factor(section_id)
+                for benchmark in benchmarks:
+                    section_score += benchmark.score * multiplication_factor
+                if section_id in bm_by_section:
+                    if benchmark_report.id in bm_by_section[section_id]:
+                        raise Exception(_('Multiple values for the same benchmark_report in the same section.'))
+                    else:
+                        bm_by_section[section_id][benchmark_report.id] = {
+                            'title': benchmark_report.title,
+                            'section_score': section_score,
+                            'benchmarks': {b.question_id: b for b in benchmark_questions_by_section[section_id]}
+                        }
+                else:
+                    bm_by_section[section_id] = {
+                        benchmark_report.id: {
+                            'title': benchmark_report.title,
+                            'section_score': section_score,
+                            'benchmarks': {b.question_id: b for b in benchmark_questions_by_section[section_id]}
+                        }
+                    }
+        return bm_by_section

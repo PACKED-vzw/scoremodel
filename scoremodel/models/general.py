@@ -127,18 +127,6 @@ class Report(db.Model):
     def ordered_sections(self):
         return sorted(self.sections, key=lambda section: section.order_in_report)
 
-    @property
-    def questions_ordered_by_combined_weight(self):
-        unordered_questions = []
-        for section in self.sections:
-            for question in section.questions:
-                unordered_questions.append({
-                    'question_id': question.id,
-                    'combined_weight': question.risk_factor.value * question.weight * section.weight,
-                    'max_score': question.maximum_score
-                })
-        return sorted(unordered_questions, key=lambda q: q['combined_weight'], reverse=True)
-
 
 class Section(db.Model):
     __tablename__ = 'Section'
@@ -149,6 +137,7 @@ class Section(db.Model):
     weight = db.Column(db.Integer, nullable=False, default=1)
     questions = db.relationship('Question', backref='section', lazy='dynamic', cascade='all, delete-orphan')
     report_id = db.Column(db.Integer, db.ForeignKey(Report.id))
+    maximum_score = db.Column(db.Integer, nullable=False, default=0)
 
     def __repr__(self):
         return u'<Section {0}: {1}>'.format(self.id, self.title)
@@ -173,8 +162,6 @@ class Section(db.Model):
             'id': self.id,
             'title': self.title,
             'context': self.context,
-            'total_score': self.total_score,
-            'multiplication_factor': self.multiplication_factor,
             'order_in_report': self.order_in_report,
             'questions': [q.output_obj() for q in self.ordered_questions],
             'report_id': self.report_id,
@@ -209,29 +196,6 @@ class Section(db.Model):
         else:
             return self.report.ordered_sections[previous_pos]
 
-    @property
-    def total_score(self):
-        """
-        Compute the maximum score for all questions. This is defined as
-        score of the answer with the highest score * weight of the question
-        :return:
-        """
-        maximum = 0
-        for question in self.questions:
-            sorted_answers = sorted(question.answers, key=lambda answer: answer.value)
-            sorted_answers.reverse()
-            if len(sorted_answers) > 0:
-                maximum = maximum + sorted_answers[0].value * question.weight * question.risk_factor.value
-        return maximum
-
-    @property
-    def multiplication_factor(self):
-        if self.total_score == 0:
-            # Prevent division by zero errors
-            return 100
-        else:
-            return 100 / self.total_score
-
 
 class Question(db.Model):
     __tablename__ = 'Question'
@@ -244,6 +208,7 @@ class Question(db.Model):
     order_in_section = db.Column(db.Integer, nullable=False, default=0)
     section_id = db.Column(db.Integer, db.ForeignKey(Section.id))
     action = db.Column(db.Text)
+    maximum_score = db.Column(db.Integer, nullable=False, default=0)
     risk_factor_id = db.Column(db.Integer, db.ForeignKey(RiskFactor.id))
     risk_factors = db.relationship('RiskFactor',
                                    secondary=risk_factors,
@@ -277,11 +242,6 @@ class Question(db.Model):
         self.order_in_section = order
         self.action = action
 
-    @property
-    def highest_answer(self):
-        highest = self.answers.order_by('value desc').all()
-        return highest[0].value
-
     def selected_answer(self, user_report_id):
         """
         Returns the selected answer for a specific question in a specific user report
@@ -290,14 +250,6 @@ class Question(db.Model):
         """
         return QuestionAnswer.query.filter(and_(QuestionAnswer.question_id == self.id,
                                                 QuestionAnswer.user_report_id == user_report_id)).first()
-
-    @property
-    def maximum_score(self):
-        sorted_answers = sorted(self.answers, key=lambda answer: answer.value, reverse=True)
-        if len(sorted_answers) > 0:
-            return sorted_answers[0].value * self.weight * self.risk_factor.value
-        else:
-            return 0
 
     @property
     def ordered_answers(self):
@@ -316,7 +268,6 @@ class Question(db.Model):
             'action': self.action,
             'risk_factor_id': self.risk_factor_id,
             'answers': [a.output_obj() for a in self.answers],
-            'maximum_score': self.maximum_score,
             'ordered_answers': [a.output_obj() for a in self.ordered_answers]
         }
 
@@ -331,30 +282,14 @@ class BenchmarkReport(db.Model):
     def __init__(self, title):
         self.title = title
 
-    @property
-    def by_section(self):
-        benchmarks_by_section = {s.id: [] for s in self.report.sections}
-        for benchmark in self.benchmarks:
-            if benchmark.question.section_id in benchmarks_by_section:
-                benchmarks_by_section[benchmark.question.section_id].append(benchmark)
-            else:
-                benchmarks_by_section[benchmark.question.section_id] = [benchmark]
-        return benchmarks_by_section
-
     def output_obj(self):
         return {
-            'id': self.id,
-            'title': self.title,
-            'report_id': self.report_id,
-            'benchmarks': [b.output_obj() for b in self.benchmarks],
-            'benchmarks_by_section': [
-                {
-                    'section_id': key,
-                    'benchmarks': [b.output_obj() for b in value]
-                }
-                for (key, value) in self.by_section.items()
-            ]
-        }
+                'id': self.id,
+                'title': self.title,
+                'report_id': self.report_id,
+                'benchmarks': [b.output_obj() for b in self.benchmarks],
+                'benchmarks_by_section': []
+            }
 
 
 class Benchmark(db.Model):
@@ -391,6 +326,5 @@ class Benchmark(db.Model):
                 'answer_id': self.answer_id,
                 'score': self.score,
                 'benchmark_report_id': self.benchmark_report_id,
-                'multiplication_factor': self.question.section.multiplication_factor,
                 'not_in_benchmark': self.not_in_benchmark
             }

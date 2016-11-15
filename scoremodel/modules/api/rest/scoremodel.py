@@ -20,7 +20,8 @@ class ScoremodelRestApi:
         'list': 'list'
     }
 
-    def __init__(self, api_class, o_request, api_obj_id=None, hooks=(), translate=None, additional_opts=None):
+    def __init__(self, api_class, o_request, api_obj_id=None, hooks=(), translate=None, additional_opts=None,
+                 prehooks=(), posthooks=()):
         """
         This class is an REST API class that translates between request methods and
         methods of the api_class class.
@@ -45,6 +46,8 @@ class ScoremodelRestApi:
         :param hooks:
         :param translate:
         :param additional_opts:
+        :param prehooks:
+        :param posthooks:
         """
         self.api = api_class()
         self.request = o_request
@@ -56,6 +59,8 @@ class ScoremodelRestApi:
             self.translate = self.translated_functions(self.translation_table)
         else:
             self.translate = self.translated_functions(translate)
+        if len(prehooks) == 0 and len(hooks) > 0:
+            prehooks = hooks
         ##
         # Normally we would use .get_data() and convert the bytes to a string
         # but CsrfProtect() already parses the form, thus emptying .get_data()
@@ -72,7 +77,7 @@ class ScoremodelRestApi:
                 self.status_code = 400
         if self.status_code != 400:
             try:
-                for hook in hooks:
+                for hook in prehooks:
                     input_data_json = hook(input_data_json)
             except Exception as e:
                 self.msg = public_error_msg['error_occurred'].format(e)
@@ -83,6 +88,12 @@ class ScoremodelRestApi:
         ##
         # Set self.response
         ##
+        try:
+            for hook in posthooks:
+                self.output_data = hook(self.output_data)
+        except Exception as e:
+            self.msg = public_error_msg['error_occurred'].format(e)
+            self.status_code = 400
         self.response = self.create_response(self.output_data)
 
     def post(self, input_data, additional_opts=None):

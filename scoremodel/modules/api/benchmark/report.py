@@ -52,6 +52,24 @@ class BenchmarkReportApi(GenericApi):
     def list(self):
         return BenchmarkReport.query.all()
 
+    def questions_by_section(self, benchmark_report_id):
+        """
+        Return a list of benchmark questions by section.id
+        :param benchmark_report_id:
+        :return:
+        """
+        existing_report = self.read(benchmark_report_id)
+        return self.__questions_by_section_obj(existing_report)
+
+    def __questions_by_section_obj(self, existing_report_obj):
+        by_section = {s.id: [] for s in existing_report_obj.report.sections}
+        for benchmark in existing_report_obj.benchmarks:
+            if benchmark.question.section_id in by_section:
+                by_section[benchmark.question.section_id].append(benchmark)
+            else:
+                by_section[benchmark.question.section_id] = [benchmark]
+        return by_section
+
     def parse_input_data(self, input_data):
         return self.clean_input_data(BenchmarkReport, input_data, self.possible_params, self.required_params,
                                      self.complex_params)

@@ -2,9 +2,12 @@ from flask import request
 from flask.ext.login import login_required, current_user
 
 from scoremodel.modules.api.rest.scoremodel import ScoremodelRestApi
-from scoremodel.modules.api.question_answer.rest_api import QuestionAnswerQueryRestApi, QuestionAnswerQuestionQueryRestApi
+from scoremodel.modules.api.question_answer.rest_api import QuestionAnswerQueryRestApi,\
+    QuestionAnswerQuestionQueryRestApi
 from scoremodel.modules.api.question_answer import QuestionAnswerApi
 from scoremodel.modules.api.user_report import UserReportApi
+from scoremodel.modules.api.section import SectionApi
+from scoremodel.modules.api.question import QuestionApi
 from scoremodel import csrf
 
 from scoremodel.views.api import api
@@ -82,9 +85,16 @@ def v_api_get_question_answer(user_report_id, question_id):
         parsed_data['question_id'] = question_id
         return parsed_data
 
+    # Insert the multiplication factor
+    def hook_add_multiplication_factor(output_data):
+        question = QuestionApi().read(question_id)
+        output_data['multiplication_factor'] = SectionApi().multiplication_factor(question.section_id)
+        return output_data
+
     # api_obj_id can not be None, but it is ignored in this case
     a_api = QuestionAnswerQuestionQueryRestApi(api_class=QuestionAnswerApi, o_request=request, api_obj_id='',
-                                               hooks=[hook_insert_current_user, hook_insert_ids])
+                                               prehooks=(hook_insert_current_user, hook_insert_ids),
+                                               posthooks=(hook_add_multiplication_factor,))
     return a_api.response
 
 
@@ -99,8 +109,21 @@ def v_api_user_report_get(user_report_id=None):
         parsed_data['user_id'] = current_user.id
         return parsed_data
 
+    # Add the multiplication factor for every question_answer
+    def hook_add_multiplication_factor(output_data):
+        new_question_answers_by_section = []
+        for section in output_data['question_answers_by_section']:
+            question_answers = []
+            for qa in section['question_answers']:
+                qa['multiplication_factor'] = SectionApi().multiplication_factor(section['section_id'])
+                question_answers.append(qa)
+            section['question_answers'] = question_answers
+            new_question_answers_by_section.append(section)
+        output_data['question_answers_by_section'] = new_question_answers_by_section
+        return output_data
+
     a_api = ScoremodelRestApi(api_class=UserReportApi, o_request=request, api_obj_id=user_report_id,
-                              hooks=[hook_insert_current_user])
+                              prehooks=(hook_insert_current_user,), posthooks=(hook_add_multiplication_factor,))
     return a_api.response
 
 

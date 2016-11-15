@@ -172,7 +172,16 @@ class QuestionApi(GenericApi):
         # Update risk factors
         if risk_factor is not None:
             existing_question.risk_factor = risk_factor
+        # Set maximum_score
+        sorted_answers = sorted(existing_question.answers, key=lambda answer: answer.value, reverse=True)
+        if len(sorted_answers) > 0:
+            existing_question.maximum_score = sorted_answers[0].value * existing_question.weight *\
+                                              existing_question.risk_factor.value
+        else:
+            existing_question.maximum_score = 0
         self.store()
+        # Update the maximum_score of the parent section
+        scoremodel.modules.api.section.SectionApi().set_maximum_score(existing_question.section_id)
         return existing_question
 
     def db_create(self, cleaned_data, section, answers=None, risk_factor=None):
@@ -202,6 +211,15 @@ class QuestionApi(GenericApi):
             new_question.risk_factor = risk_factor
         # Store everything in the database
         self.store()
+        # Set maximum_score
+        sorted_answers = sorted(new_question.answers, key=lambda answer: answer.value, reverse=True)
+        if len(sorted_answers) > 0:
+            new_question.maximum_score = sorted_answers[0].value * new_question.weight * new_question.risk_factor.value
+        else:
+            new_question.maximum_score = 0
+        self.store()
+        # Update the maximum_score of the parent section
+        scoremodel.modules.api.section.SectionApi().set_maximum_score(new_question.section_id)
         # Return the question object
         return new_question
 
@@ -217,3 +235,13 @@ class QuestionApi(GenericApi):
         if existing_question:
             return True
         return False
+
+    def maximum_score(self, question_id):
+        """
+        Compute the maximum score for a question.
+        value of highest answer * value of the risk_factor * weight of the question
+        :param question_id:
+        :return:
+        """
+        existing_question = self.read(question_id)
+        return existing_question.maximum_score
