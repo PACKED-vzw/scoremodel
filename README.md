@@ -1,6 +1,6 @@
 # Scoremodel
 
-The Scoremodel ([www.scoremodel.org](http://www.scoremodel.org)) is a website where digital preservation managers can score how well the digital preservation initiatives of their institute perform. The application consists of a wizard where the user answers questions and is scored based on their answer. At the end, remedies and actions are also proposed for the questions the user scored low on.
+The Scoremodel ([www.scoremodel.org](http://www.scoremodel.org)) is a website where digital preservation managers can score how well the digital preservation initiatives of their institute perform. The application consists of a wizard where the user answers questions and is scored based on their answer. At the end, remedies and actions are also proposed for the questions with a low score.
 
 ## Installation
 See the `INSTALL.md` file for installation instructions.
@@ -45,11 +45,29 @@ Some lists consist of generic keys (i.e. answers and risk factors in the report 
 * _Generic risk factors_ - Has a risk factor key and a value. Works the same as a _Generic answer_.
 * _Generic organisation types_ - A simple list without side-effects. Used by users wanting to register.
 
-### Pages
-
 ### Scoremodel
+The application itself is relatively simple. You can select a report template (created in the administrative interface), give your report a name and start the wizard (note that report templates are language specific).
+
+Continuing a report is also possible.
+
+Reports are completed section by section. It is not possible to "skip" a section, allthough you are not required to answer every question.
 
 #### Scoring
+At the bottom of each section, you can find your score for the section.
+
+The score is computed as follows:
+
+```
+weight of the question * value of the risk factor * value of the selected answer
+```
+
+The score is then converted to a number /100.
+
+#### Results
+The results consist of two pages, a summary (`/summary`) and a full report (`/check` or `/full`). Both pages can be printed.
+
+* _Summary_: contains some metadata, a graph of your scores as well as a comparison with all the attached benchmarks, and a top 5 of most important actions to take (computed by taking `maximum value of a question * weight of the section` for every question the value of your answer is not equal to the maximum value for that question).
+* _Full_: also contains the metadata and the graph, but includes all the questions, with both your answer and the benchmark answers, and actions you can take for every question to remedy the defects.
 
 ## Contribute
 The application is created and maintained by [PACKED vzw](http://www.packed.be).

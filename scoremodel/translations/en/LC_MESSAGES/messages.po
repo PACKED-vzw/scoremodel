@@ -7,18 +7,19 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2016-11-14 13:01+0100\n"
-"PO-Revision-Date: 2016-11-14 10:55+0100\n"
+"POT-Creation-Date: 2016-11-16 13:29+0100\n"
+"PO-Revision-Date: 2016-11-16 13:31+0100\n"
 "Last-Translator: Pieter De Praetere <pieter.de.praetere@helptux.be>\n"
 "Language: en\n"
 "Language-Team: en <it@packed.be>\n"
-"Plural-Forms: nplurals=2; plural=(n != 1)\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.3.3\n"
+"X-Generator: Poedit 1.8.11\n"
 
-#: scoremodel/__init__.py:71 scoremodel/__init__.py:77
+#: scoremodel/__init__.py:72 scoremodel/__init__.py:78
 #: scoremodel/views/admin/document.py:27 scoremodel/views/admin/document.py:65
 #: scoremodel/views/admin/page.py:60 scoremodel/views/admin/page.py:76
 #: scoremodel/views/admin/user.py:108 scoremodel/views/admin/user.py:140
@@ -49,6 +50,10 @@ msgstr "A page for menu_link {0} in language {1} does not exist."
 msgid "Error: risk_factors was provided!"
 msgstr "Error: risk_factors was provided!"
 
+#: scoremodel/modules/api/user_report.py:85
+msgid "Multiple values for the same benchmark_report in the same section."
+msgstr "Multiple values for the same benchmark_report in the same section."
+
 #: scoremodel/modules/api/benchmark/benchmark.py:82
 msgid "No benchmark with benchmark_report_id {0} and question_id {1}."
 msgstr "No benchmark with benchmark_report_id {0} and question_id {1}."
@@ -56,20 +61,20 @@ msgstr "No benchmark with benchmark_report_id {0} and question_id {1}."
 #: scoremodel/modules/api/question_answer/__init__.py:48
 #, python-format
 msgid ""
-"No QuestionAnswer with user_report_id %(user_report_id)s user_id "
-"%(user_id)s question_id %(question_id)s and answer_id %(answer_id)s"
+"No QuestionAnswer with user_report_id %(user_report_id)s user_id %(user_id)s "
+"question_id %(question_id)s and answer_id %(answer_id)s"
 msgstr ""
-"No QuestionAnswer with user_report_id %(user_report_id)s user_id "
-"%(user_id)s question_id %(question_id)s and answer_id %(answer_id)s"
+"No QuestionAnswer with user_report_id %(user_report_id)s user_id %(user_id)s "
+"question_id %(question_id)s and answer_id %(answer_id)s"
 
 #: scoremodel/modules/api/question_answer/__init__.py:80
 #, python-format
 msgid ""
-"No QuestionAnswer with user_report_id %(user_report_id)s user_id "
-"%(user_id)s and question_id %(question_id)s"
+"No QuestionAnswer with user_report_id %(user_report_id)s user_id %(user_id)s "
+"and question_id %(question_id)s"
 msgstr ""
-"No QuestionAnswer with user_report_id %(user_report_id)s user_id "
-"%(user_id)s and question_id %(question_id)s"
+"No QuestionAnswer with user_report_id %(user_report_id)s user_id %(user_id)s "
+"and question_id %(question_id)s"
 
 #: scoremodel/modules/api/question_answer/__init__.py:118
 msgid "Error: two questions with the same id in one section!"
@@ -131,7 +136,7 @@ msgstr "Value"
 #: scoremodel/templates/admin/page/edit.html:28
 #: scoremodel/templates/admin/page/list.html:9
 #: scoremodel/templates/admin/report/create.html:28
-#: scoremodel/templates/admin/report/edit.html:32
+#: scoremodel/templates/admin/report/edit.html:47
 #: scoremodel/templates/admin/report/list.html:8
 #: scoremodel/templates/admin/risk_factor/create.html:31
 #: scoremodel/templates/admin/user/register.html:53
@@ -190,8 +195,8 @@ msgid "Organisation size"
 msgstr "Organisation size"
 
 #: scoremodel/modules/forms/auth.py:15
-#: scoremodel/templates/admin/report/edit.html:90
-#: scoremodel/templates/admin/report/edit.html:139
+#: scoremodel/templates/admin/report/edit.html:105
+#: scoremodel/templates/admin/report/edit.html:154
 msgid "1"
 msgstr "1"
 
@@ -223,8 +228,8 @@ msgstr "Benchmark name"
 #: scoremodel/templates/admin/report/benchmark/create.html:19
 #: scoremodel/templates/public/create.html:19
 #: scoremodel/templates/public/edit.html:20
-#: scoremodel/templates/public/report.html:57
-#: scoremodel/templates/public/summary.html:54
+#: scoremodel/templates/public/report.html:63
+#: scoremodel/templates/public/summary.html:60
 msgid "Report template"
 msgstr "Report template"
 
@@ -232,7 +237,7 @@ msgstr "Report template"
 #: scoremodel/modules/forms/public/report.py:10
 #: scoremodel/templates/admin/document/create.html:77
 #: scoremodel/templates/admin/page/edit.html:45
-#: scoremodel/templates/admin/report/edit.html:61
+#: scoremodel/templates/admin/report/edit.html:76
 msgid "Save"
 msgstr "Save"
 
@@ -266,8 +271,8 @@ msgstr "Start setup"
 #: scoremodel/templates/public/create.html:6
 #: scoremodel/templates/public/edit.html:7
 #: scoremodel/templates/public/list.html:7
-#: scoremodel/templates/public/report.html:53
-#: scoremodel/templates/public/summary.html:50
+#: scoremodel/templates/public/report.html:59
+#: scoremodel/templates/public/summary.html:56
 #: scoremodel/templates/site/home.html:20
 msgid "Report name"
 msgstr "Report name"
@@ -344,11 +349,11 @@ msgstr ""
 #: scoremodel/modules/msg/messages.py:25
 #, python-format
 msgid ""
-"Item %(what)s with identifier %(identifier)s already exists in "
-"%(in_what)s with identifier %(in_identifier)s"
+"Item %(what)s with identifier %(identifier)s already exists in %(in_what)s "
+"with identifier %(in_identifier)s"
 msgstr ""
-"Item %(what)s with identifier %(identifier)s already exists in "
-"%(in_what)s with identifier %(in_identifier)s"
+"Item %(what)s with identifier %(identifier)s already exists in %(in_what)s "
+"with identifier %(in_identifier)s"
 
 #: scoremodel/modules/msg/messages.py:28
 #, python-format
@@ -358,8 +363,8 @@ msgstr "Attribute %(what)s missing."
 #: scoremodel/modules/report/admin.py:8
 #: scoremodel/templates/admin/report/benchmark/list.html:7
 #: scoremodel/templates/admin/report/create.html:13
-#: scoremodel/templates/admin/report/edit.html:24
-#: scoremodel/templates/admin/report/edit.html:94
+#: scoremodel/templates/admin/report/edit.html:39
+#: scoremodel/templates/admin/report/edit.html:109
 #: scoremodel/templates/admin/report/list.html:7
 msgid "Title"
 msgstr "Title"
@@ -448,11 +453,11 @@ msgstr "Setup completed successfully!"
 
 #: scoremodel/templates/setup.html:70
 msgid ""
-"We have created an administrative user. You can log in at the <a "
-"href=\"/admin/\">admin interface</a>."
+"We have created an administrative user. You can log in at the <a href=\"/"
+"admin/\">admin interface</a>."
 msgstr ""
-"We have created an administrative user. You can log in at the <a "
-"href=\"/admin/\">admin interface</a>."
+"We have created an administrative user. You can log in at the <a href=\"/"
+"admin/\">admin interface</a>."
 
 #: scoremodel/templates/setup.html:73
 msgid "Username"
@@ -478,7 +483,7 @@ msgid "List"
 msgstr "List"
 
 #: scoremodel/templates/admin/base.html:51
-#: scoremodel/templates/public/report.html:107
+#: scoremodel/templates/public/report.html:113
 msgid "Benchmark"
 msgstr "Benchmark"
 
@@ -532,13 +537,11 @@ msgstr "Document description"
 #: scoremodel/templates/admin/document/create.html:30
 #: scoremodel/templates/admin/page/edit.html:39
 msgid ""
-"You can use <a "
-"href=\"https://daringfireball.net/projects/markdown/\">Markdown</a> "
-"syntax in this field."
+"You can use <a href=\"https://daringfireball.net/projects/markdown/"
+"\">Markdown</a> syntax in this field."
 msgstr ""
-"You can use <a "
-"href=\"https://daringfireball.net/projects/markdown/\">Markdown</a> "
-"syntax in this field."
+"You can use <a href=\"https://daringfireball.net/projects/markdown/"
+"\">Markdown</a> syntax in this field."
 
 #: scoremodel/templates/admin/document/create.html:36
 msgid "Document language"
@@ -590,106 +593,106 @@ msgstr "Content"
 #: scoremodel/templates/admin/report/benchmark/list.html:8
 #: scoremodel/templates/admin/report/create.html:7
 #: scoremodel/templates/admin/report/delete.html:9
-#: scoremodel/templates/admin/report/edit.html:13
+#: scoremodel/templates/admin/report/edit.html:22
 #: scoremodel/views/admin/report.py:73 scoremodel/views/admin/report.py:78
 #: scoremodel/views/public/__init__.py:62
 #: scoremodel/views/public/__init__.py:68
 msgid "Report"
 msgstr "Report"
 
-#: scoremodel/templates/admin/report/edit.html:67
+#: scoremodel/templates/admin/report/edit.html:82
 msgid "Add section"
 msgstr "Add section"
 
-#: scoremodel/templates/admin/report/edit.html:81
 #: scoremodel/templates/admin/report/edit.html:96
+#: scoremodel/templates/admin/report/edit.html:111
 msgid "New section"
 msgstr "New section"
 
-#: scoremodel/templates/admin/report/edit.html:86
-#: scoremodel/templates/admin/report/edit.html:135
+#: scoremodel/templates/admin/report/edit.html:101
+#: scoremodel/templates/admin/report/edit.html:150
 msgid "Weight"
 msgstr "Weight"
 
 #: scoremodel/templates/admin/report/benchmark/edit.html:104
 #: scoremodel/templates/admin/report/benchmark/edit.html:126
-#: scoremodel/templates/admin/report/edit.html:100
-#: scoremodel/templates/admin/report/edit.html:158
-#: scoremodel/templates/public/report.html:154
+#: scoremodel/templates/admin/report/edit.html:115
+#: scoremodel/templates/admin/report/edit.html:173
+#: scoremodel/templates/public/report.html:160
 #: scoremodel/templates/public/section.html:110
 #: scoremodel/templates/public/section.html:130
 msgid "Context"
 msgstr "Context"
 
-#: scoremodel/templates/admin/report/edit.html:100
-#: scoremodel/templates/admin/report/edit.html:151
-#: scoremodel/templates/admin/report/edit.html:158
-#: scoremodel/templates/admin/report/edit.html:165
-#: scoremodel/templates/admin/report/edit.html:172
+#: scoremodel/templates/admin/report/edit.html:115
+#: scoremodel/templates/admin/report/edit.html:166
+#: scoremodel/templates/admin/report/edit.html:173
+#: scoremodel/templates/admin/report/edit.html:180
+#: scoremodel/templates/admin/report/edit.html:187
 msgid "optional"
 msgstr "optional"
 
-#: scoremodel/templates/admin/report/edit.html:102
+#: scoremodel/templates/admin/report/edit.html:117
 msgid "Section context"
 msgstr "Section context"
 
-#: scoremodel/templates/admin/report/edit.html:108
-#: scoremodel/templates/admin/report/edit.html:206
+#: scoremodel/templates/admin/report/edit.html:123
+#: scoremodel/templates/admin/report/edit.html:221
 msgid "Remove"
 msgstr "Remove"
 
-#: scoremodel/templates/admin/report/edit.html:117
+#: scoremodel/templates/admin/report/edit.html:132
 msgid "Add question"
 msgstr "Add question"
 
-#: scoremodel/templates/admin/report/edit.html:129
-#: scoremodel/templates/admin/report/edit.html:147
+#: scoremodel/templates/admin/report/edit.html:144
+#: scoremodel/templates/admin/report/edit.html:162
 msgid "New question"
 msgstr "New question"
 
-#: scoremodel/templates/admin/report/edit.html:143
+#: scoremodel/templates/admin/report/edit.html:158
 msgid "Question"
 msgstr "Question"
 
 #: scoremodel/templates/admin/report/benchmark/edit.html:116
 #: scoremodel/templates/admin/report/benchmark/edit.html:138
-#: scoremodel/templates/admin/report/edit.html:151
+#: scoremodel/templates/admin/report/edit.html:166
 msgid "Example"
 msgstr "Example"
 
-#: scoremodel/templates/admin/report/edit.html:154
+#: scoremodel/templates/admin/report/edit.html:169
 msgid "Question example"
 msgstr "Question example"
 
-#: scoremodel/templates/admin/report/edit.html:161
+#: scoremodel/templates/admin/report/edit.html:176
 msgid "Question context"
 msgstr "Question context"
 
 #: scoremodel/templates/admin/report/benchmark/edit.html:110
 #: scoremodel/templates/admin/report/benchmark/edit.html:132
-#: scoremodel/templates/admin/report/edit.html:165
+#: scoremodel/templates/admin/report/edit.html:180
 msgid "Risks"
 msgstr "Risks"
 
-#: scoremodel/templates/admin/report/edit.html:168
+#: scoremodel/templates/admin/report/edit.html:183
 msgid "Question risks"
 msgstr "Question risks"
 
-#: scoremodel/templates/admin/report/edit.html:172
-#: scoremodel/templates/admin/report/edit.html:174
+#: scoremodel/templates/admin/report/edit.html:187
+#: scoremodel/templates/admin/report/edit.html:189
 msgid "Actions"
 msgstr "Actions"
 
 #: scoremodel/templates/admin/report/benchmark/edit.html:44
-#: scoremodel/templates/admin/report/edit.html:178
+#: scoremodel/templates/admin/report/edit.html:193
 #: scoremodel/templates/admin/risk_factor/create.html:5
-#: scoremodel/templates/public/report.html:122
+#: scoremodel/templates/public/report.html:128
 #: scoremodel/templates/public/section.html:71
-#: scoremodel/templates/public/summary.html:103
+#: scoremodel/templates/public/summary.html:109
 msgid "Risk factor"
 msgstr "Risk factor"
 
-#: scoremodel/templates/admin/report/edit.html:191
+#: scoremodel/templates/admin/report/edit.html:206
 msgid "Answers"
 msgstr "Answers"
 
@@ -718,8 +721,8 @@ msgid "Roles"
 msgstr "Roles"
 
 #: scoremodel/templates/admin/user/delete.html:9
-#: scoremodel/templates/public/report.html:61
-#: scoremodel/templates/public/summary.html:58
+#: scoremodel/templates/public/report.html:67
+#: scoremodel/templates/public/summary.html:64
 #: scoremodel/views/admin/user.py:152 scoremodel/views/admin/user.py:155
 msgid "User"
 msgstr "User"
@@ -756,12 +759,12 @@ msgstr "Access forbidden"
 #, python-format
 msgid ""
 "You do not have the rights to view this page. If you believe this is an "
-"error, please <a href=\"%(contact)s\">contact the administrator</a>. "
-"Please return to the <a href=\"%(index)s\">main page</a>."
+"error, please <a href=\"%(contact)s\">contact the administrator</a>. Please "
+"return to the <a href=\"%(index)s\">main page</a>."
 msgstr ""
 "You do not have the rights to view this page. If you believe this is an "
-"error, please <a href=\"%(contact)s\">contact the administrator</a>. "
-"Please return to the <a href=\"%(index)s\">main page</a>."
+"error, please <a href=\"%(contact)s\">contact the administrator</a>. Please "
+"return to the <a href=\"%(index)s\">main page</a>."
 
 #: scoremodel/templates/error/404.html:4
 msgid "Page not found"
@@ -770,13 +773,13 @@ msgstr "Page not found"
 #: scoremodel/templates/error/404.html:5
 #, python-format
 msgid ""
-"We could not find the page you requested. You could try <a "
-"href=\"https://www.google.com/search?q=%(page_name)s&as_sitesearch=scoremodel.org\">searching"
-" for it</a> or return to the <a href=\"%(index)s\">main page</a>."
+"We could not find the page you requested. You could try <a href=\"https://"
+"www.google.com/search?q=%(page_name)s&as_sitesearch=scoremodel.org"
+"\">searching for it</a> or return to the <a href=\"%(index)s\">main page</a>."
 msgstr ""
-"We could not find the page you requested. You could try <a "
-"href=\"https://www.google.com/search?q=%(page_name)s&as_sitesearch=scoremodel.org\">searching"
-" for it</a> or return to the <a href=\"%(index)s\">main page</a>."
+"We could not find the page you requested. You could try <a href=\"https://"
+"www.google.com/search?q=%(page_name)s&as_sitesearch=scoremodel.org"
+"\">searching for it</a> or return to the <a href=\"%(index)s\">main page</a>."
 
 #: scoremodel/templates/login/form.html:11
 msgid "Email address"
@@ -793,61 +796,61 @@ msgstr "Creation date"
 msgid "New report"
 msgstr "New report"
 
-#: scoremodel/templates/public/report.html:22
-#: scoremodel/templates/public/summary.html:23
+#: scoremodel/templates/public/report.html:28
+#: scoremodel/templates/public/summary.html:29
 msgid "Summary"
 msgstr "Summary"
 
-#: scoremodel/templates/public/report.html:23
-#: scoremodel/templates/public/summary.html:26
+#: scoremodel/templates/public/report.html:29
+#: scoremodel/templates/public/summary.html:32
 msgid "Full report"
 msgstr "Full report"
 
-#: scoremodel/templates/public/report.html:24
-#: scoremodel/templates/public/summary.html:28
+#: scoremodel/templates/public/report.html:30
+#: scoremodel/templates/public/summary.html:34
 msgid "Print"
 msgstr "Print"
 
-#: scoremodel/templates/public/report.html:31
-#: scoremodel/templates/public/summary.html:35
+#: scoremodel/templates/public/report.html:37
+#: scoremodel/templates/public/summary.html:41
 msgid "Table of contents"
 msgstr "Table of contents"
 
-#: scoremodel/templates/public/report.html:34
-#: scoremodel/templates/public/report.html:50
-#: scoremodel/templates/public/summary.html:38
-#: scoremodel/templates/public/summary.html:47
+#: scoremodel/templates/public/report.html:40
+#: scoremodel/templates/public/report.html:56
+#: scoremodel/templates/public/summary.html:44
+#: scoremodel/templates/public/summary.html:53
 msgid "Report data"
 msgstr "Report data"
 
-#: scoremodel/templates/public/report.html:35
-#: scoremodel/templates/public/report.html:74
-#: scoremodel/templates/public/summary.html:39
-#: scoremodel/templates/public/summary.html:71
+#: scoremodel/templates/public/report.html:41
+#: scoremodel/templates/public/report.html:80
+#: scoremodel/templates/public/summary.html:45
+#: scoremodel/templates/public/summary.html:77
 msgid "Graph"
 msgstr "Graph"
 
-#: scoremodel/templates/public/report.html:36
-#: scoremodel/templates/public/report.html:87
+#: scoremodel/templates/public/report.html:42
+#: scoremodel/templates/public/report.html:93
 msgid "Results"
 msgstr "Results"
 
-#: scoremodel/templates/public/report.html:65
-#: scoremodel/templates/public/summary.html:62
+#: scoremodel/templates/public/report.html:71
+#: scoremodel/templates/public/summary.html:68
 msgid "Creation time"
 msgstr "Creation time"
 
-#: scoremodel/templates/public/report.html:103
+#: scoremodel/templates/public/report.html:109
 msgid "Score"
 msgstr "Score"
 
-#: scoremodel/templates/public/report.html:137
-#: scoremodel/templates/public/summary.html:114
+#: scoremodel/templates/public/report.html:143
+#: scoremodel/templates/public/summary.html:120
 msgid "Not completed"
 msgstr "Not completed"
 
-#: scoremodel/templates/public/report.html:160
-#: scoremodel/templates/public/summary.html:127
+#: scoremodel/templates/public/report.html:166
+#: scoremodel/templates/public/summary.html:133
 msgid "Action"
 msgstr "Action"
 
@@ -867,8 +870,8 @@ msgstr "Overview"
 msgid "Total score for section \"%(section_title)s\":"
 msgstr "Total score for section \"%(section_title)s\":"
 
-#: scoremodel/templates/public/summary.html:40
-#: scoremodel/templates/public/summary.html:84
+#: scoremodel/templates/public/summary.html:46
+#: scoremodel/templates/public/summary.html:90
 msgid "Top 5 actions"
 msgstr "Top 5 actions"
 
@@ -881,14 +884,16 @@ msgid "Report list"
 msgstr "Report list"
 
 #: scoremodel/templates/site/home.html:12
-msgid ""
-"Here you can find a list of all your reports. You can select a report to "
-"continue or <a href=\""
-msgstr ""
+msgid "Here you can find a list of all your reports."
+msgstr "Here you can find a list of all your reports."
+
+#: scoremodel/templates/site/home.html:12
+msgid "You can select a report to continue or <a href=\""
+msgstr "You can select a report to continue or <a href=\""
 
 #: scoremodel/templates/site/home.html:12
 msgid "\">create a new report</a>."
-msgstr ""
+msgstr "\">create a new report</a>."
 
 #: scoremodel/templates/site/home.html:38
 msgid "Press \"Start\" to create a new report."
@@ -964,11 +969,11 @@ msgstr "A required form element was not submitted: {0}"
 
 #: scoremodel/views/admin/auth.py:99
 msgid ""
-"You have been successfully registered. Please log in using your username "
-"and password."
+"You have been successfully registered. Please log in using your username and "
+"password."
 msgstr ""
-"You have been successfully registered. Please log in using your username "
-"and password."
+"You have been successfully registered. Please log in using your username and "
+"password."
 
 #: scoremodel/views/admin/document.py:24 scoremodel/views/admin/document.py:62
 msgid "No document with id {0}"
@@ -1148,8 +1153,8 @@ msgstr "You cannot modify filename!"
 #: scoremodel/views/public/__init__.py:75
 #: scoremodel/views/public/__init__.py:116
 #: scoremodel/views/public/__init__.py:168
-#: scoremodel/views/public/__init__.py:209
-#: scoremodel/views/public/__init__.py:241
+#: scoremodel/views/public/__init__.py:211
+#: scoremodel/views/public/__init__.py:245
 msgid "You can only view your own reports."
 msgstr "You can only view your own reports."
 
@@ -1164,3 +1169,9 @@ msgstr "This report does not exist."
 #~ msgid "An unexpected error occured: {0}"
 #~ msgstr "An unexpected error occured: {0}"
 
+#~ msgid ""
+#~ "\">Here you can find a list of all your reports.</a> You can select a "
+#~ "report to continue or <a href=\""
+#~ msgstr ""
+#~ "\">Here you can find a list of all your reports.</a> You can select a "
+#~ "report to continue or <a href=\""

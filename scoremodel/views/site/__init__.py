@@ -36,7 +36,7 @@ def v_index():
             abort(404)
             return
     return render_template('site/home.html', form=form, content=markdown.markdown(page.content),
-                           user_reports=user_reports)
+                           user_reports=user_reports[:5])
 
 
 @site.route('/faq')
