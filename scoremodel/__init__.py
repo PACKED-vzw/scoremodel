@@ -12,7 +12,6 @@ Markdown(app)
 babel = Babel(app)
 csrf = CsrfProtect(app)
 app.debug = False
-app.config['SECRET_KEY'] = 'SECRET'
 login_manager = LoginManager()
 login_manager.session_protection = 'strong'
 login_manager.init_app(app)
