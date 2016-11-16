@@ -212,7 +212,7 @@ class QuestionApi(GenericApi):
         # Store everything in the database
         self.store()
         # Set maximum_score
-        sorted_answers = sorted(new_question.answers, key=lambda answer: answer.value, reverse=True)
+        sorted_answers = sorted(new_question.answers, key=lambda a: a.value, reverse=True)
         if len(sorted_answers) > 0:
             new_question.maximum_score = sorted_answers[0].value * new_question.weight * new_question.risk_factor.value
         else:

@@ -217,14 +217,21 @@ def v_user_report_check(user_id, user_report_id):
 
     question_answers = {}
     all_scores = {}
+    highest_answers = {}
 
     for section in user_report.template.sections:
         all_scores[section.id] = 0
 
     for question_answer in user_report.question_answers:
-        question_answers[question_answer.question_id] = question_answer
-        multiplication_factor = SectionApi().multiplication_factor(question_answer.question_template.section_id)
-        all_scores[question_answer.question_template.section_id] += question_answer.score * multiplication_factor
+        question = question_answer.question_template
+        question_answers[question.id] = question_answer
+        multiplication_factor = SectionApi().multiplication_factor(question.section_id)
+        all_scores[question.section_id] += question_answer.score * multiplication_factor
+        sorted_answers = sorted(question.answers, key=lambda a: a.value, reverse=True)
+        if len(sorted_answers) > 0:
+            highest_answers[question.id] = sorted_answers[0].value
+        else:
+            highest_answers[question.id] = 0
 
     benchmarks_by_section = user_report_api.benchmarks_by_section(user_report_id)
 
@@ -234,7 +241,8 @@ def v_user_report_check(user_id, user_report_id):
                            user_report_creation_time='{:%Y-%m-%d %H:%M:%S}'.format(user_report.creation_time),
                            question_answers=question_answers,
                            all_scores=all_scores,
-                           benchmarks_by_section=benchmarks_by_section
+                           benchmarks_by_section=benchmarks_by_section,
+                           highest_answers=highest_answers
                            )
 
 

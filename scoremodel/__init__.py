@@ -11,7 +11,7 @@ db = SQLAlchemy(app)
 Markdown(app)
 babel = Babel(app)
 csrf = CsrfProtect(app)
-app.debug = False
+app.debug = app.config['DEBUG']
 login_manager = LoginManager()
 login_manager.session_protection = 'strong'
 login_manager.init_app(app)

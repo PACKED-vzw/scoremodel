@@ -134,7 +134,7 @@
                                                 <div class="col-md-11 col-sm-11">
                                                     <!-- Answers -->
                                                     {% if question_answers[question.id] is defined %}
-                                                        {% if question_answers[question.id].answer_template.value != question.highest_answer %}
+                                                        {% if question_answers[question.id].answer_template.value != highest_answers[question.id] %}
                                                             <span class="label label-danger">{{ question_answers[question.id].answer_template.answer }}</span>
                                                         {% else %}
                                                             <span class="label label-success">{{ question_answers[question.id].answer_template.answer }}</span>
