@@ -2,16 +2,19 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     {% if title %}
-        <title>Scoremodel: {{ title }}</title>
+        <title>{{ _('Scoremodel: ') }}{{ title }}</title>
     {% else %}
-        <title>Scoremodel</title>
+        <title>{{ _('Scoremodel') }}</title>
     {% endif %}
     <!-- Bootstrap -->
     <link href="{{ url_for('static', filename='lib/bower_components/bootstrap/dist/css/bootstrap.css') }}"
           rel="stylesheet"/>
     <link href="{{ url_for('static', filename='lib/bower_components/bootstrap/dist/css/bootstrap-theme.css') }}"
           rel="stylesheet"/>
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Fjalla+One" rel="stylesheet">
     <!-- Scripts -->
     <!-- Bootstrap -->
     <script src="{{ url_for('static', filename='lib/bower_components/jquery/dist/jquery.js') }}"></script>
@@ -25,83 +28,81 @@
     <script src="{{ url_for('static', filename='lib/locale/translate.js') }}"></script>
     <script src="{{ url_for('static', filename='locales/' + current_user.locale + '/icu.js') }}"></script>
     <script src="{{ url_for('static', filename='lib/scoremodel/jquery/public/locale.js') }}"></script>
-{% if current_user.locale is not none %}
-    <script id="locale_script">
-    set_js_locale('{{ current_user.locale }}');
-    </script>
-{% else %}
-    <script id="locale_script">
-    set_js_locale('{{ config['BABEL_DEFAULT_LOCALE'] }}');
-    </script>
-{% endif %}
+    {% if current_user.locale is not none %}
+        <script id="locale_script">
+            set_js_locale('{{ current_user.locale }}');
+        </script>
+    {% else %}
+        <script id="locale_script">
+            set_js_locale('{{ config['BABEL_DEFAULT_LOCALE'] }}');
+        </script>
+    {% endif %}
     <!-- Local scripts -->
     <script src="{{ url_for('static', filename='lib/scoremodel/jquery/form.js') }}"></script>
-    <!-- Local CSS -->
-    <link rel="stylesheet" href="{{ url_for('static', filename='screen.css') }}" media="screen"/>
-    <link rel="stylesheet" href="{{ url_for('static', filename='print.css') }}" media="print"/>
 </head>
 <body>
 <div class="container-fluid">
     <div class="row">
-        <div class="col-sm-4 col-md-4">
-
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-sm-12 col-md-12" style="min-height: 44px">
-            <nav class="navbar navbar-default">
-                <div class="container-fluid">
-                    <div class="navbar-header">
-                        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
-                                data-target="#navbar" aria-expanded="false">
-                            <span class="sr-only">{{ _('Toggle navigation') }}</span>
-                            <span class="icon-bar"></span>
-                            <span class="icon-bar"></span>
-                            <span class="icon-bar"></span>
-                        </button>
-                        <a class="navbar-brand" href="/" >
-                            <img alt="Scoremodel" src="{{ url_for('static', filename='img/logo_scoremodel.png') }}"
-                                 class="img-responsive"/>
-                        </a>
-                    </div>
-                    <div class="collapse navbar-collapse" id="navbar">
-                        <ul class="nav navbar-nav" role="menu">
-                            <li><a href="{{ url_for('site.v_index') }}">{{ _('Home') }}</a></li>
-                            <li><a href="{{ url_for('public.v_index') }}">{{ _('Scoremodel') }}</a></li>
-                            <li><a href="{{ url_for('site.v_faq') }}">{{ _('FAQ') }}</a></li>
-                            <li><a href="{{ url_for('site.v_doc') }}">{{ _('Documents') }}</a></li>
-                            <li><a href="{{ url_for('site.v_disclaimer') }}">{{ _('Disclaimer') }}</a></li>
-                        </ul>
-                        <ul class="nav navbar-nav navbar-right">
-                            {% if current_user.is_authenticated %}
-                                {% if current_user.has_role('administrator') %}
-                                    <li><a href="{{ url_for('admin.v_admin') }}">{{ _('Manage') }}</a></li>
-                                {% endif %}
-                                <li><a href="{{ url_for('admin.v_logout', next=request.path) }}">{{ _('Log out') }}</a></li>
-                            {% else %}
-                                <li class="dropdown">
-                                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"
-                                       aria-haspopup="true" aria-expanded="false">{{ _('Register') }}/{{ _('Log in') }}</a>
-                                <ul class="dropdown-menu">
-                                    <li><a href="{{ url_for('admin.v_login', next=request.path) }}">{{ _('Log in') }}</a></li>
-                                    <li><a href="{{ url_for('admin.v_register', next=request.path) }}">{{ _('Register') }}</a></li>
-                                </ul>
-                                </li>
+        <nav class="navbar navbar-default col-sm-12 col-md-10 col-md-offset-1" style="margin-top: 1vh;">
+            <div class="container-fluid">
+                <!-- Header -->
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
+                            data-target="#navbar_main" aria-expanded="false">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-left"
+                       style="font-size: xx-large; margin-top: 1vh; margin-bottom: 0.5vh; margin-right: 2vw;"
+                       href="{{ url_for('site.v_index') }}">
+                        <span class="glyphicon glyphicon-star" style="font-size: xx-large;" aria-hidden="true"></span>
+                        <span style="font-family: 'Fjalla One', sans-serif; font-size: xx-large;">SCOREMODEL</span>
+                    </a>
+                </div>
+                <div class="collapse navbar-collapse" id="navbar_main">
+                    <ul class="nav navbar-nav" role="menu">
+                        <li><a href="{{ url_for('site.v_index') }}">{{ _('Home') }}</a></li>
+                        <li><a href="{{ url_for('public.v_index') }}">{{ _('Scoremodel') }}</a></li>
+                        <li><a href="{{ url_for('site.v_doc') }}">{{ _('Documents') }}</a></li>
+                        <li><a href="{{ url_for('site.v_faq') }}">{{ _('FAQ') }}</a></li>
+                        <li><a href="{{ url_for('site.v_disclaimer') }}">{{ _('Disclaimer') }}</a></li>
+                        <li><a href="{{ url_for('site.v_contact') }}">{{ _('Contact') }}</a></li>
+                    </ul>
+                    <ul class="nav navbar-nav navbar-right">
+                        {% if current_user.is_authenticated %}
+                            {% if current_user.has_role('administrator') %}
+                                <li><a href="{{ url_for('admin.v_admin') }}">{{ _('Manage') }}</a></li>
                             {% endif %}
+                            <li><a href="{{ url_for('admin.v_logout', next=request.path) }}">{{ _('Log out') }}</a></li>
+                        {% else %}
+                            <li class="dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"
+                                   aria-haspopup="true" aria-expanded="false">{{ _('Register') }}/{{ _('Log in') }}</a>
+                                <ul class="dropdown-menu">
+                                    <li>
+                                        <a href="{{ url_for('admin.v_login', next=request.path) }}">{{ _('Log in') }}</a>
+                                    </li>
+                                    <li>
+                                        <a href="{{ url_for('admin.v_register', next=request.path) }}">{{ _('Register') }}</a>
+                                    </li>
+                                </ul>
+                            </li>
+                        {% endif %}
                         <li class="dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"
-                                       aria-haspopup="true" aria-expanded="false">{{ session['locale'] }}</a>
+                               aria-haspopup="true" aria-expanded="false">{{ session['locale'] }}</a>
                             <ul class="dropdown-menu" id="locale_switcher">
-                                    {% for locale in config['LANGUAGES'] %}
-                                        <li><a href="#" id="{{ locale }}">{{ locale }}</a></li>
-                                    {% endfor %}
-                                </ul>
+                                {% for locale in config['LANGUAGES'] %}
+                                    <li><a href="#" id="{{ locale }}">{{ locale }}</a></li>
+                                {% endfor %}
+                            </ul>
                         </li>
-                        </ul>
-                    </div>
+                    </ul>
                 </div>
-            </nav>
-        </div>
+            </div>
+        </nav>
     </div>
     <div class="row">
         <div class="col-sm-10 col-sm-offset-1 col-md-10 col-md-offset-1 main">
@@ -116,32 +117,23 @@
             {% block content %}{% endblock %}
         </div>
     </div>
-    <div class="row">
-        <div class="col-sm-12 col-md-12">&nbsp;</div>
-    </div>
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col-sm-1 col-md-1">
-                <a href="http://www.den.nl"><img height="40px"
-                                                 src="{{ url_for('static', filename='img/logo_den.png') }}"
-                                                 alt="Logo DEN" class="footer"/></a>
-            </div>
-            <div class="col-sm-1 col-md-1">
-                <a href="http://www.packed.be"><img height="40px"
-                                                    src="{{ url_for('static', filename='img/logo_packed.jpg') }}"
-                                                    alt="Logo PACKED vzw" class="footer"/></a>
-            </div>
-            <div class="col-sm-1 col-md-1">
-                <a href="http://creativecommons.org/licenses/by-sa/3.0"><img height="40px"
-                                                                             src="{{ url_for('static', filename='img/cc-by-sa.png') }}"
-                                                                             alt="CC-BY-SA" class="footer"/></a>
-            </div>
-            <div class="col-sm-2 col-md-1">
-                <ul>
-                    <li>it@packed.be</li>
-                </ul>
-            </div>
+    <div class="row" style="margin-top: 5vh; margin-bottom: 0.5vh;">
+        <div class="col-sm-1 col-md-1 col-sm-offset-1 col-md-offset-1">
+            <a href="http://www.den.nl"><img height="40px"
+                                             src="{{ url_for('static', filename='img/logo_den.png') }}"
+                                             alt="Logo DEN" class="footer"/></a>
+        </div>
+        <div class="col-sm-1 col-md-1">
+            <a href="http://www.packed.be"><img height="40px"
+                                                src="{{ url_for('static', filename='img/logo_packed.jpg') }}"
+                                                alt="Logo PACKED vzw" class="footer"/></a>
+        </div>
+        <div class="col-sm-1 col-md-1">
+            <a href="http://creativecommons.org/licenses/by-sa/3.0"><img height="20px"
+                                                                         src="{{ url_for('static', filename='img/cc-by-sa.png') }}"
+                                                                         alt="CC-BY-SA" class="footer"/></a>
         </div>
     </div>
+</div>
 </body>
 </html>

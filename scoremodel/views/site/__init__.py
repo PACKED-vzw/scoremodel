@@ -73,3 +73,17 @@ def v_disclaimer():
             abort(404)
             return
     return render_template('site/content.html', content=markdown.markdown(page.content), title=_('Disclaimer'))
+
+
+@site.route('/contact')
+def v_contact():
+    lang = locale_api.current_locale
+    try:
+        page = page_api.by_menu_link_and_lang('v_contact', lang)
+    except DatabaseItemDoesNotExist:
+        try:
+            page = page_api.by_menu_link_and_lang('v_contact', app.config['BABEL_DEFAULT_LOCALE'])
+        except DatabaseItemDoesNotExist:
+            abort(404)
+            return
+    return render_template('site/content.html', content=markdown.markdown(page.content), title=_('Contact'))

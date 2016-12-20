@@ -90,7 +90,7 @@ def add_admin():
 
 
 def add_menu_links():
-    menu_links = ('v_index', 'v_faq', 'v_disclaimer', 'v_doc')
+    menu_links = ('v_index', 'v_faq', 'v_disclaimer', 'v_doc', 'v_contact')
     menu_link_api = MenuLinkApi()
     for menu_link in menu_links:
         try:
