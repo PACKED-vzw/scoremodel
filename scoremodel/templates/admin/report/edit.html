@@ -13,74 +13,84 @@
     <script src="{{ url_for('static', filename='lib/scoremodel/jquery/admin/report.js') }}"></script>
     <div class="container-fluid">
         <div class="row">
-            <div class="col-xs-9">
+            <div class="col-sm-12 col-md-12">
                 <div class="report panel panel-default">
                     <div class="panel-heading">
-                        <div class="container">
+                        <div class="container-fluid">
                             <div class="row">
-                                <div class="col-xs-6 col-sm-6 col-md-6">
+                                <div class="col-sm-6">
                                     <h3 class="panel-title">{{ _('Report') }}</h3>
                                 </div>
-                                <div class="col-xs-3 col-sm-3 col-md-3" id="report_loading_gif">
+                                <div class="col-sm-3" id="report_loading_gif">
 
                                 </div>
                             </div>
                         </div>
                     </div>
                     <div class="panel-body">
-                        <div class="row">
-                            <div class="col-xs-12">
-                                <form novalidate class="form-horizontal">
-                                    <input id="report_id" type="hidden" value="{{ report.id }}"/>
-                                    <input id="last_section_id" type="hidden" value="0"/>
-                                    <input id="last_question_id" type="hidden" value="0"/>
-                                    <div class="form-group">
-                                        <label for="report_title"
-                                               class="col-sm-1 control-label"><strong>{{ _('Title') }}</strong></label>
-                                        <div class="col-sm-11">
-                                            <input id="report_title" type="text" class="form-control"
-                                                   required="required" value="{{ report.title }}"/>
+                        <div class="container-fluid">
+                            <div class="row">
+                                <div class="col-xs-12">
+                                    <form novalidate class="form-horizontal">
+                                        <input id="report_id" type="hidden" value="{{ report.id }}"/>
+                                        <input id="last_section_id" type="hidden" value="0"/>
+                                        <input id="last_question_id" type="hidden" value="0"/>
+                                        <div class="form-group">
+                                            <div class="container-fluid">
+                                                <div class="row">
+                                                    <label for="report_title"
+                                                           class="col-sm-2 control-label"><strong>{{ _('Title') }}</strong></label>
+                                                    <div class="col-sm-10">
+                                                        <input id="report_title" type="text" class="form-control"
+                                                               required="required" value="{{ report.title }}"/>
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="report_lang"
-                                               class="col-sm-1 control-label"><strong>{{ _('Language') }}</strong></label>
-                                        <div class="col-sm-11">
-                                            <select id="report_lang" class="form-control" disabled="disabled">
-                                                {% for lang in languages %}
-                                                    {% if lang.id == report.lang_id %}
-                                                        <option value="{{ lang.id }}"
-                                                                selected="selected">{{ lang.lang }}</option>
-                                                    {% else %}
-                                                        <option value="{{ lang.id }}">{{ lang.lang }}</option>
-                                                    {% endif %}
-                                                {% endfor %}
-                                            </select>
+                                        <div class="form-group">
+                                            <div class="container-fluid">
+                                                <div class="row">
+                                                    <label for="report_lang"
+                                                           class="col-sm-2 control-label"><strong>{{ _('Language') }}</strong></label>
+                                                    <div class="col-sm-10">
+                                                        <select id="report_lang" class="form-control" disabled="disabled">
+                                                            {% for lang in languages %}
+                                                                {% if lang.id == report.lang_id %}
+                                                                    <option value="{{ lang.id }}"
+                                                                            selected="selected">{{ lang.lang }}</option>
+                                                                {% else %}
+                                                                    <option value="{{ lang.id }}">{{ lang.lang }}</option>
+                                                                {% endif %}
+                                                            {% endfor %}
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </div>
-                                    </div>
-                                </form>
+                                    </form>
+                                </div>
                             </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-xs-12" id="sections">
-                                <!-- Sections -->
+                            <div class="row">
+                                <div class="col-xs-12" id="sections">
+                                    <!-- Sections -->
+                                </div>
                             </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-sm-3 col-sm-offset-1" id="cannot_save">
+                            <div class="row">
+                                <div class="col-sm-3 col-sm-offset-1" id="cannot_save">
+                                </div>
                             </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-sm-3 col-sm-offset-1">
-                                <button type="button" class="btn btn-default" id="report_save_button">
-                                    {{ _('Save') }}
-                                </button>
-                            </div>
-                            <div class="col-sm-3">
-                                <!-- Add new section -->
-                                <button type="button" class="btn btn-info"
-                                        id="add_section_button">{{ _('Add section') }}
-                                </button>
+                            <div class="row">
+                                <div class="col-sm-3 col-sm-offset-1">
+                                    <button type="button" class="btn btn-default" id="report_save_button">
+                                        {{ _('Save') }}
+                                    </button>
+                                </div>
+                                <div class="col-sm-3">
+                                    <!-- Add new section -->
+                                    <button type="button" class="btn btn-info"
+                                            id="add_section_button">{{ _('Add section') }}
+                                    </button>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -98,31 +108,47 @@
             <div class="panel-body collapse" id="section_collapse_{% raw %}{{:section_id}}{% endraw %}">
                 <form novalidate class="form-horizontal">
                     <div class="form-group">
-                    <label for="section_weight_{% raw %}{{:section_id}}{% endraw %}" class="control-label col-sm-1"><strong>{{ _('Weight') }}</strong></label>
-                    <div class="col-sm-11">
+                    <div class="container-fluid">
+                    <div class="row">
+                    <label for="section_weight_{% raw %}{{:section_id}}{% endraw %}" class="control-label col-sm-2"><strong>{{ _('Weight') }}</strong></label>
+                    <div class="col-sm-10">
                         <input id="section_weight_{% raw %}{{:section_id}}{% endraw %}" type="number" min="1"
                                max="10"
                                integer class="form-control" required="required" value="{% raw %}{{if section_weight}}{{:section_weight}}{{else}}{% endraw %}{{ _('1') }}{% raw %}{{/if}}{% endraw %}"/>
                     </div>
                     </div>
+                    </div>
+                    </div>
                     <div class="form-group">
-                        <label for="section_title_{% raw %}{{:section_id}}{% endraw %}" class="control-label col-sm-1"><strong>{{ _('Title') }}</strong></label>
-                        <div class="col-sm-11">
+                    <div class="container-fluid">
+                    <div class="row">
+                    <label for="section_title_{% raw %}{{:section_id}}{% endraw %}" class="control-label col-sm-2"><strong>{{ _('Title') }}</strong></label>
+                        <div class="col-sm-10">
                             <input id="section_title_{% raw %}{{:section_id}}{% endraw %}" type="text" class="form-control" required="required" value="{% raw %}{{if section_title}}{{:section_title}}{{else}}{% endraw %}{{ _('New section') }}{% raw %}{{/if}}{% endraw %}"/>
                         </div>
                     </div>
+                    </div>
+                    </div>
                     <div class="form-group">
-                        <label for="section_context_{% raw %}{{:section_id}}{% endraw %}" class="control-label col-sm-1">{{ _('Context') }} ({{ _('optional') }})</label>
-                        <div class="col-sm-11">
+                    <div class="container-fluid">
+                    <div class="row">
+                    <label for="section_context_{% raw %}{{:section_id}}{% endraw %}" class="control-label col-sm-2">{{ _('Context') }} ({{ _('optional') }})</label>
+                        <div class="col-sm-10">
                         <textarea id="section_context_{% raw %}{{:section_id}}{% endraw %}" class="form-control">{% raw %}{{if section_context}}{{:section_context}}{{else}}{% endraw %}{{ _('Section context') }}{% raw %}{{/if}}{% endraw %}</textarea>
                         </div>
                     </div>
+                    </div>
+                    </div>
                     <div class="form-group">
-                        <div  class="col-sm-3 col-sm-offset-1">
+                    <div class="container-fluid">
+                    <div class="row">
+                    <div  class="col-sm-3 col-sm-offset-1">
                             <button type="button" class="btn btn-default" id="section_{% raw %}{{:section_id}}{% endraw %}_remove_button">
                                 {{ _('Remove') }}
                             </button>
                         </div>
+                    </div>
+                    </div>
                     </div>
                 </form>
                 <!-- Questions -->
@@ -147,51 +173,77 @@
         <form novalidate class="form-horizontal">
             <input type="hidden" id="question_section_id_{% raw %}{{:question_id}}{% endraw %}" value="{% raw %}{{:section_id}}{% endraw %}" />
             <div class="form-group">
-                <label for="question_weight_{% raw %}{{:question_id}}{% endraw %}" class="control-label col-sm-3"><strong>{{ _('Weight') }}</strong></label>
-                <div class="col-sm-9">
-                    <input id="question_weight_{% raw %}{{:question_id}}{% endraw %}" type="number" min="1"
-                           max="10"
-                           integer class="form-control" required="required" value="{% raw %}{{if question_weight}}{{:question_weight}}{{else}}{% endraw %}{{ _('1') }}{% raw %}{{/if}}{% endraw %}"/>
+            <div class="container-fluid">
+                <div class="row">
+                    <label for="question_weight_{% raw %}{{:question_id}}{% endraw %}" class="control-label col-sm-2"><strong>{{ _('Weight') }}</strong></label>
+                    <div class="col-sm-10">
+                        <input id="question_weight_{% raw %}{{:question_id}}{% endraw %}" type="number" min="1"
+                               max="10"
+                               integer class="form-control" required="required" value="{% raw %}{{if question_weight}}{{:question_weight}}{{else}}{% endraw %}{{ _('1') }}{% raw %}{{/if}}{% endraw %}"/>
+                    </div>
                 </div>
             </div>
+            </div>
             <div class="form-group">
-                <label for="question_question_{% raw %}{{:question_id}}{% endraw %}" class="control-label col-sm-3"><strong>{{ _('Question') }}</strong></label>
-                <div class="col-sm-9">
+            <div class="container-fluid">
+            <div class="row">
+                <label for="question_question_{% raw %}{{:question_id}}{% endraw %}" class="control-label col-sm-2"><strong>{{ _('Question') }}</strong></label>
+                <div class="col-sm-10">
                      <textarea id="question_question_{% raw %}{{:question_id}}{% endraw %}"
                                class="form-control"
                                required="required">{% raw %}{{if question_question}}{{:question_question}}{{else}}{% endraw %}{{ _('New question') }}{% raw %}{{/if}}{% endraw %}</textarea>
                 </div>
             </div>
+            </div>
+            </div>
             <div class="form-group">
-                <label for="question_example_{% raw %}{{:question_id}}{% endraw %}" class="control-label col-sm-3">{{ _('Example') }} ({{ _('optional') }})</label>
-                <div class="col-sm-9">
+            <div class="container-fluid">
+            <div class="row">
+                <label for="question_example_{% raw %}{{:question_id}}{% endraw %}" class="control-label col-sm-2">{{ _('Example') }} ({{ _('optional') }})</label>
+                <div class="col-sm-10">
                      <textarea id="question_example_{% raw %}{{:question_id}}{% endraw %}"
                                class="form-control">{% raw %}{{if question_example}}{{:question_example}}{{else}}{% endraw %}{{ _('Question example') }}{% raw %}{{/if}}{% endraw %}</textarea>
                 </div>
             </div>
+            </div>
+            </div>
             <div class="form-group">
-                <label for="question_context_{% raw %}{{:question_id}}{% endraw %}" class="control-label col-sm-3">{{ _('Context') }} ({{ _('optional') }})</label>
-                <div class="col-sm-9">
+            <div class="container-fluid">
+            <div class="row">
+                <label for="question_context_{% raw %}{{:question_id}}{% endraw %}" class="control-label col-sm-2">{{ _('Context') }} ({{ _('optional') }})</label>
+                <div class="col-sm-10">
                      <textarea id="question_context_{% raw %}{{:question_id}}{% endraw %}"
                                class="form-control">{% raw %}{{if question_context}}{{:question_context}}{{else}}{% endraw %}{{ _('Question context') }}{% raw %}{{/if}}{% endraw %}</textarea>
                 </div>
             </div>
+            </div>
+            </div>
             <div class="form-group">
-                <label for="question_risk_{% raw %}{{:question_id}}{% endraw %}" class="control-label col-sm-3">{{ _('Risks') }} ({{ _('optional') }})</label>
-                <div class="col-sm-9">
+            <div class="container-fluid">
+            <div class="row">
+                <label for="question_risk_{% raw %}{{:question_id}}{% endraw %}" class="control-label col-sm-2">{{ _('Risks') }} ({{ _('optional') }})</label>
+                <div class="col-sm-10">
                      <textarea id="question_risk_{% raw %}{{:question_id}}{% endraw %}"
                                class="form-control">{% raw %}{{if question_risk}}{{:question_risk}}{{else}}{% endraw %}{{ _('Question risks') }}{% raw %}{{/if}}{% endraw %}</textarea>
                 </div>
             </div>
+            </div>
+            </div>
             <div class="form-group">
-                <label for="question_action_{% raw %}{{:question_id}}{% endraw %}" class="control-label col-sm-3">{{ _('Actions') }} ({{ _('optional') }})</label>
-                <div class="col-sm-9">
+            <div class="container-fluid">
+            <div class="row">
+                <label for="question_action_{% raw %}{{:question_id}}{% endraw %}" class="control-label col-sm-2">{{ _('Actions') }} ({{ _('optional') }})</label>
+                <div class="col-sm-10">
                     <textarea id="question_action_{% raw %}{{:question_id}}{% endraw %}" class="form-control">{% raw %}{{if question_action}}{{:question_action}}{{else}}{% endraw %}{{ _('Actions') }}{% raw %}{{/if}}{% endraw %}</textarea>
                 </div>
             </div>
+            </div>
+            </div>
             <div class="form-group">
-                <label for="question_risk_factor_{% raw %}{{:question_id}}{% endraw %}" class="control-label col-sm-3"><strong>{{ _('Risk factor') }}</strong></label>
-                <div class="col-sm-9">
+            <div class="container-fluid">
+            <div class="row">
+                <label for="question_risk_factor_{% raw %}{{:question_id}}{% endraw %}" class="control-label col-sm-2"><strong>{{ _('Risk factor') }}</strong></label>
+                <div class="col-sm-10">
                     <select
                             class="form-control"
                             required="required"
@@ -202,9 +254,13 @@
                             </select>
                 </div>
             </div>
+            </div>
+            </div>
             <div class="form-group">
-                <label for="question_answer_{% raw %}{{:question_id}}{% endraw %}" class="control-label col-sm-3"><strong>{{ _('Answers') }}</strong></label>
-                <div class="col-sm-9">
+            <div class="container-fluid">
+            <div class="row">
+                <label for="question_answer_{% raw %}{{:question_id}}{% endraw %}" class="control-label col-sm-2"><strong>{{ _('Answers') }}</strong></label>
+                <div class="col-sm-10">
                     <select
                             class="form-control" multiple="multiple"
                             required="required"
@@ -213,13 +269,19 @@
                                 <option value="{{ possible_answer.id }}">{{ possible_answer.answer }}</option>
                             {% endfor %}
                             </select>
+                            </div>
+                            </div>
                 </div>
             </div>
                 <div class="form-group">
+                <div class="container-fluid">
+            <div class="row">
                         <div  class="col-sm-3 col-sm-offset-1">
                             <button type="button" class="btn btn-default" id="question_{% raw %}{{:question_id}}{% endraw %}_remove_button">
                                 {{ _('Remove') }}
                             </button>
+                        </div>
+                        </div>
                         </div>
                     </div>
         </form>

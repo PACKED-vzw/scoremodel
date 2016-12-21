@@ -1,6 +1,5 @@
 {% extends 'admin/base.html' %}
 {% block admin_content %}
-    <div class="row">
         <form method="post" action="{{ url_for('admin.v_report_benchmark_create') }}">
             <div class="form-group">
                 <label for="benchmark_report.name">{{ _('Benchmark name') }}</label>
@@ -31,5 +30,4 @@
             {{ form.csrf_token }}
             {{ form.submit(class_='btn btn-default') }}
         </form>
-    </div>
 {% endblock %}

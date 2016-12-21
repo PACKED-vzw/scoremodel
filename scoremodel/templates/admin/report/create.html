@@ -1,54 +1,61 @@
 {% extends 'admin/base.html' %}
 {% block admin_content %}
     <form method="post" action="{{ url_for('admin.v_report_create') }}">
-        <div class="col-xs-9">
-            <div class="report panel panel-default">
-                <div class="panel-heading">
-                    <h3 class="panel-title">{{ _('Report') }}</h3>
-                </div>
-                <div class="panel-body">
-                    <div class="row">
-                        <div class="col-xs-12">
-                            <div class="form-group">
-                                <label for="report.title" class="col-sm-1 control-label">{{ _('Title') }}</label>
-                                <div class="col-sm-11">
-                                    {{ form.title(class_='form-control', id='report.title', required='required') }}
-                                    {% if form.title.errors %}
-                                        <div class="alert alert-danger">
-                                            <ul>
-                                                {% for error in form.title.errors %}
-                                                    <li>{{ error }}</li>
-                                                {% endfor %}
-                                            </ul>
-                                        </div>
-                                    {% endif %}
-                                </div>
+        <div class="report panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">{{ _('Report') }}</h3>
+            </div>
+            <div class="panel-body">
+                <div class="form-group">
+                    <div class="container-fluid">
+                        <div class="row">
+                            <label for="report.title" class="col-sm-2 control-label">{{ _('Title') }}</label>
+                            <div class="col-sm-10">
+                                {{ form.title(class_='form-control', id='report.title', required='required') }}
+                                {% if form.title.errors %}
+                                    <div class="alert alert-danger">
+                                        <ul>
+                                            {% for error in form.title.errors %}
+                                                <li>{{ error }}</li>
+                                            {% endfor %}
+                                        </ul>
+                                    </div>
+                                {% endif %}
                             </div>
-                            <div class="form-group">
-                            <label for="report.lang" class="col-sm-1 control-label">{{ _('Language') }}</label>
-                                <div class="col-sm-11">
-                                    {{ form.lang(class_='form-control', id='report.lang') }}
-                                    {% if form.lang.errors %}
-                                        <div class="alert alert-danger">
-                                            <ul>
-                                                {% for error in form.lang.errors %}
-                                                    <li>{{ error }}</li>
-                                                {% endfor %}
-                                            </ul>
-                                        </div>
-                                    {% endif %}
-                                </div>
-                            </div>
-                            {{ form.csrf_token }}
-                            <div class="form-group">
-                                <div class="col-sm-3 col-sm-offset-1">
-                                    {{ form.submit(class_='btn btn-default') }}
-                                </div>
-                            </div>
-
                         </div>
                     </div>
                 </div>
+                <div class="form-group">
+                    <div class="container-fluid">
+                        <div class="row">
+                            <label for="report.lang" class="col-sm-2 control-label">{{ _('Language') }}</label>
+                            <div class="col-sm-10">
+                                {{ form.lang(class_='form-control', id='report.lang') }}
+                                {% if form.lang.errors %}
+                                    <div class="alert alert-danger">
+                                        <ul>
+                                            {% for error in form.lang.errors %}
+                                                <li>{{ error }}</li>
+                                            {% endfor %}
+                                        </ul>
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {{ form.csrf_token }}
+                <div class="form-group">
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col-sm-3 col-sm-offset-1">
+                                {{ form.submit(class_='btn btn-default') }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
             </div>
         </div>
     </form>

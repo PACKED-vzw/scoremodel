@@ -6,80 +6,104 @@
     <script src="{{ url_for('static', filename='lib/bower_components/blueimp-file-upload/js/jquery.fileupload.js') }}"></script>
     <script src="{{ url_for('static', filename='lib/scoremodel/jquery/admin/buttons.js') }}"></script>
     <script src="{{ url_for('static', filename='lib/scoremodel/jquery/admin/document.js') }}"></script>
-    <div class="col-xs-9">
-        <div class="report panel panel-default">
-            <div class="panel-heading">
-                <h3 class="panel-title">{{ _('Document') }}</h3>
-            </div>
-            <div class="panel-body">
-                <form novalidate class="form-horizontal">
-                    <input type="hidden" id="document_id" value="{{ document.id }}"/>
-                    <div class="form-group">
-                        <label for="name" class="control-label col-sm-2">{{ _('Document name') }}</label>
-                        <div class="col-sm-10">
-                            <input class="form-control" type="text" id="name" value="" required="required"/>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label for="description"
-                               class="control-label col-sm-2">{{ _('Document description') }}</label>
-                        <div class="col-sm-10">
-                            <textarea id="description" class="form-control" rows="5"
-                                      data-provide="markdown-editable"></textarea>
-                            <div>
-                                <p class="small">{{ _('You can use <a href="https://daringfireball.net/projects/markdown/">Markdown</a> syntax in this field.') }}</p>
+    <div class="report panel panel-default">
+        <div class="panel-heading">
+            <h3 class="panel-title">{{ _('Document') }}</h3>
+        </div>
+        <div class="panel-body">
+            <form novalidate class="form-horizontal">
+                <input type="hidden" id="document_id" value="{{ document.id }}"/>
+                <div class="form-group">
+                    <div class="container-fluid">
+                        <div class="row">
+                            <label for="name" class="control-label col-sm-2">{{ _('Document name') }}</label>
+                            <div class="col-sm-10">
+                                <input class="form-control" type="text" id="name" value="" required="required"/>
                             </div>
                         </div>
                     </div>
-                    <div class="form-group">
-                        <label for="lang_id"
-                               class="control-label col-sm-2">{{ _('Document language') }}</label>
-                        <div class="col-sm-10">
-                            <select id="lang_id" class="form-control" required="required">
-                                {% for lang in languages %}
-                                    <option value="{{ lang.id }}">{{ lang.lang }}</option>
-                                {% endfor %}
-                            </select>
-                        </div>
-                    </div>
-                    {% if document.filename %}
+                </div>
+                <div class="form-group">
+                    <div class="container-fluid">
                         <div class="row">
-                        <div class="col-sm-2">
-                            <p class="text-right"><strong>Currently attached document</strong></p>
-                        </div>
-                        <div class="col-sm-10">
-                            <div class="thumbnail col-sm-6 col-md-4">
-                                    {% if document.js_media_type == 'image' %}
-                                        <img src="{{ url_for('api.v_api_resource', resource_name=document.filename) }}"
-                                         alt="Current document" id="current_document"/>
-                                    {% else %}
-                                        <a class="media" href="{{ url_for('api.v_api_resource', resource_name=document.filename) }}" id="current_document"><span class="glyphicon glyphicon-file"></span><span class="sr-only">Attached Document</span></a>
-                                    {% endif %}
-                                <div class="caption" id="current_document_caption">
-                                    <p><em>{{ document.filename }}</em></p>
+                            <label for="description"
+                                   class="control-label col-sm-2">{{ _('Document description') }}</label>
+                            <div class="col-sm-10">
+                            <textarea id="description" class="form-control" rows="5"
+                                      data-provide="markdown-editable"></textarea>
+                                <div>
+                                    <p class="small">{{ _('You can use <a href="https://daringfireball.net/projects/markdown/">Markdown</a> syntax in this field.') }}</p>
                                 </div>
                             </div>
                         </div>
-                        </div>
-                    {% endif %}
-                    <div class="form-group">
-                        <label for="input_file" class="control-label col-sm-2">{{ _('Document') }}</label>
-                        <div class="col-sm-4">
-                            <input type="file" id="input_file" name="input_file" title="{{ _('No file selected') }}"/>
-                        </div>
-                        <div class="col-sm-4">
-                            <div id="progress_indicator">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="container-fluid">
+                        <div class="row">
+                            <label for="lang_id"
+                                   class="control-label col-sm-2">{{ _('Document language') }}</label>
+                            <div class="col-sm-10">
+                                <select id="lang_id" class="form-control" required="required">
+                                    {% for lang in languages %}
+                                        <option value="{{ lang.id }}">{{ lang.lang }}</option>
+                                    {% endfor %}
+                                </select>
                             </div>
                         </div>
                     </div>
-                    <div class="form-group">
-                        <div class="col-sm-3 col-sm-offset-1">
-                            <button type="button" class="btn btn-default" id="save_button">{{ _('Save') }}
-                            </button>
+                </div>
+                {% if document.filename %}
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col-sm-2">
+                                <p class="text-right"><strong>Currently attached document</strong></p>
+                            </div>
+                            <div class="col-sm-10">
+                                <div class="thumbnail col-sm-6 col-md-4">
+                                    {% if document.js_media_type == 'image' %}
+                                        <img src="{{ url_for('api.v_api_resource', resource_name=document.filename) }}"
+                                             alt="Current document" id="current_document"/>
+                                    {% else %}
+                                        <a class="media"
+                                           href="{{ url_for('api.v_api_resource', resource_name=document.filename) }}"
+                                           id="current_document"><span class="glyphicon glyphicon-file"></span><span
+                                                class="sr-only">Attached Document</span></a>
+                                    {% endif %}
+                                    <div class="caption" id="current_document_caption">
+                                        <p><em>{{ document.filename }}</em></p>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                </form>
-            </div>
+                {% endif %}
+                <div class="form-group">
+                    <div class="container-fluid">
+                        <div class="row">
+                            <label for="input_file" class="control-label col-sm-2">{{ _('Document') }}</label>
+                            <div class="col-sm-4">
+                                <input type="file" id="input_file" name="input_file"
+                                       title="{{ _('No file selected') }}"/>
+                            </div>
+                            <div class="col-sm-4">
+                                <div id="progress_indicator">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col-sm-3 col-sm-offset-1">
+                                <button type="button" class="btn btn-default" id="save_button">{{ _('Save') }}
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
         </div>
     </div>
 {% endblock %}

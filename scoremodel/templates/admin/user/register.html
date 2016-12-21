@@ -1,13 +1,13 @@
 {% extends 'base.html' %}
 {% block content %}
-    <div class="container">
+    <div class="container-fluid">
         <div class="row">
-            <div class="col-md-8 col-sm-8">
+            <div class="col-md-8 col-sm-12">
                 <h1>{{ _('Register') }}</h1>
             </div>
         </div>
         <div class="row">
-            <div class="col-md-8 col-sm-8">
+            <div class="col-md-8 col-sm-12">
                 <form method="post" action="{{ url_for('admin.v_register') }}">
                     {{ form.csrf_token }}
                     <div class="form-group">

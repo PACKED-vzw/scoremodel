@@ -10,7 +10,7 @@
     <script type="text/javascript">
         var csrf_token = "{{ csrf_token() }}";
     </script>
-    <div class="container">
+    <div class="container-fluid">
         <div class="row">
             <div class="col-md-12 col-sm-12">
                 <h1>{{ benchmark_report.title }}
@@ -22,12 +22,12 @@
             <div class="col-md-12 col-sm-12">
                 <form novalidate>
                     <input id="report_id" type="hidden" value="{{ benchmark_report_id }}"/>
-                    <div class="container">
+                    <div class="container-fluid">
                         {% for section in benchmark_report.report.sections %}
                             <div class="row">
                                 <div class="col-sm-12 col-md-12 panel panel-default">
                                     <div class="panel-body">
-                                        <div class="container">
+                                        <div class="container-fluid">
                                             <div class="row">
                                                 <div class="col-sm-12 col-md-12">
                                                     <h2>{{ section.title }}</h2>
@@ -36,9 +36,9 @@
                                             {% for question in section.ordered_questions %}
                                                 <div class="row">
                                                     <div class="col-md-12 col-sm-12">
-                                                        <div class="container">
+                                                        <div class="container-fluid">
                                                             <div class="row">
-                                                                <div class="col-md-10 col-sm-10">
+                                                                <div class="col-md-12 col-sm-12">
                                                                     <h3>{{ question.question }}
                                                                         <small>
                                                                             ({{ _('Risk factor') }}: {{ question.risk_factor.risk_factor }})
@@ -47,7 +47,7 @@
                                                                 </div>
                                                             </div>
                                                             <div class="row">
-                                                                <div class="col-md-8 col-sm-8">
+                                                                <div class="col-md-12 col-sm-12">
                                                                     {% for answer in question.ordered_answers %}
                                                                         <div class="radio">
                                                                             <label>
@@ -92,10 +92,10 @@
                                                                 </div>
                                                             </div>
                                                             <div class="row">
-                                                                <div class="col-md-8 col-sm-8">
+                                                                <div class="col-md-12 col-sm-12">
                                                                     <div class="container">
                                                                         <div class="row">
-                                                                            <div class="col-md-8 col-sm-8">
+                                                                            <div class="col-md-12 col-sm-12">
                                                                                 <ul class="nav nav-tabs">
                                                                                     <li role="presentation"><a
                                                                                             href="#context_{{ question.id }}"
@@ -119,7 +119,7 @@
                                                                             </div>
                                                                         </div>
                                                                         <div class="row">
-                                                                            <div class="col-md-8 col-sm-8"
+                                                                            <div class="col-md-12 col-sm-12"
                                                                                  id="extra_{{ question.id }}">
                                                                                 <div class="collapse"
                                                                                      id="context_{{ question.id }}">
