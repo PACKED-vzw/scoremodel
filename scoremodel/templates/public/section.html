@@ -8,60 +8,60 @@
     <script type="text/javascript">
         var csrf_token = "{{ csrf_token() }}";
     </script>
-    <div class="container">
+    <div class="container-fluid">
         <div class="row">
-            <div class="col-md-6 col-sm-6 col-md-offset-2 col-sm-offset-2">
-                        <div class="pull-left">
-                            {% if previous_section %}
-                                <a href="{{ url_for('public.v_user_report_section', user_id=current_user.id, user_report_id=user_report_id, section_id=previous_section.id ) }}"
-                                   class="btn btn-default"><span class="glyphicon glyphicon-chevron-left"
-                                                                 aria-hidden="true"></span>&nbsp;{{ previous_section.title }}
-                                </a>
-                            {% else %}
-                                <a href="{{ url_for('.v_user_report_edit', user_id=current_user.id, user_report_id=user_report_id) }}"
-                                   class="btn btn-default"><span class="glyphicon glyphicon-chevron-left"
-                                                                 aria-hidden="true"></span>&nbsp;{{ _('Edit report') }}
-                                </a>
-                            {% endif %}
-                        </div>
-                        <div class="pull-right">
-                            {% if next_section %}
-                                <a href="{{ url_for('public.v_user_report_section', user_id=current_user.id, user_report_id=user_report_id, section_id=next_section.id ) }}"
-                                   class="btn btn-default text-right">{{ next_section.title }}&nbsp;<span
-                                        class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span></a>
-                            {% else %}
-                                <a href="{{ url_for('public.v_user_report_summary', user_id=current_user.id, user_report_id=user_report_id) }}"
-                                   class="btn btn-default text-right">{{ _('Overview') }}&nbsp;<span
-                                        class="glyphicon glyphicon-chevron-right"
-                                        aria-hidden="true"></span></a>
-                            {% endif %}
-                        </div>
+            <div class="col-md-8 col-sm-8 col-md-offset-2 col-sm-offset-2">
+                <div class="pull-left">
+                    {% if previous_section %}
+                        <a href="{{ url_for('public.v_user_report_section', user_id=current_user.id, user_report_id=user_report_id, section_id=previous_section.id ) }}"
+                           class="btn btn-default"><span class="glyphicon glyphicon-chevron-left"
+                                                         aria-hidden="true"></span>&nbsp;{{ previous_section.title }}
+                        </a>
+                    {% else %}
+                        <a href="{{ url_for('.v_user_report_edit', user_id=current_user.id, user_report_id=user_report_id) }}"
+                           class="btn btn-default"><span class="glyphicon glyphicon-chevron-left"
+                                                         aria-hidden="true"></span>&nbsp;{{ _('Edit report') }}
+                        </a>
+                    {% endif %}
+                </div>
+                <div class="pull-right">
+                    {% if next_section %}
+                        <a href="{{ url_for('public.v_user_report_section', user_id=current_user.id, user_report_id=user_report_id, section_id=next_section.id ) }}"
+                           class="btn btn-default text-right">{{ next_section.title }}&nbsp;<span
+                                class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span></a>
+                    {% else %}
+                        <a href="{{ url_for('public.v_user_report_summary', user_id=current_user.id, user_report_id=user_report_id) }}"
+                           class="btn btn-default text-right">{{ _('Overview') }}&nbsp;<span
+                                class="glyphicon glyphicon-chevron-right"
+                                aria-hidden="true"></span></a>
+                    {% endif %}
+                </div>
             </div>
         </div>
         <div class="row">
-            <div class="col-md-10 col-sm-10">
-                    <div class="container">
-                        <div class="row">
-                            <div class="col-md-10 col-sm-10">
-                                <h2>{{ section.title }}</h2>
-                            </div>
+            <div class="col-md-12 col-sm-12">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-sm-10 col-sm-offset-1">
+                            <h2>{{ section.title }}</h2>
                         </div>
                     </div>
+                </div>
             </div>
         </div>
         <div class="row">
-            <div class="col-md-10 col-sm-10 panel panel-default">
+            <div class="col-md-10 col-sm-10 panel panel-default col-sm-offset-1 col-md-offset-1">
                 <div class="panel-body">
                     <form class="novalidate">
                         <input id="report_id" type="hidden" value="{{ user_report_id }}"/>
                         <input id="section_id" type="hidden" value="{{ section.id }}"/>
-                        <div class="container">
+                        <div class="container-fluid">
                             {% for question in section.ordered_questions %}
                                 <div class="row">
-                                    <div class="col-md-10 col-sm-10">
-                                        <div class="container">
+                                    <div class="col-md-12 col-sm-12">
+                                        <div class="container-fluid">
                                             <div class="row">
-                                                <div class="col-md-9 col-sm-9">
+                                                <div class="col-md-12 col-sm-12">
                                                     <h3>{{ question.question }}
                                                         <small>
                                                             ({{ _('Risk factor') }}: {{ question.risk_factor.risk_factor }})
@@ -70,7 +70,7 @@
                                                 </div>
                                             </div>
                                             <div class="row">
-                                                <div class="col-md-8 col-sm-8">
+                                                <div class="col-md-12 col-sm-12">
                                                     {% for answer in question.ordered_answers %}
                                                         <div class="radio">
                                                             <label>
@@ -95,10 +95,10 @@
                                                 </div>
                                             </div>
                                             <div class="row">
-                                                <div class="col-md-8 col-sm-8">
-                                                    <div class="container">
+                                                <div class="col-md-12 col-sm-12">
+                                                    <div class="container-fluid">
                                                         <div class="row">
-                                                            <div class="col-md-8 col-sm-8">
+                                                            <div class="col-md-12 col-sm-12">
                                                                 <ul class="nav nav-tabs">
                                                                     <li role="presentation"><a
                                                                             href="#context_{{ question.id }}"
@@ -121,7 +121,8 @@
                                                             </div>
                                                         </div>
                                                         <div class="row">
-                                                            <div class="col-md-8 col-sm-8" id="extra_{{ question.id }}">
+                                                            <div class="col-md-12 col-sm-12"
+                                                                 id="extra_{{ question.id }}">
                                                                 <div class="collapse" id="context_{{ question.id }}">
                                                                     <h4>{{ _('Context' ) }}</h4>
                                                                     {{ question.context|markdown }}
@@ -152,7 +153,7 @@
             </div>
         </div>
         <div class="row">
-            <div class="col-md-10 col-sm-10 panel panel-default">
+            <div class="col-md-10 col-sm-10 panel panel-default col-sm-offset-1 col-md-offset-1">
                 <div class="panel-body">
                      <span>{{ _('Total score for section "%(section_title)s":', section_title=section.title) }} <span
                              id="score">0</span> /100</span>
@@ -160,32 +161,32 @@
             </div>
         </div>
         <div class="row">
-            <div class="col-md-6 col-sm-6 col-md-offset-2 col-sm-offset-2">
-                        <div class="pull-left">
-                            {% if previous_section %}
-                                <a href="{{ url_for('public.v_user_report_section', user_id=current_user.id, user_report_id=user_report_id, section_id=previous_section.id ) }}"
-                                   class="btn btn-default"><span class="glyphicon glyphicon-chevron-left"
-                                                                 aria-hidden="true"></span>&nbsp;{{ previous_section.title }}
-                                </a>
-                            {% else %}
-                                <a href="{{ url_for('.v_user_report_edit', user_id=current_user.id, user_report_id=user_report_id) }}"
-                                   class="btn btn-default"><span class="glyphicon glyphicon-chevron-left"
-                                                                 aria-hidden="true"></span>&nbsp;{{ _('Edit report') }}
-                                </a>
-                            {% endif %}
-                        </div>
-                        <div class="pull-right">
-                            {% if next_section %}
-                                <a href="{{ url_for('public.v_user_report_section', user_id=current_user.id, user_report_id=user_report_id, section_id=next_section.id ) }}"
-                                   class="btn btn-default text-right">{{ next_section.title }}&nbsp;<span
-                                        class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span></a>
-                            {% else %}
-                                <a href="{{ url_for('public.v_user_report_summary', user_id=current_user.id, user_report_id=user_report_id) }}"
-                                   class="btn btn-default text-right">{{ _('Overview') }}&nbsp;<span
-                                        class="glyphicon glyphicon-chevron-right"
-                                        aria-hidden="true"></span></a>
-                            {% endif %}
-                        </div>
+            <div class="col-md-8 col-sm-8 col-md-offset-2 col-sm-offset-2">
+                <div class="pull-left">
+                    {% if previous_section %}
+                        <a href="{{ url_for('public.v_user_report_section', user_id=current_user.id, user_report_id=user_report_id, section_id=previous_section.id ) }}"
+                           class="btn btn-default"><span class="glyphicon glyphicon-chevron-left"
+                                                         aria-hidden="true"></span>&nbsp;{{ previous_section.title }}
+                        </a>
+                    {% else %}
+                        <a href="{{ url_for('.v_user_report_edit', user_id=current_user.id, user_report_id=user_report_id) }}"
+                           class="btn btn-default"><span class="glyphicon glyphicon-chevron-left"
+                                                         aria-hidden="true"></span>&nbsp;{{ _('Edit report') }}
+                        </a>
+                    {% endif %}
+                </div>
+                <div class="pull-right">
+                    {% if next_section %}
+                        <a href="{{ url_for('public.v_user_report_section', user_id=current_user.id, user_report_id=user_report_id, section_id=next_section.id ) }}"
+                           class="btn btn-default text-right">{{ next_section.title }}&nbsp;<span
+                                class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span></a>
+                    {% else %}
+                        <a href="{{ url_for('public.v_user_report_summary', user_id=current_user.id, user_report_id=user_report_id) }}"
+                           class="btn btn-default text-right">{{ _('Overview') }}&nbsp;<span
+                                class="glyphicon glyphicon-chevron-right"
+                                aria-hidden="true"></span></a>
+                    {% endif %}
+                </div>
             </div>
         </div>
     </div>

@@ -1,8 +1,8 @@
 {% extends 'base.html' %}
 {% block content %}
     <script type="text/javascript">
-    /* This could end badly if one request finishes directly before the other starts. But I don't think that
-    will happen. */
+        /* This could end badly if one request finishes directly before the other starts. But I don't think that
+         will happen. */
         var async_counter = 0;
     </script>
     <!-- Bower -->
@@ -20,20 +20,27 @@
     <script src="{{ url_for('static', filename='lib/scoremodel/jquery/admin/loader.js') }}"></script>
     <script src="{{ url_for('static', filename='lib/scoremodel/jquery/public/graph.js') }}"></script>
     <script src="{{ url_for('static', filename='lib/scoremodel/jquery/public/report.js') }}"></script>
-    <div class="container">
-    <!-- Bar -->
+    <div class="container-fluid">
+        <!-- Bar -->
         <div class="row">
-            <div class="col-md-8 col-sm-10 col-md-offset-2">
-                <div class="container">
-                    <div class="col-md-2 col-sm-2"><a href="{{ url_for('public.v_user_report_summary', user_id=current_user.id, user_report_id=user_report.id) }}">{{ _('Summary') }}</a></div>
-                    <div class="col-md-2 col-sm-2"><a href="{{ url_for('public.v_user_report_check', user_id=current_user.id, user_report_id=user_report.id) }}">{{ _('Full report') }}</a></div>
-                    <div class="col-md-2 col-sm-2"><a href="javascript:window.print()">{{ _('Print') }}</a></div>
+            <div class="col-md-12 col-sm-12">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-sm-2 col-sm-offset-4"><a
+                                href="{{ url_for('public.v_user_report_summary', user_id=current_user.id, user_report_id=user_report.id) }}">{{ _('Summary') }}</a>
+                        </div>
+                        <div class="col-sm-2"><a
+                                href="{{ url_for('public.v_user_report_check', user_id=current_user.id, user_report_id=user_report.id) }}">{{ _('Full report') }}</a>
+                        </div>
+                        <div class="col-sm-2">
+                            <a href="javascript:window.print()">{{ _('Print') }}</a></div>
+                    </div>
                 </div>
             </div>
         </div>
         <div class="row">
             <!-- TOC -->
-            <div class="col-md-9">
+            <div class="col-md-12 col-sm-12">
                 <h1><a name="inhoudstafel">{{ _('Table of contents') }}</a></h1>
                 <nav>
                     <ul role="menu">
@@ -52,7 +59,7 @@
             </div>
         </div>
         <div class="row">
-            <div class="col-md-9">
+            <div class="col-md-12 col-sm-12">
                 <h1><a name="rapportgegevens">{{ _('Report data') }}</a></h1>
                 <table class="table">
                     <tr>
@@ -76,12 +83,12 @@
         </div>
         <!-- Graph -->
         <div class="row">
-            <div class="col-md-6 col-sm-6">
+            <div class="col-md-12 col-sm-12">
                 <h1><a name="grafiek">{{ _('Graph') }}</a><span style="margin-left: 5px;" id="graph_loader"></span></h1>
             </div>
         </div>
         <div class="row">
-            <div class="col-md-10 col-sm-10">
+            <div class="col-md-12 col-sm-12">
                 <div id="graph">
 
                 </div>
@@ -89,40 +96,40 @@
         </div>
         <!-- Sections -->
         <div class="row">
-            <div class="col-md-10 col-sm-10">
+            <div class="col-md-12 col-sm-12">
                 <h1><a name="resultaten">{{ _('Results') }}</a></h1>
             </div>
         </div>
         {% for section in report_template.sections %}
             <div class="row">
-                <div class="col-md-10 col-sm-10 panel panel-default">
+                <div class="col-md-10 col-sm-10 panel panel-default col-sm-offset-1 col-md-offset-1">
                     <div class="panel-body">
-                        <div class="container">
+                        <div class="container-fluid">
                             <div class="row">
-                                <div class="col-md-10 col-sm-10">
+                                <div class="col-md-12 col-sm-12">
                                     <a name="resultaten_{{ section.id }}"><h2>{{ section.title }}</h2></a>
                                 </div>
                             </div>
                             <div class="row">
-                                <div class="col-md-10 col-sm-10">
+                                <div class="col-md-12 col-sm-12">
                                     <!-- Scores -->
                             <span class="label label-default">{{ _('Score') }}: <span id="score_{{ section.id }}"
                                                                                       class="score">{{ all_scores[section.id] | round | int }}</span>%</span>
-                                {% if section.id in benchmarks_by_section %}
-                                    {% for benchmark_report_id, benchmark_report in benchmarks_by_section[section.id].items() %}
-                                        <span class="label label-default">{{ _('Benchmark') }} {{ benchmark_report.title }}: <span
-                                                id="score_bm_{{ benchmark_report_id }}_{{ section.id }}"
-                                                class="score">{{ benchmark_report.section_score | round | int }}</span>%</span>
-                                    {% endfor %}
-                                {% endif %}
+                                    {% if section.id in benchmarks_by_section %}
+                                        {% for benchmark_report_id, benchmark_report in benchmarks_by_section[section.id].items() %}
+                                            <span class="label label-default">{{ _('Benchmark') }} {{ benchmark_report.title }}: <span
+                                                    id="score_bm_{{ benchmark_report_id }}_{{ section.id }}"
+                                                    class="score">{{ benchmark_report.section_score | round | int }}</span>%</span>
+                                        {% endfor %}
+                                    {% endif %}
                                 </div>
                             </div>
                             {% for question in section.questions %}
                                 <div class="row">
-                                    <div class="col-md-10 col-sm-10">
-                                        <div class="container">
+                                    <div class="col-md-12 col-sm-12">
+                                        <div class="container-fluid">
                                             <div class="row">
-                                                <div class="col-md-9 col-sm-9">
+                                                <div class="col-md-12 col-sm-12">
                                                     <h3>{{ question.question }}
                                                         <small>
                                                             ({{ _('Risk factor') }}: {{ question.risk_factor.risk_factor }})
@@ -131,7 +138,7 @@
                                                 </div>
                                             </div>
                                             <div class="row" style="margin-left: 5px;">
-                                                <div class="col-md-9 col-sm-9">
+                                                <div class="col-md-12 col-sm-12">
                                                     <!-- Answers -->
                                                     {% if question_answers[question.id] is defined %}
                                                         {% if question_answers[question.id].answer_template.value != highest_answers[question.id] %}
@@ -143,28 +150,28 @@
                                                         <span class="label label-warning">{{ _('Not completed') }}</span>
                                                     {% endif %}
                                                     <!-- Benchmark answers -->
-                                                {% if section.id in benchmarks_by_section %}
-                                                    {% for benchmark_report_id, benchmark_report in benchmarks_by_section[section.id].items() %}
-                                                        {% if benchmark_report.benchmarks[question.id] is defined %}
-                                                            {% if benchmark_report.benchmarks[question.id].answer %}
-                                                                <span class="label label-default">{{ benchmark_report.title }}: <span
-                                                                        id="answer_bm_{{ benchmark_report_id }}_{{ question.id }}">{{ benchmark_report.benchmarks[question.id].answer.answer }}</span></span>
+                                                    {% if section.id in benchmarks_by_section %}
+                                                        {% for benchmark_report_id, benchmark_report in benchmarks_by_section[section.id].items() %}
+                                                            {% if benchmark_report.benchmarks[question.id] is defined %}
+                                                                {% if benchmark_report.benchmarks[question.id].answer %}
+                                                                    <span class="label label-default">{{ benchmark_report.title }}: <span
+                                                                            id="answer_bm_{{ benchmark_report_id }}_{{ question.id }}">{{ benchmark_report.benchmarks[question.id].answer.answer }}</span></span>
+                                                                {% endif %}
                                                             {% endif %}
-                                                        {% endif %}
-                                                    {% endfor %}
-                                                {% endif %}
+                                                        {% endfor %}
+                                                    {% endif %}
                                                 </div>
                                             </div>
                                             <div class="row" style="margin-left: 5px;">
-                                                <div class="col-md-8 col-sm-8">
+                                                <div class="col-md-12 col-sm-12">
                                                     <h4>{{ _('Context') }}</h4>
-                                                    <p style="margin-left: 1em; font-size: 1em;">{{question.context|markdown}}</p>
+                                                    <p style="margin-left: 1em; font-size: 1em;">{{ question.context|markdown }}</p>
                                                     {# <h4>{{ _('Risks') }}</h4>
                                                     <p style="margin-left: 1em; font-size: 1em;">{{question.risk|markdown}}</p> #}
                                                     {#  <h4>{{ _('Example') }}</h4>
                                                     <p style="margin-left: 1em; font-size: 1em;">{{question.example|markdown}}</p> #}
                                                     <h4>{{ _('Action') }}</h4>
-                                                    <p style="margin-left: 1em; font-size: 1em;">{{question.action|markdown}}</p>
+                                                    <p style="margin-left: 1em; font-size: 1em;">{{ question.action|markdown }}</p>
                                                 </div>
                                             </div>
                                         </div>

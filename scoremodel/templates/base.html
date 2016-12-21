@@ -106,9 +106,9 @@
     </div>
     <div class="row">
         <div class="col-sm-10 col-sm-offset-1 col-md-10 col-md-offset-1 main">
-            <div class="container">
+            <div class="container-fluid">
                 <div class="row">
-                    <div class="col-sm-10 col-md-10">
+                    <div class="col-sm-12 col-md-12">
                         {% if get_flashed_messages() %}
                             <!-- Messages -->
                             {% for message in get_flashed_messages() %}
@@ -120,7 +120,7 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-sm-10 col-md-10">
+                    <div class="col-sm-12 col-md-12">
                         {% block content %}{% endblock %}
                     </div>
                 </div>
@@ -128,17 +128,17 @@
         </div>
     </div>
     <div class="row" style="margin-top: 5vh; margin-bottom: 0.5vh;">
-        <div class="col-sm-1 col-md-1 col-sm-offset-1 col-md-offset-1">
+        <div class="col-sm-2 col-md-2 col-sm-offset-2 col-md-offset-1">
             <a href="http://www.den.nl"><img height="40px"
                                              src="{{ url_for('static', filename='img/logo_den.png') }}"
                                              alt="Logo DEN" class="footer"/></a>
         </div>
-        <div class="col-sm-1 col-md-1">
+        <div class="col-sm-2 col-md-2">
             <a href="http://www.packed.be"><img height="40px"
                                                 src="{{ url_for('static', filename='img/logo_packed.jpg') }}"
                                                 alt="Logo PACKED vzw" class="footer"/></a>
         </div>
-        <div class="col-sm-1 col-md-1">
+        <div class="col-sm-2 col-md-2">
             <a href="http://creativecommons.org/licenses/by-sa/3.0"><img height="20px"
                                                                          src="{{ url_for('static', filename='img/cc-by-sa.png') }}"
                                                                          alt="CC-BY-SA" class="footer"/></a>

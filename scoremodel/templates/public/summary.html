@@ -20,24 +20,27 @@
     <script src="{{ url_for('static', filename='lib/scoremodel/jquery/admin/loader.js') }}"></script>
     <script src="{{ url_for('static', filename='lib/scoremodel/jquery/public/graph.js') }}"></script>
     <script src="{{ url_for('static', filename='lib/scoremodel/jquery/public/report.js') }}"></script>
-    <div class="container">
+    <div class="container-fluid">
         <!-- Bar -->
         <div class="row">
-            <div class="col-md-8 col-sm-10 col-md-offset-2">
-                <div class="container">
-                    <div class="col-md-2 col-sm-2"><a
+            <div class="col-md-12 col-sm-12">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-sm-2 col-sm-offset-4"><a
                             href="{{ url_for('public.v_user_report_summary', user_id=current_user.id, user_report_id=user_report.id) }}">{{ _('Summary') }}</a>
+                        </div>
+                        <div class="col-sm-2"><a
+                                href="{{ url_for('public.v_user_report_check', user_id=current_user.id, user_report_id=user_report.id) }}">{{ _('Full report') }}</a>
+                        </div>
+                        <div class="col-sm-2">
+                            <a href="javascript:window.print()">{{ _('Print') }}</a></div>
                     </div>
-                    <div class="col-md-2 col-sm-2"><a
-                            href="{{ url_for('public.v_user_report_check', user_id=current_user.id, user_report_id=user_report.id) }}">{{ _('Full report') }}</a>
-                    </div>
-                    <div class="col-md-2 col-sm-2"><a href="javascript:window.print()">{{ _('Print') }}</a></div>
                 </div>
             </div>
         </div>
         <div class="row">
             <!-- TOC -->
-            <div class="col-md-9">
+            <div class="col-md-12 col-sm-12">
                 <h1><a name="inhoudstafel">{{ _('Table of contents') }}</a></h1>
                 <nav>
                     <ul role="menu">
@@ -49,7 +52,7 @@
             </div>
         </div>
         <div class="row">
-            <div class="col-md-9">
+            <div class="col-sm-12 col-md-12">
                 <h1><a name="rapportgegevens">{{ _('Report data') }}</a></h1>
                 <table class="table">
                     <tr>
@@ -73,12 +76,12 @@
         </div>
         <!-- Graph -->
         <div class="row">
-            <div class="col-md-6 col-sm-6">
+            <div class="col-md-12 col-sm-12">
                 <h1><a name="grafiek">{{ _('Graph') }}</a><span style="margin-left: 5px;" id="graph_loader"></span></h1>
             </div>
         </div>
         <div class="row">
-            <div class="col-md-10 col-sm-10">
+            <div class="col-md-12 col-sm-12">
                 <div id="graph">
 
                 </div>
@@ -86,24 +89,24 @@
         </div>
         <!-- Highest 5 unanswered questions -->
         <div class="row">
-            <div class="col-md-10 col-sm-10">
+            <div class="col-md-12 col-sm-12">
                 <h1><a name="highest_unanswered">{{ _('Top 5 actions') }}</a></h1>
             </div>
         </div>
         <div class="row">
-            <div class="col-md-10 col-sm-10 panel panel-default">
+            <div class="col-md-10 col-sm-10 panel panel-default col-md-offset-1 col-sm-offset-1">
                 <div class="panel-body">
                     <div class="container">
                         {% for question in highest_unanswered %}
                             <div class="row">
-                                <div class="container">
+                                <div class="container-fluid">
                                     <div class="row">
-                                        <div class="col-md-8 col-sm-8">
+                                        <div class="col-md-12 col-sm-12">
                                             <span class="label label-info">Sectie <em>{{ question.section.title }}</em></span>
                                         </div>
                                     </div>
                                     <div class="row">
-                                        <div class="col-md-9 col-sm-9">
+                                        <div class="col-md-12 col-sm-12">
                                             <h2 class="h3">{{ question.question }}
                                                 <small>
                                                     ({{ _('Risk factor') }}: {{ question.risk_factor.risk_factor }})
@@ -112,7 +115,7 @@
                                         </div>
                                     </div>
                                     <div class="row" style="margin-left: 5px;">
-                                        <div class="col-md-9 col-sm-9">
+                                        <div class="col-md-12 col-sm-12">
                                             <!-- Answers -->
                                             {% if question.id in question_answers_by_id %}
                                                 <span class="label label-danger">{{ question_answers_by_id[question.id].answer_template.answer }}</span>
@@ -129,7 +132,7 @@
                                         </div>
                                     </div>
                                     <div class="row" style="margin-left: 5px;">
-                                        <div class="col-md-8 col-sm-8">
+                                        <div class="col-md-12 col-sm-12">
                                             <h4>{{ _('Action') }}</h4>
                                             <p style="margin-left: 1em; font-size: 1em;">{{ question.action|markdown }}</p>
                                         </div>

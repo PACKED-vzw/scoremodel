@@ -1,15 +1,15 @@
 {% extends 'base.html' %}
 {% block content %}
-    <div class="container">
+    <div class="container-fluid">
         <div class="row">
-            <div class="col-md-5 col-sm-5">
+            <div class="col-md-7 col-sm-7">
                 {{ content | safe }}
             </div>
             <div class="col-md-5 col-sm-5">
                 {% if current_user.is_authenticated %}
-                    <div class="container">
+                    <div class="container-fluid">
                         <div class="row">
-                            <div class="col-md-5 col-sm-5">
+                            <div class="col-md-12 col-sm-12">
                                 <h4>
                                     <a href="{{ url_for('public.v_user_report_list_by_user', user_id=current_user.id) }}">{{ _('Report list') }}</a>
                                 </h4>
@@ -19,7 +19,7 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-md-5 col-sm-5">
+                            <div class="col-md-12 col-sm-12">
                                 <table class="table">
                                     <thead>
                                     <tr>
@@ -41,7 +41,7 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-md-5 col-sm-5">
+                            <div class="col-md-12 col-sm-12">
                                 <h4>{{ _('New report') }}</h4>
                                 <p class="alert alert-info"
                                    role="alert">{{ _('Press "Start" to create a new report.') }}</p>
@@ -53,7 +53,7 @@
                 {% else %}
                     <div class="container">
                         <div class="row">
-                            <div class="col-md-5 col-sm-5">
+                            <div class="col-md-12 col-sm-12">
                                 <div class="alert alert-info" role="alert">
                                     <p>{{ _('You are currently not logged in.
 Please provide your username and password or create a new account.') }}</p>
@@ -61,7 +61,7 @@ Please provide your username and password or create a new account.') }}</p>
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-md-5 col-sm-5">
+                            <div class="col-md-12 col-sm-12">
                                 {% include 'login/form.html' %}
                             </div>
                         </div>
