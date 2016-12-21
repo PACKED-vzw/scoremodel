@@ -23,7 +23,7 @@
     <div class="container">
     <!-- Bar -->
         <div class="row">
-            <div class="col-md-8 col-sm-12 col-md-offset-2">
+            <div class="col-md-8 col-sm-10 col-md-offset-2">
                 <div class="container">
                     <div class="col-md-2 col-sm-2"><a href="{{ url_for('public.v_user_report_summary', user_id=current_user.id, user_report_id=user_report.id) }}">{{ _('Summary') }}</a></div>
                     <div class="col-md-2 col-sm-2"><a href="{{ url_for('public.v_user_report_check', user_id=current_user.id, user_report_id=user_report.id) }}">{{ _('Full report') }}</a></div>
@@ -81,7 +81,7 @@
             </div>
         </div>
         <div class="row">
-            <div class="col-md-12 col-sm-12">
+            <div class="col-md-10 col-sm-10">
                 <div id="graph">
 
                 </div>
@@ -89,22 +89,22 @@
         </div>
         <!-- Sections -->
         <div class="row">
-            <div class="col-md-12 col-sm-12">
+            <div class="col-md-10 col-sm-10">
                 <h1><a name="resultaten">{{ _('Results') }}</a></h1>
             </div>
         </div>
         {% for section in report_template.sections %}
             <div class="row">
-                <div class="col-md-12 col-sm-12 panel panel-default">
+                <div class="col-md-10 col-sm-10 panel panel-default">
                     <div class="panel-body">
                         <div class="container">
                             <div class="row">
-                                <div class="col-md-12 col-sm-12">
+                                <div class="col-md-10 col-sm-10">
                                     <a name="resultaten_{{ section.id }}"><h2>{{ section.title }}</h2></a>
                                 </div>
                             </div>
                             <div class="row">
-                                <div class="col-md-12 col-sm-12">
+                                <div class="col-md-10 col-sm-10">
                                     <!-- Scores -->
                             <span class="label label-default">{{ _('Score') }}: <span id="score_{{ section.id }}"
                                                                                       class="score">{{ all_scores[section.id] | round | int }}</span>%</span>
@@ -119,10 +119,10 @@
                             </div>
                             {% for question in section.questions %}
                                 <div class="row">
-                                    <div class="col-md-12 col-sm-12">
+                                    <div class="col-md-10 col-sm-10">
                                         <div class="container">
                                             <div class="row">
-                                                <div class="col-md-11 col-sm-11">
+                                                <div class="col-md-9 col-sm-9">
                                                     <h3>{{ question.question }}
                                                         <small>
                                                             ({{ _('Risk factor') }}: {{ question.risk_factor.risk_factor }})
@@ -131,7 +131,7 @@
                                                 </div>
                                             </div>
                                             <div class="row" style="margin-left: 5px;">
-                                                <div class="col-md-11 col-sm-11">
+                                                <div class="col-md-9 col-sm-9">
                                                     <!-- Answers -->
                                                     {% if question_answers[question.id] is defined %}
                                                         {% if question_answers[question.id].answer_template.value != highest_answers[question.id] %}
