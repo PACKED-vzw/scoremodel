@@ -4,6 +4,7 @@ from scoremodel.modules.error import RequiredAttributeMissing, DatabaseItemAlrea
     IllegalEntityType
 from scoremodel.modules.msg.messages import public_api_msg, public_error_msg
 from scoremodel.modules.api.rest import RestApi
+from scoremodel.modules.logger import ScoremodelLogger
 
 
 class ScoremodelRestApi:
@@ -49,6 +50,9 @@ class ScoremodelRestApi:
         :param prehooks:
         :param posthooks:
         """
+        # Configure logging
+        self.logger = ScoremodelLogger().logger
+
         self.api = api_class()
         self.request = o_request
         self.msg = None
@@ -75,6 +79,7 @@ class ScoremodelRestApi:
             except BadRequest as e:
                 self.msg = public_error_msg['error_occurred'].format(e)
                 self.status_code = 400
+                self.logger.exception(str(e))
         if self.status_code != 400:
             try:
                 for hook in prehooks:
@@ -82,6 +87,7 @@ class ScoremodelRestApi:
             except Exception as e:
                 self.msg = public_error_msg['error_occurred'].format(e)
                 self.status_code = 400
+                self.logger.exception(str(e))
             else:
                 self.parse_request(input_data_json=input_data_json, api_obj_id=api_obj_id,
                                    additional_opts=additional_opts)
@@ -94,6 +100,7 @@ class ScoremodelRestApi:
         except Exception as e:
             self.msg = public_error_msg['error_occurred'].format(e)
             self.status_code = 400
+            self.logger.exception(str(e))
         self.response = self.create_response(self.output_data)
 
     def post(self, input_data, additional_opts=None):
@@ -101,18 +108,21 @@ class ScoremodelRestApi:
             additional_opts = {}
         try:
             created_object = self.translate['post'](input_data=input_data, **additional_opts)
-        except DatabaseItemAlreadyExists:
+        except DatabaseItemAlreadyExists as e:
             self.msg = public_error_msg['item_exists'].format(self.api)
             self.status_code = 400
             created_object = None
-        except DatabaseItemDoesNotExist:
+            self.logger.warning(str(e))
+        except DatabaseItemDoesNotExist as e:
             self.msg = public_error_msg['item_not_exists'].format(self.api)
             self.status_code = 404
             created_object = None
+            self.logger.warning(str(e))
         except Exception as e:
             self.msg = public_error_msg['error_occurred'].format(e)
             self.status_code = 400
             created_object = None
+            self.logger.exception(str(e))
         else:
             self.msg = public_api_msg['item_created'].format(self.api, created_object.id)
         if created_object is not None:
@@ -123,14 +133,16 @@ class ScoremodelRestApi:
     def get(self, item_id, input_data, additional_opts=None):
         try:
             found_object = self.translate['get'](item_id)
-        except DatabaseItemDoesNotExist:
+        except DatabaseItemDoesNotExist as e:
             self.msg = public_error_msg['item_not_exists'].format(self.api, item_id)
             self.status_code = 404
             found_object = None
+            self.logger.warning(str(e))
         except Exception as e:
             self.msg = public_error_msg['error_occurred'].format(e)
             self.status_code = 400
             found_object = None
+            self.logger.exception(str(e))
         else:
             self.msg = public_api_msg['item_read'].format(self.api, item_id)
         if found_object is not None:
@@ -145,6 +157,7 @@ class ScoremodelRestApi:
             self.msg = public_error_msg['error_occurred'].format(e)
             self.status_code = 400
             found_objects = None
+            self.logger.exception(str(e))
         if found_objects is not None:
             self.msg = public_api_msg['items_found'].format(self.api)
             out_results = []
@@ -159,18 +172,21 @@ class ScoremodelRestApi:
             additional_opts = {}
         try:
             updated_object = self.api.update(item_id, input_data=input_data, **additional_opts)
-        except DatabaseItemDoesNotExist:
+        except DatabaseItemDoesNotExist as e:
             self.msg = public_error_msg['item_not_exists'].format(self.api, item_id)
             self.status_code = 404
             updated_object = None
-        except DatabaseItemAlreadyExists:
+            self.logger.warning(str(e))
+        except DatabaseItemAlreadyExists as e:
             self.msg = public_error_msg['item_exists'].format(self.api)
             self.status_code = 400
             updated_object = None
+            self.logger.warning(str(e))
         except Exception as e:
             self.msg = public_error_msg['error_occurred'].format(e)
             self.status_code = 400
             updated_object = None
+            self.logger.exception(str(e))
         else:
             self.msg = public_api_msg['item_updated'].format(self.api, updated_object.id)
         if updated_object is not None:
@@ -181,14 +197,16 @@ class ScoremodelRestApi:
     def delete(self, item_id, additional_opts=None):
         try:
             deleted_object = self.api.delete(item_id)
-        except DatabaseItemDoesNotExist:
+        except DatabaseItemDoesNotExist as e:
             self.msg = public_error_msg['item_not_exists'].format(self.api, item_id)
             self.status_code = 404
             deleted_object = False
+            self.logger.warning(str(e))
         except Exception as e:
             self.msg = public_error_msg['error_occurred'].format(e)
             self.status_code = 400
             deleted_object = False
+            self.logger.exception(str(e))
         else:
             self.msg = public_api_msg['item_deleted'].format(self.api, item_id)
         if deleted_object is True:
@@ -209,6 +227,7 @@ class ScoremodelRestApi:
                 self.output_data = self.list(additional_opts=additional_opts)
             else:
                 self.msg = public_error_msg['missing_argument'].format('api_obj_id')
+                self.logger.warning(self.msg)
                 self.status_code = 400
         else:
             self.output_data = self.get(api_obj_id, input_data_json)
@@ -222,6 +241,7 @@ class ScoremodelRestApi:
         """
         if api_obj_id is None:
             self.msg = public_error_msg['missing_argument'].format('api_obj_id')
+            self.logger.warning(self.msg)
             self.status_code = 400
         else:
             self.output_data = self.delete(api_obj_id, additional_opts=additional_opts)
@@ -236,6 +256,7 @@ class ScoremodelRestApi:
         """
         if api_obj_id is None:
             self.msg = public_error_msg['missing_argument'].format('api_obj_id')
+            self.logger.warning(self.msg)
             self.status_code = 400
         else:
             if input_data_json is not None:
@@ -243,6 +264,7 @@ class ScoremodelRestApi:
                                             additional_opts=additional_opts)
             else:
                 self.msg = public_error_msg['missing_argument'].format('body')
+                self.logger.warning(self.msg)
                 self.status_code = 400
 
     def parse_post(self, input_data_json, additional_opts=None):
@@ -256,6 +278,7 @@ class ScoremodelRestApi:
             self.output_data = self.post(input_data_json, additional_opts=additional_opts)
         else:
             self.msg = public_error_msg['missing_argument'].format('body')
+            self.logger.warning(self.msg)
             self.status_code = 400
 
     def parse_request(self, input_data_json=None, api_obj_id=None, additional_opts=None):
@@ -280,6 +303,7 @@ class ScoremodelRestApi:
             self.parse_post(input_data_json, additional_opts=additional_opts)
         else:
             self.msg = public_error_msg['illegal_action'].format(self.request.method)
+            self.logger.warning(self.msg)
             self.status_code = 405
 
     def create_response(self, data):
@@ -295,6 +319,7 @@ class ScoremodelRestApi:
         try:
             parsed_string = json.loads(unparsed_string)
         except ValueError as e:
+            self.logger.warning(str(e))
             self.msg = u'A JSON error occurred: {0}'.format(e)
             return None
         return parsed_string

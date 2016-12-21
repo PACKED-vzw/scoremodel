@@ -1,15 +1,9 @@
-import json
-from os.path import splitext, join
-from os import getcwd
-from flask.ext.babel import gettext as _
+from scoremodel.modules.logger import ScoremodelLogger
 from scoremodel.modules.error import RequiredAttributeMissing, DatabaseItemAlreadyExists, DatabaseItemDoesNotExist, \
     IllegalEntityType, FileTypeNotAllowed, FileDoesNotExist
 from scoremodel.modules.msg.messages import public_api_msg, public_error_msg
-from scoremodel.modules.api.rest import RestApi
 from scoremodel.modules.api.file import FileApi
 from scoremodel.modules.api.rest.scoremodel import ScoremodelRestApi
-from werkzeug.utils import secure_filename
-from scoremodel import app
 
 
 ##
@@ -26,6 +20,7 @@ class FileRestApi(ScoremodelRestApi):
                  additional_opts=None):
         self.api = api_class()
         self.file_api = FileApi()
+        self.logger = ScoremodelLogger().logger
         self.form_file_field = form_file_field
         self.request = o_request
         self.msg = None
@@ -54,21 +49,25 @@ class FileRestApi(ScoremodelRestApi):
             # We do not support .list()
             self.status_code = 400
             self.msg = public_error_msg['missing_argument'].format('item_id')
+            self.logger.warning(self.msg)
             return u''
         try:
             linked_db_model = self.api.read(self.api_obj_id)
         except DatabaseItemDoesNotExist as e:
             self.status_code = 404
             self.msg = public_error_msg['item_not_exists'].format(self.api, self.api_obj_id)
+            self.logger.warning(str(e))
         except Exception as e:
             self.status_code = 400
             self.msg = public_error_msg['error_occurred'].format(e)
+            self.logger.exception(str(e))
         else:
             try:
                 existing_file = self.file_api.read(linked_db_model.filename)
             except FileDoesNotExist:
                 self.status_code = 404
                 self.msg = public_error_msg['item_not_exists'].format(self.file_api, linked_db_model.filename)
+                self.logger.warning(self.msg)
         if existing_file:
             existing_file['linked_id'] = self.api_obj_id
             return existing_file
@@ -78,6 +77,7 @@ class FileRestApi(ScoremodelRestApi):
     def put(self, item_id, input_data, additional_opts=None):
         self.status_code = 405
         self.msg = public_error_msg['illegal_action'].format('PUT')
+        self.logger.warning(self.msg)
         return u''
 
     def post(self, input_data=None, additional_opts=None):
@@ -85,15 +85,18 @@ class FileRestApi(ScoremodelRestApi):
         if not self.api_obj_id:
             self.status_code = 400
             self.msg = public_error_msg['missing_argument'].format('item_id')
+            self.logger.warning(self.msg)
             return u''
         try:
             linked_db_model = self.api.read(self.api_obj_id)
         except DatabaseItemDoesNotExist as e:
             self.status_code = 404
             self.msg = public_error_msg['item_not_exists'].format(self.api, self.api_obj_id)
+            self.logger.warning(str(e))
         except Exception as e:
             self.status_code = 400
             self.msg = public_error_msg['error_occurred'].format(e)
+            self.logger.exception(str(e))
         else:
             input_file = self.request.files[self.form_file_field]  # TODO check
             if self.linked_db_model_has_attachment(linked_db_model):
@@ -109,6 +112,7 @@ class FileRestApi(ScoremodelRestApi):
             except DatabaseItemDoesNotExist as e:
                 self.status_code = 404
                 self.msg = public_error_msg['item_not_exists'].format(self.api, self.api_obj_id)
+                self.logger.warning(str(e))
         if created_file is not None:
             created_file['linked_id'] = self.api_obj_id
             return created_file

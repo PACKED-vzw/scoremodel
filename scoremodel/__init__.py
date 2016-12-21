@@ -1,3 +1,4 @@
+import logging
 from flask import Flask, request, redirect, url_for, render_template, flash
 from flask.ext.sqlalchemy import SQLAlchemy
 from flask.ext.babel import Babel, gettext as _
@@ -16,7 +17,6 @@ login_manager = LoginManager()
 login_manager.session_protection = 'strong'
 login_manager.init_app(app)
 login_manager.login_view = 'admin.v_login'
-
 
 # Blueprints
 from scoremodel.views.api import api
