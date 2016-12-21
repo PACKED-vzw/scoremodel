@@ -11,9 +11,7 @@
     <div class="container">
         <div class="row">
             <div class="col-md-8 col-sm-8 col-md-offset-2 col-sm-offset-2">
-                <div class="container">
-                    <div class="row">
-                        <div class="col-md-4 col-sm-4">
+                        <div class="pull-left">
                             {% if previous_section %}
                                 <a href="{{ url_for('public.v_user_report_section', user_id=current_user.id, user_report_id=user_report_id, section_id=previous_section.id ) }}"
                                    class="btn btn-default"><span class="glyphicon glyphicon-chevron-left"
@@ -26,7 +24,7 @@
                                 </a>
                             {% endif %}
                         </div>
-                        <div class="col-md-4 col-sm-4">
+                        <div class="pull-right">
                             {% if next_section %}
                                 <a href="{{ url_for('public.v_user_report_section', user_id=current_user.id, user_report_id=user_report_id, section_id=next_section.id ) }}"
                                    class="btn btn-default text-right">{{ next_section.title }}&nbsp;<span
@@ -38,8 +36,6 @@
                                         aria-hidden="true"></span></a>
                             {% endif %}
                         </div>
-                    </div>
-                </div>
             </div>
         </div>
         <div class="row">
