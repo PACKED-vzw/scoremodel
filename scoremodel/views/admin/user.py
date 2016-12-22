@@ -8,6 +8,8 @@ from scoremodel.modules.user.authentication import must_be_admin
 from scoremodel.modules.error import DatabaseItemAlreadyExists, RequiredAttributeMissing, DatabaseItemDoesNotExist
 from scoremodel.views.admin import admin
 
+from scoremodel import app
+
 a_roles = RoleApi()
 
 
@@ -161,8 +163,10 @@ def v_user_delete(user_id):
 def v_user_profile():
     user = {
         'name': current_user.username,
-        'language': current_user.lang.lang
+        'language': app.config['BABEL_DEFAULT_LOCALE']
     }
+    if current_user.lang is not None:
+        user['language'] = current_user.lang.lang
     organisation = {
         'name': current_user.organisation.name,
         'type': current_user.organisation.type.type,
