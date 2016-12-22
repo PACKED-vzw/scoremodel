@@ -75,6 +75,7 @@
                             {% if current_user.has_role('administrator') %}
                                 <li><a href="{{ url_for('admin.v_admin') }}">{{ _('Manage') }}</a></li>
                             {% endif %}
+                            <li><a href="{{ url_for('admin.v_user_profile') }}">{{ _('Profile') }}</a></li>
                             <li><a href="{{ url_for('admin.v_logout', next=request.path) }}">{{ _('Log out') }}</a></li>
                         {% else %}
                             <li class="dropdown">

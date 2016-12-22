@@ -1,0 +1,73 @@
+{% extends 'base.html' %}
+{% block content %}
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-3 col-sm-3 col-md-offset-9 col-sm-offset-9">
+                [<a href="{{ url_for('admin.v_update_password') }}">{{ _('Update password') }}</a>]
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-8 col-sm-12">
+                <h1>{{ _('Profile') }}</h1>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-8 col-sm-12">
+                <h2>{{ _('Personal data') }}</h2>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-4 col-sm-6">
+                <table class="table">
+                    <tbody>
+                    <tr>
+                        <td>{{ _('User name') }}</td>
+                        <td>{{ user['name'] }}</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="col-md-4 col-sm-6">
+                <table class="table">
+                    <tbody>
+                    <tr>
+                        <td>{{ _('Language') }}</td>
+                        <td>{{ user['language'] }}</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-8 col-sm-12">
+                <h2>{{ _('Organisation') }}</h2>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-4 col-sm-6">
+                <table class="table">
+                    <tbody>
+                    <tr>
+                        <td>{{ _('Organisation name') }}</td>
+                        <td>{{ organisation['name'] }}</td>
+                    </tr>
+                    <tr>
+                        <td>{{ _('Organisation type') }}</td>
+                        <td>{{ organisation['type'] }}</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="col-md-4 col-sm-6">
+                <table class="table">
+                    <tbody>
+                    <tr>
+                        <td>{{ _('Organisation size') }}</td>
+                        <td>{{ organisation['size'] }}</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+{% endblock %}

@@ -1,17 +1,20 @@
 from flask import render_template, redirect, request, url_for, flash
 from flask.ext.login import login_user, login_required, logout_user, current_user
+from scoremodel.modules.logger import ScoremodelLogger
 from scoremodel.modules.user.authentication import LoginForm
-from scoremodel.modules.forms.auth import RegistrationForm
+from scoremodel.modules.forms.auth import RegistrationForm, ChangePasswordForm
 from scoremodel.modules.api.user import UserApi
 from scoremodel.modules.api.role import RoleApi
 from scoremodel.modules.api.lang import LangApi
 from scoremodel.modules.api.organisation_type import OrganisationTypeApi
 from scoremodel.modules.api.organisation import OrganisationApi
-from scoremodel.modules.error import DatabaseItemDoesNotExist, DatabaseItemAlreadyExists, RequiredAttributeMissing
+from scoremodel.modules.error import DatabaseItemDoesNotExist, DatabaseItemAlreadyExists, RequiredAttributeMissing,\
+    InvalidPassword
 from scoremodel.views.admin import admin
 from flask.ext.babel import gettext as _
 
 a_roles = RoleApi()
+logger = ScoremodelLogger().logger
 
 
 @admin.route('/login', methods=['GET', 'POST'])
@@ -83,6 +86,7 @@ def v_register():
                 new_organisation = a_org.create(organisation_data)
             except Exception as e:
                 flash(_('An unexpected error occurred.'))
+                logger.exception(str(e))
                 return redirect(url_for('admin.v_register'))
             user_data['organisation_id'] = new_organisation.id
         try:
@@ -94,8 +98,42 @@ def v_register():
         except Exception as e:  # Remove this after debugging
             #    flash('An unexpected error occurred: {0}'.format(e))
             flash(_('An unexpected error occurred.'))
+            logger.exception(str(e))
             return redirect(url_for('admin.v_register'))
         else:
             flash(_('You have been successfully registered. Please log in using your username and password.'))
             return redirect(url_for('admin.v_login'))
     return render_template('admin/user/register.html', form=form)
+
+
+@admin.route('/change-password', methods=['GET', 'POST'])
+@login_required
+def v_update_password():
+    a_user = UserApi()
+    form = ChangePasswordForm()
+    if request.method == 'POST' and form.validate_on_submit():
+        try:
+            a_user.check_password(current_user.id, form.old_password.data)
+        except InvalidPassword:
+            flash(_('Invalid password.'))
+            return render_template('admin/user/change_password.html', form=form)
+        except Exception as e:
+            flash(_('An unexpected error occurred.'))
+            logger.exception(str(e))
+            return redirect(url_for('admin.v_update_password'))
+        try:
+            a_user.update_password(current_user.id, form.new_password.data)
+        except Exception as e:
+            flash(_('An unexpected error occurred.'))
+            logger.exception(str(e))
+            return redirect(url_for('admin.v_update_password'))
+        else:
+            flash(_('Your password has been successfully changed.'))
+            return redirect(url_for('site.v_index'))
+
+    return render_template('admin/user/change_password.html', form=form)
+
+
+@admin.route('/forgotten-password', methods=['GET', 'POST'])
+def v_forgotten_password():
+    pass

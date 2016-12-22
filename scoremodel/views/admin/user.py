@@ -1,5 +1,5 @@
 from flask import render_template, url_for, flash, request, redirect
-from flask.ext.login import login_required
+from flask.ext.login import login_required, current_user
 from flask.ext.babel import gettext as _
 from scoremodel.modules.api.user import UserApi
 from scoremodel.modules.api.role import RoleApi
@@ -153,3 +153,19 @@ def v_user_delete(user_id):
 
     return render_template('admin/generic/delete.html', action_url=url_for('admin.v_user_delete', user_id=user_id),
                            item_type=_('User'), item_identifier=existing_user.email, form=form)
+
+
+# For registered users
+@admin.route('/profile', methods=['GET'])
+@login_required
+def v_user_profile():
+    user = {
+        'name': current_user.username,
+        'language': current_user.lang.lang
+    }
+    organisation = {
+        'name': current_user.organisation.name,
+        'type': current_user.organisation.type.type,
+        'size': current_user.organisation.size if not None else 0
+    }
+    return render_template('admin/user/profile.html', user=user, organisation=organisation)

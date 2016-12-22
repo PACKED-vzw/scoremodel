@@ -205,6 +205,12 @@ class UserApi(GenericApi):
             raise DatabaseItemDoesNotExist(_e['item_not_exists'].format(User, session_token))
         return existing_user
 
+    def update_password(self, user_id, new_password):
+        existing_user = User.query.filter(User.id == user_id).first()
+        existing_user.set_password(new_password)
+        db.session.commit()
+        return existing_user
+
 
 @login_manager.user_loader
 def load_user(session_token):
