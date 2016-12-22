@@ -132,7 +132,7 @@ def v_user_report_edit(user_id, user_report_id):
             'report_id': form.report.data,
             'name': form.name.data
         }
-        if input_data['report_id'] != existing_user_report.id:
+        if input_data['report_id'] != existing_user_report.report_id:
             # We have to delete all the QuestionAnswer's, as they are no longer current
             for question_answer in existing_user_report.question_answers:
                 qa_api = QuestionAnswerApi()
