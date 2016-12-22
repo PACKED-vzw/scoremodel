@@ -168,8 +168,12 @@ def v_user_profile():
     if current_user.lang is not None:
         user['language'] = current_user.lang.lang
     organisation = {
-        'name': current_user.organisation.name,
-        'type': current_user.organisation.type.type,
-        'size': current_user.organisation.size if not None else 0
+        'name': '',
+        'type': '',
+        'size': 0
     }
+    if current_user.organisation is not None:
+        organisation['name'] = current_user.organisation.name
+        organisation['type'] = current_user.organisation.type.type
+        organisation['size'] = current_user.organisation.size if not None else 0
     return render_template('admin/user/profile.html', user=user, organisation=organisation)
