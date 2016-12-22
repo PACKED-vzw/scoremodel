@@ -10,7 +10,7 @@ class QuestionAnswerQueryRestApi(ScoremodelRestApi):
         try:
             found_object = self.api.query(input_data)
         except DatabaseItemDoesNotExist:
-            self.msg =public_error_msg['item_not_exists'].format(self.api, item_id)
+            self.msg = public_error_msg['item_not_exists'].format(self.api, item_id)
             self.status_code = 404
             found_object = None
         except Exception as e:
@@ -18,7 +18,7 @@ class QuestionAnswerQueryRestApi(ScoremodelRestApi):
             self.status_code = 400
             found_object = None
         else:
-            self.msg =public_api_msg['item_read'].format(self.api, item_id)
+            self.msg = public_api_msg['item_read'].format(self.api, item_id)
         if found_object is not None:
             return found_object.output_obj()
         else:

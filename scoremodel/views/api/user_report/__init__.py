@@ -87,6 +87,8 @@ def v_api_get_question_answer(user_report_id, question_id):
 
     # Insert the multiplication factor
     def hook_add_multiplication_factor(output_data):
+        if type(output_data) is not dict:
+            return output_data
         question = QuestionApi().read(question_id)
         output_data['multiplication_factor'] = SectionApi().multiplication_factor(question.section_id)
         return output_data
@@ -111,6 +113,8 @@ def v_api_user_report_get(user_report_id=None):
 
     # Add the multiplication factor for every question_answer
     def hook_add_multiplication_factor(output_data):
+        if type(output_data) is not dict:
+            return output_data
         new_question_answers_by_section = []
         for section in output_data['question_answers_by_section']:
             question_answers = []
