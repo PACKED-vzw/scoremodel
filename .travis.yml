@@ -6,5 +6,6 @@ install: "pip install -r requirements.txt"
 before_script:
     - mysql -e 'create database scoremodel;'
     - cp travis_config.py config.py
+    - mkdir -p scoremodel/logs
     - python3 travis.py
 script: py.test
