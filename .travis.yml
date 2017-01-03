@@ -1,5 +1,10 @@
 language: python
 python:
-          - "3.5"
+    - "3.5"
+services: mysql
 install: "pip install -r requirements.txt"
+before_script:
+    - mysql -e 'create database scoremodel;'
+    - cp travis_config.py config.py
+    - python3 travis.py
 script: py.test
