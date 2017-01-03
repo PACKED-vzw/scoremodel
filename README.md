@@ -1,5 +1,7 @@
 # Scoremodel
 
+[![Build Status](https://travis-ci.org/PACKED-vzw/scoremodel.svg?branch=master)](https://travis-ci.org/PACKED-vzw/scoremodel)
+
 The Scoremodel ([www.scoremodel.org](http://www.scoremodel.org)) is a website where digital preservation managers can score how well the digital preservation initiatives of their institute perform. The application consists of a wizard where the user answers questions and is scored based on their answer. At the end, remedies and actions are also proposed for the questions with a low score.
 
 ## Installation
