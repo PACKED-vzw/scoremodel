@@ -14,7 +14,7 @@ from scoremodel.views.admin import admin
 from flask.ext.babel import gettext as _
 
 a_roles = RoleApi()
-logger = ScoremodelLogger().logger
+logger = ScoremodelLogger()
 
 
 @admin.route('/login', methods=['GET', 'POST'])

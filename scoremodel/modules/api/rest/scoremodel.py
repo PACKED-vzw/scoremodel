@@ -51,7 +51,7 @@ class ScoremodelRestApi:
         :param posthooks:
         """
         # Configure logging
-        self.logger = ScoremodelLogger().logger
+        self.logger = ScoremodelLogger()
 
         self.api = api_class()
         self.request = o_request

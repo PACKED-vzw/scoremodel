@@ -20,7 +20,7 @@ class FileRestApi(ScoremodelRestApi):
                  additional_opts=None):
         self.api = api_class()
         self.file_api = FileApi()
-        self.logger = ScoremodelLogger().logger
+        self.logger = ScoremodelLogger()
         self.form_file_field = form_file_field
         self.request = o_request
         self.msg = None
