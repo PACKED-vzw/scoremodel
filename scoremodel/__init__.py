@@ -1,4 +1,5 @@
 import logging
+from logging.handlers import RotatingFileHandler
 from flask import Flask, request, redirect, url_for, render_template, flash
 from flask.ext.sqlalchemy import SQLAlchemy
 from flask.ext.babel import Babel, gettext as _
@@ -17,6 +18,30 @@ login_manager = LoginManager()
 login_manager.session_protection = 'strong'
 login_manager.init_app(app)
 login_manager.login_view = 'admin.v_login'
+
+
+# Logger
+def make_handler():
+    handler = RotatingFileHandler(
+        app.config['LOG_FILENAME'],
+        maxBytes=10 * 1024,
+        backupCount=5
+    )
+    formatter = logging.Formatter(
+        '{asctime}:{levelname}:{message}',
+        style='{'
+    )
+    handler.setFormatter(formatter)
+    return handler
+
+logger = logging.getLogger('scoremodel')
+if app.debug is True:
+    logger.setLevel(logging.DEBUG)
+else:
+    logger.setLevel(logging.ERROR)
+
+logger.addHandler(make_handler())
+
 
 # Blueprints
 from scoremodel.views.api import api
