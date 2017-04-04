@@ -2,6 +2,6 @@
 {% block content %}
     <div class="jumbotron">
     <h1>{{ _('Page not found') }}</h1>
-    <p>{{ _('We could not find the page you requested. You could try <a href="https://www.google.com/search?q=%(page_name)s&as_sitesearch=scoremodel.org">searching for it</a> or return to the <a href="%(index)s">main page</a>.', page_name=page_name, index=url_for('.v_index')) }}</p>
+    <p>{{ _('We could not find the page you requested. You could try <a href="https://www.google.com/search?q=%(page_name)s&as_sitesearch=scoremodel.org">searching for it</a> or return to the <a href="%(index)s">main page</a>.', page_name=page_name, index=url_for('public.v_index')) }}</p>
     </div>
 {% endblock %}
