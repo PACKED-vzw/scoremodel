@@ -2,6 +2,9 @@ language: python
 python:
     - "3.5"
 services: mysql
+before_install:
+    - sudo apt-get -qq update
+    - sudo apt-get install -y python3-mysql.connector
 install: "pip install -r requirements.txt"
 before_script:
     - mysql -e 'create database scoremodel;'
