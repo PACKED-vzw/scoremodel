@@ -120,13 +120,6 @@
                                             <!-- Risk Factor -->
                                             <span class="label label-default"
                                                   style="background-color: rgb({{ colored_risk_factors[question.risk_factor.risk_factor][0] }}, {{ colored_risk_factors[question.risk_factor.risk_factor][1] }}, {{ colored_risk_factors[question.risk_factor.risk_factor][2] }})">{{ question.risk_factor.risk_factor }}</span>
-
-                                            <!-- Answers -->
-                                            {% if question.id in question_answers_by_id %}
-                                                <span class="label label-danger">{{ question_answers_by_id[question.id].answer_template.answer }}</span>
-                                            {% else %}
-                                                <span class="label label-warning">{{ _('Not completed') }}</span>
-                                            {% endif %}
                                             <!-- Benchmark answers -->
                                             {% if question.id in benchmarks_by_question %}
                                                 {% for benchmark in benchmarks_by_question[question.id] %}
