@@ -2,11 +2,13 @@ from flask import request, render_template, redirect, url_for, flash, abort, Blu
 from flask.ext.login import login_required, current_user
 from flask.ext.babel import gettext as _
 
+from scoremodel.modules.report.color import Color
 from scoremodel.modules.api.question_answer import QuestionAnswerApi
 from scoremodel.modules.api.report import ReportApi
 from scoremodel.modules.api.section import SectionApi
 from scoremodel.modules.api.question import QuestionApi
 from scoremodel.modules.api.user import UserApi
+from scoremodel.modules.api.risk_factor import RiskFactorApi
 from scoremodel.modules.api.user_report import UserReportApi
 from scoremodel.modules.error import DatabaseItemDoesNotExist, DatabaseItemAlreadyExists, RequiredAttributeMissing
 from scoremodel.modules.forms.public.report import UserReportCreateForm
@@ -192,6 +194,10 @@ def v_user_report_section(user_id, user_report_id, section_id):
 
     benchmarks_by_section = user_report_api.benchmarks_by_section(user_report_id)
 
+    # Create a color-range for the risk_factors
+    risk_factors = [r.risk_factor for r in RiskFactorApi().list()]
+    colored_risk_factors = Color().range(risk_factors)
+
     return render_template('public/section.html',
                            title=current_section.title,
                            section=current_section,
@@ -199,7 +205,8 @@ def v_user_report_section(user_id, user_report_id, section_id):
                            question_answers=question_answers,
                            next_section=current_section.next_in_report,
                            previous_section=current_section.previous_in_report,
-                           benchmarks_by_section=benchmarks_by_section
+                           benchmarks_by_section=benchmarks_by_section,
+                           colored_risk_factors=colored_risk_factors
                            )
 
 
@@ -235,6 +242,10 @@ def v_user_report_check(user_id, user_report_id):
 
     benchmarks_by_section = user_report_api.benchmarks_by_section(user_report_id)
 
+    # Create a color-range for the risk_factors
+    risk_factors = [r.risk_factor for r in RiskFactorApi().list()]
+    colored_risk_factors = Color().range(risk_factors)
+
     return render_template('public/report.html',
                            report_template=user_report.template,
                            user_report=user_report,
@@ -242,7 +253,8 @@ def v_user_report_check(user_id, user_report_id):
                            question_answers=question_answers,
                            all_scores=all_scores,
                            benchmarks_by_section=benchmarks_by_section,
-                           highest_answers=highest_answers
+                           highest_answers=highest_answers,
+                           colored_risk_factors=colored_risk_factors
                            )
 
 
@@ -289,11 +301,16 @@ def v_user_report_summary(user_id, user_report_id):
             else:
                 benchmarks_by_question[bm.question_id] = [bm]
 
+    # Create a color-range for the risk_factors
+    risk_factors = [r.risk_factor for r in RiskFactorApi().list()]
+    colored_risk_factors = Color().range(risk_factors)
+
     return render_template('public/summary.html',
                            report_template=user_report.template,
                            user_report=user_report,
                            user_report_creation_time='{:%Y-%m-%d %H:%M:%S}'.format(user_report.creation_time),
                            highest_unanswered=visible_unanswered,
                            benchmarks_by_question=benchmarks_by_question,
-                           question_answers_by_id=question_answers
+                           question_answers_by_id=question_answers,
+                           colored_risk_factors=colored_risk_factors
                            )

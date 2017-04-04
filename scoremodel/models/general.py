@@ -251,6 +251,9 @@ class Question(db.Model):
         return QuestionAnswer.query.filter(and_(QuestionAnswer.question_id == self.id,
                                                 QuestionAnswer.user_report_id == user_report_id)).first()
 
+    def ordered_risk_factors(self):
+        return sorted(self.risk_factors, key=lambda r: r.value, reverse=True)
+
     @property
     def ordered_answers(self):
         return sorted(self.answers, key=lambda a: a.value, reverse=True)

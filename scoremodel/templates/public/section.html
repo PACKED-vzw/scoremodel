@@ -49,15 +49,15 @@
                 </div>
             </div>
         </div>
-    {%  if section.context %}
-        <div class="row">
-            <div class="col-md-10 col-sm-10 col-sm-offset-1 col-md-offset-1">
-                <hr/>
+        {% if section.context %}
+            <div class="row">
+                <div class="col-md-10 col-sm-10 col-sm-offset-1 col-md-offset-1">
+                    <hr/>
                     {{ section.context|markdown }}
-                <hr/>
+                    <hr/>
+                </div>
             </div>
-        </div>
-    {% endif %}
+        {% endif %}
         <div class="row">
             <div class="col-md-10 col-sm-10 panel panel-default col-sm-offset-1 col-md-offset-1">
                 <div class="panel-body">
@@ -72,10 +72,15 @@
                                             <div class="row">
                                                 <div class="col-md-12 col-sm-12">
                                                     <h3>{{ question.question }}
-                                                        <small>
-                                                            ({{ _('Risk factor') }}: {{ question.risk_factor.risk_factor }})
-                                                        </small>
                                                     </h3>
+                                                </div>
+                                            </div>
+                                            <div class="row" style="margin-left: 5px;">
+                                                <div class="col-md-12 col-sm-12">
+                                                    <!-- Risk Factor -->
+                                                    <span class="label label-default"
+                                                          style="background-color: rgb({{ colored_risk_factors[question.risk_factor.risk_factor][0] }}, {{ colored_risk_factors[question.risk_factor.risk_factor][1] }}, {{ colored_risk_factors[question.risk_factor.risk_factor][2] }})">{{ question.risk_factor.risk_factor }}</span>
+
                                                 </div>
                                             </div>
                                             <div class="row">
@@ -117,7 +122,7 @@
                                                                     <li role="presentation"><a
                                                                             href="#actions_{{ question.id }}"
                                                                             data-toggle="collapse" aria-expanded="false"
-                                                                            aria-controls="actions_{{ question.id }}">{{  _('Actions') }}</a>
+                                                                            aria-controls="actions_{{ question.id }}">{{ _('Actions') }}</a>
                                                                     </li>
                                                                     {#
                                                                     <li role="presentation"><a

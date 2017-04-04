@@ -1,8 +1,8 @@
 {% extends 'base.html' %}
 {% block content %}
     <script type="text/javascript">
-    /* This could end badly if one request finishes directly before the other starts. But I don't think that
-    will happen. */
+        /* This could end badly if one request finishes directly before the other starts. But I don't think that
+         will happen. */
         var async_counter = 0;
     </script>
     <!-- Bower -->
@@ -23,11 +23,11 @@
     <div class="container-fluid">
         <!-- Bar -->
         <div class="row">
-            <div class="col-md-12 col-sm-12">
+            <div class="col-md-10 col-sm-10 col-md-offset-1 col-sm-offset-1">
                 <div class="container-fluid">
                     <div class="row">
                         <div class="col-sm-2 col-sm-offset-4"><a
-                            href="{{ url_for('public.v_user_report_summary', user_id=current_user.id, user_report_id=user_report.id) }}">{{ _('Summary') }}</a>
+                                href="{{ url_for('public.v_user_report_summary', user_id=current_user.id, user_report_id=user_report.id) }}">{{ _('Summary') }}</a>
                         </div>
                         <div class="col-sm-2"><a
                                 href="{{ url_for('public.v_user_report_check', user_id=current_user.id, user_report_id=user_report.id) }}">{{ _('Full report') }}</a>
@@ -40,7 +40,7 @@
         </div>
         <div class="row">
             <!-- TOC -->
-            <div class="col-md-12 col-sm-12">
+            <div class="col-md-10 col-sm-10 col-md-offset-1 col-sm-offset-1">
                 <h1><a name="inhoudstafel">{{ _('Table of contents') }}</a></h1>
                 <nav>
                     <ul role="menu">
@@ -52,7 +52,7 @@
             </div>
         </div>
         <div class="row">
-            <div class="col-sm-12 col-md-12">
+            <div class="col-sm-10 col-md-10 col-md-offset-1 col-sm-offset-1">
                 <h1><a name="rapportgegevens">{{ _('Report data') }}</a></h1>
                 <table class="table">
                     <tr>
@@ -76,12 +76,12 @@
         </div>
         <!-- Graph -->
         <div class="row">
-            <div class="col-md-12 col-sm-12">
+            <div class="col-md-10 col-sm-10 col-md-offset-1 col-sm-offset-1">
                 <h1><a name="grafiek">{{ _('Graph') }}</a><span style="margin-left: 5px;" id="graph_loader"></span></h1>
             </div>
         </div>
         <div class="row">
-            <div class="col-md-12 col-sm-12">
+            <div class="col-md-10 col-sm-10 col-md-offset-1 col-sm-offset-1">
                 <div id="graph">
 
                 </div>
@@ -89,7 +89,7 @@
         </div>
         <!-- Highest 5 unanswered questions -->
         <div class="row">
-            <div class="col-md-12 col-sm-12">
+            <div class="col-md-10 col-sm-10 col-md-offset-1 col-sm-offset-1">
                 <h1><a name="highest_unanswered">{{ _('Top 5 actions') }}</a></h1>
             </div>
         </div>
@@ -107,15 +107,15 @@
                                     </div>
                                     <div class="row">
                                         <div class="col-md-12 col-sm-12">
-                                            <h2 class="h3">{{ question.question }}
-                                                <small>
-                                                    ({{ _('Risk factor') }}: {{ question.risk_factor.risk_factor }})
-                                                </small>
-                                            </h2>
+                                            <h2 class="h3">{{ question.question }}</h2>
                                         </div>
                                     </div>
                                     <div class="row" style="margin-left: 5px;">
                                         <div class="col-md-12 col-sm-12">
+                                            <!-- Risk Factor -->
+                                            <span class="label label-default"
+                                                  style="background-color: rgb({{ colored_risk_factors[question.risk_factor.risk_factor][0] }}, {{ colored_risk_factors[question.risk_factor.risk_factor][1] }}, {{ colored_risk_factors[question.risk_factor.risk_factor][2] }})">{{ question.risk_factor.risk_factor }}</span>
+
                                             <!-- Answers -->
                                             {% if question.id in question_answers_by_id %}
                                                 <span class="label label-danger">{{ question_answers_by_id[question.id].answer_template.answer }}</span>
