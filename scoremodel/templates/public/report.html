@@ -38,53 +38,47 @@
                 </div>
             </div>
         </div>
+        <!-- Pretty Title -->
+        <div class="row">
+            <div class="col-md-10 col-sm-10 col-md-offset-1 col-sm-offset-1">
+                {% if current_user.organisation.name %}
+                    <h1>
+                        <a name="prettytitle">{{ _('Report card for %(organisation)s', organisation=current_user.organisation.name) }}</a>
+                    </h1>
+                {% else %}
+                    <h1><a name="prettytitle">{{ _('Report card') }}</a></h1>
+                {% endif %}
+            </div>
+        </div>
         <div class="row">
             <!-- TOC -->
             <div class="col-md-10 col-sm-10 col-md-offset-1 col-sm-offset-1">
-                <h1><a name="inhoudstafel">{{ _('Table of contents') }}</a></h1>
+                <h2><a name="inhoudstafel">{{ _('Table of contents') }}</a></h2>
                 <nav>
                     <ul role="menu">
-                        <li><a href="#rapportgegevens">{{ _('Report data') }}</a></li>
-                        <li><a href="#grafiek">{{ _('Graph') }}</a></li>
-                        <li><a href="#resultaten">{{ _('Results') }}</a></li>
-                        <li>
+                        <li><a href="#resultaten">{{ _('Results') }}</a>
                             <ul>
+                                <li class="sr-only"><a href="#grafiek">{{ _('Graph') }}</a></li>
                                 {% for section in report_template.sections %}
                                     <li><a href="#resultaten_{{ section.id }}">{{ section.title }}</a></li>
                                 {% endfor %}
                             </ul>
                         </li>
+                        <li><a href="#rapportgegevens">{{ _('Report data') }}</a></li>
                     </ul>
                 </nav>
             </div>
         </div>
         <div class="row">
             <div class="col-md-10 col-sm-10 col-md-offset-1 col-sm-offset-1">
-                <h1><a name="rapportgegevens">{{ _('Report data') }}</a></h1>
-                <table class="table">
-                    <tr>
-                        <td>{{ _('Report name') }}</td>
-                        <td>{{ user_report.name }}</td>
-                    </tr>
-                    <tr>
-                        <td>{{ _('Report template') }}</td>
-                        <td>{{ report_template.title }}</td>
-                    </tr>
-                    <tr>
-                        <td>{{ _('User') }}</td>
-                        <td>{{ user_report.user.username }}</td>
-                    </tr>
-                    <tr>
-                        <td>{{ _('Creation time') }}</td>
-                        <td>{{ user_report_creation_time }}</td>
-                    </tr>
-                </table>
+                <h2><a name="resultaten">{{ _('Results') }}</a></h2>
             </div>
         </div>
         <!-- Graph -->
         <div class="row">
             <div class="col-md-10 col-sm-10 col-md-offset-1 col-sm-offset-1">
-                <h1><a name="grafiek">{{ _('Graph') }}</a><span style="margin-left: 5px;" id="graph_loader"></span></h1>
+                <h3 class="sr-only"><a name="grafiek">{{ _('Graph') }}</a><span style="margin-left: 5px;"
+                                                                                id="graph_loader"></span></h3>
             </div>
         </div>
         <div class="row">
@@ -94,12 +88,12 @@
                 </div>
             </div>
         </div>
-        <!-- Sections -->
         <div class="row">
             <div class="col-md-10 col-sm-10 col-md-offset-1 col-sm-offset-1">
-                <h1><a name="resultaten">{{ _('Results') }}</a></h1>
+                <p class="text-justify text-muted ">{{ _('The graph shows the score for all the sections in this report. The blue area shows your scores; the other areas show the benchmarks that are linked to this report. If you area is larger than the benchmark area, you have exceeded the benchmark scores.') }}</p>
             </div>
         </div>
+        <!-- Sections -->
         {% for section in report_template.sections %}
             <div class="row">
                 <div class="col-md-10 col-sm-10 panel panel-default col-sm-offset-1 col-md-offset-1">
@@ -107,7 +101,7 @@
                         <div class="container-fluid">
                             <div class="row">
                                 <div class="col-md-12 col-sm-12">
-                                    <a name="resultaten_{{ section.id }}"><h2>{{ section.title }}</h2></a>
+                                    <a name="resultaten_{{ section.id }}"><h3>{{ section.title }}</h3></a>
                                 </div>
                             </div>
                             <div class="row">
@@ -130,8 +124,7 @@
                                         <div class="container-fluid">
                                             <div class="row">
                                                 <div class="col-md-12 col-sm-12">
-                                                    <h3>{{ question.question }}
-                                                    </h3>
+                                                    <h4>{{ question.question }}</h4>
                                                 </div>
                                             </div>
                                             <div class="row" style="margin-left: 5px;">
@@ -164,13 +157,13 @@
                                             </div>
                                             <div class="row" style="margin-left: 5px;">
                                                 <div class="col-md-12 col-sm-12">
-                                                    <h4>{{ _('Context') }}</h4>
+                                                    <h5>{{ _('Context') }}</h5>
                                                     <p style="margin-left: 1em; font-size: 1em;">{{ question.context|markdown }}</p>
                                                     {# <h4>{{ _('Risks') }}</h4>
                                                     <p style="margin-left: 1em; font-size: 1em;">{{question.risk|markdown}}</p> #}
                                                     {#  <h4>{{ _('Example') }}</h4>
                                                     <p style="margin-left: 1em; font-size: 1em;">{{question.example|markdown}}</p> #}
-                                                    <h4>{{ _('Action') }}</h4>
+                                                    <h5>{{ _('Action') }}</h5>
                                                     <p style="margin-left: 1em; font-size: 1em;">{{ question.action|markdown }}</p>
                                                 </div>
                                             </div>
@@ -183,5 +176,28 @@
                 </div>
             </div>
         {% endfor %}
+        <div class="row">
+            <div class="col-md-10 col-sm-10 col-md-offset-1 col-sm-offset-1">
+                <h2><a name="rapportgegevens">{{ _('Report data') }}</a></h2>
+                <table class="table">
+                    <tr>
+                        <td>{{ _('Report name') }}</td>
+                        <td>{{ user_report.name }}</td>
+                    </tr>
+                    <tr>
+                        <td>{{ _('Report template') }}</td>
+                        <td>{{ report_template.title }}</td>
+                    </tr>
+                    <tr>
+                        <td>{{ _('User') }}</td>
+                        <td>{{ user_report.user.username }}</td>
+                    </tr>
+                    <tr>
+                        <td>{{ _('Creation time') }}</td>
+                        <td>{{ user_report_creation_time }}</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
     </div>
 {% endblock %}

@@ -38,46 +38,41 @@
                 </div>
             </div>
         </div>
+        <!-- Pretty Title -->
+        <div class="row">
+            <div class="col-md-10 col-sm-10 col-md-offset-1 col-sm-offset-1">
+                {% if current_user.organisation.name %}
+                    <h1>
+                        <a name="prettytitle">{{ _('Report card for %(organisation)s', organisation=current_user.organisation.name) }}</a>
+                    </h1>
+                {% else %}
+                    <h1><a name="prettytitle">{{ _('Report card') }}</a></h1>
+                {% endif %}
+            </div>
+        </div>
         <div class="row">
             <!-- TOC -->
             <div class="col-md-10 col-sm-10 col-md-offset-1 col-sm-offset-1">
-                <h1><a name="inhoudstafel">{{ _('Table of contents') }}</a></h1>
+                <h2><a name="inhoudstafel">{{ _('Table of contents') }}</a></h2>
                 <nav>
                     <ul role="menu">
+                        <li class="sr-only"><a href="#grafiek">{{ _('Graph') }}</a></li>
+                        <li><a href="#highest_unanswered">{{ _('Action plan') }}</a></li>
                         <li><a href="#rapportgegevens">{{ _('Report data') }}</a></li>
-                        <li><a href="#grafiek">{{ _('Graph') }}</a></li>
-                        <li><a href="#highest_unanswered">{{ _('Top 5 actions') }}</a></li>
                     </ul>
                 </nav>
             </div>
         </div>
         <div class="row">
-            <div class="col-sm-10 col-md-10 col-md-offset-1 col-sm-offset-1">
-                <h1><a name="rapportgegevens">{{ _('Report data') }}</a></h1>
-                <table class="table">
-                    <tr>
-                        <td>{{ _('Report name') }}</td>
-                        <td>{{ user_report.name }}</td>
-                    </tr>
-                    <tr>
-                        <td>{{ _('Report template') }}</td>
-                        <td>{{ report_template.title }}</td>
-                    </tr>
-                    <tr>
-                        <td>{{ _('User') }}</td>
-                        <td>{{ user_report.user.username }}</td>
-                    </tr>
-                    <tr>
-                        <td>{{ _('Creation time') }}</td>
-                        <td>{{ user_report_creation_time }}</td>
-                    </tr>
-                </table>
+            <div class="col-md-10 col-sm-10 col-md-offset-1 col-sm-offset-1">
+                <h2><a name="resultaten">{{ _('Results') }}</a></h2>
             </div>
         </div>
         <!-- Graph -->
         <div class="row">
             <div class="col-md-10 col-sm-10 col-md-offset-1 col-sm-offset-1">
-                <h1><a name="grafiek">{{ _('Graph') }}</a><span style="margin-left: 5px;" id="graph_loader"></span></h1>
+                <h3 class="sr-only"><a name="grafiek">{{ _('Graph') }}</a><span style="margin-left: 5px;"
+                                                                                id="graph_loader"></span></h3>
             </div>
         </div>
         <div class="row">
@@ -87,12 +82,22 @@
                 </div>
             </div>
         </div>
+        <div class="row">
+            <div class="col-md-10 col-sm-10 col-md-offset-1 col-sm-offset-1">
+                <p class="text-justify text-muted ">{{ _('The graph shows the score for all the sections in this report. The blue area shows your scores; the other areas show the benchmarks that are linked to this report. If you area is larger than the benchmark area, you have exceeded the benchmark scores.') }}</p>
+            </div>
+        </div>
         <!-- Highest 5 unanswered questions -->
         <div class="row">
             <div class="col-md-10 col-sm-10 col-md-offset-1 col-sm-offset-1">
-                <h1><a name="highest_unanswered">{{ _('Top 5 actions') }}</a></h1>
+                <h2><a name="highest_unanswered">{{ _('Action plan') }}</a></h2>
             </div>
         </div>
+    <div class="row">
+        <div class="col-md-10 col-sm-10 col-md-offset-1 col-sm-offset-1">
+            <p class="text-justify text-muted">{{ _('In this section, you can find the 5 top-most actions you should take to increase your score. A full report can be found <a href="%(url)s">here</a>.', url=url_for('public.v_user_report_check', user_id=current_user.id, user_report_id=user_report.id)) }}</p>
+            </div>
+    </div>
         <div class="row">
             <div class="col-md-10 col-sm-10 panel panel-default col-md-offset-1 col-sm-offset-1">
                 <div class="panel-body">
@@ -107,7 +112,7 @@
                                     </div>
                                     <div class="row">
                                         <div class="col-md-12 col-sm-12">
-                                            <h2 class="h3">{{ question.question }}</h2>
+                                            <h3 class="h4">{{ question.question }}</h3>
                                         </div>
                                     </div>
                                     <div class="row" style="margin-left: 5px;">
@@ -133,7 +138,7 @@
                                     </div>
                                     <div class="row" style="margin-left: 5px;">
                                         <div class="col-md-12 col-sm-12">
-                                            <h4>{{ _('Action') }}</h4>
+                                            <h4 class="h5">{{ _('Action') }}</h4>
                                             <p style="margin-left: 1em; font-size: 1em;">{{ question.action|markdown }}</p>
                                         </div>
                                     </div>
@@ -142,6 +147,29 @@
                         {% endfor %}
                     </div>
                 </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-10 col-sm-10 col-md-offset-1 col-sm-offset-1">
+                <h2><a name="rapportgegevens">{{ _('Report data') }}</a></h2>
+                <table class="table">
+                    <tr>
+                        <td>{{ _('Report name') }}</td>
+                        <td>{{ user_report.name }}</td>
+                    </tr>
+                    <tr>
+                        <td>{{ _('Report template') }}</td>
+                        <td>{{ report_template.title }}</td>
+                    </tr>
+                    <tr>
+                        <td>{{ _('User') }}</td>
+                        <td>{{ user_report.user.username }}</td>
+                    </tr>
+                    <tr>
+                        <td>{{ _('Creation time') }}</td>
+                        <td>{{ user_report_creation_time }}</td>
+                    </tr>
+                </table>
             </div>
         </div>
     </div>
