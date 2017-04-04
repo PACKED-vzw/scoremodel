@@ -175,7 +175,7 @@ def v_user_report_section(user_id, user_report_id, section_id):
         return
     except Exception as e:
         flash(_('An unexpected error occurred.'))
-        return redirect(url_for('v_index'))
+        return redirect(url_for('site.v_index'))
 
     # Check whether current section is in this user_report
     if section_id not in [section.id for section in user_report.template.sections]:

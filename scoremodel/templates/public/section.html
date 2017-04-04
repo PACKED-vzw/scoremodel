@@ -49,6 +49,15 @@
                 </div>
             </div>
         </div>
+    {%  if section.context %}
+        <div class="row">
+            <div class="col-md-10 col-sm-10 col-sm-offset-1 col-md-offset-1">
+                <hr/>
+                    {{ section.context|markdown }}
+                <hr/>
+            </div>
+        </div>
+    {% endif %}
         <div class="row">
             <div class="col-md-10 col-sm-10 panel panel-default col-sm-offset-1 col-md-offset-1">
                 <div class="panel-body">
