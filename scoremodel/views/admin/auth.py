@@ -22,6 +22,7 @@ def v_login():
     form = LoginForm()
     a_user = UserApi()
     if request.method == 'POST' and form.validate_on_submit():
+        print(form)
         try:
             user = a_user.get_by_user(form.email.data)
         except DatabaseItemDoesNotExist:
@@ -29,7 +30,7 @@ def v_login():
             flash(_('Invalid username or password.'))
         else:
             if user.verify_password(form.password.data):
-                login_user(user, form.remember_me.data)
+                login_user(user, remember=form.remember_me.data)
                 next_url = request.args.get('next')
                 return redirect(next_url or url_for('site.v_index'))
             else:
