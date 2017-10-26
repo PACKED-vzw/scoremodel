@@ -9,4 +9,3 @@ flask-markdown
 gunicorn
 mysql-connector
 Flask-Testing
-gunicorn
