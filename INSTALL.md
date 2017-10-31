@@ -26,15 +26,18 @@ All other requirements can be installed by executing `pip3 install -r requiremen
 Since version 2.2.3, installing `mysql-connector` requires some extra steps (instructions for Ubuntu).
 
 1. Install required OS packages:
-	```
+
+```
 apt-get install libprotobuf-dev libprotobuf9v5 protobuf-compiler
-	```
+```
+
 2. Set environment variables _in the shell you will be using to install your requirements_:
-	```
+
+```
 export MYSQLXPB_PROTOBUF_INCLUDE_DIR=/usr/include/google/protobuf                                                                                                
 export MYSQLXPB_PROTOBUF_LIB_DIR=/usr/lib/x86_64-linux-gnu
 export export MYSQLXPB_PROTOC=/usr/bin/protoc
-	```
+```
 
 ## Installation
 The Scoremodel will create its own database, so the only installation step you have to perform is to download the latest version from [GitHub](https://github.com/PACKED-vzw/scoremodel) and unpack it inside a directory on your hard drive (e.g. `/var/www/www.scoremodel.dev/scoremodel`).
