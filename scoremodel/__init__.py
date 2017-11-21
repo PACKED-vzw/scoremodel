@@ -2,6 +2,7 @@ import logging
 from logging.handlers import RotatingFileHandler
 from flask import Flask, request, redirect, url_for, render_template, flash
 from flask.ext.sqlalchemy import SQLAlchemy
+from sqlalchemy.exc import ProgrammingError
 from flask.ext.babel import Babel, gettext as _
 from flask.ext.login import LoginManager, current_user
 from flask.ext.markdown import Markdown
@@ -79,10 +80,13 @@ def add_header(response):
 
 @app.route('/')
 def v_index():
-    if check_has_tables() is not True or check_has_admin() is not True:
+    try:
+        if check_has_tables() is not True or check_has_admin() is not True:
+            return redirect(url_for('v_setup'))
+        else:
+            return redirect(url_for('site.v_index'))
+    except ProgrammingError:
         return redirect(url_for('v_setup'))
-    else:
-        return redirect(url_for('site.v_index'))
 
 
 @app.route('/setup', methods=['GET', 'POST'])

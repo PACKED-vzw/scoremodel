@@ -9,7 +9,7 @@ from scoremodel.modules.user.token import Token
 class Role(db.Model):
     __tablename__ = 'roles'
     id = db.Column(db.Integer, primary_key=True)
-    role = db.Column(db.String(255), index=True, unique=True)
+    role = db.Column(db.String(190), index=True, unique=True)
 
     def __repr__(self):
         return '<Role {0}>'.format(self.role)
@@ -27,7 +27,7 @@ users_roles = db.Table('users_roles',
 class OrganisationType(db.Model):
     __tablename__ = 'OrganisationType'
     id = db.Column(db.Integer, primary_key=True)
-    type = db.Column(db.String(255), index=True, unique=True)
+    type = db.Column(db.String(190), index=True, unique=True)
     organisations = db.relationship('Organisation', backref='type', lazy='dynamic')
 
     def __init__(self, type):
@@ -51,15 +51,15 @@ class Organisation(db.Model):
 class User(db.Model):
     __tablename__ = 'User'
     id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(255), index=True, unique=True, nullable=False)
-    email = db.Column(db.String(255), index=True, unique=True, nullable=False)
+    username = db.Column(db.String(190), index=True, unique=True, nullable=False)
+    email = db.Column(db.String(190), index=True, unique=True, nullable=False)
     password_hash = db.Column(db.String(255), nullable=False)
     questions = db.relationship('QuestionAnswer', backref='user', lazy='dynamic')
     reports = db.relationship('UserReport', backref='user', lazy='dynamic')
     authenticated = db.Column(db.Boolean, default=False)
     lang_id = db.Column(db.Integer, db.ForeignKey('Lang.id'))
-    api_key = db.Column(db.String(255), nullable=False, unique=True)
-    session_token = db.Column(db.String(255), nullable=False, unique=True)
+    api_key = db.Column(db.String(190), nullable=False, unique=True)
+    session_token = db.Column(db.String(190), nullable=False, unique=True)
     organisation_id = db.Column(db.Integer, db.ForeignKey(Organisation.id))
     roles = db.relationship('Role',
                             secondary=users_roles,
