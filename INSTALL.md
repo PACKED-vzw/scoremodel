@@ -162,6 +162,12 @@ a2ensite dev.scoremodel.org.conf # The name of the configuration file you config
 service apache2 reload
 ```
 
+## Additional actions
+Before running the setup, several steps must be taken to ensure a smooth experience.
+
+* Either create the `logs` directory or update the location of the log file in the configuration settings.
+* In `/scoremodel/static/lib`, execute `bower install` to install the Javascript dependencies (found in `bower.json`).
+
 ## Setup
 After you have configured the database and web server, you can visit the application at the web address you specified (e.g. dev.scoremodel.org).
 
