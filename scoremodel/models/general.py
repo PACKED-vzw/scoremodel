@@ -68,7 +68,7 @@ answers = db.Table('answer_question',
 class RiskFactor(db.Model):
     __tablename__ = 'RiskFactor'
     id = db.Column(db.Integer, primary_key=True)
-    risk_factor = db.Column(db.String(255), index=True, unique=True)
+    risk_factor = db.Column(db.String(190), index=True, unique=True)
     value = db.Column(db.Integer, nullable=False, default=1)
     lang_id = db.Column(db.Integer, db.ForeignKey('Lang.id'))
     questions_single = db.relationship('Question', backref='risk_factor', lazy='dynamic')
