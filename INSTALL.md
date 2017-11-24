@@ -55,7 +55,7 @@ virtualenv venv
 . venv/bin/activate
 ```
 
-Install the dependencies by executing `pip3 install -r requirements.txt`.
+Go back to the previous directory with `cd ..` and install the dependencies by executing `pip3 install -r requirements.txt`.
 
 ## Configuration
 Before the setup can be started, you must first configure the application in `config.py`.
