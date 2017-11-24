@@ -34,9 +34,8 @@ apt-get install libprotobuf-dev libprotobuf9v5 protobuf-compiler
 2. Set environment variables _in the shell you will be using to install your requirements_:
 
 ```
-export MYSQLXPB_PROTOBUF_INCLUDE_DIR=/usr/include/google/protobuf                                                                                                
-export MYSQLXPB_PROTOBUF_LIB_DIR=/usr/lib/x86_64-linux-gnu
-export export MYSQLXPB_PROTOC=/usr/bin/protoc
+export MYSQLXPB_PROTOBUF_INCLUDE_DIR=/usr/include/google/protobuf && export MYSQLXPB_PROTOBUF_LIB_DIR=/usr/lib/x86_64-linux-gnu && export export MYSQLXPB_PROTOC=/usr/bin/protoc
+
 ```
 
 ## Installation
