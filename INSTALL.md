@@ -52,9 +52,10 @@ Change to your application directory (`/var/www/www.scoremodel.dev/scoremodel`) 
 cd /var/www/www.scoremodel.dev/scoremodel
 virtualenv venv
 . venv/bin/activate
+cd ..
 ```
 
-Go back to the previous directory with `cd ..` and install the dependencies by executing `pip3 install -r requirements.txt`.
+And install the dependencies by executing `pip3 install -r requirements.txt`.
 
 ## Configuration
 Before the setup can be started, you must first configure the application in `config.py`.
