@@ -1,4 +1,4 @@
-from flask.ext.babel import lazy_gettext as _
+from flask_babel import lazy_gettext as _
 
 public_api_msg = {
     'item_created': _('%(what)s <%(identifier)s> created.', what='{0}', identifier='{1}'),

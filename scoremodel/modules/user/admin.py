@@ -1,7 +1,7 @@
-from flask.ext.wtf import Form
+from flask_wtf import Form
 from wtforms import StringField, PasswordField, BooleanField, SubmitField, SelectMultipleField
 from wtforms.validators import Required, Email, EqualTo
-from flask.ext.babel import lazy_gettext as _
+from flask_babel import lazy_gettext as _
 
 
 class UserCreateForm(Form):

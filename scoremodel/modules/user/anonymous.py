@@ -1,4 +1,4 @@
-from flask.ext.login import AnonymousUserMixin
+from flask_login import AnonymousUserMixin
 from scoremodel import app
 
 

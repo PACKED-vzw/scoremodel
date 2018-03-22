@@ -2,7 +2,7 @@ import bcrypt
 from hashlib import sha512
 from scoremodel import db, app
 import scoremodel.models.public
-from flask.ext.login import AnonymousUserMixin
+from flask_login import AnonymousUserMixin
 from scoremodel.modules.user.token import Token
 
 

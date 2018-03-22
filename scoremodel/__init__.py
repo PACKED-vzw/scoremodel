@@ -1,19 +1,19 @@
 import logging
 from logging.handlers import RotatingFileHandler
 from flask import Flask, request, redirect, url_for, render_template, flash
-from flask.ext.sqlalchemy import SQLAlchemy
+from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.exc import ProgrammingError
-from flask.ext.babel import Babel, gettext as _
-from flask.ext.login import LoginManager, current_user
-from flask.ext.markdown import Markdown
-from flask_wtf.csrf import CsrfProtect
+from flask_babel import Babel, gettext as _
+from flask_login import LoginManager, current_user
+from flaskext.markdown import Markdown
+from flask_wtf.csrf import CSRFProtect
 from scoremodel.modules.setup import AppSetup
 
 app = AppSetup().app
 db = SQLAlchemy(app)
 Markdown(app)
 babel = Babel(app)
-csrf = CsrfProtect(app)
+csrf = CSRFProtect(app)
 app.debug = app.config['DEBUG']
 login_manager = LoginManager()
 login_manager.session_protection = 'strong'

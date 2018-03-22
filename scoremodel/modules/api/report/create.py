@@ -6,7 +6,7 @@ from scoremodel.modules.msg.messages import module_error_msg as _e
 from scoremodel.models.general import Report
 from scoremodel.modules.error import RequiredAttributeMissing, DatabaseItemAlreadyExists, DatabaseItemDoesNotExist
 from scoremodel import db
-from flask.ext.babel import lazy_gettext as _
+from flask_babel import lazy_gettext as _
 
 
 ##

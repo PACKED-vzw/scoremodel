@@ -1,5 +1,5 @@
 from flask import session
-from flask.ext.login import current_user
+from flask_login import current_user
 from scoremodel.modules.api.user import UserApi
 from scoremodel.modules.error import DatabaseItemDoesNotExist
 from scoremodel import app
