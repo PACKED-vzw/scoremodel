@@ -1,5 +1,5 @@
 from flask import render_template, redirect, request, url_for, flash
-from flask.ext.login import login_required
+from flask_login import login_required
 from scoremodel.modules.api.page import PageApi
 from scoremodel.modules.api.menu_link import MenuLinkApi
 from scoremodel.modules.api.lang import LangApi
@@ -9,7 +9,7 @@ from scoremodel.modules.error import DatabaseItemDoesNotExist
 from scoremodel.modules.user.authentication import must_be_admin
 from scoremodel.modules.error import DatabaseItemAlreadyExists, RequiredAttributeMissing, DatabaseItemDoesNotExist
 from scoremodel.views.admin import admin
-from flask.ext.babel import gettext as _
+from flask_babel import gettext as _
 
 page_api = PageApi()
 lang_api = LangApi()

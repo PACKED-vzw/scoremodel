@@ -1,5 +1,5 @@
 from flask import request
-from flask.ext.login import login_required
+from flask_login import login_required
 
 from scoremodel.modules.api.rest.scoremodel import ScoremodelRestApi
 from scoremodel.modules.api.benchmark.benchmark import BenchmarkApi

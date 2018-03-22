@@ -1,5 +1,5 @@
 from sqlalchemy import and_
-from flask.ext.babel import gettext as _
+from flask_babel import gettext as _
 
 from scoremodel import db
 from scoremodel.models.general import Section
