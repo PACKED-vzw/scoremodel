@@ -1,4 +1,4 @@
-from flask.ext.babel import gettext as _
+from flask_babel import gettext as _
 from scoremodel.modules.msg.messages import module_error_msg as _e
 from scoremodel.modules.api.generic import GenericApi
 from scoremodel.models.user import OrganisationType

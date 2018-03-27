@@ -1,6 +1,6 @@
 from flask import request, render_template, url_for, redirect, flash
-from flask.ext.login import login_required
-from flask.ext.babel import gettext as _
+from flask_login import login_required
+from flask_babel import gettext as _
 from scoremodel.views.admin import admin
 from scoremodel.modules.api.risk_factor import RiskFactorApi
 from scoremodel.modules.api.lang import LangApi

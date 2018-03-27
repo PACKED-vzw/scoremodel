@@ -1,6 +1,6 @@
 from flask import render_template, url_for, flash, request, redirect
-from flask.ext.login import login_required, current_user
-from flask.ext.babel import gettext as _
+from flask_login import login_required, current_user
+from flask_babel import gettext as _
 from scoremodel.modules.api.user import UserApi
 from scoremodel.modules.api.role import RoleApi
 from scoremodel.modules.user.admin import UserCreateForm, UserDeleteForm, UserModifyForm

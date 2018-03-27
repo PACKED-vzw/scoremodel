@@ -1,7 +1,7 @@
-from flask.ext.wtf import Form
+from flask_wtf import Form
 from wtforms import StringField, SubmitField, IntegerField, SelectField
 from wtforms.validators import InputRequired
-from flask.ext.babel import lazy_gettext as _
+from flask_babel import lazy_gettext as _
 
 
 class AnswerCreateForm(Form):

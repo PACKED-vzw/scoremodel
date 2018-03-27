@@ -1,6 +1,6 @@
 from flask import request, make_response, send_from_directory
-from flask.ext.login import login_required
-from flask.ext.babel import gettext as _
+from flask_login import login_required
+from flask_babel import gettext as _
 
 from scoremodel.modules.api.rest.scoremodel import ScoremodelRestApi
 from scoremodel.modules.api.rest.file import FileRestApi

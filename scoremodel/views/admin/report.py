@@ -1,6 +1,6 @@
 from scoremodel.views.admin import admin
 from flask import request, make_response, render_template, redirect, url_for, flash
-from flask.ext.login import login_required
+from flask_login import login_required
 from scoremodel.modules.user.authentication import must_be_admin
 from scoremodel.modules.api.report import ReportApi
 from scoremodel.modules.api.answer import AnswerApi
@@ -13,7 +13,7 @@ from scoremodel.modules.api.benchmark.report import BenchmarkReportApi
 from scoremodel.modules.report.admin import ReportCreateForm, ReportDeleteForm
 from scoremodel.modules.forms.benchmark_report import BenchmarkReportCreateForm
 from scoremodel.modules.error import DatabaseItemAlreadyExists, RequiredAttributeMissing, DatabaseItemDoesNotExist
-from flask.ext.babel import gettext as _
+from flask_babel import gettext as _
 
 lang_api = LangApi()
 locale_api = Locale()

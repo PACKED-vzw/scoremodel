@@ -1,5 +1,5 @@
 from flask import render_template, redirect, request, url_for, flash
-from flask.ext.login import login_required
+from flask_login import login_required
 from scoremodel.modules.api.document import DocumentApi
 from scoremodel.modules.api.lang import LangApi
 from scoremodel.modules.api.file import FileApi
@@ -10,7 +10,7 @@ from scoremodel.modules.user.authentication import must_be_admin
 from scoremodel.modules.error import DatabaseItemAlreadyExists, RequiredAttributeMissing, DatabaseItemDoesNotExist, \
     FileDoesNotExist
 from scoremodel.views.admin import admin
-from flask.ext.babel import gettext as _
+from flask_babel import gettext as _
 
 
 @admin.route('/document/edit/<int:document_id>', methods=['GET'])

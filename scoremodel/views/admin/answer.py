@@ -1,8 +1,8 @@
 from scoremodel.views.admin import admin
-from flask.ext.babel import gettext as _
+from flask_babel import gettext as _
 from scoremodel.modules.msg.messages import module_error_msg as _e
 from flask import request, make_response, render_template, redirect, url_for, flash
-from flask.ext.login import login_required
+from flask_login import login_required
 from scoremodel.modules.user.authentication import must_be_admin
 from scoremodel.modules.api.answer import AnswerApi
 from scoremodel.modules.api.lang import LangApi

@@ -1,7 +1,7 @@
 from os.path import splitext, join, isfile
 from os import getcwd, remove
 import mimetypes
-from flask.ext.babel import gettext as _
+from flask_babel import gettext as _
 from werkzeug.utils import secure_filename
 from scoremodel.modules.api.generic import GenericApi
 from scoremodel.modules.error import FileTypeNotAllowed, FileDoesNotExist

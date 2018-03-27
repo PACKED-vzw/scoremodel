@@ -1,6 +1,6 @@
 from flask import request, render_template, redirect, url_for, flash, abort, Blueprint
-from flask.ext.login import login_required, current_user
-from flask.ext.babel import gettext as _
+from flask_login import login_required, current_user
+from flask_babel import gettext as _
 import markdown
 
 from scoremodel.modules.api.page import PageApi

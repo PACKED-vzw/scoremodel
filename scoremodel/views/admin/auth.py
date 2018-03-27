@@ -1,5 +1,5 @@
 from flask import render_template, redirect, request, url_for, flash
-from flask.ext.login import login_user, login_required, logout_user, current_user
+from flask_login import login_user, login_required, logout_user, current_user
 from scoremodel.modules.logger import ScoremodelLogger
 from scoremodel.modules.user.authentication import LoginForm
 from scoremodel.modules.forms.auth import RegistrationForm, ChangePasswordForm
@@ -11,7 +11,7 @@ from scoremodel.modules.api.organisation import OrganisationApi
 from scoremodel.modules.error import DatabaseItemDoesNotExist, DatabaseItemAlreadyExists, RequiredAttributeMissing,\
     InvalidPassword
 from scoremodel.views.admin import admin
-from flask.ext.babel import gettext as _
+from flask_babel import gettext as _
 
 a_roles = RoleApi()
 logger = ScoremodelLogger()
