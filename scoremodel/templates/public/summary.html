@@ -22,6 +22,7 @@
     <script src="{{ url_for('static', filename='lib/scoremodel/jquery/public/report.js') }}"></script>
     <div class="container-fluid">
         <!-- Bar -->
+        <!--
         <div class="row">
             <div class="col-md-10 col-sm-10 col-md-offset-1 col-sm-offset-1">
                 <div class="container-fluid">
@@ -38,34 +39,47 @@
                 </div>
             </div>
         </div>
+        -->
         <!-- Pretty Title -->
         <div class="row">
             <div class="col-md-10 col-sm-10 col-md-offset-1 col-sm-offset-1">
                 {% if current_user.organisation.name %}
                     <h1>
-                        <a name="prettytitle">{{ _('Report card for %(organisation)s', organisation=current_user.organisation.name) }}</a>
+                        <a name="prettytitle">{{ _('Eindrapport Scoremodel %(organisation)s', organisation=current_user.organisation.name) }}</a>
                     </h1>
                 {% else %}
-                    <h1><a name="prettytitle">{{ _('Report card') }}</a></h1>
+                    <h1><a name="prettytitle">{{ _('Eindrapport Scoremodel') }}</a></h1>
                 {% endif %}
             </div>
         </div>
         <div class="row">
-            <!-- TOC -->
             <div class="col-md-10 col-sm-10 col-md-offset-1 col-sm-offset-1">
-                <h2><a name="inhoudstafel">{{ _('Table of contents') }}</a></h2>
-                <nav>
-                    <ul role="menu">
-                        <li class="sr-only"><a href="#grafiek">{{ _('Graph') }}</a></li>
-                        <li><a href="#highest_unanswered">{{ _('Action plan') }}</a></li>
-                        <li><a href="#rapportgegevens">{{ _('Report data') }}</a></li>
-                    </ul>
-                </nav>
+                <table class="table">
+                    <tr>
+                        <td>{{ _('Datum') }}</td>
+                        <td>{{ user_report_creation_time }}</td>
+                    </tr>
+                    <tr>
+                        <td>{{ _('User') }}</td>
+                        <td>{{ user_report.user.username }}</td>
+                    </tr>
+                    <tr>
+                        <td>{{ _('Acties') }}</td>
+                        <td><a href="{{ url_for('public.v_user_report_check', user_id=current_user.id, user_report_id=user_report.id) }}">{{ _('Full report') }}</a>
+                            &nbsp&nbsp&nbsp&nbsp
+                            <a href="javascript:window.print()">{{ _('Print') }}</a>
+                        </td>
+                    </tr>
+                </table>
             </div>
         </div>
         <div class="row">
             <div class="col-md-10 col-sm-10 col-md-offset-1 col-sm-offset-1">
-                <h2><a name="resultaten">{{ _('Results') }}</a></h2>
+                {% if current_user.organisation.name %}
+                    <p class="text-justify text-muted ">{{ _('Hieronder vind je de sterke en zwakke punten van de digitale huishouding van %(organisation)s.', organisation=current_user.organisation.name) }}</p>
+                {% else %}
+                    <p class="text-justify text-muted ">{{ _('Hieronder vind je de sterke en zwakke punten van jouw digitale huishouding.') }}</p>
+                {% endif %}
             </div>
         </div>
         <!-- Graph -->
@@ -84,7 +98,9 @@
         </div>
         <div class="row">
             <div class="col-md-10 col-sm-10 col-md-offset-1 col-sm-offset-1">
-                <p class="text-justify text-muted ">{{ _('The graph shows the score for all the sections in this report. The blue area shows your scores; the other areas show the benchmarks that are linked to this report. If you area is larger than the benchmark area, you have exceeded the benchmark scores.') }}</p>
+                <p class="text-justify text-muted ">{{ _('Elk van de zeven assen van het radardiagram is een aspect van je digitale huishouding. Hoe verder de marker van het centrum verwijderd is, hoe beter je gescoord hebt. 
+                Bevindt de marker zich in de rode zone, dan is dringende actie vereist. Bevindt de marker zich in de gele zone, dan is je huidige werking voor verbetering vatbaar. Bevindt de marker zich in de groene zone, dan heb je dat aspect van je digitale huishouding op orde.') }}</p>
+                <p class="text-justify text-muted ">{{ _('De blauwe lijn geeft aan hoe je scoort volgens de OAIS-norm. De oranje lijn geeft aan hoe je scoort voor de Core Trust Seal-norm.') }}</p>
             </div>
         </div>
         <!-- Highest 5 unanswered questions -->
@@ -93,11 +109,12 @@
                 <h2><a name="highest_unanswered">{{ _('Action plan') }}</a></h2>
             </div>
         </div>
-    <div class="row">
-        <div class="col-md-10 col-sm-10 col-md-offset-1 col-sm-offset-1">
-            <p class="text-justify text-muted">{{ _('In this section, you can find the 5 top-most actions you should take to increase your score. A full report can be found <a href="%(url)s">here</a>.', url=url_for('public.v_user_report_check', user_id=current_user.id, user_report_id=user_report.id)) }}</p>
-            </div>
-    </div>
+        <div class="row">
+            <div class="col-md-10 col-sm-10 col-md-offset-1 col-sm-offset-1">
+                <p class="text-justify text-muted">{{ _('Het is belangrijk dat je risico’s stelselmatig aanpakt. Tracht voor elk aspect van je digitale huishouding buiten de rode zone te geraken en vervolgens zo dicht mogelijk de groene zone te benaderen. Zo groeit stelselmatig de veilige bewaring van je digitale collectie.') }}</p>
+                <p class="text-justify text-muted">{{ _('Hieronder vind je de eisen uit het scoremodel waarvoor je het dringendst actie moet ondernemen, telkens met een stappenplan om het probleem concreet aan te pakken.') }}</p>
+                </div>
+        </div>
         <div class="row">
             <div class="col-md-10 col-sm-10 panel panel-default col-md-offset-1 col-sm-offset-1">
                 <div class="panel-body">
@@ -105,28 +122,15 @@
                         {% for question in highest_unanswered %}
                             <div class="row">
                                 <div class="container-fluid">
-                                    <div class="row">
+                                    <!--<div class="row">
                                         <div class="col-md-12 col-sm-12">
                                             <span class="label label-info">Sectie <em>{{ question.section.title }}</em></span>
                                         </div>
                                     </div>
+                                    -->
                                     <div class="row">
                                         <div class="col-md-12 col-sm-12">
-                                            <h3 class="h4">{{ question.question }}</h3>
-                                        </div>
-                                    </div>
-                                    <div class="row" style="margin-left: 5px;">
-                                        <div class="col-md-12 col-sm-12">
-                                            <!-- Risk Factor -->
-                                            <span class="label label-default"
-                                                  style="background-color: rgb({{ colored_risk_factors[question.risk_factor.risk_factor][0] }}, {{ colored_risk_factors[question.risk_factor.risk_factor][1] }}, {{ colored_risk_factors[question.risk_factor.risk_factor][2] }})">{{ question.risk_factor.risk_factor }}</span>
-                                            <!-- Benchmark answers -->
-                                            {% if question.id in benchmarks_by_question %}
-                                                {% for benchmark in benchmarks_by_question[question.id] %}
-                                                    <span class="label label-default">{{ benchmark.benchmark_report.title }}: <span
-                                                            id="answer_bm_{{ benchmark.benchmark_report.id }}_{{ question.id }}">{{ benchmark.answer.answer }}</span></span>
-                                                {% endfor %}
-                                            {% endif %}
+                                            <h3 class="h4">{{ question.question|replaceindex(loop.index) }}</h3>
                                         </div>
                                     </div>
                                     <div class="row" style="margin-left: 5px;">
@@ -140,29 +144,6 @@
                         {% endfor %}
                     </div>
                 </div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-10 col-sm-10 col-md-offset-1 col-sm-offset-1">
-                <h2><a name="rapportgegevens">{{ _('Report data') }}</a></h2>
-                <table class="table">
-                    <tr>
-                        <td>{{ _('Report name') }}</td>
-                        <td>{{ user_report.name }}</td>
-                    </tr>
-                    <tr>
-                        <td>{{ _('Report template') }}</td>
-                        <td>{{ report_template.title }}</td>
-                    </tr>
-                    <tr>
-                        <td>{{ _('User') }}</td>
-                        <td>{{ user_report.user.username }}</td>
-                    </tr>
-                    <tr>
-                        <td>{{ _('Creation time') }}</td>
-                        <td>{{ user_report_creation_time }}</td>
-                    </tr>
-                </table>
             </div>
         </div>
     </div>

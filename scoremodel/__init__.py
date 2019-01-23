@@ -2,18 +2,17 @@ import logging
 from logging.handlers import RotatingFileHandler
 from flask import Flask, request, redirect, url_for, render_template, flash
 from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy.exc import ProgrammingError
 from flask_babel import Babel, gettext as _
 from flask_login import LoginManager, current_user
 from flaskext.markdown import Markdown
-from flask_wtf.csrf import CSRFProtect
+from flask_wtf.csrf import CsrfProtect
 from scoremodel.modules.setup import AppSetup
 
 app = AppSetup().app
 db = SQLAlchemy(app)
 Markdown(app)
 babel = Babel(app)
-csrf = CSRFProtect(app)
+csrf = CsrfProtect(app)
 app.debug = app.config['DEBUG']
 login_manager = LoginManager()
 login_manager.session_protection = 'strong'
@@ -42,6 +41,20 @@ else:
     logger.setLevel(logging.ERROR)
 
 logger.addHandler(make_handler())
+
+@app.template_filter('stripindex')
+def strip_index(s):
+    for i in range(len(s)):
+        if s[i] == '.':
+            break
+    return s[i+2:]
+
+@app.template_filter('replaceindex')
+def strip_index(s, index):
+    for i in range(len(s)):
+        if s[i] == '.':
+            break
+    return "{}. {}".format(str(index), s[i+2:])
 
 
 # Blueprints
@@ -80,13 +93,10 @@ def add_header(response):
 
 @app.route('/')
 def v_index():
-    try:
-        if check_has_tables() is not True or check_has_admin() is not True:
-            return redirect(url_for('v_setup'))
-        else:
-            return redirect(url_for('site.v_index'))
-    except ProgrammingError:
+    if check_has_tables() is not True or check_has_admin() is not True:
         return redirect(url_for('v_setup'))
+    else:
+        return redirect(url_for('site.v_index'))
 
 
 @app.route('/setup', methods=['GET', 'POST'])

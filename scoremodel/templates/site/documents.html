@@ -10,10 +10,8 @@
                     <tbody>
                     {% for document in documents %}
                         <tr>
-                            <td> 
-                            {% if document.filename %}
+                            <td>
                                 <a href="{{ url_for('api.v_api_resource', resource_name=document.filename) }}">{{ document.filename }}</a>
-                            {% endif %}
                             </td>
                             <td>
                                 {{ document.description | markdown }}

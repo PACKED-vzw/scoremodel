@@ -68,7 +68,7 @@ answers = db.Table('answer_question',
 class RiskFactor(db.Model):
     __tablename__ = 'RiskFactor'
     id = db.Column(db.Integer, primary_key=True)
-    risk_factor = db.Column(db.String(190), index=True, unique=True)
+    risk_factor = db.Column(db.String(255), index=True, unique=True)
     value = db.Column(db.Integer, nullable=False, default=1)
     lang_id = db.Column(db.Integer, db.ForeignKey('Lang.id'))
     questions_single = db.relationship('Question', backref='risk_factor', lazy='dynamic')
@@ -135,7 +135,8 @@ class Section(db.Model):
     context = db.Column(db.Text)
     order_in_report = db.Column(db.Integer, nullable=False, default=0)
     weight = db.Column(db.Integer, nullable=False, default=1)
-    questions = db.relationship('Question', backref='section', lazy='dynamic', cascade='all, delete-orphan')
+    questions = db.relationship('Question', backref='section', cascade='all, delete-orphan')
+    #questions = db.relationship('Question', backref='section', lazy='dynamic', cascade='all, delete-orphan')
     report_id = db.Column(db.Integer, db.ForeignKey(Report.id))
     maximum_score = db.Column(db.Integer, nullable=False, default=0)
 
@@ -169,6 +170,10 @@ class Section(db.Model):
             'next_section_id': next_section_id,
             'previous_section_id': previous_section_id
         }
+
+    @property
+    def benchmark_count(self):
+        return sum(1 for q in self.questions if q.benchmark.not_in_benchmark == False)
 
     @property
     def highest_order(self):
@@ -226,7 +231,8 @@ class Question(db.Model):
                               )
     question_answers = db.relationship('QuestionAnswer', backref='question_template', lazy='dynamic',
                                        cascade='all, delete-orphan')
-    benchmark = db.relationship('Benchmark', backref='question', lazy='dynamic', cascade='all, delete-orphan')
+    benchmark = db.relationship('Benchmark', backref='question', uselist=False, cascade='all, delete-orphan')
+    #benchmark = db.relationship('Benchmark', backref='question', lazy='dynamic', cascade='all, delete-orphan')
 
     # TODO: make weight dependent on risk_factors! (risk_factors must have a weight: hoog: 3, midden: 2, laag: 1
 

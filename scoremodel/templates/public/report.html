@@ -64,6 +64,7 @@
                                 {% endfor %}
                             </ul>
                         </li>
+                        <li><a href="#highest_unanswered">{{ _('Action plan') }}</a></li>
                         <li><a href="#rapportgegevens">{{ _('Report data') }}</a></li>
                     </ul>
                 </nav>
@@ -176,6 +177,49 @@
                 </div>
             </div>
         {% endfor %}
+        <!-- Highest 5 unanswered questions -->
+        <div class="row">
+            <div class="col-md-10 col-sm-10 col-md-offset-1 col-sm-offset-1">
+                <h2><a name="highest_unanswered">{{ _('Action plan') }}</a></h2>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-10 col-sm-10 col-md-offset-1 col-sm-offset-1">
+                <p class="text-justify text-muted">{{ _('Het is belangrijk dat je risico’s stelselmatig aanpakt. Tracht voor elk aspect van je digitale huishouding buiten de rode zone te geraken en vervolgens zo dicht mogelijk de groene zone te benaderen. Zo groeit stelselmatig de veilige bewaring van je digitale collectie.') }}</p>
+                <p class="text-justify text-muted">{{ _('Hieronder vind je de eisen uit het scoremodel waarvoor je het dringendst actie moet ondernemen, telkens met een stappenplan om het probleem concreet aan te pakken.') }}</p>
+                </div>
+        </div>
+        <div class="row">
+            <div class="col-md-10 col-sm-10 panel panel-default col-md-offset-1 col-sm-offset-1">
+                <div class="panel-body">
+                    <div class="container-fluid">
+                        {% for question in highest_unanswered %}
+                            <div class="row">
+                                <div class="container-fluid">
+                                    <!--<div class="row">
+                                        <div class="col-md-12 col-sm-12">
+                                            <span class="label label-info">Sectie <em>{{ question.section.title }}</em></span>
+                                        </div>
+                                    </div>
+                                    -->
+                                    <div class="row">
+                                        <div class="col-md-12 col-sm-12">
+                                            <h3 class="h4">{{ question.question|replaceindex(loop.index) }}</h3>
+                                        </div>
+                                    </div>
+                                    <div class="row" style="margin-left: 5px;">
+                                        <div class="col-md-12 col-sm-12">
+                                            <h4 class="h5">{{ _('Action') }}</h4>
+                                            <p style="margin-left: 1em; font-size: 1em;">{{ question.action|markdown }}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
         <div class="row">
             <div class="col-md-10 col-sm-10 col-md-offset-1 col-sm-offset-1">
                 <h2><a name="rapportgegevens">{{ _('Report data') }}</a></h2>

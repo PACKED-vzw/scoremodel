@@ -861,7 +861,7 @@ msgstr "Rapportgegevens"
 #: scoremodel/templates/public/report.html:93
 #: scoremodel/templates/public/summary.html:87
 msgid "The graph shows the score for all the sections in this report. The blue area shows your scores; the other areas show the benchmarks that are linked to this report. If you area is larger than the benchmark area, you have exceeded the benchmark scores."
-msgstr "De grafiek toont de score voor alle secties in dit rapport. Het blauwe vlak geven uw score weer; de andere vlakken die van de benchmarks. Als uw vlak groter is dan dat van een benchmark, dan hebt u hoger gescoord."
+msgstr "De grafiek toont de score voor alle secties in dit rapport. Het blauwe vlak geven uw score weer; de andere vlakken die van de benchmarks. Als uw vlak groter is dan dat van een benchmark, dan hebt u hoger gescoord of niet."
 
 #: scoremodel/templates/public/report.html:110
 msgid "Score"

@@ -28,7 +28,7 @@ class UserReport(db.Model):
 
     @property
     def by_section(self):
-        questions_by_section = {s.id: {'title': s.title, 'questions': []} for s in self.template.sections}
+        questions_by_section = {s.id: {'title': s.title, 'benchmark_count': s.benchmark_count, 'questions': []} for s in self.template.sections}
         for question in self.question_answers:
             if question.question_template.section_id in questions_by_section:
                 questions_by_section[question.question_template.section_id]['questions'].append(question)
@@ -48,6 +48,7 @@ class UserReport(db.Model):
                 {
                     'section_id': key,
                     'section_title': value['title'],
+                    'benchmark_count': value['benchmark_count'],
                     'question_answers': [q.output_obj() for q in value['questions']]
                 }
                 for (key, value) in self.by_section.items()
@@ -69,6 +70,7 @@ class QuestionAnswer(db.Model):
     question_id = db.Column(db.Integer, db.ForeignKey('Question.id'))
     answer_id = db.Column(db.Integer, db.ForeignKey('Answer.id'))
     user_report_id = db.Column(db.Integer, db.ForeignKey(UserReport.id))
+    benchmark = db.relationship('Benchmark', primaryjoin="foreign(QuestionAnswer.question_id)==Benchmark.question_id")
 
     def __init__(self, user_id, question_id, answer_id, user_report_id):
         self.user_id = user_id
@@ -87,5 +89,6 @@ class QuestionAnswer(db.Model):
             'question_id': self.question_id,
             'answer_id': self.answer_id,
             'score': self.score,
-            'user_report_id': self.user_report_id
+            'user_report_id': self.user_report_id,
+            'not_in_benchmark': self.benchmark.not_in_benchmark
         }

@@ -240,6 +240,21 @@ def v_user_report_check(user_id, user_report_id):
         else:
             highest_answers[question.id] = 0
 
+    highest_unanswered = []
+
+    for question in ReportApi().questions_by_combined_weight(user_report.template.id):
+        if question['question_id'] not in question_answers or question_answers[question['question_id']].score < \
+                question['max_score']:
+            try:
+                highest_unanswered.append(QuestionApi().read(question['question_id']))
+            except DatabaseItemDoesNotExist:
+                pass
+
+    if len(highest_unanswered) >= 5:
+        visible_unanswered = highest_unanswered[:5]
+    else:
+        visible_unanswered = highest_unanswered
+
     benchmarks_by_section = user_report_api.benchmarks_by_section(user_report_id)
 
     # Create a color-range for the risk_factors
@@ -250,6 +265,7 @@ def v_user_report_check(user_id, user_report_id):
                            report_template=user_report.template,
                            user_report=user_report,
                            user_report_creation_time='{:%Y-%m-%d %H:%M:%S}'.format(user_report.creation_time),
+                           highest_unanswered=visible_unanswered,
                            question_answers=question_answers,
                            all_scores=all_scores,
                            benchmarks_by_section=benchmarks_by_section,

@@ -9,7 +9,7 @@ from scoremodel.modules.api.role import RoleApi
 from scoremodel.modules.api.menu_link import MenuLinkApi
 from scoremodel.modules.error import DatabaseItemDoesNotExist
 from random import SystemRandom
-from sqlalchemy.exc import OperationalError, NoSuchTableError, ProgrammingError
+from sqlalchemy.exc import OperationalError, NoSuchTableError
 from sqlalchemy import Table, MetaData
 import string
 
@@ -38,8 +38,6 @@ def check_has_tables():
         except NoSuchTableError:
             return False
         except OperationalError:
-            return False
-        except ProgrammingError:
             return False
     return True
 

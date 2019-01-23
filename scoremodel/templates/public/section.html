@@ -28,7 +28,11 @@
                     {% if next_section %}
                         <a href="{{ url_for('public.v_user_report_section', user_id=current_user.id, user_report_id=user_report_id, section_id=next_section.id ) }}"
                            class="btn btn-default text-right">{{ next_section.title }}&nbsp;<span
-                                class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span></a>
+                                class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span></a>&nbsp
+                        <a href="{{ url_for('public.v_user_report_summary', user_id=current_user.id, user_report_id=user_report_id) }}"
+                           class="btn btn-default text-right">{{ _('Overview') }}&nbsp;<span
+                                class="glyphicon glyphicon-chevron-right"
+                                aria-hidden="true"></span></a>
                     {% else %}
                         <a href="{{ url_for('public.v_user_report_summary', user_id=current_user.id, user_report_id=user_report_id) }}"
                            class="btn btn-default text-right">{{ _('Overview') }}&nbsp;<span
