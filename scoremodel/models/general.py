@@ -176,6 +176,10 @@ class Section(db.Model):
         return sum(1 for q in self.questions if q.benchmark.not_in_benchmark == False)
 
     @property
+    def total_weight(self):
+        return sum(q.weight for q in self.questions)
+
+    @property
     def highest_order(self):
         return self.ordered_questions[-1].order_in_section
 

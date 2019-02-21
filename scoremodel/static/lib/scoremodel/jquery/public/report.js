@@ -35,11 +35,11 @@ function draw_user_report(data) {
         var section_score = 0;
         for (var j = 0; j < section.question_answers.length; j++) {
             var question_answer = section.question_answers[j];
-            section_score = section_score + (question_answer.score * question_answer.multiplication_factor);
+            section_score = section_score + (question_answer.weight / section.total_weight);
         }
         axes.push({
             axis: section.section_title,
-            value: section_score
+            value: section_score * 100
         });
     }
     /* Redraw the graph */
