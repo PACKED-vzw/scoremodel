@@ -4,6 +4,7 @@ from scoremodel import db, app
 import scoremodel.models.public
 from flask_login import AnonymousUserMixin
 from scoremodel.modules.user.token import Token
+import datetime
 
 
 class Role(db.Model):
@@ -61,6 +62,7 @@ class User(db.Model):
     api_key = db.Column(db.String(255), nullable=False, unique=True)
     session_token = db.Column(db.String(255), nullable=False, unique=True)
     organisation_id = db.Column(db.Integer, db.ForeignKey(Organisation.id))
+    creation_time = db.Column(db.DateTime)
     roles = db.relationship('Role',
                             secondary=users_roles,
                             primaryjoin=(users_roles.c.user_id == id),
@@ -74,6 +76,11 @@ class User(db.Model):
         self.set_password(password)
         self.set_api_key()
         self.set_session_token()
+        self.creation_time = datetime.datetime.now()
+
+    @property
+    def creation_date(self):
+        return self.creation_time.date()
 
     def __repr__(self):
         return '<User {0}>'.format(self.username)
