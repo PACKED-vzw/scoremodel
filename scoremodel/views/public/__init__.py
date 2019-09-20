@@ -195,7 +195,8 @@ def v_user_report_section(user_id, user_report_id, section_id):
     benchmarks_by_section = user_report_api.benchmarks_by_section(user_report_id)
 
     # Create a color-range for the risk_factors
-    risk_factors = [r.risk_factor for r in RiskFactorApi().list()]
+    #risk_factors = [r.risk_factor for r in RiskFactorApi().list()]
+    risk_factors = [r.risk_factor for r in RiskFactorApi().by_lang(user_report.template.lang.lang)]
     colored_risk_factors = Color().range(risk_factors)
 
     return render_template('public/section.html',
@@ -258,7 +259,8 @@ def v_user_report_check(user_id, user_report_id):
     benchmarks_by_section = user_report_api.benchmarks_by_section(user_report_id)
 
     # Create a color-range for the risk_factors
-    risk_factors = [r.risk_factor for r in RiskFactorApi().list()]
+    #risk_factors = [r.risk_factor for r in RiskFactorApi().list()]
+    risk_factors = [r.risk_factor for r in RiskFactorApi().by_lang(user_report.template.lang.lang)]
     colored_risk_factors = Color().range(risk_factors)
 
     return render_template('public/report.html',
@@ -318,7 +320,8 @@ def v_user_report_summary(user_id, user_report_id):
                 benchmarks_by_question[bm.question_id] = [bm]
 
     # Create a color-range for the risk_factors
-    risk_factors = [r.risk_factor for r in RiskFactorApi().list()]
+    #risk_factors = [r.risk_factor for r in RiskFactorApi().list()]
+    risk_factors = [r.risk_factor for r in RiskFactorApi().by_lang(user_report.template.lang.lang)]
     colored_risk_factors = Color().range(risk_factors)
 
     return render_template('public/summary.html',

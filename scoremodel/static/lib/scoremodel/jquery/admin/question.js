@@ -51,6 +51,9 @@ function delete_question_data(question_id) {
     return $.ajax({
         method: 'DELETE',
         url: '/api/v2/question/' + question_id,
+        headers: {
+            'X-CSRFToken': csrf_token
+        },
         success: function (data, status) {
         },
         error: function (jqXHR, status, error) {

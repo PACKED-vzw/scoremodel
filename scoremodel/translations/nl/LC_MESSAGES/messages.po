@@ -7,19 +7,18 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2017-04-04 13:30+0200\n"
+"POT-Creation-Date: 2019-09-16 15:29+0200\n"
 "PO-Revision-Date: 2017-04-04 13:42+0200\n"
 "Last-Translator: Pieter De Praetere <pieter.de.praetere@helptux.be>\n"
 "Language: nl\n"
 "Language-Team: nl <LL@li.org>\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Plural-Forms: nplurals=2; plural=(n != 1)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.3.3\n"
-"X-Generator: Poedit 2.0\n"
+"Generated-By: Babel 2.6.0\n"
 
-#: scoremodel/__init__.py:97 scoremodel/__init__.py:103
+#: scoremodel/__init__.py:111 scoremodel/__init__.py:117
 #: scoremodel/views/admin/document.py:27 scoremodel/views/admin/document.py:65
 #: scoremodel/views/admin/page.py:60 scoremodel/views/admin/page.py:76
 #: scoremodel/views/admin/user.py:110 scoremodel/views/admin/user.py:142
@@ -60,13 +59,21 @@ msgstr "Geen benchmark met benchmark_report_id {0} en question_id {1}."
 
 #: scoremodel/modules/api/question_answer/__init__.py:48
 #, python-format
-msgid "No QuestionAnswer with user_report_id %(user_report_id)s user_id %(user_id)s question_id %(question_id)s and answer_id %(answer_id)s"
-msgstr "Geen QuestionAnswer met user_report_id %(user_report_id)s user_id %(user_id)s question_id %(question_id)s en answer_id %(answer_id)s"
+msgid ""
+"No QuestionAnswer with user_report_id %(user_report_id)s user_id "
+"%(user_id)s question_id %(question_id)s and answer_id %(answer_id)s"
+msgstr ""
+"Geen QuestionAnswer met user_report_id %(user_report_id)s user_id "
+"%(user_id)s question_id %(question_id)s en answer_id %(answer_id)s"
 
 #: scoremodel/modules/api/question_answer/__init__.py:80
 #, python-format
-msgid "No QuestionAnswer with user_report_id %(user_report_id)s user_id %(user_id)s and question_id %(question_id)s"
-msgstr "Geen QuestionAnswer met user_report_id %(user_report_id)s user_id %(user_id)s en question_id %(question_id)s"
+msgid ""
+"No QuestionAnswer with user_report_id %(user_report_id)s user_id "
+"%(user_id)s and question_id %(question_id)s"
+msgstr ""
+"Geen QuestionAnswer met user_report_id %(user_report_id)s user_id "
+"%(user_id)s en question_id %(question_id)s"
 
 #: scoremodel/modules/api/question_answer/__init__.py:118
 msgid "Error: two questions with the same id in one section!"
@@ -212,7 +219,7 @@ msgstr "21 of meer"
 
 #: scoremodel/modules/forms/auth.py:21
 #: scoremodel/templates/admin/user/register.html:6
-#: scoremodel/templates/base.html:83 scoremodel/templates/base.html:89
+#: scoremodel/templates/base.html:92 scoremodel/templates/base.html:98
 msgid "Register"
 msgstr "Registreren"
 
@@ -244,8 +251,7 @@ msgstr "Naam benchmark"
 #: scoremodel/templates/admin/report/benchmark/create.html:18
 #: scoremodel/templates/public/create.html:18
 #: scoremodel/templates/public/edit.html:19
-#: scoremodel/templates/public/report.html:188
-#: scoremodel/templates/public/summary.html:161
+#: scoremodel/templates/public/report.html:232
 msgid "Report template"
 msgstr "Rapportsjabloon"
 
@@ -287,8 +293,7 @@ msgstr "Begin setup"
 #: scoremodel/templates/public/create.html:5
 #: scoremodel/templates/public/edit.html:6
 #: scoremodel/templates/public/list.html:6
-#: scoremodel/templates/public/report.html:184
-#: scoremodel/templates/public/summary.html:157
+#: scoremodel/templates/public/report.html:228
 #: scoremodel/templates/site/home.html:26
 msgid "Report name"
 msgstr "Rapportnaam"
@@ -355,13 +360,21 @@ msgstr "Een %(what)s met als identifier %(identifier)s bestaat niet."
 
 #: scoremodel/modules/msg/messages.py:22
 #, python-format
-msgid "No %(what)s with identifier %(identifier)s does not exist in %(in_what)s with identifier %(in_identifier)s"
-msgstr "Een %(what)s met als identifier %(identifier)s bestaat niet in %(in_what)s met als identifier %(in_identifier)s."
+msgid ""
+"No %(what)s with identifier %(identifier)s does not exist in %(in_what)s "
+"with identifier %(in_identifier)s"
+msgstr ""
+"Een %(what)s met als identifier %(identifier)s bestaat niet in "
+"%(in_what)s met als identifier %(in_identifier)s."
 
 #: scoremodel/modules/msg/messages.py:25
 #, python-format
-msgid "Item %(what)s with identifier %(identifier)s already exists in %(in_what)s with identifier %(in_identifier)s"
-msgstr "Item %(what)s met als identifier %(identifier)s bestaat al in %(in_what)s met als identifier %(in_identifier)s."
+msgid ""
+"Item %(what)s with identifier %(identifier)s already exists in "
+"%(in_what)s with identifier %(in_identifier)s"
+msgstr ""
+"Item %(what)s met als identifier %(identifier)s bestaat al in %(in_what)s"
+" met als identifier %(in_identifier)s."
 
 #: scoremodel/modules/msg/messages.py:28
 #, python-format
@@ -399,52 +412,49 @@ msgstr "Onthoud mij"
 msgid "Log on"
 msgstr "Aanmelden"
 
-#: scoremodel/templates/base.html:7
-msgid "Scoremodel: "
-msgstr "Scoremodel:"
-
-#: scoremodel/templates/base.html:9 scoremodel/templates/base.html:67
+#: scoremodel/templates/base.html:16 scoremodel/templates/base.html:18
+#: scoremodel/templates/base.html:76
 msgid "Scoremodel"
 msgstr "Scoremodel"
 
 #: scoremodel/templates/admin/admin_navigation.html:6
-#: scoremodel/templates/base.html:66 scoremodel/templates/setup.html:33
+#: scoremodel/templates/base.html:75 scoremodel/templates/setup.html:33
 msgid "Home"
 msgstr "Home"
 
-#: scoremodel/templates/admin/base.html:60 scoremodel/templates/base.html:68
+#: scoremodel/templates/admin/base.html:60 scoremodel/templates/base.html:77
 #: scoremodel/views/site/__init__.py:61
 msgid "Documents"
 msgstr "Documenten"
 
-#: scoremodel/templates/base.html:69 scoremodel/views/site/__init__.py:53
+#: scoremodel/templates/base.html:78 scoremodel/views/site/__init__.py:53
 msgid "FAQ"
 msgstr "FAQ"
 
-#: scoremodel/templates/base.html:70 scoremodel/views/site/__init__.py:75
+#: scoremodel/templates/base.html:79 scoremodel/views/site/__init__.py:75
 msgid "Disclaimer"
 msgstr "Disclaimer"
 
-#: scoremodel/templates/base.html:71 scoremodel/views/site/__init__.py:89
+#: scoremodel/templates/base.html:80 scoremodel/views/site/__init__.py:89
 msgid "Contact"
 msgstr "Contact"
 
-#: scoremodel/templates/base.html:76
+#: scoremodel/templates/base.html:85
 msgid "Manage"
 msgstr "Beheren"
 
 #: scoremodel/templates/admin/user/profile.html:11
-#: scoremodel/templates/base.html:78
+#: scoremodel/templates/base.html:87
 msgid "Profile"
 msgstr "Profiel"
 
 #: scoremodel/templates/admin/admin_navigation.html:9
-#: scoremodel/templates/base.html:79
+#: scoremodel/templates/base.html:88
 msgid "Log out"
 msgstr "Afmelden"
 
-#: scoremodel/templates/admin/login.html:6 scoremodel/templates/base.html:83
-#: scoremodel/templates/base.html:86 scoremodel/templates/login/form.html:4
+#: scoremodel/templates/admin/login.html:6 scoremodel/templates/base.html:92
+#: scoremodel/templates/base.html:95 scoremodel/templates/login/form.html:4
 msgid "Log in"
 msgstr "Aanmelden"
 
@@ -458,16 +468,24 @@ msgid "Setup"
 msgstr "Setup"
 
 #: scoremodel/templates/setup.html:59
-msgid "Press <Start setup> to commence the setup. This script will create an administrative user."
-msgstr "Druk op <Start setup> om de installatie te beginnen. Er zal een administratieve gebruiker worden aangemaakt."
+msgid ""
+"Press <Start setup> to commence the setup. This script will create an "
+"administrative user."
+msgstr ""
+"Druk op <Start setup> om de installatie te beginnen. Er zal een "
+"administratieve gebruiker worden aangemaakt."
 
 #: scoremodel/templates/setup.html:67
 msgid "Setup completed successfully!"
 msgstr "Setup met succes voltooid."
 
 #: scoremodel/templates/setup.html:70
-msgid "We have created an administrative user. You can log in at the <a href=\"/admin/\">admin interface</a>."
-msgstr "We hebben een administratieve gebruiker aangemaakt. U kan inloggen op de <a href=\"/admin/\">beheerinterface</a> ."
+msgid ""
+"We have created an administrative user. You can log in at the <a "
+"href=\"/admin/\">admin interface</a>."
+msgstr ""
+"We hebben een administratieve gebruiker aangemaakt. U kan inloggen op de "
+"<a href=\"/admin/\">beheerinterface</a> ."
 
 #: scoremodel/templates/setup.html:73
 msgid "Username"
@@ -493,7 +511,7 @@ msgid "List"
 msgstr "Lijst"
 
 #: scoremodel/templates/admin/base.html:51
-#: scoremodel/templates/public/report.html:114
+#: scoremodel/templates/public/report.html:115
 msgid "Benchmark"
 msgstr "Benchmark"
 
@@ -551,8 +569,14 @@ msgstr "Documentbeschrijving"
 
 #: scoremodel/templates/admin/document/create.html:35
 #: scoremodel/templates/admin/page/edit.html:47
-msgid "You can use <a href=\"https://daringfireball.net/projects/markdown/\">Markdown</a> syntax in this field."
-msgstr "U kan in dit veld <a href=\"https://daringfireball.net/projects/markdown/\">Markdown</a>-syntax gebruiken."
+msgid ""
+"You can use <a "
+"href=\"https://daringfireball.net/projects/markdown/\">Markdown</a> "
+"syntax in this field."
+msgstr ""
+"U kan in dit veld <a "
+"href=\"https://daringfireball.net/projects/markdown/\">Markdown</a>-syntax"
+" gebruiken."
 
 #: scoremodel/templates/admin/document/create.html:45
 msgid "Document language"
@@ -583,8 +607,12 @@ msgstr "Verwijderen bevestigen"
 #: scoremodel/templates/admin/user/delete.html:9
 #: scoremodel/templates/public/generic/delete.html:9
 #, python-format
-msgid "Please press &lt;Confirm delete&gt; to confirm the deletion of the %(item_type)s called &ldquo;%(item_identifier)s&rdquo;."
-msgstr "Druk op &lt;Verwijderen bevestigen&gt; om de verwijdering van %(item_type)s met als identifier &ldquo;%(item_identifier)s&rdquo;."
+msgid ""
+"Please press &lt;Confirm delete&gt; to confirm the deletion of the "
+"%(item_type)s called &ldquo;%(item_identifier)s&rdquo;."
+msgstr ""
+"Druk op &lt;Verwijderen bevestigen&gt; om de verwijdering van "
+"%(item_type)s met als identifier &ldquo;%(item_identifier)s&rdquo;."
 
 #: scoremodel/templates/admin/page/create.html:5
 #: scoremodel/templates/admin/page/edit.html:9
@@ -625,9 +653,9 @@ msgstr "Gewicht"
 #: scoremodel/templates/admin/report/benchmark/edit.html:126
 #: scoremodel/templates/admin/report/edit.html:135
 #: scoremodel/templates/admin/report/edit.html:213
-#: scoremodel/templates/public/report.html:160
-#: scoremodel/templates/public/section.html:120
-#: scoremodel/templates/public/section.html:146
+#: scoremodel/templates/public/report.html:161
+#: scoremodel/templates/public/section.html:124
+#: scoremodel/templates/public/section.html:150
 msgid "Context"
 msgstr "Context"
 
@@ -687,8 +715,8 @@ msgstr "Risico's van de vraag"
 
 #: scoremodel/templates/admin/report/edit.html:235
 #: scoremodel/templates/admin/report/edit.html:237
-#: scoremodel/templates/public/section.html:125
-#: scoremodel/templates/public/section.html:151
+#: scoremodel/templates/public/section.html:129
+#: scoremodel/templates/public/section.html:155
 msgid "Actions"
 msgstr "Acties"
 
@@ -735,8 +763,8 @@ msgid "Roles"
 msgstr "Rollen"
 
 #: scoremodel/templates/admin/user/delete.html:9
-#: scoremodel/templates/public/report.html:192
-#: scoremodel/templates/public/summary.html:165
+#: scoremodel/templates/public/report.html:236
+#: scoremodel/templates/public/summary.html:63
 #: scoremodel/views/admin/user.py:154 scoremodel/views/admin/user.py:157
 msgid "User"
 msgstr "Gebruiker"
@@ -784,8 +812,14 @@ msgstr "Geen toegang"
 
 #: scoremodel/templates/error/403.html:5
 #, python-format
-msgid "You do not have the rights to view this page. If you believe this is an error, please <a href=\"%(contact)s\">contact the administrator</a>. Please return to the <a href=\"%(index)s\">main page</a>."
-msgstr "U heeft niet de rechten om deze pagina te bekijken. Als u denkt dat dit een fout is dat, neem dan <a href=\"%(contact)s\">contact op met de beheerder</a>. Ga terug naar de <a href=\"%(index)s\">Hoofdpagina</a>."
+msgid ""
+"You do not have the rights to view this page. If you believe this is an "
+"error, please <a href=\"%(contact)s\">contact the administrator</a>. "
+"Please return to the <a href=\"%(index)s\">main page</a>."
+msgstr ""
+"U heeft niet de rechten om deze pagina te bekijken. Als u denkt dat dit "
+"een fout is dat, neem dan <a href=\"%(contact)s\">contact op met de "
+"beheerder</a>. Ga terug naar de <a href=\"%(index)s\">Hoofdpagina</a>."
 
 #: scoremodel/templates/error/404.html:4
 msgid "Page not found"
@@ -793,8 +827,15 @@ msgstr "Pagina niet gevonden"
 
 #: scoremodel/templates/error/404.html:5
 #, python-format
-msgid "We could not find the page you requested. You could try <a href=\"https://www.google.com/search?q=%(page_name)s&as_sitesearch=scoremodel.org\">searching for it</a> or return to the <a href=\"%(index)s\">main page</a>."
-msgstr "We kunnen de door u opgevraagde pagina niet vinden. U kan proberen om ernaar te <a href=\"https://www.google.com/search?q=%(page_name)s&as_sitesearch=scoremodel.org\">zoeken</a> of teruggaan naar de <a href=\"%(index)s\">Hoofdpagina</a>."
+msgid ""
+"We could not find the page you requested. You could try <a "
+"href=\"https://www.google.com/search?q=%(page_name)s&as_sitesearch=scoremodel.org\">searching"
+" for it</a> or return to the <a href=\"%(index)s\">main page</a>."
+msgstr ""
+"We kunnen de door u opgevraagde pagina niet vinden. U kan proberen om "
+"ernaar te <a "
+"href=\"https://www.google.com/search?q=%(page_name)s&as_sitesearch=scoremodel.org\">zoeken</a>"
+" of teruggaan naar de <a href=\"%(index)s\">Hoofdpagina</a>."
 
 #: scoremodel/templates/public/list.html:7
 #: scoremodel/templates/site/home.html:27
@@ -808,105 +849,167 @@ msgid "New report"
 msgstr "Nieuw rapport"
 
 #: scoremodel/templates/public/report.html:30
-#: scoremodel/templates/public/summary.html:30
+#: scoremodel/templates/public/summary.html:31
 msgid "Summary"
 msgstr "Samenvatting"
 
 #: scoremodel/templates/public/report.html:33
-#: scoremodel/templates/public/summary.html:33
+#: scoremodel/templates/public/summary.html:34
+#: scoremodel/templates/public/summary.html:68
 msgid "Full report"
 msgstr "Volledig rapport"
 
 #: scoremodel/templates/public/report.html:36
-#: scoremodel/templates/public/summary.html:36
+#: scoremodel/templates/public/summary.html:37
+#: scoremodel/templates/public/summary.html:70
 msgid "Print"
 msgstr "Afdrukken"
 
 #: scoremodel/templates/public/report.html:46
-#: scoremodel/templates/public/summary.html:46
 #, python-format
 msgid "Report card for %(organisation)s"
 msgstr "Rapport voor %(organisation)s"
 
 #: scoremodel/templates/public/report.html:49
-#: scoremodel/templates/public/summary.html:49
 msgid "Report card"
 msgstr "Rapport"
 
 #: scoremodel/templates/public/report.html:56
-#: scoremodel/templates/public/summary.html:56
 msgid "Table of contents"
 msgstr "Inhoudsopgave"
 
 #: scoremodel/templates/public/report.html:59
-#: scoremodel/templates/public/report.html:74
-#: scoremodel/templates/public/summary.html:68
+#: scoremodel/templates/public/report.html:75
 msgid "Results"
 msgstr "Resultaten"
 
 #: scoremodel/templates/public/report.html:61
-#: scoremodel/templates/public/report.html:80
-#: scoremodel/templates/public/summary.html:59
-#: scoremodel/templates/public/summary.html:74
+#: scoremodel/templates/public/report.html:81
+#: scoremodel/templates/public/summary.html:88
 msgid "Graph"
 msgstr "Grafiek"
 
 #: scoremodel/templates/public/report.html:67
-#: scoremodel/templates/public/report.html:181
-#: scoremodel/templates/public/summary.html:61
-#: scoremodel/templates/public/summary.html:154
+#: scoremodel/templates/public/report.html:183
+#: scoremodel/templates/public/summary.html:109
+msgid "Action plan"
+msgstr "Actieplan"
+
+#: scoremodel/templates/public/report.html:68
+#: scoremodel/templates/public/report.html:225
 msgid "Report data"
 msgstr "Rapportgegevens"
 
-#: scoremodel/templates/public/report.html:93
-#: scoremodel/templates/public/summary.html:87
-msgid "The graph shows the score for all the sections in this report. The blue area shows your scores; the other areas show the benchmarks that are linked to this report. If you area is larger than the benchmark area, you have exceeded the benchmark scores."
-msgstr "De grafiek toont de score voor alle secties in dit rapport. Het blauwe vlak geven uw score weer; de andere vlakken die van de benchmarks. Als uw vlak groter is dan dat van een benchmark, dan hebt u hoger gescoord of niet."
+#: scoremodel/templates/public/report.html:94
+msgid ""
+"The graph shows the score for all the sections in this report. The blue "
+"area shows your scores; the other areas show the benchmarks that are "
+"linked to this report. If you area is larger than the benchmark area, you"
+" have exceeded the benchmark scores."
+msgstr ""
+"De grafiek toont de score voor alle secties in dit rapport. Het blauwe "
+"vlak geven uw score weer; de andere vlakken die van de benchmarks. Als uw"
+" vlak groter is dan dat van een benchmark, dan hebt u hoger gescoord of "
+"niet."
 
-#: scoremodel/templates/public/report.html:110
+#: scoremodel/templates/public/report.html:111
 msgid "Score"
 msgstr "Score"
 
-#: scoremodel/templates/public/report.html:143
-#: scoremodel/templates/public/summary.html:128
+#: scoremodel/templates/public/report.html:144
 msgid "Not completed"
 msgstr "Niet voltooid"
 
-#: scoremodel/templates/public/report.html:166
-#: scoremodel/templates/public/summary.html:141
+#: scoremodel/templates/public/report.html:167
+#: scoremodel/templates/public/report.html:212
+#: scoremodel/templates/public/summary.html:138
 msgid "Action"
 msgstr "Actie"
 
-#: scoremodel/templates/public/report.html:196
-#: scoremodel/templates/public/summary.html:169
+#: scoremodel/templates/public/report.html:188
+#: scoremodel/templates/public/summary.html:114
+msgid ""
+"Het is belangrijk dat je risico’s stelselmatig aanpakt. Tracht voor elk "
+"aspect van je digitale huishouding buiten de rode zone te geraken en "
+"vervolgens zo dicht mogelijk de groene zone te benaderen. Zo groeit "
+"stelselmatig de veilige bewaring van je digitale collectie."
+msgstr ""
+
+#: scoremodel/templates/public/report.html:189
+#: scoremodel/templates/public/summary.html:115
+msgid ""
+"Hieronder vind je de eisen uit het scoremodel waarvoor je het dringendst "
+"actie moet ondernemen, telkens met een stappenplan om het probleem "
+"concreet aan te pakken."
+msgstr ""
+
+#: scoremodel/templates/public/report.html:240
 msgid "Creation time"
 msgstr "Aanmaakdatum en -tijd"
 
 #: scoremodel/templates/public/section.html:23
-#: scoremodel/templates/public/section.html:197
+#: scoremodel/templates/public/section.html:201
 #: scoremodel/views/public/__init__.py:162
 msgid "Edit report"
 msgstr "Rapport bewerken"
 
-#: scoremodel/templates/public/section.html:34
-#: scoremodel/templates/public/section.html:208
+#: scoremodel/templates/public/section.html:33
+#: scoremodel/templates/public/section.html:38
+#: scoremodel/templates/public/section.html:212
 msgid "Overview"
 msgstr "Overzicht"
 
-#: scoremodel/templates/public/section.html:181
+#: scoremodel/templates/public/section.html:185
 #, python-format
 msgid "Total score for section \"%(section_title)s\":"
 msgstr "Totale score voor sectie \"%(section_title)s\":"
 
-#: scoremodel/templates/public/summary.html:60
-#: scoremodel/templates/public/summary.html:93
-msgid "Action plan"
-msgstr "Actieplan"
-
-#: scoremodel/templates/public/summary.html:98
+#: scoremodel/templates/public/summary.html:48
 #, python-format
-msgid "In this section, you can find the 5 top-most actions you should take to increase your score. A full report can be found <a href=\"%(url)s\">here</a>."
-msgstr "In deze sectie kan u de 5 belangrijkste acties vinden die u kan ondernemen om uw score te verbeteren. Een volledig rapport kan u <a href=\"%(url)s\">hier</a> vinden."
+msgid "Eindrapport Scoremodel %(organisation)s"
+msgstr ""
+
+#: scoremodel/templates/public/summary.html:51
+msgid "Eindrapport Scoremodel"
+msgstr ""
+
+#: scoremodel/templates/public/summary.html:59
+msgid "Datum"
+msgstr ""
+
+#: scoremodel/templates/public/summary.html:67
+msgid "Acties"
+msgstr ""
+
+#: scoremodel/templates/public/summary.html:79
+#, python-format
+msgid ""
+"Hieronder vind je de sterke en zwakke punten van de digitale huishouding "
+"van %(organisation)s."
+msgstr ""
+
+#: scoremodel/templates/public/summary.html:81
+msgid ""
+"Hieronder vind je de sterke en zwakke punten van jouw digitale "
+"huishouding."
+msgstr ""
+
+#: scoremodel/templates/public/summary.html:101
+msgid ""
+"Elk van de zeven assen van het radardiagram is een aspect van je digitale"
+" huishouding. Hoe verder de marker van het centrum verwijderd is, hoe "
+"beter je gescoord hebt. \n"
+"                Bevindt de marker zich in de rode zone, dan is dringende "
+"actie vereist. Bevindt de marker zich in de gele zone, dan is je huidige "
+"werking voor verbetering vatbaar. Bevindt de marker zich in de groene "
+"zone, dan heb je dat aspect van je digitale huishouding op orde."
+msgstr ""
+
+#: scoremodel/templates/public/summary.html:103
+msgid ""
+"De blauwe lijn geeft aan hoe je scoort volgens de OAIS-norm. De oranje "
+"lijn geeft aan hoe je scoort voor de Core Trust Seal-norm."
+msgstr ""
 
 #: scoremodel/templates/site/documents.html:8
 msgid "Description"
@@ -937,9 +1040,11 @@ msgid "Start"
 msgstr "Start"
 
 #: scoremodel/templates/site/home.html:58
-msgid "You are currently not logged in.\n"
+msgid ""
+"You are currently not logged in.\n"
 "Please provide your username and password or create a new account."
-msgstr "U bent momenteel niet aangemeld.\n"
+msgstr ""
+"U bent momenteel niet aangemeld.\n"
 "Geef uw gebruikersnaam en wachtwoord of maak een nieuwe account aan."
 
 #: scoremodel/views/admin/answer.py:42
@@ -999,8 +1104,12 @@ msgid "A required form element was not submitted: {0}"
 msgstr "Een verplicht veld in het formulier is niet ingevuld: {0}"
 
 #: scoremodel/views/admin/auth.py:105
-msgid "You have been successfully registered. Please log in using your username and password."
-msgstr "U bent succesvol geregistreerd. Gelieve in te loggen met uw gebruikersnaam en wachtwoord."
+msgid ""
+"You have been successfully registered. Please log in using your username "
+"and password."
+msgstr ""
+"U bent succesvol geregistreerd. Gelieve in te loggen met uw "
+"gebruikersnaam en wachtwoord."
 
 #: scoremodel/views/admin/auth.py:119
 msgid "Invalid password."
@@ -1016,7 +1125,9 @@ msgstr "Geen document met id {0}"
 
 #: scoremodel/views/admin/document.py:76
 msgid "Unable to delete attached file. The document was not deleted"
-msgstr "Niet in staat om gekoppeld bestand te verwijderen. Het document is niet verwijderd"
+msgstr ""
+"Niet in staat om gekoppeld bestand te verwijderen. Het document is niet "
+"verwijderd"
 
 #: scoremodel/views/admin/document.py:81
 msgid "Document {0} deleted"
@@ -1189,7 +1300,7 @@ msgstr "U kunt de bestandsnaam niet wijzigen!"
 #: scoremodel/views/public/__init__.py:118
 #: scoremodel/views/public/__init__.py:170
 #: scoremodel/views/public/__init__.py:218
-#: scoremodel/views/public/__init__.py:265
+#: scoremodel/views/public/__init__.py:281
 msgid "You can only view your own reports."
 msgstr "U kunt alleen uw eigen rapporten bekijken."
 
@@ -1200,6 +1311,332 @@ msgstr "Rapport aangemaakt"
 #: scoremodel/views/public/__init__.py:126
 msgid "This report does not exist."
 msgstr "Dit rapport bestaat niet."
+
+#: venv/lib/python3.7/site-packages/flask_wtf/file.py:51
+#: venv/lib/python3.7/site-packages/wtforms/validators.py:205
+#: venv/lib/python3.7/site-packages/wtforms/validators.py:245
+msgid "This field is required."
+msgstr ""
+
+#: venv/lib/python3.7/site-packages/flask_wtf/file.py:85
+msgid "File does not have an approved extension: {extensions}"
+msgstr ""
+
+#: venv/lib/python3.7/site-packages/flask_wtf/file.py:90
+msgid "File does not have an approved extension."
+msgstr ""
+
+#: venv/lib/python3.7/site-packages/gunicorn/argparse_compat.py:313
+msgid "usage: "
+msgstr ""
+
+#: venv/lib/python3.7/site-packages/gunicorn/argparse_compat.py:821
+msgid ".__call__() not defined"
+msgstr ""
+
+#: venv/lib/python3.7/site-packages/gunicorn/argparse_compat.py:1105
+#, python-format
+msgid "unknown parser %r (choices: %s)"
+msgstr ""
+
+#: venv/lib/python3.7/site-packages/gunicorn/argparse_compat.py:1146
+#, python-format
+msgid "argument \"-\" with mode %r"
+msgstr ""
+
+#: venv/lib/python3.7/site-packages/gunicorn/argparse_compat.py:1349
+#, python-format
+msgid "cannot merge actions - two groups are named %r"
+msgstr ""
+
+#: venv/lib/python3.7/site-packages/gunicorn/argparse_compat.py:1387
+msgid "'required' is an invalid argument for positionals"
+msgstr ""
+
+#: venv/lib/python3.7/site-packages/gunicorn/argparse_compat.py:1407
+#, python-format
+msgid "invalid option string %r: must start with a character %r"
+msgstr ""
+
+#: venv/lib/python3.7/site-packages/gunicorn/argparse_compat.py:1428
+#, python-format
+msgid "dest= is required for options like %r"
+msgstr ""
+
+#: venv/lib/python3.7/site-packages/gunicorn/argparse_compat.py:1445
+#, python-format
+msgid "invalid conflict_resolution value: %r"
+msgstr ""
+
+#: venv/lib/python3.7/site-packages/gunicorn/argparse_compat.py:1463
+#, python-format
+msgid "conflicting option string(s): %s"
+msgstr ""
+
+#: venv/lib/python3.7/site-packages/gunicorn/argparse_compat.py:1526
+msgid "mutually exclusive arguments must be optional"
+msgstr ""
+
+#: venv/lib/python3.7/site-packages/gunicorn/argparse_compat.py:1596
+msgid "positional arguments"
+msgstr ""
+
+#: venv/lib/python3.7/site-packages/gunicorn/argparse_compat.py:1597
+msgid "optional arguments"
+msgstr ""
+
+#: venv/lib/python3.7/site-packages/gunicorn/argparse_compat.py:1615
+msgid "show this help message and exit"
+msgstr ""
+
+#: venv/lib/python3.7/site-packages/gunicorn/argparse_compat.py:1621
+msgid "show program's version number and exit"
+msgstr ""
+
+#: venv/lib/python3.7/site-packages/gunicorn/argparse_compat.py:1653
+msgid "cannot have multiple subparser arguments"
+msgstr ""
+
+#: venv/lib/python3.7/site-packages/gunicorn/argparse_compat.py:1705
+#, python-format
+msgid "unrecognized arguments: %s"
+msgstr ""
+
+#: venv/lib/python3.7/site-packages/gunicorn/argparse_compat.py:1802
+#, python-format
+msgid "not allowed with argument %s"
+msgstr ""
+
+#: venv/lib/python3.7/site-packages/gunicorn/argparse_compat.py:1848
+#: venv/lib/python3.7/site-packages/gunicorn/argparse_compat.py:1862
+#, python-format
+msgid "ignored explicit argument %r"
+msgstr ""
+
+#: venv/lib/python3.7/site-packages/gunicorn/argparse_compat.py:1952
+msgid "too few arguments"
+msgstr ""
+
+#: venv/lib/python3.7/site-packages/gunicorn/argparse_compat.py:1959
+#, python-format
+msgid "argument %s is required"
+msgstr ""
+
+#: venv/lib/python3.7/site-packages/gunicorn/argparse_compat.py:1973
+#, python-format
+msgid "one of the arguments %s is required"
+msgstr ""
+
+#: venv/lib/python3.7/site-packages/gunicorn/argparse_compat.py:2019
+msgid "expected one argument"
+msgstr ""
+
+#: venv/lib/python3.7/site-packages/gunicorn/argparse_compat.py:2020
+msgid "expected at most one argument"
+msgstr ""
+
+#: venv/lib/python3.7/site-packages/gunicorn/argparse_compat.py:2021
+msgid "expected at least one argument"
+msgstr ""
+
+#: venv/lib/python3.7/site-packages/gunicorn/argparse_compat.py:2023
+#, python-format
+msgid "expected %s argument(s)"
+msgstr ""
+
+#: venv/lib/python3.7/site-packages/gunicorn/argparse_compat.py:2080
+#, python-format
+msgid "ambiguous option: %s could match %s"
+msgstr ""
+
+#: venv/lib/python3.7/site-packages/gunicorn/argparse_compat.py:2142
+#, python-format
+msgid "unexpected option string: %s"
+msgstr ""
+
+#: venv/lib/python3.7/site-packages/gunicorn/argparse_compat.py:2243
+#, python-format
+msgid "%r is not callable"
+msgstr ""
+
+#: venv/lib/python3.7/site-packages/gunicorn/argparse_compat.py:2259
+#, python-format
+msgid "invalid %s value: %r"
+msgstr ""
+
+#: venv/lib/python3.7/site-packages/gunicorn/argparse_compat.py:2269
+#, python-format
+msgid "invalid choice: %r (choose from %s)"
+msgstr ""
+
+#: venv/lib/python3.7/site-packages/gunicorn/argparse_compat.py:2362
+#, python-format
+msgid "%s: error: %s\n"
+msgstr ""
+
+#: venv/lib/python3.7/site-packages/wtforms/validators.py:58
+#, python-format
+msgid "Invalid field name '%s'."
+msgstr ""
+
+#: venv/lib/python3.7/site-packages/wtforms/validators.py:66
+#, python-format
+msgid "Field must be equal to %(other_name)s."
+msgstr ""
+
+#: venv/lib/python3.7/site-packages/wtforms/validators.py:99
+#, python-format
+msgid "Field must be at least %(min)d character long."
+msgid_plural "Field must be at least %(min)d characters long."
+msgstr[0] ""
+msgstr[1] ""
+
+#: venv/lib/python3.7/site-packages/wtforms/validators.py:102
+#, python-format
+msgid "Field cannot be longer than %(max)d character."
+msgid_plural "Field cannot be longer than %(max)d characters."
+msgstr[0] ""
+msgstr[1] ""
+
+#: venv/lib/python3.7/site-packages/wtforms/validators.py:105
+#, python-format
+msgid "Field must be between %(min)d and %(max)d characters long."
+msgstr ""
+
+#: venv/lib/python3.7/site-packages/wtforms/validators.py:141
+#, python-format
+msgid "Number must be at least %(min)s."
+msgstr ""
+
+#: venv/lib/python3.7/site-packages/wtforms/validators.py:143
+#, python-format
+msgid "Number must be at most %(max)s."
+msgstr ""
+
+#: venv/lib/python3.7/site-packages/wtforms/validators.py:145
+#, python-format
+msgid "Number must be between %(min)s and %(max)s."
+msgstr ""
+
+#: venv/lib/python3.7/site-packages/wtforms/validators.py:277
+msgid "Invalid input."
+msgstr ""
+
+#: venv/lib/python3.7/site-packages/wtforms/validators.py:311
+msgid "Invalid email address."
+msgstr ""
+
+#: venv/lib/python3.7/site-packages/wtforms/validators.py:352
+msgid "Invalid IP address."
+msgstr ""
+
+#: venv/lib/python3.7/site-packages/wtforms/validators.py:403
+msgid "Invalid Mac address."
+msgstr ""
+
+#: venv/lib/python3.7/site-packages/wtforms/validators.py:432
+msgid "Invalid URL."
+msgstr ""
+
+#: venv/lib/python3.7/site-packages/wtforms/validators.py:452
+msgid "Invalid UUID."
+msgstr ""
+
+#: venv/lib/python3.7/site-packages/wtforms/validators.py:482
+#, python-format
+msgid "Invalid value, must be one of: %(values)s."
+msgstr ""
+
+#: venv/lib/python3.7/site-packages/wtforms/validators.py:514
+#, python-format
+msgid "Invalid value, can't be any of: %(values)s."
+msgstr ""
+
+#: venv/lib/python3.7/site-packages/wtforms/csrf/core.py:98
+#: venv/lib/python3.7/site-packages/wtforms/ext/csrf/form.py:47
+msgid "Invalid CSRF Token"
+msgstr ""
+
+#: venv/lib/python3.7/site-packages/wtforms/csrf/session.py:61
+#: venv/lib/python3.7/site-packages/wtforms/ext/csrf/session.py:58
+msgid "CSRF token missing"
+msgstr ""
+
+#: venv/lib/python3.7/site-packages/wtforms/csrf/session.py:69
+#: venv/lib/python3.7/site-packages/wtforms/ext/csrf/session.py:66
+msgid "CSRF failed"
+msgstr ""
+
+#: venv/lib/python3.7/site-packages/wtforms/csrf/session.py:74
+#: venv/lib/python3.7/site-packages/wtforms/ext/csrf/session.py:71
+msgid "CSRF token expired"
+msgstr ""
+
+#: venv/lib/python3.7/site-packages/wtforms/ext/appengine/fields.py:87
+#: venv/lib/python3.7/site-packages/wtforms/ext/appengine/fields.py:164
+#: venv/lib/python3.7/site-packages/wtforms/ext/appengine/fields.py:166
+#: venv/lib/python3.7/site-packages/wtforms/ext/django/fields.py:95
+#: venv/lib/python3.7/site-packages/wtforms/ext/sqlalchemy/fields.py:125
+#: venv/lib/python3.7/site-packages/wtforms/ext/sqlalchemy/fields.py:127
+#: venv/lib/python3.7/site-packages/wtforms/ext/sqlalchemy/fields.py:180
+#: venv/lib/python3.7/site-packages/wtforms/ext/sqlalchemy/fields.py:185
+#: venv/lib/python3.7/site-packages/wtforms/fields/core.py:475
+msgid "Not a valid choice"
+msgstr ""
+
+#: venv/lib/python3.7/site-packages/wtforms/ext/appengine/fields.py:185
+msgid "Not a valid list"
+msgstr ""
+
+#: venv/lib/python3.7/site-packages/wtforms/ext/appengine/fields.py:204
+msgid "Not a valid integer list"
+msgstr ""
+
+#: venv/lib/python3.7/site-packages/wtforms/ext/dateutil/fields.py:63
+msgid "Please input a date/time value"
+msgstr ""
+
+#: venv/lib/python3.7/site-packages/wtforms/ext/dateutil/fields.py:75
+#: venv/lib/python3.7/site-packages/wtforms/ext/dateutil/fields.py:83
+msgid "Invalid date/time input"
+msgstr ""
+
+#: venv/lib/python3.7/site-packages/wtforms/fields/core.py:468
+msgid "Invalid Choice: could not coerce"
+msgstr ""
+
+#: venv/lib/python3.7/site-packages/wtforms/fields/core.py:501
+msgid "Invalid choice(s): one or more data inputs could not be coerced"
+msgstr ""
+
+#: venv/lib/python3.7/site-packages/wtforms/fields/core.py:508
+#, python-format
+msgid "'%(value)s' is not a valid choice for this field"
+msgstr ""
+
+#: venv/lib/python3.7/site-packages/wtforms/fields/core.py:591
+msgid "Not a valid integer value"
+msgstr ""
+
+#: venv/lib/python3.7/site-packages/wtforms/fields/core.py:657
+msgid "Not a valid decimal value"
+msgstr ""
+
+#: venv/lib/python3.7/site-packages/wtforms/fields/core.py:684
+msgid "Not a valid float value"
+msgstr ""
+
+#: venv/lib/python3.7/site-packages/wtforms/fields/core.py:745
+msgid "Not a valid datetime value"
+msgstr ""
+
+#: venv/lib/python3.7/site-packages/wtforms/fields/core.py:762
+msgid "Not a valid date value"
+msgstr ""
+
+#: venv/lib/python3.7/site-packages/wtforms/fields/core.py:779
+msgid "Not a valid time value"
+msgstr ""
 
 #~ msgid "An unexpected error occured: {0}"
 #~ msgstr "Er is een onverwachte fout opgetreden: {0}"
@@ -1212,3 +1649,20 @@ msgstr "Dit rapport bestaat niet."
 
 #~ msgid "Top 5 actions"
 #~ msgstr "Belangrijkste 5 acties"
+
+#~ msgid "Scoremodel: "
+#~ msgstr "Scoremodel:"
+
+#~ msgid ""
+#~ "In this section, you can find the"
+#~ " 5 top-most actions you should "
+#~ "take to increase your score. A "
+#~ "full report can be found <a "
+#~ "href=\"%(url)s\">here</a>."
+#~ msgstr ""
+#~ "In deze sectie kan u de 5 "
+#~ "belangrijkste acties vinden die u kan"
+#~ " ondernemen om uw score te "
+#~ "verbeteren. Een volledig rapport kan u"
+#~ " <a href=\"%(url)s\">hier</a> vinden."
+
